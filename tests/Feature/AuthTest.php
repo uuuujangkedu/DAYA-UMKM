@@ -1,0 +1,204 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use App\Models\VerificationCode;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Laravel\Socialite\Facades\Socialite;
+use Laravel\Socialite\Two\User as SocialiteUser;
+use Mockery;
+use Tests\TestCase;
+
+class AuthTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_login_page_renders_successfully(): void
+    {
+        $response = $this->get('/login');
+        $response->assertStatus(200);
+        $response->assertSee('Masuk dengan Google');
+        $response->assertSee('Selamat Datang Kembali');
+    }
+
+    public function test_register_page_renders_successfully(): void
+    {
+        $response = $this->get('/register');
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Investor');
+        $response->assertSee('Pelaku UMKM');
+    }
+
+    public function test_user_can_register_and_receives_otp(): void
+    {
+        Mail::fake();
+
+        $response = $this->post('/register', [
+            'nama' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'nomor_telepon' => '081234567890',
+            'role' => 'investor',
+            'password' => 'Rahasia123!',
+            'password_confirmation' => 'Rahasia123!',
+        ]);
+
+        $response->assertRedirect('/verify-otp');
+        $this->assertDatabaseHas('users', [
+            'email' => 'budi@example.com',
+            'status' => 'menunggu_verifikasi',
+        ]);
+
+        $this->assertDatabaseHas('verification_codes', [
+            'sent_to' => 'budi@example.com',
+            'verification_type' => 'otp_email',
+            'is_used' => false,
+        ]);
+    }
+
+    public function test_user_can_login_with_valid_credentials_and_triggers_otp(): void
+    {
+        Mail::fake();
+
+        $user = User::create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'password' => 'Rahasia123!',
+            'role' => 'investor',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'budi@example.com',
+            'password' => 'Rahasia123!',
+        ]);
+
+        $response->assertRedirect('/verify-otp');
+        $this->assertEquals($user->id, session('otp_user_id'));
+    }
+
+    public function test_user_can_verify_otp_and_login(): void
+    {
+        Mail::fake();
+
+        $user = User::create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'password' => 'Rahasia123!',
+            'role' => 'investor',
+            'status' => 'menunggu_verifikasi',
+        ]);
+
+        $code = VerificationCode::create([
+            'user_id' => $user->id,
+            'verification_type' => 'otp_email',
+            'secret_code' => '654321',
+            'sent_to' => $user->email,
+            'is_used' => false,
+            'expires_at' => now()->addMinutes(5),
+        ]);
+
+        $response = $this->withSession([
+            'otp_user_id' => $user->id,
+            'otp_email' => $user->email,
+            'otp_action' => 'daftar',
+        ])->post('/verify-otp', [
+            'otp' => '654321',
+        ]);
+
+        $response->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+
+        $user->refresh();
+        $this->assertEquals('aktif', $user->status);
+        $this->assertNotNull($user->email_verified_at);
+
+        $code->refresh();
+        $this->assertTrue($code->is_used);
+    }
+
+    public function test_google_oauth_callback_creates_and_authenticates_user(): void
+    {
+        $abstractUser = Mockery::mock(SocialiteUser::class);
+        $abstractUser->shouldReceive('getId')->andReturn('google-unique-id-999');
+        $abstractUser->shouldReceive('getName')->andReturn('Google User');
+        $abstractUser->shouldReceive('getEmail')->andReturn('googleuser@gmail.com');
+        $abstractUser->shouldReceive('getAvatar')->andReturn('https://lh3.googleusercontent.com/avatar.jpg');
+
+        $provider = Mockery::mock('Laravel\Socialite\Two\GoogleProvider');
+        $provider->shouldReceive('user')->andReturn($abstractUser);
+
+        Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
+
+        $response = $this->get('/auth/google/callback');
+
+        $response->assertRedirect('/dashboard');
+        $this->assertDatabaseHas('users', [
+            'email' => 'googleuser@gmail.com',
+            'status' => 'aktif',
+        ]);
+        $this->assertDatabaseHas('third_party_authentications', [
+            'provider_name' => 'google',
+            'provider_user_id' => 'google-unique-id-999',
+        ]);
+    }
+
+    public function test_forgot_password_sends_otp_and_resets_password(): void
+    {
+        Mail::fake();
+
+        $user = User::create([
+            'name' => 'Siti Aminah',
+            'email' => 'siti@example.com',
+            'password' => 'Lama123!@#',
+            'role' => 'investor',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        // 1. Request forgot password
+        $response = $this->post('/forgot-password', [
+            'email' => 'siti@example.com',
+        ]);
+        $response->assertRedirect('/verify-otp');
+
+        $this->assertDatabaseHas('verification_codes', [
+            'user_id' => $user->id,
+            'sent_to' => 'siti@example.com',
+            'is_used' => false,
+        ]);
+
+        $code = VerificationCode::where('user_id', $user->id)->latest('id_verification')->first();
+
+        // 2. Verifikasi OTP untuk reset
+        $verifyResponse = $this->withSession([
+            'otp_user_id' => $user->id,
+            'otp_email' => $user->email,
+            'otp_action' => 'reset_password',
+        ])->post('/verify-otp', [
+            'otp' => $code->secret_code,
+        ]);
+
+        $verifyResponse->assertRedirect('/reset-password');
+        $this->assertTrue(session('can_reset_password'));
+
+        // 3. Simpan sandi baru
+        $updateResponse = $this->withSession([
+            'can_reset_password' => true,
+            'reset_user_id' => $user->id,
+        ])->post('/reset-password', [
+            'password' => 'Baru123!@#',
+            'password_confirmation' => 'Baru123!@#',
+        ]);
+
+        $updateResponse->assertRedirect('/login');
+
+        // 4. Verifikasi password baru bisa dipakai login
+        $user->refresh();
+        $this->assertTrue(Hash::check('Baru123!@#', $user->password));
+    }
+}
