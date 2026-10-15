@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendOtpMail;
+use App\Models\Ruko;
 use App\Models\ThirdPartyAuthentication;
+use App\Models\Umkm;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Carbon\Carbon;
@@ -31,13 +33,40 @@ class AuthController extends Controller
     }
 
     /**
-     * Tampilkan halaman Register
+     * Tampilkan halaman Register (Formulir Cepat 30 Detik)
      */
-    public function showRegister()
+    public function showRegister(Request $request)
     {
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
+
+        return view('auth.register');
+    }
+
+    /**
+     * Tampilkan Formulir Cepat dengan Peran Investor Terpilih
+     */
+    public function showRegisterInvestor(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        $request->merge(['role' => 'investor']);
+        return view('auth.register');
+    }
+
+    /**
+     * Tampilkan Formulir Cepat dengan Peran Pelaku UMKM Terpilih
+     */
+    public function showRegisterUmkm(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        $request->merge(['role' => 'umkm']);
         return view('auth.register');
     }
 
@@ -56,56 +85,86 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses Registrasi Manual
+     * Proses Registrasi Akun Cepat & Inisialisasi Profil (Tahap 1)
      */
     public function register(Request $request)
     {
-        $validated = $request->validate([
+        $role = $request->input('role', 'umkm');
+
+        $rules = [
             'nama' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email'],
-            'nomor_telepon' => ['nullable', 'string', 'max:20'],
+            'nomor_telepon' => ['required', 'string', 'max:25'],
             'role' => ['required', 'in:investor,umkm'],
             'password' => [
                 'required',
                 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols(),
             ],
-        ], [
+            'provinsi_kota' => ['nullable', 'string', 'max:100'],
+            'kecamatan' => ['nullable', 'string', 'max:100'],
+            'kelurahan' => ['nullable', 'string', 'max:100'],
+            'kategori_diminati' => ['nullable', 'string', 'max:100'],
+        ];
+
+        $validated = $request->validate($rules, [
             'nama.required' => 'Nama lengkap wajib diisi.',
             'email.required' => 'Alamat email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Email ini sudah terdaftar. Silakan masuk.',
+            'nomor_telepon.required' => 'Nomor WhatsApp / telepon wajib diisi.',
             'password.required' => 'Kata sandi wajib diisi.',
             'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
             'password.min' => 'Kata sandi minimal 8 karakter.',
             'password.mixed' => 'Kata sandi harus mengandung huruf besar dan kecil.',
             'password.numbers' => 'Kata sandi harus mengandung angka.',
             'password.symbols' => 'Kata sandi harus mengandung simbol/karakter khusus.',
-            'role.required' => 'Pilih peran Anda.',
+            'role.required' => 'Pilih peran pendaftaran.',
         ]);
 
-        // Simpan data pengguna dengan status menunggu_verifikasi
+        // Simpan data akun pengguna baru
         $user = User::create([
             'name' => $validated['nama'],
             'email' => $validated['email'],
-            'phone_number' => $validated['nomor_telepon'] ?? null,
-            'role' => $validated['role'],
+            'phone_number' => $validated['nomor_telepon'],
+            'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+            'kecamatan' => $validated['kecamatan'] ?? null,
+            'kelurahan' => $validated['kelurahan'] ?? null,
+            'kategori_diminati' => $validated['kategori_diminati'] ?? null,
+            'role' => $role,
             'password' => $validated['password'],
             'status' => 'menunggu_verifikasi',
         ]);
 
-        // Kirim OTP verifikasi email
+        // Jika pendaftar adalah UMKM, inisialisasi profil usaha awal (status: draf)
+        if ($role === 'umkm') {
+            Umkm::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'nama_usaha' => 'Usaha ' . $validated['nama'],
+                    'jenis_usaha' => 'Makanan',
+                    'pemilik' => $validated['nama'],
+                    'nomor_whatsapp' => $validated['nomor_telepon'],
+                    'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+                    'kecamatan' => $validated['kecamatan'] ?? null,
+                    'kelurahan' => $validated['kelurahan'] ?? null,
+                    'status_pengajuan' => 'draf',
+                ]
+            );
+        }
+
+        // Kirim OTP verifikasi email pendaftaran
         $this->generateAndSendOtp($user, 'daftar');
 
         Session::put('otp_user_id', $user->id);
         Session::put('otp_email', $user->email);
         Session::put('otp_action', 'daftar');
 
-        return redirect()->route('otp.verify.show')->with('success', 'Kode OTP 6-digit telah dikirim ke email Anda. Silakan verifikasi.');
+        return redirect()->route('otp.verify.show')->with('success', 'Akun berhasil dibuat! Silakan verifikasi email Anda dengan kode OTP.');
     }
 
     /**
-     * Proses Login Manual (Memerlukan verifikasi OTP Email)
+     * Proses Login Manual (Langsung Masuk tanpa OTP jika akun aktif)
      */
     public function login(Request $request)
     {
@@ -130,15 +189,26 @@ class AuthController extends Controller
             return back()->with('error', 'Akun Anda sedang ditangguhkan. Hubungi admin DAYA UMKM.');
         }
 
-        // Kirim OTP verifikasi login
-        $this->generateAndSendOtp($user, 'masuk');
+        // Jika akun masih berstatus menunggu verifikasi awal, arahkan ke OTP pendaftaran
+        if ($user->status === 'menunggu_verifikasi') {
+            $this->generateAndSendOtp($user, 'daftar');
 
-        Session::put('otp_user_id', $user->id);
-        Session::put('otp_email', $user->email);
-        Session::put('otp_action', 'masuk');
-        Session::put('remember', $request->boolean('remember'));
+            Session::put('otp_user_id', $user->id);
+            Session::put('otp_email', $user->email);
+            Session::put('otp_action', 'daftar');
 
-        return redirect()->route('otp.verify.show')->with('success', 'Kode OTP keamanan telah dikirim ke email Anda.');
+            return redirect()->route('otp.verify.show')->with('warning', 'Akun Anda belum diverifikasi. Kode OTP telah dikirimkan ke email Anda.');
+        }
+
+        // Login langsung ke akun
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        if (in_array($user->role, ['admin', 'super_admin'])) {
+            return redirect()->intended('/admin');
+        }
+
+        return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
     }
 
     /**
@@ -283,6 +353,14 @@ class AuthController extends Controller
 
         // Bersihkan session OTP
         Session::forget(['otp_user_id', 'otp_email', 'otp_action', 'remember']);
+
+        // Jika verifikasi berasal dari pendaftaran akun baru, arahkan langsung ke formulir pendaftaran peran (Tahap 2)
+        if ($action === 'daftar') {
+            if ($user->role === 'investor') {
+                return redirect()->route('formulir.investor')->with('success', 'Email berhasil diverifikasi! Silakan lengkapi Formulir Pendaftaran Investor Anda di bawah ini.');
+            }
+            return redirect()->route('formulir.umkm')->with('success', 'Email berhasil diverifikasi! Silakan lengkapi Formulir Pendaftaran Pelaku UMKM Anda di bawah ini.');
+        }
 
         return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
     }

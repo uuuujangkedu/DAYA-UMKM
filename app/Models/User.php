@@ -24,6 +24,10 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'phone_number',
+        'provinsi_kota',
+        'kecamatan',
+        'kelurahan',
+        'kategori_diminati',
         'password',
         'role',
         'email_verified_at',
@@ -80,5 +84,15 @@ class User extends Authenticatable implements FilamentUser
     public function isActive(): bool
     {
         return $this->status === 'aktif';
+    }
+
+    public function umkm(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Umkm::class, 'user_id');
+    }
+
+    public function investasis(): HasMany
+    {
+        return $this->hasMany(Investasi::class, 'id_pengguna', 'id');
     }
 }

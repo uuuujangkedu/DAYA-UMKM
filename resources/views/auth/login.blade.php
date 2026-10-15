@@ -56,7 +56,7 @@
                     <div class="w-full border-t border-[#E5E3DC]"></div>
                 </div>
                 <div class="relative inline-block bg-white px-3 text-[11px] uppercase tracking-wider text-[#706F6C] font-medium">
-                    Atau dengan Email & OTP
+                    Atau Masuk dengan Email
                 </div>
             </div>
 
@@ -122,14 +122,6 @@
                     @error('password')
                         <p class="mt-1 text-[11px] text-red-600">{{ $message }}</p>
                     @enderror
-                </div>
-
-                <!-- Info OTP Notice -->
-                <div class="p-3 bg-emerald-50/70 border border-emerald-200/70 rounded-xl flex items-start gap-2.5 text-[11px] text-[#075B50]">
-                    <svg class="w-4 h-4 text-[#075B50] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span>Setelah menekan tombol Masuk, kode <strong>OTP 6 digit</strong> akan dikirimkan ke email Anda untuk konfirmasi keamanan.</span>
                 </div>
 
                 <!-- Remember Me Checkbox -->

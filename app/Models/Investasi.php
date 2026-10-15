@@ -18,6 +18,8 @@ class Investasi extends Model
         'persentase_bagi_hasil',
         'periode_pembagian',
         'status',
+        'catatan',
+        'dibaca',
         'tanggal_investasi',
     ];
 

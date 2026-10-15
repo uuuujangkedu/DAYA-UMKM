@@ -23,5 +23,17 @@ class AdminUserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'staf.admin@dayaumkm.id'],
+            [
+                'name' => 'Staf Admin Operasional',
+                'phone_number' => '081234567891',
+                'password' => Hash::make('Admin123!'),
+                'role' => 'admin',
+                'status' => 'aktif',
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }

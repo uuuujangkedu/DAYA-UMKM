@@ -24,11 +24,20 @@
                     Wadah terintegrasi bagi investor untuk menyalurkan permodalan produktif dan memfasilitasi pelaku UMKM mendapatkan sewa ruko strategis dengan tata kelola transparan & akuntabel.
                 </p>
 
-                <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <a href="{{ route('register') }}" class="px-6 py-3.5 bg-[#075B50] hover:bg-[#26734D] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition">
-                        Daftar Jadi Mitra
+                <div class="flex flex-wrap items-center gap-3 pt-2">
+                    <a href="{{ route('gabung.investor') }}" class="px-5 py-3.5 bg-[#075B50] hover:bg-[#26734D] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2">
+                        <span>Daftar Jadi Investor</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
                     </a>
-                    <a href="{{ route('login') }}" class="px-6 py-3.5 bg-[#F5B800] hover:bg-[#E2A700] text-[#1B1B18] font-bold text-xs uppercase tracking-wider rounded-xl shadow transition">
+                    <a href="{{ route('gabung.umkm') }}" class="px-5 py-3.5 bg-[#00A389] hover:bg-[#008F78] text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2">
+                        <span>Daftar Jadi Pelaku UMKM</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                    <a href="{{ route('login') }}" class="px-5 py-3.5 bg-[#F5B800] hover:bg-[#E2A700] text-[#1B1B18] font-bold text-xs uppercase tracking-wider rounded-xl shadow transition">
                         Masuk Akun
                     </a>
                 </div>

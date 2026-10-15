@@ -11,11 +11,43 @@ class Umkm extends Model
     protected $primaryKey = 'id_umkm';
 
     protected $fillable = [
+        'user_id',
         'nama_usaha',
         'jenis_usaha',
         'pemilik',
+        'nik_penanggung_jawab',
+        'nomor_whatsapp',
+        'provinsi_kota',
+        'kecamatan',
+        'kelurahan',
         'deskripsi',
+        'foto_produk',
+        'file_proposal',
+        'id_ruko_diminati',
+        'status_pengajuan',
+        'modal_dibutuhkan',
+        'target_pendanaan',
+        'estimasi_bagi_hasil',
+        'persentase_bagi_hasil',
+        'dokumen_proposal',
+        'nib',
+        'omzet_bulanan',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function ruko()
+    {
+        return $this->belongsTo(Ruko::class, 'id_ruko_diminati', 'id_ruko');
+    }
+
+    public function produks(): HasMany
+    {
+        return $this->hasMany(Produk::class, 'id_umkm', 'id_umkm');
+    }
 
     public function investasi(): HasMany
     {
@@ -25,5 +57,10 @@ class Umkm extends Model
     public function transaksiSewa(): HasMany
     {
         return $this->hasMany(TransaksiSewa::class, 'id_umkm', 'id_umkm');
+    }
+
+    public function catatanKeuangan(): HasMany
+    {
+        return $this->hasMany(CatatanKeuangan::class, 'id_umkm', 'id_umkm');
     }
 }

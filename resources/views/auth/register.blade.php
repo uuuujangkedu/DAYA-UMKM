@@ -14,8 +14,24 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
             </div>
-            <h1 class="text-xl font-bold tracking-tight">Bergabung dengan DAYA UMKM</h1>
-            <p class="text-xs text-emerald-100 mt-1">Platform sinergi investasi modal usaha & sewa ruko strategis</p>
+            <h1 class="text-xl font-bold tracking-tight">
+                @if (request('role') === 'investor')
+                    Daftar Sebagai Mitra Investor
+                @elseif (request('role') === 'umkm')
+                    Daftar Sebagai Pelaku UMKM
+                @else
+                    Bergabung dengan DAYA UMKM
+                @endif
+            </h1>
+            <p class="text-xs text-emerald-100 mt-1">
+                @if (request('role') === 'investor')
+                    Salurkan permodalan produktif dan dapatkan bagi hasil transparan
+                @elseif (request('role') === 'umkm')
+                    Kembangkan bisnis Anda dengan akses modal dan sewa ruko strategis
+                @else
+                    Platform sinergi investasi modal usaha & sewa ruko strategis
+                @endif
+            </p>
         </div>
 
         <div class="p-6 sm:p-8">
@@ -61,15 +77,22 @@
                         Daftar Sebagai:
                     </label>
                     <div class="grid grid-cols-2 gap-3">
-                        <label class="relative flex items-center p-3 rounded-xl border border-[#D0CFC7] hover:border-[#075B50] cursor-pointer bg-[#F8F7F2]/40 transition group">
-                            <input type="radio" name="role" value="investor" class="text-[#075B50] focus:ring-[#075B50]" {{ old('role', 'investor') === 'investor' ? 'checked' : '' }}>
+                        @php
+                            $defaultRole = request('role', 'investor');
+                            if (!in_array($defaultRole, ['investor', 'umkm'])) {
+                                $defaultRole = 'investor';
+                            }
+                            $selectedRole = old('role', $defaultRole);
+                        @endphp
+                        <label class="relative flex items-center p-3 rounded-xl border {{ $selectedRole === 'investor' ? 'border-[#075B50] bg-emerald-50/50' : 'border-[#D0CFC7] bg-[#F8F7F2]/40' }} hover:border-[#075B50] cursor-pointer transition group">
+                            <input type="radio" name="role" value="investor" class="text-[#075B50] focus:ring-[#075B50]" {{ $selectedRole === 'investor' ? 'checked' : '' }}>
                             <div class="ml-2.5">
                                 <span class="block text-xs font-bold text-[#1B1B18] group-hover:text-[#075B50]">Investor</span>
                                 <span class="block text-[10px] text-[#706F6C]">Pemodal UMKM</span>
                             </div>
                         </label>
-                        <label class="relative flex items-center p-3 rounded-xl border border-[#D0CFC7] hover:border-[#075B50] cursor-pointer bg-[#F8F7F2]/40 transition group">
-                            <input type="radio" name="role" value="umkm" class="text-[#075B50] focus:ring-[#075B50]" {{ old('role') === 'umkm' ? 'checked' : '' }}>
+                        <label class="relative flex items-center p-3 rounded-xl border {{ $selectedRole === 'umkm' ? 'border-[#075B50] bg-teal-50/50' : 'border-[#D0CFC7] bg-[#F8F7F2]/40' }} hover:border-[#075B50] cursor-pointer transition group">
+                            <input type="radio" name="role" value="umkm" class="text-[#075B50] focus:ring-[#075B50]" {{ $selectedRole === 'umkm' ? 'checked' : '' }}>
                             <div class="ml-2.5">
                                 <span class="block text-xs font-bold text-[#1B1B18] group-hover:text-[#075B50]">Pelaku UMKM</span>
                                 <span class="block text-[10px] text-[#706F6C]">Pencari Modal / Sewa</span>

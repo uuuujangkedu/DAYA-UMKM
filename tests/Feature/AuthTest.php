@@ -59,7 +59,27 @@ class AuthTest extends TestCase
         ]);
     }
 
-    public function test_user_can_login_with_valid_credentials_and_triggers_otp(): void
+    public function test_active_user_can_login_directly_without_otp(): void
+    {
+        $user = User::create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'password' => 'Rahasia123!',
+            'role' => 'investor',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        $response = $this->post('/login', [
+            'email' => 'budi@example.com',
+            'password' => 'Rahasia123!',
+        ]);
+
+        $response->assertRedirect('/dashboard');
+        $this->assertAuthenticatedAs($user);
+    }
+
+    public function test_unverified_user_login_triggers_otp(): void
     {
         Mail::fake();
 
@@ -68,8 +88,7 @@ class AuthTest extends TestCase
             'email' => 'budi@example.com',
             'password' => 'Rahasia123!',
             'role' => 'investor',
-            'status' => 'aktif',
-            'email_verified_at' => now(),
+            'status' => 'menunggu_verifikasi',
         ]);
 
         $response = $this->post('/login', [
@@ -110,7 +129,7 @@ class AuthTest extends TestCase
             'otp' => '654321',
         ]);
 
-        $response->assertRedirect('/dashboard');
+        $response->assertRedirect('/formulir/investor');
         $this->assertAuthenticatedAs($user);
 
         $user->refresh();
@@ -201,4 +220,145 @@ class AuthTest extends TestCase
         $user->refresh();
         $this->assertTrue(Hash::check('Baru123!@#', $user->password));
     }
+
+    public function test_gabung_investor_page_renders_successfully(): void
+    {
+        $response = $this->get('/gabung/investor');
+        $response->assertStatus(200);
+        $response->assertSee('Investor DAYA UMKM');
+        $response->assertSee('Kenapa Gabung Menjadi Investor');
+    }
+
+    public function test_gabung_umkm_page_renders_successfully(): void
+    {
+        $response = $this->get('/gabung/umkm');
+        $response->assertStatus(200);
+        $response->assertSee('Pelaku UMKM DAYA');
+        $response->assertSee('Kenapa Gabung Menjadi Pelaku UMKM');
+    }
+
+    public function test_register_investor_form_renders_successfully(): void
+    {
+        $response = $this->get('/register/investor');
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Sebagai Mitra Investor');
+        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Investor');
+    }
+
+    public function test_register_umkm_form_renders_successfully(): void
+    {
+        $response = $this->get('/register/umkm');
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Sebagai Pelaku UMKM');
+        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Pelaku UMKM');
+    }
+
+    public function test_umkm_dashboard_renders_onboarding_form(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'umkm',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get('/formulir/umkm');
+        $response->assertStatus(200);
+        $response->assertSee('Formulir Pendaftaran Pelaku UMKM');
+        $response->assertSee('Identitas Pengaju UMKM');
+        $response->assertSee('Informasi Usaha & Produk', false);
+        $response->assertSee('Lokasi Ruko (Pilihan Minat Sewa)');
+        $response->assertSee('Simpan Draf');
+        $response->assertSee('Kirim Pengajuan ke Admin');
+    }
+
+    public function test_umkm_can_save_draft_and_submit_pengajuan(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'umkm',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        // Simpan draf
+        $draftResponse = $this->actingAs($user)->post('/formulir/umkm', [
+            'aksi' => 'simpan_draf',
+            'nama_usaha' => 'Kopi Sejahtera',
+            'jenis_usaha' => 'Makanan',
+            'pemilik' => 'Budi Santoso',
+            'nomor_whatsapp' => '081234567890',
+        ]);
+
+        $draftResponse->assertRedirect('/dashboard');
+        $this->assertDatabaseHas('umkm', [
+            'user_id' => $user->id,
+            'nama_usaha' => 'Kopi Sejahtera',
+            'status_pengajuan' => 'draf',
+        ]);
+
+        // Kirim pengajuan
+        $submitResponse = $this->actingAs($user)->post('/formulir/umkm', [
+            'aksi' => 'kirim_pengajuan',
+            'nama_usaha' => 'Kopi Sejahtera',
+            'jenis_usaha' => 'Makanan',
+            'pemilik' => 'Budi Santoso',
+            'nomor_whatsapp' => '081234567890',
+        ]);
+
+        $submitResponse->assertRedirect('/dashboard');
+        $this->assertDatabaseHas('umkm', [
+            'user_id' => $user->id,
+            'nama_usaha' => 'Kopi Sejahtera',
+            'status_pengajuan' => 'menunggu_verifikasi',
+        ]);
+    }
+
+    public function test_investor_form_and_dashboard_renders(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'investor',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+            'kategori_diminati' => null,
+        ]);
+
+        // Belum isi formulir -> diarahkan ke formulir investor
+        $redirectResponse = $this->actingAs($user)->get('/dashboard');
+        $redirectResponse->assertRedirect('/formulir/investor');
+
+        // Buka formulir investor
+        $formResponse = $this->actingAs($user)->get('/formulir/investor');
+        $formResponse->assertStatus(200);
+        $formResponse->assertSee('Formulir Pendaftaran Investor');
+        $formResponse->assertSee('Identitas Pendaftar Investor');
+        $formResponse->assertSee('Informasi UMKM (Minat Pendanaan)');
+
+        // Kirim formulir investor
+        $saveResponse = $this->actingAs($user)->post('/formulir/investor', [
+            'nama' => $user->name,
+            'nomor_telepon' => '081299887766',
+            'kategori_diminati' => 'Makanan',
+        ]);
+        $saveResponse->assertRedirect('/dashboard');
+
+        // Setelah diisi, status menjadi menunggu_verifikasi dan melihat layar tunggu persetujuan admin
+        $user->refresh();
+        $this->assertEquals('Makanan', $user->kategori_diminati);
+        $this->assertEquals('menunggu_verifikasi', $user->status);
+
+        $dashResponse = $this->actingAs($user)->get('/dashboard');
+        $dashResponse->assertStatus(200);
+        $dashResponse->assertSee('Mitra Investor');
+        $dashResponse->assertSee('Akun Mitra Investor Anda Sedang Menunggu Verifikasi & Persetujuan (ACC) Admin', false);
+
+        // Setelah disetujui (ACC) oleh Super Admin, dashboard investor terbuka penuh
+        $user->update(['status' => 'aktif']);
+        $approvedResponse = $this->actingAs($user->fresh())->get('/dashboard');
+        $approvedResponse->assertStatus(200);
+        $approvedResponse->assertSee('BERANDA');
+        $approvedResponse->assertSee('Katalog Peluang Investasi');
+        $approvedResponse->assertSee('Ruko Strategis Siap Ditempati UMKM');
+    }
 }
+
