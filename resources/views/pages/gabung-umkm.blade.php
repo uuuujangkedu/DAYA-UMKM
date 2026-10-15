@@ -1,266 +1,182 @@
 @extends('layouts.auth')
 
-@section('title', 'Gabung Jadi Pelaku UMKM - DAYA UMKM')
+@section('title', 'Gabung Jadi Pelaku UMKM')
 
 @section('content')
-<div class="w-full max-w-6xl space-y-16 py-4">
+<div class="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
 
-    <!-- HERO SECTION (Sesuai Gaya Desain PaDi UMKM) -->
-    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#112F2B] via-[#093D36] to-[#075B50] text-white shadow-xl border border-emerald-900/40 p-8 sm:p-12 lg:p-16">
-        <!-- Dekorasi Background Circles -->
-        <div class="absolute -right-16 -top-16 w-80 h-80 rounded-full bg-teal-400/10 blur-3xl pointer-events-none"></div>
-        <div class="absolute -left-16 -bottom-16 w-80 h-80 rounded-full bg-[#F5B800]/10 blur-3xl pointer-events-none"></div>
-
-        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <!-- 1. HERO SECTION UMKM -->
+    <section class="hero-card animate-hero">
+        <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center">
             
-            <!-- Kolom Teks & Aksi -->
-            <div class="lg:col-span-7 space-y-6">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-200 text-xs font-bold border border-white/15 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Solusi Terpadu Modal & Sewa Ruko</span>
-                </div>
-
-                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
-                    Gabung Jadi <br>
-                    <span class="text-[#F5B800]">Pelaku UMKM DAYA</span>
+            <div class="space-y-6 text-left">
+                <h1 class="text-[#161d1a] font-bold text-[36px] sm:text-[46px] lg:text-[50px] leading-[1.08] tracking-[-0.025em]">
+                    Solusi modal dan sewa ruko bagi pelaku usaha
                 </h1>
 
-                <p class="text-emerald-100/90 text-sm sm:text-base leading-relaxed max-w-xl">
-                    Kembangkan bisnis Anda ke tingkat berikutnya dengan kemudahan akses permodalan produktif dan fasilitas sewa ruko komersial di lokasi strategis. Bebas beban agunan memberatkan, tumbuh bersama mitra investor.
+                <p class="text-[#4b5551] text-[18px] leading-[1.6] max-w-[46ch]">
+                    Kembangkan bisnis Anda dengan kemudahan akses permodalan produktif dan direktori sewa ruko strategis tanpa beban agunan memberatkan.
                 </p>
 
                 <div class="flex flex-wrap items-center gap-4 pt-2">
-                    <a href="{{ route('register.umkm') }}" 
-                       class="px-7 py-3.5 bg-[#00A389] hover:bg-[#008F78] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg hover:shadow-xl transition-all duration-150 transform hover:-translate-y-0.5 flex items-center gap-2">
-                        <span>GABUNG SEKARANG</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
+                    <a href="{{ route('register.umkm') }}" class="btn-primary">
+                        Daftar sebagai pelaku UMKM
                     </a>
-
-                    <a href="#kenapa-umkm" 
-                       class="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-bold text-xs uppercase tracking-wider rounded-xl border border-white/20 backdrop-blur-sm transition">
-                        Pelajari Manfaat
+                    <a href="#manfaat-umkm" class="btn-secondary">
+                        Pelajari fasilitas
                     </a>
-                </div>
-
-                <div class="pt-4 flex items-center gap-6 text-xs text-emerald-200/80">
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Akses Permodalan Fleksibel</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span>Pilihan Lokasi Ruko Terbaik</span>
-                    </div>
                 </div>
             </div>
 
-            <!-- Kolom Visual Showcase Card -->
-            <div class="lg:col-span-5">
-                <div class="relative bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 shadow-2xl space-y-5">
-                    
-                    <div class="flex items-center justify-between border-b border-white/15 pb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-xl bg-white text-[#075B50] flex items-center justify-center font-black text-lg shadow-md">
-                                <svg class="w-6 h-6 text-[#075B50]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="text-[11px] text-emerald-200 uppercase font-semibold">Fasilitas Bisnis</div>
-                                <div class="text-base font-extrabold text-white">Mitra Pelaku UMKM</div>
-                            </div>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full bg-[#F5B800]/20 text-[#F5B800] text-[10px] font-bold border border-[#F5B800]/30">Peluang Emas</span>
+            <!-- Panel Profil & Fasilitas Bisnis -->
+            <div class="animate-hero-panel">
+                <div class="panel-peluang space-y-5">
+                    <div class="text-center space-y-1">
+                        <h2 class="text-[18px] font-bold text-[#084539] leading-snug">
+                            Fasilitas ekosistem usaha
+                        </h2>
+                        <p class="text-[14px] text-[#4b5551]">
+                            Dukungan menyeluruh bagi pelaku UMKM
+                        </p>
                     </div>
 
-                    <!-- Highlight Metrics -->
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-black/20 rounded-xl p-3.5 border border-white/10">
-                            <div class="text-[10px] text-emerald-200">Kebutuhan Modal</div>
-                            <div class="text-xl font-black text-[#F5B800] mt-0.5">Sesuai Usaha</div>
-                            <div class="text-[9px] text-emerald-300/80 mt-1">Skema bagi hasil fleksibel</div>
+                    <div class="grid grid-cols-2 gap-3 w-full text-left">
+                        <div class="bg-white rounded-[6px] p-4 border border-[#e2e1d8]">
+                            <span class="text-[12px] text-[#4b5551] block">Kebutuhan modal</span>
+                            <span class="text-[18px] font-bold text-[#084539] mt-0.5 block">Fleksibel</span>
+                            <span class="text-[12px] text-[#4b5551] mt-0.5 block">Sesuai kapasitas usaha</span>
                         </div>
-                        <div class="bg-black/20 rounded-xl p-3.5 border border-white/10">
-                            <div class="text-[10px] text-emerald-200">Ketersediaan Ruko</div>
-                            <div class="text-xl font-black text-white mt-0.5">Lokasi Utama</div>
-                            <div class="text-[9px] text-emerald-300/80 mt-1">Dekat pusat keramaian</div>
+                        <div class="bg-white rounded-[6px] p-4 border border-[#e2e1d8]">
+                            <span class="text-[12px] text-[#4b5551] block">Ketersediaan ruko</span>
+                            <span class="text-[18px] font-bold text-[#161d1a] mt-0.5 block">Strategis</span>
+                            <span class="text-[12px] text-[#4b5551] mt-0.5 block">Pusat keramaian</span>
                         </div>
                     </div>
 
-                    <div class="bg-teal-950/40 rounded-xl p-3.5 border border-teal-600/30 text-xs text-emerald-100 flex items-start gap-2.5">
-                        <svg class="w-4 h-4 text-[#F5B800] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        <span>Bergabung bersama ratusan pengusaha mikro dan kecil yang telah meningkatkan kapasitas produksinya melalui jejaring DAYA UMKM.</span>
-                    </div>
-
-                    <a href="{{ route('register.umkm') }}" class="block text-center w-full py-3 bg-[#F5B800] hover:bg-[#E2A700] text-[#075B50] font-extrabold text-xs uppercase tracking-wider rounded-xl transition shadow">
-                        MULAI REGISTRASI PELAKU UMKM &rarr;
-                    </a>
+                    <p class="text-[13px] text-[#4b5551] text-left leading-[1.5] border-t border-[#c6dfd8] pt-3">
+                        Tumbuh bersama jejaring investor terpercaya dan fasilitas sewa komersial dengan tata kelola jelas.
+                    </p>
                 </div>
             </div>
 
         </div>
     </section>
 
-    <!-- SECTION 2: KENAPA GABUNG MENJADI PELAKU UMKM (Sesuai Referensi PaDi UMKM) -->
-    <section id="kenapa-umkm" class="text-center space-y-4 pt-4">
-        <h2 class="text-2xl sm:text-4xl font-extrabold text-[#1B1B18] tracking-tight">
-            Kenapa Gabung Menjadi Pelaku UMKM di DAYA UMKM
-        </h2>
-        <!-- Garis Penegas Aksen Hijau/Teal Khas Screenshot PaDi -->
-        <div class="w-16 h-1 bg-[#00A389] mx-auto rounded-full"></div>
-        <p class="text-[#5E6E69] text-xs sm:text-sm max-w-2xl mx-auto">
-            Dapatkan dukungan fasilitas menyeluruh dari permodalan produktif hingga kemudahan mencari tempat usaha strategis.
-        </p>
-
-        <!-- Grid 4 Keunggulan -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pt-6 text-left">
-            
-            <!-- Keunggulan 1 -->
-            <div class="bg-white rounded-2xl p-6 border border-[#E5E3DC] shadow-sm hover:shadow-md hover:border-[#075B50] transition group">
-                <div class="w-12 h-12 rounded-2xl bg-teal-50 text-[#075B50] flex items-center justify-center mb-4 group-hover:bg-[#075B50] group-hover:text-white transition shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-[#1B1B18] mb-2 group-hover:text-[#075B50] transition">
-                    Akses Modal Produktif
-                </h3>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Dapatkan pendanaan dari investor terverifikasi dengan mekanisme bagi hasil murni yang ramah bagi kelangsungan arus kas usaha Anda.
-                </p>
-            </div>
-
-            <!-- Keunggulan 2 -->
-            <div class="bg-white rounded-2xl p-6 border border-[#E5E3DC] shadow-sm hover:shadow-md hover:border-[#075B50] transition group">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-[#075B50] flex items-center justify-center mb-4 group-hover:bg-[#075B50] group-hover:text-white transition shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-[#1B1B18] mb-2 group-hover:text-[#075B50] transition">
-                    Sewa Ruko Strategis
-                </h3>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Akses direktori ruko komersial dari penyedia terpercaya dengan spesifikasi lengkap, harga transparan, dan jadwal bebas tumpang tindih.
-                </p>
-            </div>
-
-            <!-- Keunggulan 3 -->
-            <div class="bg-white rounded-2xl p-6 border border-[#E5E3DC] shadow-sm hover:shadow-md hover:border-[#075B50] transition group">
-                <div class="w-12 h-12 rounded-2xl bg-amber-50 text-[#C68D00] flex items-center justify-center mb-4 group-hover:bg-[#F5B800] group-hover:text-[#075B50] transition shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-[#1B1B18] mb-2 group-hover:text-[#075B50] transition">
-                    Tata Kelola & Bukti Transparan
-                </h3>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Semua transaksi sewa ruko dan penyaluran bagi hasil tercatat rapi di sistem sehingga meningkatkan kredibilitas bisnis Anda.
-                </p>
-            </div>
-
-            <!-- Keunggulan 4 -->
-            <div class="bg-white rounded-2xl p-6 border border-[#E5E3DC] shadow-sm hover:shadow-md hover:border-[#075B50] transition group">
-                <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-[#4338CA] flex items-center justify-center mb-4 group-hover:bg-[#4338CA] group-hover:text-white transition shadow-sm">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                </div>
-                <h3 class="text-base font-bold text-[#1B1B18] mb-2 group-hover:text-[#4338CA] transition">
-                    Peluang Bisnis Naik Kelas
-                </h3>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Dukungan ekspansi lokasi gerai dan kapasitas produksi membantu UMKM Anda berkembang menjadi bisnis skala menengah dan besar.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- SECTION 3: 4 LANGKAH MUDAH BERGABUNG SEBAGAI UMKM -->
-    <section class="bg-white rounded-3xl p-8 sm:p-12 border border-[#E5E3DC] shadow-sm">
-        <div class="text-center max-w-xl mx-auto space-y-3 mb-10">
-            <span class="text-xs font-bold uppercase tracking-wider text-[#075B50]">Langkah Mudah</span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#1B1B18]">Cara Memulai Perjalanan Usaha Anda</h2>
-            <div class="w-12 h-1 bg-[#00A389] mx-auto rounded-full"></div>
+    <!-- 2. KEUNGGULAN BERGABUNG SEBAGAI UMKM -->
+    <section id="manfaat-umkm" class="hero-card space-y-8">
+        <div class="text-left space-y-2">
+            <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
+                Keunggulan bergabung di Daya UMKM
+            </h2>
+            <p class="text-[#4b5551] text-[16px] max-w-2xl leading-[1.6]">
+                Dukungan fasilitas menyeluruh dari permodalan usaha hingga kemudahan sewa tempat berdagang.
+            </p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-            
-            <!-- Langkah 1 -->
-            <div class="p-6 rounded-2xl bg-[#F8F7F2] border border-[#E5E3DC] space-y-3 relative group hover:border-[#075B50] transition">
-                <div class="w-10 h-10 rounded-xl bg-[#075B50] text-white flex items-center justify-center font-extrabold text-sm shadow">
-                    1
-                </div>
-                <h4 class="font-bold text-sm text-[#1B1B18]">Daftar Akun UMKM</h4>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Isi formulir pendaftaran UMKM, data identitas, dan verifikasi alamat email via kode OTP resmi.
-                </p>
-            </div>
-
-            <!-- Langkah 2 -->
-            <div class="p-6 rounded-2xl bg-[#F8F7F2] border border-[#E5E3DC] space-y-3 relative group hover:border-[#075B50] transition">
-                <div class="w-10 h-10 rounded-xl bg-[#075B50] text-white flex items-center justify-center font-extrabold text-sm shadow">
-                    2
-                </div>
-                <h4 class="font-bold text-sm text-[#1B1B18]">Lengkapi Profil Usaha</h4>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Masukkan nama usaha, jenis industri dagang/jasa, kontak aktif, dan deskripsi kebutuhan pengembangan bisnis Anda.
-                </p>
-            </div>
-
-            <!-- Langkah 3 -->
-            <div class="p-6 rounded-2xl bg-[#F8F7F2] border border-[#E5E3DC] space-y-3 relative group hover:border-[#075B50] transition">
-                <div class="w-10 h-10 rounded-xl bg-[#075B50] text-white flex items-center justify-center font-extrabold text-sm shadow">
-                    3
-                </div>
-                <h4 class="font-bold text-sm text-[#1B1B18]">Pilih Ruko atau Ajukan Modal</h4>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Jelajahi ruko yang tersedia atau ajukan kebutuhan modal kerja agar dapat ditinjau dan didanai oleh investor.
-                </p>
-            </div>
-
-            <!-- Langkah 4 -->
-            <div class="p-6 rounded-2xl bg-[#F8F7F2] border border-[#E5E3DC] space-y-3 relative group hover:border-[#075B50] transition">
-                <div class="w-10 h-10 rounded-xl bg-[#F5B800] text-[#075B50] flex items-center justify-center font-extrabold text-sm shadow">
-                    4
-                </div>
-                <h4 class="font-bold text-sm text-[#1B1B18]">Operasional & Bertumbuh</h4>
-                <p class="text-xs text-[#5E6E69] leading-relaxed">
-                    Mulai operasikan gerai usaha Anda, catat perkembangan omzet, dan jalin kolaborasi berkelanjutan dalam ekosistem.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- SECTION 4: CALL TO ACTION BOTTOM BANNER -->
-    <section class="rounded-3xl bg-gradient-to-r from-[#075B50] to-[#1E5C3D] p-8 sm:p-12 text-white text-center space-y-6 shadow-lg">
-        <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">
-            Saatnya Membawa Usaha Anda Menuju Tingkat Selanjutnya
-        </h2>
-        <p class="text-xs sm:text-sm text-emerald-100 max-w-2xl mx-auto leading-relaxed">
-            Daftarkan usaha Anda sekarang juga dan nikmati berbagai kemudahan permodalan serta lokasi ruko usaha terbaik di Indonesia.
-        </p>
-        <div class="pt-2">
-            <a href="{{ route('register.umkm') }}" 
-               class="inline-flex items-center gap-2 px-8 py-4 bg-[#F5B800] hover:bg-[#E2A700] text-[#075B50] font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-xl hover:shadow-2xl transition transform hover:-translate-y-0.5">
-                <span>Buka Formulir Pendaftaran UMKM</span>
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Akses modal produktif</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Pendanaan dari investor terverifikasi dengan mekanisme bagi hasil murni yang ramah bagi arus kas usaha.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Sewa ruko strategis</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Akses direktori ruko komersial dari penyedia terpercaya dengan spesifikasi lengkap dan harga transparan.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Pencatatan transparan</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Semua transaksi sewa ruko dan penyaluran bagi hasil tercatat rapi di sistem untuk reputasi usaha Anda.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Peluang naik kelas</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Dukungan ekspansi lokasi gerai dan kapasitas produksi membantu UMKM bertumbuh secara berkelanjutan.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. CARA MEMULAI PERJALANAN USAHA -->
+    <section class="hero-card space-y-8">
+        <div class="text-left space-y-2">
+            <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
+                Tahapan pendaftaran usaha
+            </h2>
+            <p class="text-[#4b5551] text-[16px] max-w-2xl leading-[1.6]">
+                Langkah teratur dari registrasi hingga operasional gerai usaha Anda.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 1</span>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Daftar akun UMKM</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Isi formulir pendaftaran akun usaha dan lakukan verifikasi alamat email lewat kode OTP resmi.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 2</span>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Lengkapi profil usaha</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Masukkan nama usaha, bidang industri, kontak aktif, dan deskripsi kebutuhan pengembangan.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 3</span>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Pilih ruko atau modal</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Pilih lokasi ruko yang tersedia atau ajukan kebutuhan modal kerja agar dapat ditinjau investor.
+                </p>
+            </div>
+
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+                <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 4</span>
+                <h3 class="font-bold text-[16px] text-[#161d1a]">Operasional & tumbuh</h3>
+                <p class="text-[14px] text-[#4b5551] leading-[1.6]">
+                    Jalankan operasional usaha, catat perkembangan omzet, dan bangun hubungan kemitraan yang sehat.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. BOTTOM ACTION CARD -->
+    <section class="hero-card space-y-6 text-left">
+        <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
+            Saatnya membawa usaha Anda ke tingkat selanjutnya
+        </h2>
+        <p class="text-[#4b5551] text-[16px] max-w-2xl leading-[1.6]">
+            Daftarkan unit usaha Anda sekarang untuk mendapatkan akses modal terukur dan pilihan ruko komersial terbaik.
+        </p>
+        <div>
+            <a href="{{ route('register.umkm') }}" class="btn-primary">
+                Daftar sebagai pelaku UMKM
             </a>
         </div>
     </section>
 
 </div>
 @endsection
+
