@@ -8,20 +8,20 @@
     <!-- 1. Floating Action Button (FAB) -->
     <button type="button" 
             id="a11y-trigger-btn"
-            class="a11y-ignore fixed bottom-6 right-6 z-[9999] w-12 h-12 rounded-full bg-[#0b5a4a] hover:bg-[#084539] text-white flex items-center justify-center shadow-lg transition-transform hover:scale-105 cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#0b5a4a]/30"
+            class="a11y-ignore fixed bottom-6 left-6 z-[9999] w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#0b5a4a] hover:bg-[#084539] text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105 cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#0b5a4a]/30"
             aria-label="Buka menu aksesibilitas disabilitas"
             aria-haspopup="dialog"
             aria-expanded="false"
             title="Aksesibilitas & Disabilitas">
         <!-- Universal Accessibility Icon -->
-        <svg class="w-6 h-6 text-white pointer-events-none" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg class="w-6 h-6 md:w-7 md:h-7 text-white pointer-events-none" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
         </svg>
     </button>
 
     <!-- 2. Panel Menu Aksesibilitas (Super Simpel & Bersih) -->
     <div id="a11y-panel" 
-         class="a11y-ignore hidden fixed bottom-20 right-6 z-[9999] w-[320px] sm:w-[350px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
+         class="a11y-ignore hidden fixed bottom-20 md:bottom-[90px] left-6 z-[9999] w-[320px] sm:w-[350px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
          role="dialog"
          aria-modal="true"
          aria-label="Panel Pengaturan Aksesibilitas">
