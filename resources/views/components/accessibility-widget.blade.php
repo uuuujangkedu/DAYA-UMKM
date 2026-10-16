@@ -57,10 +57,6 @@
                 <div class="text-[12px] text-[#4b5551] leading-relaxed">
                     Arahkan kursor atau klik pada paragraf atau teks apa pun untuk mendengarkan informasinya.
                 </div>
-                <div id="a11y-reader-badge" class="hidden text-[11px] font-semibold text-[#0b5a4a] bg-[#d8ebe5] px-2 py-0.5 rounded-[4px] inline-flex items-center gap-1.5 mt-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#0b5a4a] animate-ping"></span>
-                    <span>Mode suara aktif</span>
-                </div>
             </div>
             <button type="button" 
                     id="a11y-toggle-reader"
@@ -202,7 +198,6 @@
         const resetBtn = document.getElementById('a11y-btn-reset');
 
         const readerToggle = document.getElementById('a11y-toggle-reader');
-        const readerBadge = document.getElementById('a11y-reader-badge');
         const contrastToggle = document.getElementById('a11y-toggle-contrast');
         const dyslexiaToggle = document.getElementById('a11y-toggle-dyslexia');
         const linksToggle = document.getElementById('a11y-toggle-links');
@@ -280,10 +275,6 @@
 
             // 5. Pembaca Layar
             setSwitchVisual(readerToggle, state.screenReader);
-            if (readerBadge) {
-                if (state.screenReader) readerBadge.classList.remove('hidden');
-                else readerBadge.classList.add('hidden');
-            }
             if (!state.screenReader && window.speechSynthesis) {
                 window.speechSynthesis.cancel();
                 clearSpeakingHighlight();
