@@ -19,43 +19,33 @@
         </svg>
     </button>
 
-    <!-- 2. Panel Menu Aksesibilitas (Clean Look & Modern List) -->
+    <!-- 2. Panel Menu Aksesibilitas (Super Simpel & Bersih) -->
     <div id="a11y-panel" 
-         class="a11y-ignore hidden fixed bottom-20 right-6 z-[9999] w-[350px] sm:w-[390px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
+         class="a11y-ignore hidden fixed bottom-20 right-6 z-[9999] w-[320px] sm:w-[350px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
          role="dialog"
          aria-modal="true"
          aria-label="Panel Pengaturan Aksesibilitas">
         
-        <!-- Header Panel -->
-        <div class="flex items-center justify-between pb-3.5 border-b border-[#e2e1d8]">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-[#d8ebe5] text-[#0b5a4a] flex items-center justify-center shrink-0">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h2 class="text-[16px] font-bold text-[#161d1a] leading-tight">Aksesibilitas web</h2>
-                    <span class="text-[12px] text-[#4b5551]">Alat bantu kemudahan navigasi</span>
-                </div>
-            </div>
+        <!-- Header Panel Simpel -->
+        <div class="flex items-center justify-between pb-3 border-b border-[#e2e1d8]">
+            <h2 class="text-[16px] font-bold text-[#161d1a]">Aksesibilitas</h2>
 
             <button type="button" 
                     id="a11y-close-btn"
                     class="p-1 rounded-md text-[#4b5551] hover:text-[#161d1a] hover:bg-[#f7f6f1] transition cursor-pointer"
                     aria-label="Tutup panel aksesibilitas">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
         </div>
 
         <!-- FITUR 1: Pembaca Layar -->
-        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-4">
+        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-3">
             <div class="space-y-0.5 pr-2">
                 <div class="text-[14px] font-bold text-[#161d1a]">Pembaca layar</div>
                 <div class="text-[12px] text-[#4b5551] leading-relaxed">
-                    Arahkan kursor atau klik pada paragraf atau teks apa pun untuk mendengarkan informasinya.
+                    Klik teks untuk mendengarkannya
                 </div>
             </div>
             <button type="button" 
@@ -69,37 +59,34 @@
             </button>
         </div>
 
-        <!-- FITUR 2: Ukuran Teks (Segmented Control) -->
+        <!-- FITUR 2: Ukuran Teks (3 Tombol Terpisah) -->
         <div class="py-3.5 border-b border-[#e2e1d8] space-y-2.5">
-            <div class="flex items-center justify-between">
-                <span class="text-[14px] font-bold text-[#161d1a]">Ukuran teks</span>
-                <span id="a11y-font-indicator" class="text-[13px] font-medium text-[#0b5a4a]">Normal</span>
-            </div>
-            <div class="grid grid-cols-3 rounded-[8px] border border-[#e2e1d8] overflow-hidden divide-x divide-[#e2e1d8] bg-white">
+            <div class="text-[14px] font-bold text-[#161d1a]">Ukuran teks</div>
+            <div class="grid grid-cols-3 gap-2.5">
                 <button type="button" 
                         data-size="sm"
-                        class="a11y-size-btn py-2 text-[13px] font-medium transition cursor-pointer text-[#161d1a] bg-white hover:bg-[#f7f6f1] text-center">
-                    A- Kecil
+                        class="a11y-size-btn py-2 px-3 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[13px] font-medium transition cursor-pointer text-center">
+                    A-
                 </button>
                 <button type="button" 
                         data-size="normal"
-                        class="a11y-size-btn active py-2 text-[13px] font-semibold transition cursor-pointer text-white bg-[#0b5a4a] text-center">
+                        class="a11y-size-btn active py-2 px-3 rounded-[8px] border border-[#0b5a4a] bg-[#0b5a4a] text-white text-[13px] font-semibold transition cursor-pointer text-center shadow-sm">
                     Normal
                 </button>
                 <button type="button" 
                         data-size="lg"
-                        class="a11y-size-btn py-2 text-[13px] font-medium transition cursor-pointer text-[#161d1a] bg-white hover:bg-[#f7f6f1] text-center">
-                    A+ Besar
+                        class="a11y-size-btn py-2 px-3 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[13px] font-medium transition cursor-pointer text-center">
+                    A+
                 </button>
             </div>
         </div>
 
         <!-- FITUR 3: Kontras Tinggi -->
-        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-4">
+        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-3">
             <div class="space-y-0.5 pr-2">
                 <div class="text-[14px] font-bold text-[#161d1a]">Kontras tinggi</div>
                 <div class="text-[12px] text-[#4b5551] leading-relaxed">
-                    Latar gelap dengan teks kuning terang untuk kenyamanan mata.
+                    Latar gelap dengan teks kuning
                 </div>
             </div>
             <button type="button" 
@@ -114,11 +101,11 @@
         </div>
 
         <!-- FITUR 4: Ramah Disleksia -->
-        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-4">
+        <div class="py-3.5 border-b border-[#e2e1d8] flex items-center justify-between gap-3">
             <div class="space-y-0.5 pr-2">
                 <div class="text-[14px] font-bold text-[#161d1a]">Ramah disleksia</div>
                 <div class="text-[12px] text-[#4b5551] leading-relaxed">
-                    Jenis huruf dan spasi khusus agar teks lebih mudah dibaca.
+                    Jenis huruf dan spasi yang lebih lapang
                 </div>
             </div>
             <button type="button" 
@@ -133,11 +120,11 @@
         </div>
 
         <!-- FITUR 5: Sorot Tautan -->
-        <div class="py-3.5 flex items-center justify-between gap-4">
+        <div class="py-3.5 flex items-center justify-between gap-3">
             <div class="space-y-0.5 pr-2">
                 <div class="text-[14px] font-bold text-[#161d1a]">Sorot tautan</div>
                 <div class="text-[12px] text-[#4b5551] leading-relaxed">
-                    Beri penanda kuning yang mencolok pada tautan dan tombol.
+                    Tandai tautan dan tombol dengan kuning
                 </div>
             </div>
             <button type="button" 
@@ -151,13 +138,15 @@
             </button>
         </div>
 
-        <!-- FOOTER: Pengaturan tersimpan & Atur ulang -->
-        <div class="pt-3 border-t border-[#e2e1d8] flex items-center justify-between text-[12px]">
-            <span class="text-[#4b5551]">Pengaturan tersimpan di perangkat ini</span>
+        <!-- FOOTER: Tombol Atur Ulang -->
+        <div class="pt-3 border-t border-[#e2e1d8]">
             <button type="button" 
                     id="a11y-btn-reset"
-                    class="font-semibold text-[#0b5a4a] hover:underline cursor-pointer">
-                Atur ulang
+                    class="w-full py-2.5 px-4 rounded-[8px] border border-[#e2e1d8] bg-white hover:bg-[#f7f6f1] text-[#0b5a4a] hover:border-[#0b5a4a] text-[13px] font-semibold transition cursor-pointer flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Atur ulang</span>
             </button>
         </div>
 
@@ -202,7 +191,6 @@
         const dyslexiaToggle = document.getElementById('a11y-toggle-dyslexia');
         const linksToggle = document.getElementById('a11y-toggle-links');
         const fontBtns = document.querySelectorAll('.a11y-size-btn');
-        const fontIndicator = document.getElementById('a11y-font-indicator');
 
         // Helper update visual switch (100% presisi dan tidak pernah overflow)
         function setSwitchVisual(switchEl, active) {
@@ -234,20 +222,17 @@
             else if (state.fontSize === 'lg') root.classList.add('a11y-font-lg');
             else root.classList.add('a11y-font-normal');
 
-            // Update segmented buttons
+            // Update font buttons
             fontBtns.forEach(btn => {
                 const s = btn.getAttribute('data-size');
                 if (s === state.fontSize) {
-                    btn.classList.add('active', 'bg-[#0b5a4a]', 'text-white', 'font-semibold');
-                    btn.classList.remove('bg-white', 'text-[#161d1a]', 'hover:bg-[#f7f6f1]');
+                    btn.classList.add('active', 'bg-[#0b5a4a]', 'text-white', 'border-[#0b5a4a]', 'font-semibold', 'shadow-sm');
+                    btn.classList.remove('bg-white', 'text-[#161d1a]', 'border-[#e2e1d8]', 'hover:bg-[#f7f6f1]', 'font-medium');
                 } else {
-                    btn.classList.remove('active', 'bg-[#0b5a4a]', 'text-white', 'font-semibold');
-                    btn.classList.add('bg-white', 'text-[#161d1a]', 'hover:bg-[#f7f6f1]');
+                    btn.classList.remove('active', 'bg-[#0b5a4a]', 'text-white', 'border-[#0b5a4a]', 'font-semibold', 'shadow-sm');
+                    btn.classList.add('bg-white', 'text-[#161d1a]', 'border-[#e2e1d8]', 'hover:bg-[#f7f6f1]', 'font-medium');
                 }
             });
-            if (fontIndicator) {
-                fontIndicator.textContent = state.fontSize === 'sm' ? 'Kecil' : (state.fontSize === 'lg' ? 'Besar' : 'Normal');
-            }
 
             // 2. Kontras tinggi
             if (state.contrast) {
