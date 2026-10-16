@@ -119,13 +119,14 @@ body {
     justify-content: center;
     background-color: var(--gold);
     color: var(--ink);
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
-    padding: 14px 22px;
+    line-height: 1.25;
+    padding: 7px 18px;
     border-radius: 6px;
     text-decoration: none;
     border: 1px solid transparent;
-    transition: background-color 0.15s ease;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
 .btn-header-masuk:hover {
@@ -157,6 +158,50 @@ body {
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 32px 24px;
+}
+
+/* ========================================================
+   PENGATURAN KARAKTER HERO (UKURAN & POSISI JARAK)
+   ======================================================== */
+.hero-character-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    align-self: flex-end;
+    /* Menempelkan tepi bawah potongan badan ke dasar kartu (menghapus jarak ngambang) */
+    margin-bottom: -32px;
+}
+
+@media (min-width: 640px) {
+    .hero-character-wrapper {
+        margin-bottom: -48px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-character-wrapper {
+        justify-content: flex-end;
+        margin-bottom: -72px; /* UBAH DI SINI: untuk atur posisi naik/turun karakter di desktop */
+    }
+}
+
+.hero-character-img {
+    width: 100%;
+    max-width: 400px; /* Ukuran mobile/tablet */
+    height: auto;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.05));
+    transition: transform 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .hero-character-img {
+        max-width: 530px; /* UBAH DI SINI: untuk atur besar/kecil karakter di desktop */
+        transform: scale(1.06); /* Skala proporsi karakter */
+        transform-origin: bottom right;
+    }
 }
 
 @media (min-width: 640px) {

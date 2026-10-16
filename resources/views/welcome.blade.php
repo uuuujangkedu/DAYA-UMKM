@@ -6,10 +6,10 @@
 <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
 
     <!-- 1. HERO SECTION (Sesuai DESIGN.md: Kartu putih, 1.2fr : 1fr, max-w 46ch, sentence case) -->
-    <section id="beranda" class="hero-card scroll-mt-[100px]" data-reveal>
-        <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center">
+    <section id="beranda" class="hero-card scroll-mt-[100px] overflow-hidden" data-reveal>
+        <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center lg:items-end">
             
-            <div class="space-y-6 text-left">
+            <div class="space-y-6 text-left py-2 sm:py-4">
                 <h1 class="text-[#161d1a] font-bold text-[36px] sm:text-[46px] lg:text-[52px] leading-[1.08] tracking-[-0.025em]" data-reveal-item>
                     Wadah permodalan produktif dan sewa ruko bagi pelaku usaha
                 </h1>
@@ -28,19 +28,11 @@
                 </div>
             </div>
 
-            <!-- Panel Peluang (Sesuai DESIGN.md: latar mint, radius 10px, min-height 320px, rata tengah) -->
-            <div data-reveal-item>
-                <div class="panel-peluang">
-                    <svg class="w-10 h-10 text-[#0b5a4a] mb-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                    </svg>
-                    <h2 class="text-[18px] font-bold text-[#084539] leading-snug">
-                        Peluang investasi dan sewa ruko
-                    </h2>
-                    <p class="text-[15px] text-[#4b5551] mt-2 max-w-xs leading-[1.5]">
-                        Tersebar di berbagai lokasi strategis dengan tata kelola transparan dan imbal hasil terukur.
-                    </p>
-                </div>
+            <!-- Karakter 3D Maskot / Pelaku UMKM -->
+            <div class="hero-character-wrapper" data-reveal-item>
+                <img src="{{ asset('images/hero-character.png') }}" 
+                     alt="Karakter Pelaku Usaha Daya UMKM" 
+                     class="hero-character-img">
             </div>
 
         </div>
