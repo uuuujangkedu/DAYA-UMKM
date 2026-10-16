@@ -401,7 +401,7 @@ section[id] {
    MODUL AKSESIBILITAS & DISABILITAS (WCAG Standards)
    ======================================================== */
 
-/* 1. Pengaturan Ukuran Teks (Font Scaling) */
+/* 1. Pengaturan Ukuran Teks (Font Scaling: Normal > Besar > Lebih besar) */
 html.a11y-font-sm {
     font-size: 14.5px !important;
 }
@@ -409,7 +409,10 @@ html.a11y-font-normal {
     font-size: 16px !important;
 }
 html.a11y-font-lg {
-    font-size: 19px !important;
+    font-size: 18.5px !important;
+}
+html.a11y-font-xl {
+    font-size: 21px !important;
 }
 
 /* 2. Mode Kontras Tinggi (High Contrast WCAG AAA) */

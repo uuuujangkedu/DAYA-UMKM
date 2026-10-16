@@ -62,21 +62,21 @@
         <!-- FITUR 2: Ukuran Teks (3 Tombol Terpisah) -->
         <div class="py-3.5 border-b border-[#e2e1d8] space-y-2.5">
             <div class="text-[14px] font-bold text-[#161d1a]">Ukuran teks</div>
-            <div class="grid grid-cols-3 gap-2.5">
-                <button type="button" 
-                        data-size="sm"
-                        class="a11y-size-btn py-2 px-3 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[13px] font-medium transition cursor-pointer text-center">
-                    A-
-                </button>
+            <div class="grid grid-cols-3 gap-2">
                 <button type="button" 
                         data-size="normal"
-                        class="a11y-size-btn active py-2 px-3 rounded-[8px] border border-[#0b5a4a] bg-[#0b5a4a] text-white text-[13px] font-semibold transition cursor-pointer text-center shadow-sm">
+                        class="a11y-size-btn active py-2 px-1 sm:px-2 rounded-[8px] border border-[#0b5a4a] bg-[#0b5a4a] text-white text-[12.5px] sm:text-[13px] font-semibold transition cursor-pointer text-center shadow-sm">
                     Normal
                 </button>
                 <button type="button" 
                         data-size="lg"
-                        class="a11y-size-btn py-2 px-3 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[13px] font-medium transition cursor-pointer text-center">
-                    A+
+                        class="a11y-size-btn py-2 px-1 sm:px-2 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[12.5px] sm:text-[13px] font-medium transition cursor-pointer text-center">
+                    Besar
+                </button>
+                <button type="button" 
+                        data-size="xl"
+                        class="a11y-size-btn py-2 px-1 sm:px-2 rounded-[8px] border border-[#e2e1d8] bg-white text-[#161d1a] hover:bg-[#f7f6f1] text-[12px] sm:text-[12.5px] font-medium transition cursor-pointer text-center whitespace-nowrap">
+                    Lebih besar
                 </button>
             </div>
         </div>
@@ -217,9 +217,9 @@
             const root = document.documentElement;
 
             // 1. Ukuran font
-            root.classList.remove('a11y-font-sm', 'a11y-font-normal', 'a11y-font-lg');
-            if (state.fontSize === 'sm') root.classList.add('a11y-font-sm');
-            else if (state.fontSize === 'lg') root.classList.add('a11y-font-lg');
+            root.classList.remove('a11y-font-sm', 'a11y-font-normal', 'a11y-font-lg', 'a11y-font-xl');
+            if (state.fontSize === 'lg') root.classList.add('a11y-font-lg');
+            else if (state.fontSize === 'xl') root.classList.add('a11y-font-xl');
             else root.classList.add('a11y-font-normal');
 
             // Update font buttons
