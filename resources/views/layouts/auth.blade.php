@@ -38,7 +38,7 @@
     </style>
 
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/motion.js'])
     @endif
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -304,6 +304,8 @@
             // 4. Smooth scroll dengan offset tepat (96px) saat link anchor diklik
             document.querySelectorAll('a[href*="#"]').forEach(link => {
                 link.addEventListener('click', function(e) {
+                    if (window.lenis) return; // Lenis in motion.js handles smooth scrolling
+
                     const href = this.getAttribute('href');
                     if (!href) return;
                     const hashIndex = href.indexOf('#');
@@ -340,6 +342,7 @@
             const berandaLink = document.getElementById('nav-link-beranda');
             if (berandaLink) {
                 berandaLink.addEventListener('click', function(e) {
+                    if (window.lenis) return; // Lenis in motion.js handles it
                     if (window.location.pathname === '/' || window.location.pathname === '') {
                         e.preventDefault();
                         window.scrollTo({ top: 0, behavior: 'smooth' });
