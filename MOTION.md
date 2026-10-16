@@ -14,7 +14,7 @@ Dokumen ini khusus mengatur animasi dan smooth scroll. Dokumen ini **tidak** men
 
 | Area | Motion | Smooth scroll (Lenis) |
 | --- | --- | --- |
-| Landing page / halaman publik | Ya | Ya |
+| Landing page & halaman publik (`/`, `/gabung/investor`, `/gabung/umkm`) | Ya | Ya |
 | Dashboard admin, super admin, UMKM, investor, dan semua dashboard user | **Tidak** | **Tidak** |
 
 Dashboard memakai scroll native dan navbar statis sesuai `DESIGN.md` bagian 8. Motion modul ini tidak boleh di-import di layout dashboard.

@@ -6,19 +6,19 @@
 <div class="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
 
     <!-- 1. HERO SECTION INVESTOR -->
-    <section class="hero-card animate-hero">
+    <section class="hero-card scroll-mt-[100px]" data-reveal data-hero>
         <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center">
             
             <div class="space-y-6 text-left">
-                <h1 class="text-[#161d1a] font-bold text-[36px] sm:text-[46px] lg:text-[50px] leading-[1.08] tracking-[-0.025em]">
+                <h1 class="text-[#161d1a] font-bold text-[36px] sm:text-[46px] lg:text-[50px] leading-[1.08] tracking-[-0.025em]" data-reveal-item>
                     Kemitraan permodalan bagi investor produktif
                 </h1>
 
-                <p class="text-[#4b5551] text-[18px] leading-[1.6] max-w-[46ch]">
+                <p class="text-[#4b5551] text-[18px] leading-[1.6] max-w-[46ch]" data-reveal-item>
                     Salurkan permodalan langsung kepada pelaku UMKM terverifikasi di ekosistem Daya UMKM dengan imbal hasil terukur, berkala, dan transparan.
                 </p>
 
-                <div class="flex flex-wrap items-center gap-4 pt-2">
+                <div class="flex flex-wrap items-center gap-4 pt-2" data-reveal-item>
                     <a href="{{ route('register.investor') }}" class="btn-primary">
                         Daftar sebagai investor
                     </a>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Panel Profil & Metrik Kemitraan -->
-            <div class="animate-hero-panel">
+            <div data-reveal-item>
                 <div class="panel-peluang space-y-5">
                     <div class="text-center space-y-1">
                         <h2 class="text-[18px] font-bold text-[#084539] leading-snug">
@@ -63,8 +63,8 @@
     </section>
 
     <!-- 2. MANFAAT MENJADI INVESTOR -->
-    <section id="manfaat-investor" class="hero-card space-y-8">
-        <div class="text-left space-y-2">
+    <section id="manfaat-investor" class="hero-card space-y-8 scroll-mt-[100px]" data-reveal>
+        <div class="text-left space-y-2" data-reveal-item>
             <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
                 Keunggulan kemitraan investor
             </h2>
@@ -74,7 +74,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
@@ -84,7 +84,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -94,7 +94,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
@@ -104,7 +104,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <svg class="w-8 h-8 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
@@ -117,8 +117,8 @@
     </section>
 
     <!-- 3. CARA MEMULAI INVESTASI -->
-    <section class="hero-card space-y-8">
-        <div class="text-left space-y-2">
+    <section class="hero-card space-y-8 scroll-mt-[100px]" data-reveal>
+        <div class="text-left space-y-2" data-reveal-item>
             <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
                 Tahapan berinvestasi
             </h2>
@@ -128,7 +128,7 @@
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 1</span>
                 <h3 class="font-bold text-[16px] text-[#161d1a]">Daftar akun investor</h3>
                 <p class="text-[14px] text-[#4b5551] leading-[1.6]">
@@ -136,7 +136,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 2</span>
                 <h3 class="font-bold text-[16px] text-[#161d1a]">Pilih UMKM potensial</h3>
                 <p class="text-[14px] text-[#4b5551] leading-[1.6]">
@@ -144,7 +144,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 3</span>
                 <h3 class="font-bold text-[16px] text-[#161d1a]">Konfirmasi permodalan</h3>
                 <p class="text-[14px] text-[#4b5551] leading-[1.6]">
@@ -152,7 +152,7 @@
                 </p>
             </div>
 
-            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left">
+            <div class="p-6 rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] space-y-3 text-left" data-reveal-item>
                 <span class="inline-block text-[14px] font-bold text-[#0b5a4a]">Tahap 4</span>
                 <h3 class="font-bold text-[16px] text-[#161d1a]">Terima bagi hasil</h3>
                 <p class="text-[14px] text-[#4b5551] leading-[1.6]">
@@ -163,14 +163,14 @@
     </section>
 
     <!-- 4. BOTTOM ACTION CARD -->
-    <section class="hero-card space-y-6 text-left">
-        <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
+    <section class="hero-card space-y-6 text-left scroll-mt-[100px]" data-reveal>
+        <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight" data-reveal-item>
             Mulai kemitraan investasi Anda sekarang
         </h2>
-        <p class="text-[#4b5551] text-[16px] max-w-2xl leading-[1.6]">
+        <p class="text-[#4b5551] text-[16px] max-w-2xl leading-[1.6]" data-reveal-item>
             Dukung pertumbuhan pelaku usaha lokal dan nikmati bagi hasil terukur bersama ekosistem terpercaya Daya UMKM.
         </p>
-        <div>
+        <div data-reveal-item>
             <a href="{{ route('register.investor') }}" class="btn-primary">
                 Daftar sebagai investor
             </a>

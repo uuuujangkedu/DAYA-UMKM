@@ -16,7 +16,7 @@ function initMotion() {
     // 2. Register GSAP Plugin once
     gsap.registerPlugin(ScrollTrigger);
 
-    // 3. Initialize Lenis Smooth Scroll (Landing page only)
+    // 3. Initialize Lenis Smooth Scroll (Landing page & Gabung public pages)
     const lenis = new Lenis({
         duration: 1.1,
         smoothWheel: true,
@@ -43,13 +43,13 @@ function initMotion() {
         });
     }
 
-    // 5. Shared Reveal Configuration for all sections
+    // 5. Shared Reveal Configuration for all sections (Landing page & Gabung pages)
     //    Each section has [data-reveal], children have [data-reveal-item]
     const revealSections = document.querySelectorAll('[data-reveal]');
     const sectionTimelines = new Map();
 
-    revealSections.forEach((section) => {
-        const isHero = section.id === 'beranda';
+    revealSections.forEach((section, index) => {
+        const isHero = section.id === 'beranda' || section.hasAttribute('data-hero') || index === 0;
         const items = section.querySelectorAll('[data-reveal-item]');
 
         // Single coordinated timeline for the section and its children
@@ -112,9 +112,6 @@ function initMotion() {
     function navigateToSection(targetEl, hash) {
         if (!targetEl) return;
 
-        const isLanding = window.location.pathname === '/' || window.location.pathname === '';
-        if (!isLanding) return;
-
         lenis.scrollTo(targetEl, {
             offset: -96,
             duration: 1.1,
@@ -141,6 +138,17 @@ function initMotion() {
             if (!href) return;
             const hashIndex = href.indexOf('#');
             if (hashIndex === -1) return;
+
+            // Check if this link points to a hash on another page
+            const pathPart = href.substring(0, hashIndex);
+            const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+            const cleanPathPart = pathPart.replace(/\/$/, '') || '/';
+            
+            if (pathPart && cleanPathPart !== currentPath) {
+                // Cross-page link (e.g. href="/#tentang-kami" while on "/gabung/umkm")
+                // Let browser navigate normally to the target page!
+                return;
+            }
 
             const hash = href.substring(hashIndex);
             if (!hash || hash === '#') return;
@@ -170,12 +178,11 @@ function initMotion() {
         });
     }
 
-    // 7. Initial Hash Navigation: e.g. opening /#tentang-kami directly
+    // 7. Initial Hash Navigation: e.g. opening /#tentang-kami or /gabung/umkm#manfaat-umkm directly
     if (window.location.hash) {
         const hash = window.location.hash;
         const targetEl = document.querySelector(hash);
         if (targetEl) {
-            // Scroll to top first so Lenis smoothly travels to the anchor
             window.scrollTo(0, 0);
             setTimeout(() => {
                 navigateToSection(targetEl, hash);
