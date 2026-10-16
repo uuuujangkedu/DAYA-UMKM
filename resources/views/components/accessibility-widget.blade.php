@@ -270,6 +270,58 @@
         // FITUR SCREEN READER (Web Speech API)
         // ==========================================
         let currentSpeakingEl = null;
+        let selectedIndonesianVoice = null;
+
+        function getBestIndonesianVoice() {
+            if (!window.speechSynthesis) return null;
+            const voices = window.speechSynthesis.getVoices();
+            if (!voices || voices.length === 0) return null;
+
+            // 1. Prioritas Suara Natural Edge (Microsoft Gadis / Ardi) - Sangat manusiawi & jernih
+            let voice = voices.find(v => 
+                (v.name.includes('Natural') || v.name.includes('Online')) && 
+                (v.lang.toLowerCase().includes('id') || v.name.toLowerCase().includes('indonesia'))
+            );
+            if (voice) return voice;
+
+            // 2. Prioritas Google Bahasa Indonesia (Chrome)
+            voice = voices.find(v => 
+                v.name.toLowerCase().includes('google') && 
+                (v.lang.toLowerCase().includes('id') || v.name.toLowerCase().includes('indonesia'))
+            );
+            if (voice) return voice;
+
+            // 3. Suara Apple macOS / iOS (Damayanti) atau nama Indonesia lain
+            voice = voices.find(v => 
+                v.name.toLowerCase().includes('damayanti') || 
+                v.name.toLowerCase().includes('andika') || 
+                v.name.toLowerCase().includes('indonesia')
+            );
+            if (voice) return voice;
+
+            // 4. Semua suara dengan kode bahasa id-ID / id
+            voice = voices.find(v => 
+                v.lang && (v.lang.toLowerCase() === 'id-id' || v.lang.toLowerCase().startsWith('id'))
+            );
+            if (voice) return voice;
+
+            // 5. Cadangan terdekat: Bahasa Melayu (ms-MY) jika tidak ada suara Indonesia
+            voice = voices.find(v => 
+                v.lang && (v.lang.toLowerCase().startsWith('ms') || v.name.toLowerCase().includes('malay'))
+            );
+            return voice || null;
+        }
+
+        function initVoices() {
+            selectedIndonesianVoice = getBestIndonesianVoice();
+        }
+
+        if (window.speechSynthesis) {
+            initVoices();
+            if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                window.speechSynthesis.onvoiceschanged = initVoices;
+            }
+        }
 
         function clearSpeakingHighlight() {
             if (currentSpeakingEl) {
@@ -291,7 +343,18 @@
 
             const utterance = new SpeechSynthesisUtterance(text.trim());
             utterance.lang = 'id-ID';
-            utterance.rate = 1.0;
+
+            // Pastikan voice terbaru terdeteksi
+            if (!selectedIndonesianVoice) {
+                selectedIndonesianVoice = getBestIndonesianVoice();
+            }
+
+            if (selectedIndonesianVoice) {
+                utterance.voice = selectedIndonesianVoice;
+            }
+
+            // Kecepatan dan intonasi santai agar artikulasi bahasa Indonesia terdengar fasih & jelas
+            utterance.rate = 0.94;
             utterance.pitch = 1.0;
 
             if (targetEl) {
