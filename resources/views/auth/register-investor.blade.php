@@ -3,7 +3,7 @@
 @section('title', 'Formulir Pendaftaran Investor - Daya UMKM')
 
 @section('content')
-<div class="w-full max-w-4xl py-6 space-y-6">
+<div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
     <!-- Top Role Tab Switcher -->
     <div class="flex items-center justify-between flex-wrap gap-4 bg-white p-3 rounded-[12px] border border-[#e2e1d8]">

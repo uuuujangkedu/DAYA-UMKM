@@ -3,7 +3,7 @@
 @section('title', 'Formulir Pendaftaran Pelaku UMKM - Daya UMKM')
 
 @section('content')
-<div class="w-full max-w-4xl py-6 space-y-6">
+<div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
     <!-- Progress Indicator Stepper -->
     <div class="bg-white rounded-[12px] p-4 sm:p-5 border border-[#e2e1d8] flex items-center justify-between flex-wrap gap-4">

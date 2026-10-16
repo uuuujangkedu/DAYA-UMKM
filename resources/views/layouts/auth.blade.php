@@ -204,8 +204,8 @@
         </div>
     </header>
 
-    <!-- Konten Utama Halaman -->
-    <main class="flex-grow w-full">
+    <!-- Konten Utama Halaman (Tengah secara horizontal) -->
+    <main class="flex-grow w-full flex flex-col items-center">
         @yield('content')
     </main>
 

@@ -3,7 +3,7 @@
 @section('title', 'Menunggu Persetujuan Admin - Mitra Investor DAYA UMKM')
 
 @section('content')
-<div class="w-full max-w-4xl py-6 space-y-8">
+<div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
 
     <!-- TOP HEADER PROFILE & STATUS -->
     <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E3DC] shadow-sm">

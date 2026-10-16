@@ -3,7 +3,7 @@
 @section('title', 'Beranda')
 
 @section('content')
-<div class="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
+<div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
 
     <!-- 1. HERO SECTION (Sesuai DESIGN.md: Kartu putih, 1.2fr : 1fr, max-w 46ch, sentence case) -->
     <section id="beranda" class="hero-card animate-hero scroll-mt-[100px]">
