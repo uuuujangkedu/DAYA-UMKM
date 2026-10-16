@@ -6,7 +6,7 @@
 <div class="max-w-[1200px] mx-auto px-5 sm:px-8 space-y-12 sm:space-y-16 pt-10 sm:pt-12 pb-8">
 
     <!-- 1. HERO SECTION (Sesuai DESIGN.md: Kartu putih, 1.2fr : 1fr, max-w 46ch, sentence case) -->
-    <section class="hero-card animate-hero">
+    <section id="beranda" class="hero-card animate-hero scroll-mt-[100px]">
         <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-16 items-center">
             
             <div class="space-y-6 text-left">
@@ -47,7 +47,7 @@
     </section>
 
     <!-- 2. SECTION TENTANG KAMI -->
-    <section id="tentang-kami" class="hero-card">
+    <section id="tentang-kami" class="hero-card scroll-mt-[100px]">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
             <div class="lg:col-span-4">
@@ -76,7 +76,7 @@
     </section>
 
     <!-- 3. SECTION PANDUAN DAN ALUR KERJA (TUTORIAL) -->
-    <section id="tutorial" class="hero-card space-y-8">
+    <section id="tutorial" class="hero-card space-y-8 scroll-mt-[100px]">
         <div class="text-left space-y-2">
             <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight">
                 Panduan dan alur kerja
@@ -115,7 +115,7 @@
 
     <!-- 4. SECTION BANTUAN & KONTAK -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <section id="bantuan" class="hero-card space-y-4 text-left">
+        <section id="bantuan" class="hero-card space-y-4 text-left scroll-mt-[100px]">
             <h2 class="text-[24px] sm:text-[28px] font-bold text-[#161d1a] leading-tight">
                 Pusat bantuan
             </h2>
@@ -129,7 +129,7 @@
             </div>
         </section>
 
-        <section id="kontak" class="hero-card space-y-4 text-left">
+        <section id="kontak" class="hero-card space-y-4 text-left scroll-mt-[100px]">
             <h2 class="text-[24px] sm:text-[28px] font-bold text-[#161d1a] leading-tight">
                 Kontak resmi
             </h2>
@@ -145,4 +145,3 @@
 
 </div>
 @endsection
-

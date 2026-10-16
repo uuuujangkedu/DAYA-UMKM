@@ -194,6 +194,16 @@ body {
     }
 }
 
+/* Smooth scroll behavior & section anchor offset */
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+section[id] {
+    scroll-margin-top: 100px;
+}
+
 /* Public Header Scroll Styles */
 .header-public {
     background-color: var(--green);
@@ -207,27 +217,112 @@ body {
     border-bottom-color: var(--line);
 }
 
-.header-public .brand-text,
-.header-public .nav-item,
-.header-public .lang-text {
+.header-public .brand-text {
     color: #ffffff;
     transition: color 0.25s ease;
 }
 
-.header-public.scrolled .brand-text,
-.header-public.scrolled .nav-item,
-.header-public.scrolled .lang-text {
+.header-public.scrolled .brand-text {
+    color: var(--green);
+}
+
+/* Nav Item - Uniform, Crisp, Straight Underline on Hover & Active */
+.header-public .nav-item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid transparent;
+    border-radius: 0 !important;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    transition: color 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+    background: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+.header-public .nav-item:hover {
+    color: #ffffff;
+    border-bottom-color: rgba(255, 255, 255, 0.75);
+}
+
+.header-public .nav-item.active {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+    font-weight: 600;
+}
+
+.header-public.scrolled .nav-item {
     color: var(--green);
 }
 
 .header-public.scrolled .nav-item:hover {
     color: var(--green-hover);
-}
-
-.header-public .nav-item.active {
-    border-bottom: 2px solid #ffffff;
+    border-bottom-color: var(--green);
 }
 
 .header-public.scrolled .nav-item.active {
-    border-bottom: 2px solid var(--green);
+    color: var(--green);
+    border-bottom-color: var(--green);
+    font-weight: 600;
 }
+
+/* Language Switcher Button (Segmented Button Control) */
+.lang-switch-container {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.header-public.scrolled .lang-switch-container {
+    background-color: var(--bg);
+    border-color: var(--line);
+}
+
+.lang-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.2s ease;
+}
+
+.lang-btn:hover {
+    color: #ffffff;
+}
+
+.lang-btn.active {
+    background-color: #ffffff;
+    color: var(--green);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.header-public.scrolled .lang-btn {
+    color: var(--ink-2);
+}
+
+.header-public.scrolled .lang-btn:hover {
+    color: var(--green);
+}
+
+.header-public.scrolled .lang-btn.active {
+    background-color: var(--green);
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+

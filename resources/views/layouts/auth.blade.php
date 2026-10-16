@@ -95,16 +95,16 @@
                 </div>
             </a>
 
-            <!-- 2. Menu Navigasi (Sentence Case, font 15px) -->
+            <!-- 2. Menu Navigasi (Urutan: Beranda > Tentang kami > Gabung > Tutorial > Bantuan > Kontak) -->
             <nav class="hidden lg:flex items-center gap-7 text-[15px] font-medium" aria-label="Utama">
-                <a href="{{ url('/') }}" class="nav-item py-1 transition-colors {{ request()->is('/') ? 'active font-semibold' : '' }}" {{ request()->is('/') ? 'aria-current="page"' : '' }}>Beranda</a>
-                <a href="{{ url('/#tentang-kami') }}" class="nav-item py-1 transition-colors">Tentang kami</a>
+                <a href="{{ url('/') }}" id="nav-link-beranda" class="nav-item transition-colors {{ request()->is('/') ? 'active font-semibold' : '' }}" {{ request()->is('/') ? 'aria-current="page"' : '' }}>Beranda</a>
+                <a href="{{ url('/#tentang-kami') }}" id="nav-link-tentang-kami" class="nav-item transition-colors">Tentang kami</a>
                 
                 <!-- Dropdown Gabung -->
                 <div class="relative group" id="gabung-dropdown-wrapper">
                     <button type="button" 
                             id="gabung-dropdown-btn"
-                            class="nav-item inline-flex items-center gap-1.5 py-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#161d1a] rounded-[6px] cursor-pointer {{ request()->is('gabung*') ? 'active font-semibold' : '' }}">
+                            class="nav-item inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#161d1a] cursor-pointer {{ request()->is('gabung*') ? 'active font-semibold' : '' }}">
                         <span>Gabung</span>
                         <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -139,17 +139,20 @@
                     </div>
                 </div>
 
-                <a href="{{ url('/#bantuan') }}" class="nav-item py-1 transition-colors">Bantuan</a>
-                <a href="{{ url('/#kontak') }}" class="nav-item py-1 transition-colors">Kontak</a>
-                <a href="{{ url('/#tutorial') }}" class="nav-item py-1 transition-colors">Tutorial</a>
+                <a href="{{ url('/#tutorial') }}" id="nav-link-tutorial" class="nav-item transition-colors">Tutorial</a>
+                <a href="{{ url('/#bantuan') }}" id="nav-link-bantuan" class="nav-item transition-colors">Bantuan</a>
+                <a href="{{ url('/#kontak') }}" id="nav-link-kontak" class="nav-item transition-colors">Kontak</a>
             </nav>
 
-            <!-- 3. Toggle IDN / ENG & 4. Tombol Masuk -->
+            <!-- 3. Button Translate IDN / ENG & 4. Tombol Masuk -->
             <div class="flex items-center gap-5">
-                <div class="hidden sm:inline-flex items-center text-[14px] lang-text tracking-wide" aria-label="Pilihan bahasa">
-                    <span class="font-bold">IDN</span>
-                    <span class="mx-1.5 opacity-60">/</span>
-                    <span class="opacity-75 font-normal">ENG</span>
+                <div class="hidden sm:inline-flex lang-switch-container" aria-label="Pilihan bahasa" id="lang-switch-box">
+                    <button type="button" class="lang-btn active" data-lang="id" title="Bahasa Indonesia">
+                        IDN
+                    </button>
+                    <button type="button" class="lang-btn" data-lang="en" title="English">
+                        ENG
+                    </button>
                 </div>
 
                 @auth
@@ -180,20 +183,23 @@
             <a href="{{ url('/#tentang-kami') }}" class="block py-1.5 hover:text-[#0b5a4a]">Tentang kami</a>
             
             <div class="pt-2 pb-2 border-t border-[#e2e1d8]">
-                <span class="text-[13px] font-semibold text-[#4b5551] block mb-1">Pendaftaran:</span>
+                <span class="text-[13px] font-semibold text-[#4b5551] block mb-1">Gabung:</span>
                 <div class="pl-2 space-y-1">
                     <a href="{{ route('gabung.investor') }}" class="block py-1 hover:text-[#0b5a4a]">Daftar mitra investor</a>
                     <a href="{{ route('gabung.umkm') }}" class="block py-1 hover:text-[#0b5a4a]">Daftar pelaku UMKM</a>
                 </div>
             </div>
 
+            <a href="{{ url('/#tutorial') }}" class="block py-1.5 hover:text-[#0b5a4a]">Tutorial</a>
             <a href="{{ url('/#bantuan') }}" class="block py-1.5 hover:text-[#0b5a4a]">Bantuan</a>
             <a href="{{ url('/#kontak') }}" class="block py-1.5 hover:text-[#0b5a4a]">Kontak</a>
-            <a href="{{ url('/#tutorial') }}" class="block py-1.5 hover:text-[#0b5a4a]">Tutorial</a>
 
-            <div class="pt-2 border-t border-[#e2e1d8] flex items-center justify-between text-[14px]">
+            <div class="pt-3 border-t border-[#e2e1d8] flex items-center justify-between text-[14px]">
                 <span class="text-[#4b5551]">Bahasa:</span>
-                <span class="text-[#161d1a]"><strong class="font-bold">IDN</strong> / <span class="opacity-70">ENG</span></span>
+                <div class="inline-flex lang-switch-container">
+                    <button type="button" class="lang-btn active" data-lang="id">IDN</button>
+                    <button type="button" class="lang-btn" data-lang="en">ENG</button>
+                </div>
             </div>
         </div>
     </header>
@@ -219,22 +225,154 @@
     </footer>
 
     <script>
-        // Perilaku scroll navbar khusus landing page / halaman publik (class scrolled saat scrollY > 8)
         (function() {
             const header = document.getElementById('site-header');
-            if (header) {
-                const onScroll = () => {
-                    if (window.scrollY > 8) {
-                        header.classList.add('scrolled');
+            
+            // 1. Scroll header state (scrolled class saat scrollY > 8)
+            const onHeaderScroll = () => {
+                if (!header) return;
+                if (window.scrollY > 8) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            };
+            window.addEventListener('scroll', onHeaderScroll, { passive: true });
+            onHeaderScroll();
+
+            // 2. Active nav link helper
+            const navLinks = {
+                '#beranda': document.getElementById('nav-link-beranda'),
+                '#tentang-kami': document.getElementById('nav-link-tentang-kami'),
+                '#tutorial': document.getElementById('nav-link-tutorial'),
+                '#bantuan': document.getElementById('nav-link-bantuan'),
+                '#kontak': document.getElementById('nav-link-kontak')
+            };
+
+            function setActiveNav(targetHash) {
+                // Jangan override jika kita di halaman selain landing page
+                const isLanding = window.location.pathname === '/' || window.location.pathname === '';
+                if (!isLanding) return;
+
+                Object.entries(navLinks).forEach(([hash, link]) => {
+                    if (!link) return;
+                    if (hash === targetHash) {
+                        link.classList.add('active', 'font-semibold');
+                        link.setAttribute('aria-current', 'page');
                     } else {
-                        header.classList.remove('scrolled');
+                        link.classList.remove('active', 'font-semibold');
+                        link.removeAttribute('aria-current');
                     }
-                };
-                window.addEventListener('scroll', onScroll, { passive: true });
-                onScroll();
+                });
             }
 
-            // Mobile Menu Toggle
+            // 3. ScrollSpy untuk mendeteksi posisi seksi yang sedang dilihat
+            function updateScrollSpy() {
+                const isLanding = window.location.pathname === '/' || window.location.pathname === '';
+                if (!isLanding) return;
+
+                const scrollY = window.scrollY;
+                // Threshold 120px untuk memperhitungkan tinggi header (80px) + offset visual
+                const checkPos = scrollY + 140;
+
+                const sections = [
+                    { id: '#kontak', el: document.querySelector('#kontak') },
+                    { id: '#bantuan', el: document.querySelector('#bantuan') },
+                    { id: '#tutorial', el: document.querySelector('#tutorial') },
+                    { id: '#tentang-kami', el: document.querySelector('#tentang-kami') }
+                ];
+
+                let current = null;
+                for (const item of sections) {
+                    if (item.el && item.el.offsetTop <= checkPos) {
+                        current = item.id;
+                        break;
+                    }
+                }
+
+                if (!current) {
+                    current = '#beranda';
+                }
+
+                setActiveNav(current);
+            }
+
+            window.addEventListener('scroll', updateScrollSpy, { passive: true });
+            // Initial call
+            setTimeout(updateScrollSpy, 100);
+
+            // 4. Smooth scroll dengan offset tepat (96px) saat link anchor diklik
+            document.querySelectorAll('a[href*="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (!href) return;
+                    const hashIndex = href.indexOf('#');
+                    if (hashIndex === -1) return;
+
+                    const hash = href.substring(hashIndex);
+                    const targetEl = document.querySelector(hash);
+
+                    const isCurrentPageLanding = window.location.pathname === '/' || window.location.pathname === '';
+                    if (isCurrentPageLanding && targetEl) {
+                        e.preventDefault();
+                        const headerOffset = 96;
+                        const elementPosition = targetEl.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        setActiveNav(hash);
+                        history.pushState(null, null, hash);
+
+                        // Tutup menu mobile jika terbuka
+                        const mobileMenu = document.getElementById('mobile-menu');
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+
+            // Handle klik Beranda link saat di landing page
+            const berandaLink = document.getElementById('nav-link-beranda');
+            if (berandaLink) {
+                berandaLink.addEventListener('click', function(e) {
+                    if (window.location.pathname === '/' || window.location.pathname === '') {
+                        e.preventDefault();
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                        setActiveNav('#beranda');
+                        history.pushState(null, null, ' ');
+                    }
+                });
+            }
+
+            // 5. Language Switcher Buttons (IDN / ENG)
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const savedLang = localStorage.getItem('daya_umkm_lang') || 'id';
+
+            function updateLangButtons(activeLang) {
+                langButtons.forEach(btn => {
+                    if (btn.getAttribute('data-lang') === activeLang) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            }
+            updateLangButtons(savedLang);
+
+            langButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    localStorage.setItem('daya_umkm_lang', lang);
+                    updateLangButtons(lang);
+                });
+            });
+
+            // 6. Mobile Menu Toggle
             const mobileMenuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             if (mobileMenuBtn && mobileMenu) {
