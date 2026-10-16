@@ -250,5 +250,8 @@
             }
         }
     </script>
+
+    <!-- Komponen Aksesibilitas Disabilitas -->
+    @include('components.accessibility-widget')
 </body>
 </html>

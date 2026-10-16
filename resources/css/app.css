@@ -326,3 +326,135 @@ section[id] {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
+/* ========================================================
+   MODUL AKSESIBILITAS & DISABILITAS (WCAG Standards)
+   ======================================================== */
+
+/* 1. Pengaturan Ukuran Teks (Font Scaling) */
+html.a11y-font-sm {
+    font-size: 14.5px !important;
+}
+html.a11y-font-normal {
+    font-size: 16px !important;
+}
+html.a11y-font-lg {
+    font-size: 19px !important;
+}
+
+/* 2. Mode Kontras Tinggi (High Contrast WCAG AAA) */
+html.a11y-high-contrast {
+    --bg: #000000 !important;
+    --surface: #121212 !important;
+    --ink: #ffff00 !important;
+    --ink-2: #ffffff !important;
+    --line: #ffff00 !important;
+    --green: #ffff00 !important;
+    --green-hover: #ffffff !important;
+    --mint: #1a1a1a !important;
+    --gold: #ffff00 !important;
+    --gold-hover: #ffffff !important;
+}
+
+html.a11y-high-contrast body {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+html.a11y-high-contrast div:not(#a11y-widget-root *),
+html.a11y-high-contrast section:not(#a11y-widget-root *),
+html.a11y-high-contrast aside:not(#a11y-widget-root *),
+html.a11y-high-contrast main:not(#a11y-widget-root *),
+html.a11y-high-contrast header:not(#a11y-widget-root *),
+html.a11y-high-contrast footer:not(#a11y-widget-root *),
+html.a11y-high-contrast .hero-card,
+html.a11y-high-contrast .bg-white,
+html.a11y-high-contrast [class*="bg-white"],
+html.a11y-high-contrast [class*="bg-[#f7f6f1]"],
+html.a11y-high-contrast [class*="bg-[#F8F7F2]"],
+html.a11y-high-contrast [class*="bg-[#F9F8F3]"] {
+    background-color: #0d0d0d !important;
+    border-color: #ffff00 !important;
+    color: #ffffff !important;
+}
+
+html.a11y-high-contrast h1,
+html.a11y-high-contrast h2,
+html.a11y-high-contrast h3,
+html.a11y-high-contrast h4,
+html.a11y-high-contrast strong,
+html.a11y-high-contrast b,
+html.a11y-high-contrast a:not(#a11y-widget-root *),
+html.a11y-high-contrast .brand-text {
+    color: #ffff00 !important;
+}
+
+html.a11y-high-contrast a:not(#a11y-widget-root *) {
+    text-decoration: underline !important;
+}
+
+html.a11y-high-contrast input:not(#a11y-widget-root *),
+html.a11y-high-contrast select:not(#a11y-widget-root *),
+html.a11y-high-contrast textarea:not(#a11y-widget-root *) {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+html.a11y-high-contrast .btn-primary,
+html.a11y-high-contrast .btn-secondary,
+html.a11y-high-contrast .btn-header-masuk {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+    border: 2px solid #ffff00 !important;
+}
+
+html.a11y-high-contrast .btn-primary:hover,
+html.a11y-high-contrast .btn-secondary:hover,
+html.a11y-high-contrast .btn-header-masuk:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+/* 3. Mode Ramah Disleksia (Dyslexia Friendly) */
+html.a11y-dyslexia,
+html.a11y-dyslexia body,
+html.a11y-dyslexia p,
+html.a11y-dyslexia h1,
+html.a11y-dyslexia h2,
+html.a11y-dyslexia h3,
+html.a11y-dyslexia h4,
+html.a11y-dyslexia a,
+html.a11y-dyslexia span,
+html.a11y-dyslexia button,
+html.a11y-dyslexia input,
+html.a11y-dyslexia textarea,
+html.a11y-dyslexia select {
+    font-family: 'Lexend', 'Comic Sans MS', sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.12em !important;
+    line-height: 1.8 !important;
+}
+
+/* 4. Mode Sorot Tautan (Highlight Links) */
+html.a11y-highlight-links a:not(#a11y-widget-root *),
+html.a11y-highlight-links button[type="button"]:not(#a11y-widget-root *),
+html.a11y-highlight-links button[type="submit"]:not(#a11y-widget-root *) {
+    outline: 2px solid #ca8a04 !important;
+    outline-offset: 2px !important;
+    background-color: rgba(254, 240, 138, 0.4) !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 3px !important;
+    color: #854d0e !important;
+}
+
+/* 5. Sorotan Aktif Saat Elemen Sedang Dibacakan (Screen Reader) */
+.a11y-speaking-active {
+    outline: 3px solid #0b5a4a !important;
+    outline-offset: 4px !important;
+    background-color: rgba(216, 235, 229, 0.5) !important;
+    border-radius: 4px !important;
+    transition: outline 0.15s ease, background-color 0.15s ease;
+}
+
+
