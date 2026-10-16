@@ -39,20 +39,17 @@
     </section>
 
     <!-- 2. SECTION TENTANG KAMI -->
-    <section id="tentang-kami" class="hero-card scroll-mt-[100px]" data-reveal>
+    <section id="tentang-kami" class="hero-card scroll-mt-[100px] overflow-hidden" data-reveal>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            <div class="lg:col-span-4" data-reveal-item>
-                <div class="rounded-[10px] bg-[#f7f6f1] border border-[#e2e1d8] p-8 flex flex-col items-center justify-center text-center min-h-[220px]">
-                    <svg class="w-10 h-10 text-[#0b5a4a] mb-3" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                    <span class="font-bold text-[16px] text-[#084539]">Kemitraan produktif</span>
-                    <span class="text-[14px] text-[#4b5551] mt-1">Menghubungkan modal dengan potensi usaha nyata</span>
-                </div>
+            <!-- Karakter 3D Tentang Kami -->
+            <div class="lg:col-span-5 about-character-wrapper" data-reveal-item>
+                <img src="{{ asset('images/about-character.png') }}" 
+                     alt="Karakter Maskot Tentang Kami Daya UMKM" 
+                     class="about-character-img">
             </div>
 
-            <div class="lg:col-span-8 space-y-4 text-left">
+            <div class="lg:col-span-7 space-y-4 text-left">
                 <h2 class="text-[28px] sm:text-[34px] font-bold text-[#161d1a] leading-tight" data-reveal-item>
                     Tentang kami
                 </h2>

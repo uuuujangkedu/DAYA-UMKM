@@ -204,6 +204,51 @@ body {
     }
 }
 
+/* ========================================================
+   PENGATURAN KARAKTER TENTANG KAMI
+   ======================================================== */
+.about-character-wrapper {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    align-self: flex-end;
+    margin-bottom: -32px;
+}
+
+@media (min-width: 640px) {
+    .about-character-wrapper {
+        margin-bottom: -48px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .about-character-wrapper {
+        justify-content: center;
+        margin-bottom: -72px; /* Menempelkan batas bawah karakter ke dasar kartu */
+    }
+}
+
+.about-character-img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.05));
+    transition: transform 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .about-character-img {
+        max-width: 480px;
+        transform: scale(1.08);
+        transform-origin: bottom center;
+    }
+}
+
+
+
 @media (min-width: 640px) {
     .hero-card {
         padding: 48px;
