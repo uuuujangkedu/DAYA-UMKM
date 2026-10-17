@@ -7,23 +7,29 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg: #f7f6f1;
+            --bg: #F4F7F5;
             --surface: #ffffff;
-            --ink: #161d1a;
-            --ink-2: #4b5551;
-            --line: #e2e1d8;
-            --green: #0b5a4a;
-            --green-hover: #084539;
-            --mint: #d8ebe5;
-            --gold: #f2b705;
-            --gold-hover: #dca704;
+            --ink: #1A1A1A;
+            --ink-2: #4A5E57;
+            --line: rgba(15, 90, 71, 0.12);
+            --green: #0F5A47;
+            --green-dark: #0F5A47;
+            --green-mid: #1A7A5E;
+            --green-hover: #0A4738;
+            --green-light: #C8E6DC;
+            --teal-glow: rgba(26, 122, 94, 0.12);
+            --mint: #D8EBE5;
+            --gold: #F5C842;
+            --gold-hover: #E5B832;
+            --yellow-accent: #F5C842;
+            --yellow-soft: rgba(245, 200, 66, 0.15);
         }
         body {
-            font-family: 'IBM Plex Sans', "Segoe UI", system-ui, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg);
             color: var(--ink);
             margin: 0;
@@ -32,7 +38,7 @@
             flex-direction: column;
         }
         :focus-visible {
-            outline: 2px solid var(--ink);
+            outline: 2px solid var(--green);
             outline-offset: 3px;
         }
     </style>
@@ -46,92 +52,96 @@
             theme: {
                 extend: {
                     colors: {
-                        bg: '#f7f6f1',
+                        bg: '#F4F7F5',
                         surface: '#ffffff',
-                        ink: '#161d1a',
-                        'ink-2': '#4b5551',
-                        line: '#e2e1d8',
-                        green: '#0b5a4a',
-                        'green-hover': '#084539',
-                        mint: '#d8ebe5',
-                        gold: '#f2b705',
-                        'gold-hover': '#dca704',
+                        ink: '#1A1A1A',
+                        'ink-2': '#4A5E57',
+                        line: 'rgba(15, 90, 71, 0.12)',
+                        green: '#0F5A47',
+                        'green-dark': '#0F5A47',
+                        'green-mid': '#1A7A5E',
+                        'green-hover': '#0A4738',
+                        'green-light': '#C8E6DC',
+                        mint: '#D8EBE5',
+                        gold: '#F5C842',
+                        'gold-hover': '#E5B832',
+                        'yellow-accent': '#F5C842',
                         // Compatibility aliases
-                        primary: '#0b5a4a',
-                        'primary-dark': '#084539',
-                        secondary: '#0b5a4a',
-                        'neutral-bg': '#f7f6f1',
-                        accent: '#f2b705',
+                        primary: '#0F5A47',
+                        'primary-dark': '#0A4738',
+                        secondary: '#0F5A47',
+                        'neutral-bg': '#F4F7F5',
+                        accent: '#F5C842',
                     },
                     fontFamily: {
-                        sans: ['IBM Plex Sans', 'Segoe UI', 'system-ui', 'sans-serif'],
+                        sans: ['"Plus Jakarta Sans"', 'IBM Plex Sans', 'Segoe UI', 'system-ui', 'sans-serif'],
                     },
                     borderRadius: {
-                        'sm-btn': '6px',
-                        'md-panel': '10px',
-                        'lg-card': '12px',
+                        'sm-btn': '8px',
+                        'md-panel': '12px',
+                        'lg-card': '16px',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-[#f7f6f1] text-[#161d1a] antialiased min-h-screen flex flex-col font-sans">
+<body class="bg-[#F4F7F5] text-[#1A1A1A] antialiased min-h-screen flex flex-col font-sans selection:bg-[#C8E6DC] selection:text-[#0F5A47]">
 
-    <!-- Header Publik Sesuai DESIGN.md (Tinggi 80px, sticky, scroll transition) -->
-    <header id="site-header" class="header-public sticky top-0 z-50 h-[80px] flex items-center transition-all duration-250 ease-in-out">
+    <!-- Header Publik Sesuai new-design.jpg (Tinggi 72px, sticky, frosted glass) -->
+    <header id="site-header" class="header-public sticky top-0 z-50 h-[72px] sm:h-[76px] flex items-center transition-all duration-200 ease-in-out bg-white/92 backdrop-blur-md border-b border-[#0F5A47]/10 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
         <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 flex items-center justify-between">
             
             <!-- 1. Logo + Nama Brand + Subjudul -->
-            <a href="{{ url('/') }}" class="flex items-center gap-3.5 group rounded-[6px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#161d1a]">
-                <div class="w-10 h-10 rounded-[6px] bg-[#d8ebe5] flex items-center justify-center shrink-0">
-                    <svg class="w-5 h-5 text-[#0b5a4a]" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+            <a href="{{ url('/') }}" class="flex items-center gap-3 group rounded-[8px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0F5A47]">
+                <div class="w-10 h-10 rounded-[10px] bg-gradient-to-br from-[#1A7A5E] to-[#0F5A47] flex items-center justify-center shrink-0 shadow-sm shadow-[#0F5A47]/20 group-hover:scale-105 transition-transform duration-200">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                     </svg>
                 </div>
                 <div class="flex flex-col text-left">
-                    <span class="brand-text font-bold text-[18px] leading-tight">Daya UMKM</span>
-                    <span class="brand-text text-[13px] opacity-90 leading-tight">Investasi & sewa ruko</span>
+                    <span class="brand-text font-bold text-[18px] leading-tight text-[#0F5A47] tracking-tight">Daya UMKM</span>
+                    <span class="text-[12px] text-[#4A5E57] font-medium leading-tight">Produksi & sewa ruko</span>
                 </div>
             </a>
 
             <!-- 2. Menu Navigasi (Urutan: Beranda > Tentang kami > Gabung > Tutorial > Bantuan > Kontak) -->
-            <nav class="hidden lg:flex items-center gap-7 text-[15px] font-medium" aria-label="Utama">
-                <a href="{{ url('/') }}" id="nav-link-beranda" class="nav-item transition-colors {{ request()->is('/') ? 'active font-semibold' : '' }}" {{ request()->is('/') ? 'aria-current="page"' : '' }}>Beranda</a>
-                <a href="{{ url('/#tentang-kami') }}" id="nav-link-tentang-kami" class="nav-item transition-colors">Tentang kami</a>
+            <nav class="hidden lg:flex items-center gap-7 text-[14px] font-medium" aria-label="Utama">
+                <a href="{{ url('/') }}" id="nav-link-beranda" class="nav-item transition-all py-1 {{ request()->is('/') ? 'active text-[#0F5A47] font-semibold border-b-2 border-[#0F5A47]' : 'text-[#1A1A1A] hover:text-[#0F5A47]' }}" {{ request()->is('/') ? 'aria-current="page"' : '' }}>Beranda</a>
+                <a href="{{ url('/#tentang-kami') }}" id="nav-link-tentang-kami" class="nav-item transition-all py-1 text-[#1A1A1A] hover:text-[#0F5A47]">Tentang kami</a>
                 
                 <!-- Dropdown Gabung -->
                 <div class="relative group" id="gabung-dropdown-wrapper">
                     <button type="button" 
                             id="gabung-dropdown-btn"
-                            class="nav-item inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#161d1a] cursor-pointer {{ request()->is('gabung*') ? 'active font-semibold' : '' }}">
+                            class="nav-item inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0F5A47] cursor-pointer py-1 text-[#1A1A1A] hover:text-[#0F5A47] {{ request()->is('gabung*') ? 'active text-[#0F5A47] font-semibold border-b-2 border-[#0F5A47]' : '' }}">
                         <span>Gabung</span>
-                        <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg class="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-180 text-[#4A5E57]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     
                     <!-- Dropdown Box -->
                     <div class="absolute left-0 top-full pt-3 w-64 hidden group-hover:block hover:block z-50">
-                        <div class="bg-[#ffffff] rounded-[10px] border border-[#e2e1d8] p-2 text-left space-y-1 shadow-sm">
+                        <div class="bg-[#ffffff] rounded-[12px] border border-[#0F5A47]/10 p-2 text-left space-y-1 shadow-lg">
                             <a href="{{ route('gabung.investor') }}" 
-                               class="block p-3 rounded-[6px] hover:bg-[#d8ebe5] transition group/item">
-                                <span class="font-semibold text-[14px] text-[#161d1a] block">
+                               class="block p-3 rounded-[8px] hover:bg-[#C8E6DC]/40 transition group/item">
+                                <span class="font-semibold text-[14px] text-[#0F5A47] block">
                                     Daftar mitra investor
                                 </span>
-                                <span class="text-[13px] text-[#4b5551] block mt-0.5">
+                                <span class="text-[12.5px] text-[#4A5E57] block mt-0.5">
                                     Mulai danai dan kembangkan usaha
                                 </span>
                             </a>
 
-                            <div class="h-px bg-[#e2e1d8] my-1"></div>
+                            <div class="h-px bg-[#0F5A47]/10 my-1"></div>
 
                             <a href="{{ route('gabung.umkm') }}" 
-                               class="block p-3 rounded-[6px] hover:bg-[#d8ebe5] transition group/item">
-                                <span class="font-semibold text-[14px] text-[#161d1a] block">
+                               class="block p-3 rounded-[8px] hover:bg-[#C8E6DC]/40 transition group/item">
+                                <span class="font-semibold text-[14px] text-[#0F5A47] block">
                                     Daftar pelaku UMKM
                                 </span>
-                                <span class="text-[13px] text-[#4b5551] block mt-0.5">
+                                <span class="text-[12.5px] text-[#4A5E57] block mt-0.5">
                                     Dapatkan akses modal dan sewa ruko
                                 </span>
                             </a>
@@ -139,28 +149,28 @@
                     </div>
                 </div>
 
-                <a href="{{ url('/#tutorial') }}" id="nav-link-tutorial" class="nav-item transition-colors">Tutorial</a>
-                <a href="{{ url('/#bantuan') }}" id="nav-link-bantuan" class="nav-item transition-colors">Bantuan</a>
-                <a href="{{ url('/#kontak') }}" id="nav-link-kontak" class="nav-item transition-colors">Kontak</a>
+                <a href="{{ url('/#tutorial') }}" id="nav-link-tutorial" class="nav-item transition-all py-1 text-[#1A1A1A] hover:text-[#0F5A47]">Tutorial</a>
+                <a href="{{ url('/#bantuan') }}" id="nav-link-bantuan" class="nav-item transition-all py-1 text-[#1A1A1A] hover:text-[#0F5A47]">Bantuan</a>
+                <a href="{{ url('/#kontak') }}" id="nav-link-kontak" class="nav-item transition-all py-1 text-[#1A1A1A] hover:text-[#0F5A47]">Kontak</a>
             </nav>
 
-            <!-- 3. Button Translate IDN / ENG & 4. Tombol Masuk -->
-            <div class="flex items-center gap-5">
-                <div class="hidden sm:inline-flex lang-switch-container" aria-label="Pilihan bahasa" id="lang-switch-box">
-                    <button type="button" class="lang-btn active" data-lang="id" title="Bahasa Indonesia">
+            <!-- 3. Button Translate IDN / ENG & 4. Tombol Masuk (Yellow Accent Sesuai new-design.jpg) -->
+            <div class="flex items-center gap-4">
+                <div class="hidden sm:inline-flex lang-switch-container bg-[#F4F7F5] border border-[#0F5A47]/15 rounded-lg p-1" aria-label="Pilihan bahasa" id="lang-switch-box">
+                    <button type="button" class="lang-btn active px-2.5 py-1 text-xs font-semibold rounded-md bg-white text-[#0F5A47] shadow-sm" data-lang="id" title="Bahasa Indonesia">
                         IDN
                     </button>
-                    <button type="button" class="lang-btn" data-lang="en" title="English">
+                    <button type="button" class="lang-btn px-2.5 py-1 text-xs font-semibold rounded-md text-[#4A5E57] hover:text-[#0F5A47]" data-lang="en" title="English">
                         ENG
                     </button>
                 </div>
 
                 @auth
-                    <a href="{{ route('dashboard') }}" class="btn-header-masuk">
+                    <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center bg-[#F5C842] hover:bg-[#E5B832] text-[#1A1A1A] font-semibold text-[14px] px-5 py-2 rounded-lg shadow-sm hover:shadow transition-all duration-150">
                         Dashboard
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="btn-header-masuk">
+                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center bg-[#F5C842] hover:bg-[#E5B832] text-[#1A1A1A] font-semibold text-[14px] px-5 py-2 rounded-lg shadow-sm hover:shadow transition-all duration-150">
                         Masuk
                     </a>
                 @endauth
@@ -168,9 +178,9 @@
                 <!-- Tombol Menu Mobile -->
                 <button type="button" 
                         id="mobile-menu-btn" 
-                        class="lg:hidden p-2 rounded-[6px] text-current focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#161d1a]"
+                        class="lg:hidden p-2 rounded-[8px] text-[#1A1A1A] hover:bg-[#0F5A47]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0F5A47]"
                         aria-label="Menu navigasi">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
@@ -209,17 +219,17 @@
         @yield('content')
     </main>
 
-    <!-- Footer Publik Sesuai DESIGN.md -->
-    <footer class="bg-[#ffffff] border-t border-[#e2e1d8] text-[#4b5551] text-[14px] py-8 mt-16">
+    <!-- Footer Publik Sesuai new-design.jpg -->
+    <footer class="bg-transparent border-t border-[#0F5A47]/10 text-[#4A5E57] text-[13px] py-6 sm:py-7 mt-12 w-full">
         <div class="max-w-[1200px] mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <span class="font-semibold text-[#0b5a4a]">Daya UMKM</span>
+            <div class="flex items-center gap-2 text-[#6B7E78]">
+                <span class="font-semibold text-[#0F5A47]">Daya UMKM</span>
                 <span>&copy; {{ date('Y') }}. Hak cipta dilindungi.</span>
             </div>
-            <div class="flex flex-wrap items-center gap-6">
-                <a href="#" class="hover:text-[#0b5a4a] transition">Kebijakan privasi</a>
-                <a href="#" class="hover:text-[#0b5a4a] transition">Syarat dan ketentuan</a>
-                <a href="{{ url('/#bantuan') }}" class="hover:text-[#0b5a4a] transition">Hubungi bantuan</a>
+            <div class="flex flex-wrap items-center gap-6 text-[#4A5E57]">
+                <a href="#" class="hover:text-[#0F5A47] hover:underline transition-colors">Kebijakan privasi</a>
+                <a href="#" class="hover:text-[#0F5A47] hover:underline transition-colors">Syarat dan ketentuan</a>
+                <a href="{{ url('/#bantuan') }}" class="hover:text-[#0F5A47] hover:underline transition-colors">Hubungi bantuan</a>
             </div>
         </div>
     </footer>

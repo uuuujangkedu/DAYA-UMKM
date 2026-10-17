@@ -5,44 +5,54 @@
 @source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'IBM Plex Sans', "Segoe UI", system-ui, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', 'IBM Plex Sans', "Segoe UI", system-ui, sans-serif;
 
-    --color-bg: #f7f6f1;
+    --color-bg: #F4F7F5;
     --color-surface: #ffffff;
-    --color-ink: #161d1a;
-    --color-ink-2: #4b5551;
-    --color-line: #e2e1d8;
-    --color-green: #0b5a4a;
-    --color-green-hover: #084539;
-    --color-mint: #d8ebe5;
-    --color-gold: #f2b705;
-    --color-gold-hover: #dca704;
+    --color-ink: #1A1A1A;
+    --color-ink-2: #4A5E57;
+    --color-line: rgba(15, 90, 71, 0.12);
+    --color-green: #0F5A47;
+    --color-green-dark: #0F5A47;
+    --color-green-mid: #1A7A5E;
+    --color-green-light: #C8E6DC;
+    --color-green-hover: #0A4738;
+    --color-mint: #D8EBE5;
+    --color-gold: #F5C842;
+    --color-gold-hover: #E5B832;
+    --color-yellow-accent: #F5C842;
 
     /* Legacy tokens for compatibility */
-    --color-primary: #0b5a4a;
-    --color-primary-dark: #084539;
-    --color-primary-light: #d8ebe5;
-    --color-secondary: #0b5a4a;
-    --color-neutral-bg: #f7f6f1;
+    --color-primary: #0F5A47;
+    --color-primary-dark: #0A4738;
+    --color-primary-light: #C8E6DC;
+    --color-secondary: #0F5A47;
+    --color-neutral-bg: #F4F7F5;
     --color-neutral-card: #ffffff;
-    --color-neutral-border: #e2e1d8;
-    --color-neutral-text: #161d1a;
-    --color-neutral-muted: #4b5551;
-    --color-accent: #f2b705;
-    --color-accent-hover: #dca704;
+    --color-neutral-border: rgba(15, 90, 71, 0.12);
+    --color-neutral-text: #1A1A1A;
+    --color-neutral-muted: #4A5E57;
+    --color-accent: #F5C842;
+    --color-accent-hover: #E5B832;
 }
 
 :root {
-    --bg: #f7f6f1;
+    --bg: #F4F7F5;
     --surface: #ffffff;
-    --ink: #161d1a;
-    --ink-2: #4b5551;
-    --line: #e2e1d8;
-    --green: #0b5a4a;
-    --green-hover: #084539;
-    --mint: #d8ebe5;
-    --gold: #f2b705;
-    --gold-hover: #dca704;
+    --ink: #1A1A1A;
+    --ink-2: #4A5E57;
+    --line: rgba(15, 90, 71, 0.12);
+    --green: #0F5A47;
+    --green-dark: #0F5A47;
+    --green-mid: #1A7A5E;
+    --green-light: #C8E6DC;
+    --green-hover: #0A4738;
+    --mint: #D8EBE5;
+    --gold: #F5C842;
+    --gold-hover: #E5B832;
+    --yellow-accent: #F5C842;
+    --teal-glow: rgba(26, 122, 94, 0.12);
+    --yellow-soft: rgba(245, 200, 66, 0.15);
 }
 
 body {
@@ -275,26 +285,24 @@ section[id] {
     scroll-margin-top: 100px;
 }
 
-/* Public Header Scroll Styles */
+/* Public Header Styles (Frosted Glass Sesuai new-design.jpg) */
 .header-public {
-    background-color: var(--green);
-    color: #ffffff;
-    border-bottom: 1px solid transparent;
-    transition: background-color 0.25s ease, border-color 0.25s ease;
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #1A1A1A;
+    border-bottom: 1px solid rgba(15, 90, 71, 0.08);
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .header-public.scrolled {
-    background-color: #ffffff;
-    border-bottom-color: var(--line);
+    background-color: rgba(255, 255, 255, 0.98);
+    border-bottom-color: rgba(15, 90, 71, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 .header-public .brand-text {
-    color: #ffffff;
-    transition: color 0.25s ease;
-}
-
-.header-public.scrolled .brand-text {
-    color: var(--green);
+    color: var(--green-dark);
 }
 
 /* Nav Item - Uniform, Crisp, Straight Underline on Hover & Active */
@@ -302,14 +310,14 @@ section[id] {
     position: relative;
     display: inline-flex;
     align-items: center;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     border-bottom: 2px solid transparent;
     border-radius: 0 !important;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: #1A1A1A;
     transition: color 0.15s ease, border-color 0.15s ease;
     cursor: pointer;
     background: transparent;
@@ -319,29 +327,64 @@ section[id] {
 }
 
 .header-public .nav-item:hover {
-    color: #ffffff;
-    border-bottom-color: rgba(255, 255, 255, 0.75);
+    color: var(--green-dark);
+    border-bottom-color: rgba(15, 90, 71, 0.3);
 }
 
 .header-public .nav-item.active {
-    color: #ffffff;
-    border-bottom-color: #ffffff;
+    color: var(--green-dark);
+    border-bottom-color: var(--green-dark);
     font-weight: 600;
 }
 
-.header-public.scrolled .nav-item {
-    color: var(--green);
+/* ========================================================
+   ANIMASI FLOATING MICRO-ASSETS (new-design.jpg)
+   ======================================================== */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(1.5deg);
+    }
 }
 
-.header-public.scrolled .nav-item:hover {
-    color: var(--green-hover);
-    border-bottom-color: var(--green);
+@keyframes float-slow {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-7px) rotate(-1deg);
+    }
 }
 
-.header-public.scrolled .nav-item.active {
-    color: var(--green);
-    border-bottom-color: var(--green);
-    font-weight: 600;
+@keyframes float-delayed {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-12px) rotate(1deg);
+    }
+}
+
+.animate-float {
+    animation: float 4.5s ease-in-out infinite;
+}
+
+.animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float-delayed 5.2s ease-in-out 1.2s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-float,
+    .animate-float-slow,
+    .animate-float-delayed {
+        animation: none !important;
+    }
 }
 
 /* Language Switcher Button (Segmented Button Control) */
