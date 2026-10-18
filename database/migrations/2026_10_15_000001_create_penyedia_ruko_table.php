@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('kontak', 20);
             $table->text('alamat');
             $table->timestamps();
-            
+
             $table->index('nama_perusahaan');
         });
     }

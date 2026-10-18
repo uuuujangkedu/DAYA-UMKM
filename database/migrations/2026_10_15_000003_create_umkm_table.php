@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('pemilik', 100);
             $table->text('deskripsi')->nullable();
             $table->timestamps();
-            
+
             $table->index('jenis_usaha');
             $table->index('nama_usaha');
         });

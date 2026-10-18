@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ThirdPartyAuthentication extends Model
 {
     protected $table = 'third_party_authentications';
+
     protected $primaryKey = 'id_oauth';
 
     protected $fillable = [

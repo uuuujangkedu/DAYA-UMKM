@@ -7,7 +7,7 @@ use App\Models\Investasi;
 use App\Models\Produk;
 use App\Models\Ruko;
 use App\Models\Umkm;
-use App\Models\User;
+use App\Services\ExcelFinancialParser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -36,7 +36,7 @@ class DashboardController extends Controller
             $umkm = Umkm::firstOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'nama_usaha' => 'Usaha ' . $user->name,
+                    'nama_usaha' => 'Usaha '.$user->name,
                     'jenis_usaha' => 'Makanan',
                     'pemilik' => $user->name,
                     'nomor_whatsapp' => $user->phone_number,
@@ -93,7 +93,7 @@ class DashboardController extends Controller
 
             // Data grafik 7 hari
             $days = [
-                'Sen' => 45, 'Sel' => 65, 'Rab' => 30, 'Kam' => 75, 'Jum' => 20, 'Sab' => 90, 'Min' => 55
+                'Sen' => 45, 'Sel' => 65, 'Rab' => 30, 'Kam' => 75, 'Jum' => 20, 'Sab' => 90, 'Min' => 55,
             ];
 
             // Produk Terlaris
@@ -105,7 +105,7 @@ class DashboardController extends Controller
                 $queryProduk->where('status', $request->query('status'));
             }
             if ($request->filled('q')) {
-                $queryProduk->where('nama_produk', 'like', '%' . $request->q . '%');
+                $queryProduk->where('nama_produk', 'like', '%'.$request->q.'%');
             }
             $allProduks = $queryProduk->latest('id_produk')->get();
 
@@ -191,11 +191,11 @@ class DashboardController extends Controller
                 ->whereIn('status_pengajuan', ['terverifikasi', 'menunggu_verifikasi']);
 
             if ($request->filled('q')) {
-                $search = '%' . $request->q . '%';
+                $search = '%'.$request->q.'%';
                 $queryProposal->where(function ($q) use ($search) {
                     $q->where('nama_usaha', 'like', $search)
-                      ->orWhere('jenis_usaha', 'like', $search)
-                      ->orWhere('pemilik', 'like', $search);
+                        ->orWhere('jenis_usaha', 'like', $search)
+                        ->orWhere('pemilik', 'like', $search);
                 });
             }
 
@@ -257,7 +257,7 @@ class DashboardController extends Controller
 
         Produk::create($validated);
 
-        return redirect()->route('dashboard', ['tab' => 'produk'])->with('success', 'Produk "' . $validated['nama_produk'] . '" berhasil ditambahkan!');
+        return redirect()->route('dashboard', ['tab' => 'produk'])->with('success', 'Produk "'.$validated['nama_produk'].'" berhasil ditambahkan!');
     }
 
     /**
@@ -336,7 +336,7 @@ class DashboardController extends Controller
             'foto_bukti.max' => 'Ukuran file lampiran maksimal 10MB.',
         ]);
 
-        $pendapatan = !empty($validated['pendapatan']) ? (float) $validated['pendapatan'] : 0.0;
+        $pendapatan = ! empty($validated['pendapatan']) ? (float) $validated['pendapatan'] : 0.0;
         $hpp = (float) ($validated['hpp'] ?? 0);
         $bebanOperasional = (float) ($validated['beban_operasional'] ?? 0);
         $bebanLain = (float) ($validated['beban_lain'] ?? 0);
@@ -351,11 +351,11 @@ class DashboardController extends Controller
 
             // DETEKSI OTOMATIS PEMASUKAN & PENGELUARAN DARI EXCEL / CSV
             if (in_array($ext, ['xlsx', 'xls', 'csv'])) {
-                $fullPath = \Illuminate\Support\Facades\Storage::disk('public')->path($fotoBuktiPath);
-                if (!file_exists($fullPath) && $file->getRealPath() && file_exists($file->getRealPath())) {
+                $fullPath = Storage::disk('public')->path($fotoBuktiPath);
+                if (! file_exists($fullPath) && $file->getRealPath() && file_exists($file->getRealPath())) {
                     $fullPath = $file->getRealPath();
                 }
-                $parseResult = \App\Services\ExcelFinancialParser::parse($fullPath, $ext);
+                $parseResult = ExcelFinancialParser::parse($fullPath, $ext);
 
                 if ($parseResult['success']) {
                     if ($pendapatan <= 0 && $parseResult['pendapatan'] > 0) {
@@ -371,14 +371,14 @@ class DashboardController extends Controller
                         $bebanLain = $parseResult['beban_lain'];
                     }
 
-                    $excelDetectionNote = ' (Terdeteksi Otomatis dari Excel: ' . $parseResult['message'] . ')';
+                    $excelDetectionNote = ' (Terdeteksi Otomatis dari Excel: '.$parseResult['message'].')';
                 }
             }
         }
 
-        if ($pendapatan <= 0 && !$request->hasFile('foto_bukti')) {
+        if ($pendapatan <= 0 && ! $request->hasFile('foto_bukti')) {
             return back()->withInput()->withErrors([
-                'pendapatan' => 'Nominal pendapatan / omzet wajib diisi, atau lampirkan berkas Excel (.xlsx / .csv) untuk dianalisis otomatis.'
+                'pendapatan' => 'Nominal pendapatan / omzet wajib diisi, atau lampirkan berkas Excel (.xlsx / .csv) untuk dianalisis otomatis.',
             ]);
         }
 
@@ -411,10 +411,10 @@ class DashboardController extends Controller
             if ($fotoBuktiPath) {
                 $keuangan->foto_bukti = $fotoBuktiPath;
             }
-            $keuangan->catatan = ($validated['catatan'] ?? '') . $excelDetectionNote;
+            $keuangan->catatan = ($validated['catatan'] ?? '').$excelDetectionNote;
             $keuangan->save();
 
-            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode ' . $validated['bulan_tahun'] . ' berhasil diperbarui!');
+            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode '.$validated['bulan_tahun'].' berhasil diperbarui!');
         }
 
         // KASUS 2: Cek apakah periode bulan ini sudah pernah diinput sebelumnya
@@ -443,13 +443,13 @@ class DashboardController extends Controller
             if ($fotoBuktiPath) {
                 $existing->foto_bukti = $fotoBuktiPath;
             }
-            $additionalNote = ($validated['catatan'] ?? '') . $excelDetectionNote;
-            if (!empty($additionalNote)) {
-                $existing->catatan = trim(($existing->catatan ? $existing->catatan . ' | ' : '') . $additionalNote);
+            $additionalNote = ($validated['catatan'] ?? '').$excelDetectionNote;
+            if (! empty($additionalNote)) {
+                $existing->catatan = trim(($existing->catatan ? $existing->catatan.' | ' : '').$additionalNote);
             }
             $existing->save();
 
-            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Transaksi baru berhasil ditotalkan & diakumulasikan ke periode ' . $validated['bulan_tahun'] . '! Total Omzet saat ini: Rp ' . number_format($existing->pendapatan, 0, ',', '.') . ' (Laba Bersih: Rp ' . number_format($existing->laba_bersih, 0, ',', '.') . ').');
+            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Transaksi baru berhasil ditotalkan & diakumulasikan ke periode '.$validated['bulan_tahun'].'! Total Omzet saat ini: Rp '.number_format($existing->pendapatan, 0, ',', '.').' (Laba Bersih: Rp '.number_format($existing->laba_bersih, 0, ',', '.').').');
         }
 
         // Jika data sebelumnya ada dan mode aksi adalah 'ganti' (Menimpa total periode)
@@ -464,10 +464,10 @@ class DashboardController extends Controller
             if ($fotoBuktiPath) {
                 $existing->foto_bukti = $fotoBuktiPath;
             }
-            $existing->catatan = ($validated['catatan'] ?? '') . $excelDetectionNote;
+            $existing->catatan = ($validated['catatan'] ?? '').$excelDetectionNote;
             $existing->save();
 
-            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode ' . $validated['bulan_tahun'] . ' berhasil diperbarui (diganti)!');
+            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode '.$validated['bulan_tahun'].' berhasil diperbarui (diganti)!');
         }
 
         // KASUS 3: Buat Catatan Baru
@@ -482,14 +482,14 @@ class DashboardController extends Controller
             'margin_laba' => $marginLaba,
             'status_laba' => $statusLaba,
             'foto_bukti' => $fotoBuktiPath,
-            'catatan' => ($validated['catatan'] ?? '') . $excelDetectionNote,
+            'catatan' => ($validated['catatan'] ?? '').$excelDetectionNote,
         ]);
 
-        $statusMsg = $statusLaba === 'untung' 
-            ? 'Hasil Analisis: USAHA MENGALAMI KEUNTUNGAN (Laba Bersih Rp ' . number_format($labaBersih, 0, ',', '.') . ' / Margin +' . $marginLaba . '%).'
-            : ($statusLaba === 'rugi' ? 'Hasil Analisis: USAHA MENGALAMI DEFISIT/RUGI (Rugi Rp ' . number_format(abs($labaBersih), 0, ',', '.') . '). Evaluasi pengeluaran operasional Anda.' : 'Hasil Analisis: IMPAS (Break Even Point).');
+        $statusMsg = $statusLaba === 'untung'
+            ? 'Hasil Analisis: USAHA MENGALAMI KEUNTUNGAN (Laba Bersih Rp '.number_format($labaBersih, 0, ',', '.').' / Margin +'.$marginLaba.'%).'
+            : ($statusLaba === 'rugi' ? 'Hasil Analisis: USAHA MENGALAMI DEFISIT/RUGI (Rugi Rp '.number_format(abs($labaBersih), 0, ',', '.').'). Evaluasi pengeluaran operasional Anda.' : 'Hasil Analisis: IMPAS (Break Even Point).');
 
-        return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode ' . $validated['bulan_tahun'] . ' berhasil disimpan! ' . $statusMsg);
+        return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Catatan keuangan periode '.$validated['bulan_tahun'].' berhasil disimpan! '.$statusMsg);
     }
 
     /**
@@ -498,7 +498,9 @@ class DashboardController extends Controller
     public function gabungKeuanganPeriode(Request $request)
     {
         $user = Auth::user();
-        if ($user->role !== 'umkm') abort(403);
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
         $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
         $bulanTahun = $request->input('bulan_tahun');
 
@@ -528,7 +530,7 @@ class DashboardController extends Controller
                 'margin_laba' => $margin,
                 'status_laba' => $statusLaba,
                 'foto_bukti' => $fileBukti,
-                'catatan' => 'Hasil penggabungan total akumulasi dari ' . $records->count() . ' catatan transaksi.',
+                'catatan' => 'Hasil penggabungan total akumulasi dari '.$records->count().' catatan transaksi.',
             ]);
 
             CatatanKeuangan::where('id_umkm', $umkm->id_umkm)
@@ -536,7 +538,7 @@ class DashboardController extends Controller
                 ->where('id_keuangan', '!=', $first->id_keuangan)
                 ->delete();
 
-            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Berhasil menggabungkan dan menotalkan seluruh ' . $records->count() . ' catatan transaksi periode ' . $bulanTahun . ' menjadi satu akumulasi total!');
+            return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Berhasil menggabungkan dan menotalkan seluruh '.$records->count().' catatan transaksi periode '.$bulanTahun.' menjadi satu akumulasi total!');
         }
 
         return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('info', 'Catatan periode ini sudah menjadi satu.');
@@ -592,7 +594,7 @@ class DashboardController extends Controller
             'tanggal_investasi' => now(),
         ]);
 
-        return back()->with('success', 'Selamat! Pengajuan minat investasi sebesar Rp ' . number_format($validated['jumlah_modal'], 0, ',', '.') . ' pada usaha "' . $umkm->nama_usaha . '" BERHASIL DIKIRIMKAN! Pelaku UMKM telah menerima notifikasi resmi Anda.');
+        return back()->with('success', 'Selamat! Pengajuan minat investasi sebesar Rp '.number_format($validated['jumlah_modal'], 0, ',', '.').' pada usaha "'.$umkm->nama_usaha.'" BERHASIL DIKIRIMKAN! Pelaku UMKM telah menerima notifikasi resmi Anda.');
     }
 
     /**
@@ -620,6 +622,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $umkms = Umkm::latest('id_umkm')->take(8)->get();
+
         return view('auth.formulir-investor', compact('user', 'umkms'));
     }
 
@@ -661,7 +664,7 @@ class DashboardController extends Controller
         $umkm = Umkm::firstOrCreate(
             ['user_id' => $user->id],
             [
-                'nama_usaha' => 'Usaha ' . $user->name,
+                'nama_usaha' => 'Usaha '.$user->name,
                 'jenis_usaha' => 'Makanan',
                 'pemilik' => $user->name,
                 'nomor_whatsapp' => $user->phone_number,
@@ -723,7 +726,7 @@ class DashboardController extends Controller
         $umkm = Umkm::firstOrCreate(
             ['user_id' => $user->id],
             [
-                'nama_usaha' => $validated['nama_usaha'] ?? ('Usaha ' . $user->name),
+                'nama_usaha' => $validated['nama_usaha'] ?? ('Usaha '.$user->name),
                 'jenis_usaha' => $validated['jenis_usaha'] ?? 'Makanan',
                 'pemilik' => $validated['pemilik'] ?? $user->name,
                 'nomor_whatsapp' => $validated['nomor_whatsapp'] ?? $user->phone_number,

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SendOtpMail;
-use App\Models\Ruko;
 use App\Models\ThirdPartyAuthentication;
 use App\Models\Umkm;
 use App\Models\User;
@@ -29,6 +28,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
+
         return view('auth.login');
     }
 
@@ -54,6 +54,7 @@ class AuthController extends Controller
         }
 
         $request->merge(['role' => 'investor']);
+
         return view('auth.register');
     }
 
@@ -67,6 +68,7 @@ class AuthController extends Controller
         }
 
         $request->merge(['role' => 'umkm']);
+
         return view('auth.register');
     }
 
@@ -76,11 +78,12 @@ class AuthController extends Controller
     public function showVerifyOtp(Request $request)
     {
         $email = Session::get('otp_email');
-        if (!$email) {
+        if (! $email) {
             return redirect()->route('login')->with('error', 'Sesi verifikasi tidak ditemukan. Silakan login atau daftar ulang.');
         }
 
         $action = Session::get('otp_action', 'verifikasi');
+
         return view('auth.verify-otp', compact('email', 'action'));
     }
 
@@ -141,7 +144,7 @@ class AuthController extends Controller
             Umkm::firstOrCreate(
                 ['user_id' => $user->id],
                 [
-                    'nama_usaha' => 'Usaha ' . $validated['nama'],
+                    'nama_usaha' => 'Usaha '.$validated['nama'],
                     'jenis_usaha' => 'Makanan',
                     'pemilik' => $validated['nama'],
                     'nomor_whatsapp' => $validated['nomor_telepon'],
@@ -179,7 +182,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             return back()->withInput($request->only('email'))->withErrors([
                 'email' => 'Kombinasi email dan kata sandi tidak sesuai.',
             ]);
@@ -208,7 +211,7 @@ class AuthController extends Controller
             return redirect()->intended('/admin');
         }
 
-        return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
+        return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, '.$user->name.'!');
     }
 
     /**
@@ -248,7 +251,7 @@ class AuthController extends Controller
      */
     public function showResetPassword()
     {
-        if (!Session::get('can_reset_password') || !Session::get('reset_user_id')) {
+        if (! Session::get('can_reset_password') || ! Session::get('reset_user_id')) {
             return redirect()->route('password.request')->with('error', 'Sesi reset kata sandi tidak valid atau telah kedaluwarsa.');
         }
 
@@ -261,7 +264,7 @@ class AuthController extends Controller
     public function resetPassword(Request $request)
     {
         $userId = Session::get('reset_user_id');
-        if (!Session::get('can_reset_password') || !$userId) {
+        if (! Session::get('can_reset_password') || ! $userId) {
             return redirect()->route('password.request')->with('error', 'Sesi reset kata sandi telah kedaluwarsa.');
         }
 
@@ -304,7 +307,7 @@ class AuthController extends Controller
         $userId = Session::get('otp_user_id');
         $email = Session::get('otp_email');
 
-        if (!$userId || !$email) {
+        if (! $userId || ! $email) {
             return redirect()->route('login')->with('error', 'Sesi telah kedaluwarsa. Silakan ulangi.');
         }
 
@@ -319,7 +322,7 @@ class AuthController extends Controller
             ->latest('id_verification')
             ->first();
 
-        if (!$code) {
+        if (! $code) {
             return back()->withErrors([
                 'otp' => 'Kode OTP salah atau sudah kedaluwarsa. Silakan klik kirim ulang.',
             ]);
@@ -339,7 +342,7 @@ class AuthController extends Controller
         }
 
         // Update status user jika belum terverifikasi
-        if (!$user->email_verified_at) {
+        if (! $user->email_verified_at) {
             $user->email_verified_at = Carbon::now();
         }
         if ($user->status === 'menunggu_verifikasi') {
@@ -359,10 +362,11 @@ class AuthController extends Controller
             if ($user->role === 'investor') {
                 return redirect()->route('formulir.investor')->with('success', 'Email berhasil diverifikasi! Silakan lengkapi Formulir Pendaftaran Investor Anda di bawah ini.');
             }
+
             return redirect()->route('formulir.umkm')->with('success', 'Email berhasil diverifikasi! Silakan lengkapi Formulir Pendaftaran Pelaku UMKM Anda di bawah ini.');
         }
 
-        return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
+        return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, '.$user->name.'!');
     }
 
     /**
@@ -371,7 +375,7 @@ class AuthController extends Controller
     public function resendOtp()
     {
         $userId = Session::get('otp_user_id');
-        if (!$userId) {
+        if (! $userId) {
             return redirect()->route('login')->with('error', 'Sesi tidak ditemukan.');
         }
 
@@ -391,7 +395,7 @@ class AuthController extends Controller
         try {
             return Socialite::driver('google')->redirect();
         } catch (Throwable $e) {
-            return redirect()->route('login')->with('error', 'Gagal menghubungkan ke Google: ' . $e->getMessage() . '. Pastikan Client ID dan Secret sudah diisi.');
+            return redirect()->route('login')->with('error', 'Gagal menghubungkan ke Google: '.$e->getMessage().'. Pastikan Client ID dan Secret sudah diisi.');
         }
     }
 
@@ -403,13 +407,13 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (Throwable $e) {
-            return redirect()->route('login')->with('error', 'Autentikasi Google gagal atau dibatalkan: ' . $e->getMessage());
+            return redirect()->route('login')->with('error', 'Autentikasi Google gagal atau dibatalkan: '.$e->getMessage());
         }
 
         // Cari atau buat pengguna
         $user = User::where('email', $googleUser->getEmail())->first();
 
-        if (!$user) {
+        if (! $user) {
             // Pengguna baru mendaftar via Google -> otomatis terverifikasi & aktif sesuai ERD
             $user = User::create([
                 'name' => $googleUser->getName() ?? 'Pengguna Google',
@@ -421,13 +425,13 @@ class AuthController extends Controller
             ]);
         } else {
             // Update email_verified_at jika belum
-            if (!$user->email_verified_at) {
+            if (! $user->email_verified_at) {
                 $user->email_verified_at = Carbon::now();
             }
             if ($user->status === 'menunggu_verifikasi') {
                 $user->status = 'aktif';
             }
-            if (!$user->avatar_url) {
+            if (! $user->avatar_url) {
                 $user->avatar_url = $googleUser->getAvatar();
             }
             $user->save();

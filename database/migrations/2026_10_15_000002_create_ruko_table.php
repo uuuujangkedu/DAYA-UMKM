@@ -16,12 +16,12 @@ return new class extends Migration
             $table->decimal('harga_sewa_per_bulan', 12, 2);
             $table->string('status_ketersediaan', 20)->default('tersedia');
             $table->timestamps();
-            
+
             $table->foreign('id_penyedia')
-                  ->references('id_penyedia')
-                  ->on('penyedia_ruko')
-                  ->onDelete('restrict');
-            
+                ->references('id_penyedia')
+                ->on('penyedia_ruko')
+                ->onDelete('restrict');
+
             $table->index('status_ketersediaan');
             $table->index('id_penyedia');
         });

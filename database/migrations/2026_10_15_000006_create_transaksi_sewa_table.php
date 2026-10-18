@@ -17,17 +17,17 @@ return new class extends Migration
             $table->decimal('total_harga', 12, 2);
             $table->string('status_pembayaran', 20)->default('pending');
             $table->timestamps();
-            
+
             $table->foreign('id_umkm')
-                  ->references('id_umkm')
-                  ->on('umkm')
-                  ->onDelete('restrict');
-            
+                ->references('id_umkm')
+                ->on('umkm')
+                ->onDelete('restrict');
+
             $table->foreign('id_ruko')
-                  ->references('id_ruko')
-                  ->on('ruko')
-                  ->onDelete('restrict');
-            
+                ->references('id_ruko')
+                ->on('ruko')
+                ->onDelete('restrict');
+
             $table->index('id_umkm');
             $table->index('id_ruko');
             $table->index('status_pembayaran');

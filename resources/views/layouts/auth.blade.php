@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Daya UMKM') - Solusi Permodalan dan Sewa Ruko</title>
 
     <!-- Favicon -->
@@ -569,5 +570,8 @@
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget')
+
+    <!-- Komponen AI Customer Support Assistant Widget -->
+    @include('components.chatbot-widget')
 </body>
 </html>

@@ -7,6 +7,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -78,7 +79,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function isEmailVerified(): bool
     {
-        return !is_null($this->email_verified_at);
+        return ! is_null($this->email_verified_at);
     }
 
     public function isActive(): bool
@@ -86,7 +87,7 @@ class User extends Authenticatable implements FilamentUser
         return $this->status === 'aktif';
     }
 
-    public function umkm(): \Illuminate\Database\Eloquent\Relations\HasOne
+    public function umkm(): HasOne
     {
         return $this->hasOne(Umkm::class, 'user_id');
     }

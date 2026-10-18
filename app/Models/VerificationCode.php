@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class VerificationCode extends Model
 {
     protected $table = 'verification_codes';
+
     protected $primaryKey = 'id_verification';
 
     protected $fillable = [
@@ -34,6 +35,6 @@ class VerificationCode extends Model
 
     public function isValid(): bool
     {
-        return !$this->is_used && $this->expires_at->isFuture();
+        return ! $this->is_used && $this->expires_at->isFuture();
     }
 }

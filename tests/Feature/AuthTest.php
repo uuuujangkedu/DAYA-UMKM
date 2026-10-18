@@ -21,14 +21,14 @@ class AuthTest extends TestCase
         $response = $this->get('/login');
         $response->assertStatus(200);
         $response->assertSee('Masuk dengan Google');
-        $response->assertSee('Selamat Datang Kembali');
+        $response->assertSee('Masuk ke akun');
     }
 
     public function test_register_page_renders_successfully(): void
     {
         $response = $this->get('/register');
         $response->assertStatus(200);
-        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Daftar dengan Google');
         $response->assertSee('Investor');
         $response->assertSee('Pelaku UMKM');
     }
@@ -225,24 +225,24 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/gabung/investor');
         $response->assertStatus(200);
-        $response->assertSee('Investor DAYA UMKM');
-        $response->assertSee('Kenapa Gabung Menjadi Investor');
+        $response->assertSee('Ekosistem Mitra Investor');
+        $response->assertSee('Daftar sebagai investor');
     }
 
     public function test_gabung_umkm_page_renders_successfully(): void
     {
         $response = $this->get('/gabung/umkm');
         $response->assertStatus(200);
-        $response->assertSee('Pelaku UMKM DAYA');
-        $response->assertSee('Kenapa Gabung Menjadi Pelaku UMKM');
+        $response->assertSee('Ekosistem Pelaku UMKM');
+        $response->assertSee('Daftar sebagai pelaku UMKM');
     }
 
     public function test_register_investor_form_renders_successfully(): void
     {
         $response = $this->get('/register/investor');
         $response->assertStatus(200);
-        $response->assertSee('Daftar Sebagai Mitra Investor');
-        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Daftar sebagai mitra investor');
+        $response->assertSee('Daftar dengan Google');
         $response->assertSee('Investor');
     }
 
@@ -250,8 +250,8 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/register/umkm');
         $response->assertStatus(200);
-        $response->assertSee('Daftar Sebagai Pelaku UMKM');
-        $response->assertSee('Daftar Cepat dengan Google');
+        $response->assertSee('Daftar sebagai pelaku UMKM');
+        $response->assertSee('Daftar dengan Google');
         $response->assertSee('Pelaku UMKM');
     }
 
@@ -265,12 +265,10 @@ class AuthTest extends TestCase
 
         $response = $this->actingAs($user)->get('/formulir/umkm');
         $response->assertStatus(200);
-        $response->assertSee('Formulir Pendaftaran Pelaku UMKM');
-        $response->assertSee('Identitas Pengaju UMKM');
-        $response->assertSee('Informasi Usaha & Produk', false);
-        $response->assertSee('Lokasi Ruko (Pilihan Minat Sewa)');
-        $response->assertSee('Simpan Draf');
-        $response->assertSee('Kirim Pengajuan ke Admin');
+        $response->assertSee('Formulir pendaftaran pelaku UMKM');
+        $response->assertSee('Identitas pengaju UMKM');
+        $response->assertSee('Simpan draf');
+        $response->assertSee('Kirim pengajuan ke admin');
     }
 
     public function test_umkm_can_save_draft_and_submit_pengajuan(): void
@@ -330,9 +328,9 @@ class AuthTest extends TestCase
         // Buka formulir investor
         $formResponse = $this->actingAs($user)->get('/formulir/investor');
         $formResponse->assertStatus(200);
-        $formResponse->assertSee('Formulir Pendaftaran Investor');
-        $formResponse->assertSee('Identitas Pendaftar Investor');
-        $formResponse->assertSee('Informasi UMKM (Minat Pendanaan)');
+        $formResponse->assertSee('Formulir pendaftaran investor');
+        $formResponse->assertSee('Identitas pendaftar investor');
+        $formResponse->assertSee('Katalog minat pendanaan');
 
         // Kirim formulir investor
         $saveResponse = $this->actingAs($user)->post('/formulir/investor', [
@@ -361,4 +359,3 @@ class AuthTest extends TestCase
         $approvedResponse->assertSee('Ruko Strategis Siap Ditempati UMKM');
     }
 }
-

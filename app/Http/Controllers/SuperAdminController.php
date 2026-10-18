@@ -20,7 +20,7 @@ class SuperAdminController extends Controller
     private function checkAdminAccess()
     {
         $user = Auth::user();
-        if (!$user || !in_array($user->role, ['admin', 'super_admin'])) {
+        if (! $user || ! in_array($user->role, ['admin', 'super_admin'])) {
             abort(403, 'Akses ditolak. Halaman ini khusus untuk Administrator.');
         }
     }
@@ -31,7 +31,7 @@ class SuperAdminController extends Controller
     private function checkSuperAdminOnly()
     {
         $user = Auth::user();
-        if (!$user || $user->role !== 'super_admin') {
+        if (! $user || $user->role !== 'super_admin') {
             abort(403, 'Akses ditolak. Fitur ini merupakan hak khusus Super Administrator.');
         }
     }
@@ -48,7 +48,7 @@ class SuperAdminController extends Controller
     {
         $onlineThreshold = Carbon::now()->subMinutes(15)->timestamp;
 
-        if (!Schema::hasTable('sessions')) {
+        if (! Schema::hasTable('sessions')) {
             return collect();
         }
 
@@ -62,10 +62,11 @@ class SuperAdminController extends Controller
 
         return $sessions->map(function ($s) use ($users) {
             $u = $users->get($s->user_id);
+
             return [
                 'session_id' => $s->id,
                 'user_id' => $s->user_id,
-                'name' => $u ? $u->name : 'Pengguna #' . $s->user_id,
+                'name' => $u ? $u->name : 'Pengguna #'.$s->user_id,
                 'email' => $u ? $u->email : '-',
                 'role' => $u ? $u->role : 'unknown',
                 'ip_address' => $s->ip_address ?? '127.0.0.1',
@@ -105,7 +106,7 @@ class SuperAdminController extends Controller
         $days = [
             'Sen' => 0, 'Sel' => 0, 'Rab' => 0, 'Kam' => 0, 'Jum' => 0, 'Sab' => 0, 'Min' => 0,
         ];
-        
+
         $dayMap = [
             1 => 'Sen', 2 => 'Sel', 3 => 'Rab', 4 => 'Kam', 5 => 'Jum', 6 => 'Sab', 0 => 'Min',
         ];
@@ -166,11 +167,11 @@ class SuperAdminController extends Controller
         }
 
         if ($request->filled('q')) {
-            $search = '%' . $request->q . '%';
+            $search = '%'.$request->q.'%';
             $query->where(function ($q) use ($search) {
                 $q->where('nama_usaha', 'like', $search)
-                  ->orWhere('pemilik', 'like', $search)
-                  ->orWhere('nomor_whatsapp', 'like', $search);
+                    ->orWhere('pemilik', 'like', $search)
+                    ->orWhere('nomor_whatsapp', 'like', $search);
             });
         }
 
@@ -223,7 +224,7 @@ class SuperAdminController extends Controller
             'ip_address' => $request->ip() ?? '127.0.0.1',
         ]);
 
-        return back()->with('success', 'Proposal usaha "' . $umkm->nama_usaha . '" BERHASIL DISETUJUI! Usaha kini resmi terverifikasi dan tayang di katalog investor.');
+        return back()->with('success', 'Proposal usaha "'.$umkm->nama_usaha.'" BERHASIL DISETUJUI! Usaha kini resmi terverifikasi dan tayang di katalog investor.');
     }
 
     /**
@@ -255,7 +256,7 @@ class SuperAdminController extends Controller
             'ip_address' => $request->ip() ?? '127.0.0.1',
         ]);
 
-        return back()->with('success', 'Proposal usaha "' . $umkm->nama_usaha . '" telah DITOLAK. Status telah diperbarui.');
+        return back()->with('success', 'Proposal usaha "'.$umkm->nama_usaha.'" telah DITOLAK. Status telah diperbarui.');
     }
 
     /**
@@ -274,11 +275,11 @@ class SuperAdminController extends Controller
         }
 
         if ($request->filled('q')) {
-            $search = '%' . $request->q . '%';
+            $search = '%'.$request->q.'%';
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', $search)
-                  ->orWhere('email', 'like', $search)
-                  ->orWhere('phone_number', 'like', $search);
+                    ->orWhere('email', 'like', $search)
+                    ->orWhere('phone_number', 'like', $search);
             });
         }
 
@@ -331,7 +332,7 @@ class SuperAdminController extends Controller
 
         LogAktivitasAdmin::create([
             'id_pengguna' => Auth::id(),
-            'aksi' => 'Ubah Status Akun: ' . $statusBaru,
+            'aksi' => 'Ubah Status Akun: '.$statusBaru,
             'detail_perubahan' => [
                 'target_id' => $targetUser->id,
                 'target_email' => $targetUser->email,
@@ -341,7 +342,7 @@ class SuperAdminController extends Controller
             'ip_address' => $request->ip() ?? '127.0.0.1',
         ]);
 
-        return back()->with('success', 'Status akun ' . $targetUser->name . ' berhasil diubah menjadi: ' . strtoupper($statusBaru));
+        return back()->with('success', 'Status akun '.$targetUser->name.' berhasil diubah menjadi: '.strtoupper($statusBaru));
     }
 
     /**
@@ -367,7 +368,7 @@ class SuperAdminController extends Controller
         $roleBaru = $validated['role'];
 
         if ($roleLama === $roleBaru) {
-            return back()->with('info', 'Role pengguna ' . $targetUser->name . ' sudah merupakan ' . strtoupper($roleBaru) . '. Tidak ada perubahan dilakukan.');
+            return back()->with('info', 'Role pengguna '.$targetUser->name.' sudah merupakan '.strtoupper($roleBaru).'. Tidak ada perubahan dilakukan.');
         }
 
         // Jika menurunkan status super_admin, pastikan masih ada super_admin lain di sistem
@@ -390,7 +391,7 @@ class SuperAdminController extends Controller
             Umkm::firstOrCreate(
                 ['user_id' => $targetUser->id],
                 [
-                    'nama_usaha' => 'Usaha ' . $targetUser->name,
+                    'nama_usaha' => 'Usaha '.$targetUser->name,
                     'jenis_usaha' => 'Makanan',
                     'pemilik' => $targetUser->name,
                     'nomor_whatsapp' => $targetUser->phone_number,
@@ -401,7 +402,7 @@ class SuperAdminController extends Controller
 
         LogAktivitasAdmin::create([
             'id_pengguna' => Auth::id(),
-            'aksi' => 'Ubah Role Pengguna: ' . strtoupper($roleLama) . ' -> ' . strtoupper($roleBaru),
+            'aksi' => 'Ubah Role Pengguna: '.strtoupper($roleLama).' -> '.strtoupper($roleBaru),
             'detail_perubahan' => [
                 'target_id' => $targetUser->id,
                 'target_name' => $targetUser->name,
@@ -419,7 +420,7 @@ class SuperAdminController extends Controller
             'umkm' => 'Pelaku UMKM',
         ];
 
-        return back()->with('success', 'Role pengguna "' . $targetUser->name . '" BERHASIL DIUBAH menjadi ' . ($roleLabels[$roleBaru] ?? ucfirst($roleBaru)) . '!');
+        return back()->with('success', 'Role pengguna "'.$targetUser->name.'" BERHASIL DIUBAH menjadi '.($roleLabels[$roleBaru] ?? ucfirst($roleBaru)).'!');
     }
 
     /**
@@ -436,7 +437,7 @@ class SuperAdminController extends Controller
 
         LogAktivitasAdmin::create([
             'id_pengguna' => Auth::id(),
-            'aksi' => 'Persetujuan (ACC) Akun ' . ucfirst($targetUser->role),
+            'aksi' => 'Persetujuan (ACC) Akun '.ucfirst($targetUser->role),
             'detail_perubahan' => [
                 'target_id' => $targetUser->id,
                 'target_name' => $targetUser->name,
@@ -448,7 +449,7 @@ class SuperAdminController extends Controller
             'ip_address' => $request->ip() ?? '127.0.0.1',
         ]);
 
-        return back()->with('success', 'Akun ' . ucfirst($targetUser->role) . ' "' . $targetUser->name . '" BERHASIL DISETUJUI (ACC)! Pengguna kini dapat mengakses dashboard sepenuhnya.');
+        return back()->with('success', 'Akun '.ucfirst($targetUser->role).' "'.$targetUser->name.'" BERHASIL DISETUJUI (ACC)! Pengguna kini dapat mengakses dashboard sepenuhnya.');
     }
 
     /**

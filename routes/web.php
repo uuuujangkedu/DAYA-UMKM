@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,10 @@ Route::get('/admin/{any?}', function () {
     return redirect()->route('superadmin.dashboard');
 })->where('any', '.*');
 
+// Chatbot AI Assistant Routes
+Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage'])->name('chatbot.message');
+Route::post('/chatbot/reset', [ChatbotController::class, 'resetChat'])->name('chatbot.reset');
+
 // Guest Auth Routes
 Route::middleware('guest')->group(function () {
     // 1. Sign In
@@ -65,6 +70,7 @@ Route::middleware('guest')->group(function () {
 });
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SuperAdminController;
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
@@ -99,26 +105,27 @@ Route::middleware('auth')->group(function () {
     // SUPER ADMIN MANAGEMENT & AUDIT ROUTES
     // ==========================================
     Route::prefix('super-admin')->name('superadmin.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\SuperAdminController::class, 'dashboard'])->name('dashboard');
-        Route::get('/pengajuan', [\App\Http\Controllers\SuperAdminController::class, 'pengajuan'])->name('pengajuan');
-        Route::post('/pengajuan/{id}/approve', [\App\Http\Controllers\SuperAdminController::class, 'approvePengajuan'])->name('pengajuan.approve');
-        Route::post('/pengajuan/{id}/reject', [\App\Http\Controllers\SuperAdminController::class, 'rejectPengajuan'])->name('pengajuan.reject');
-        
-        Route::get('/users', [\App\Http\Controllers\SuperAdminController::class, 'users'])->name('users');
-        Route::post('/users/{id}/approve', [\App\Http\Controllers\SuperAdminController::class, 'approveUser'])->name('users.approve');
-        Route::post('/users/{id}/toggle-status', [\App\Http\Controllers\SuperAdminController::class, 'toggleUserStatus'])->name('users.toggle');
-        Route::post('/users/{id}/change-role', [\App\Http\Controllers\SuperAdminController::class, 'changeRole'])->name('users.change-role');
+        Route::get('/', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('/pengajuan', [SuperAdminController::class, 'pengajuan'])->name('pengajuan');
+        Route::post('/pengajuan/{id}/approve', [SuperAdminController::class, 'approvePengajuan'])->name('pengajuan.approve');
+        Route::post('/pengajuan/{id}/reject', [SuperAdminController::class, 'rejectPengajuan'])->name('pengajuan.reject');
 
-        Route::get('/log-aktivitas', [\App\Http\Controllers\SuperAdminController::class, 'logAktivitas'])->name('logs');
-        Route::get('/ruko', [\App\Http\Controllers\SuperAdminController::class, 'ruko'])->name('ruko');
+        Route::get('/users', [SuperAdminController::class, 'users'])->name('users');
+        Route::post('/users/{id}/approve', [SuperAdminController::class, 'approveUser'])->name('users.approve');
+        Route::post('/users/{id}/toggle-status', [SuperAdminController::class, 'toggleUserStatus'])->name('users.toggle');
+        Route::post('/users/{id}/change-role', [SuperAdminController::class, 'changeRole'])->name('users.change-role');
+
+        Route::get('/log-aktivitas', [SuperAdminController::class, 'logAktivitas'])->name('logs');
+        Route::get('/ruko', [SuperAdminController::class, 'ruko'])->name('ruko');
     });
 });
 
 // Akses berkas public storage (foto produk, bukti kuitansi keuangan, dll.)
 Route::get('/storage/{path}', function (string $path) {
-    $filePath = storage_path('app/public/' . $path);
-    if (!file_exists($filePath)) {
+    $filePath = storage_path('app/public/'.$path);
+    if (! file_exists($filePath)) {
         abort(404);
     }
+
     return response()->file($filePath);
 })->where('path', '.*')->name('public.storage');

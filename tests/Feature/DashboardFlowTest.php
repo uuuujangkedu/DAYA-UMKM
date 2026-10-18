@@ -2,11 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\CatatanKeuangan;
 use App\Models\Investasi;
 use App\Models\Produk;
 use App\Models\Umkm;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class DashboardFlowTest extends TestCase
@@ -199,7 +202,7 @@ class DashboardFlowTest extends TestCase
 
     public function test_umkm_can_upload_excel_and_csv_for_financial_analysis()
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $user = User::factory()->create([
             'role' => 'umkm',
@@ -215,7 +218,7 @@ class DashboardFlowTest extends TestCase
             'status_pengajuan' => 'terverifikasi',
         ]);
 
-        $excelFile = \Illuminate\Http\UploadedFile::fake()->create('laporan_kas_september.xlsx', 150, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $excelFile = UploadedFile::fake()->create('laporan_kas_september.xlsx', 150, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
         $response = $this->actingAs($user)->post('/dashboard/umkm/keuangan', [
             'bulan_tahun' => 'September 2026',
@@ -229,7 +232,7 @@ class DashboardFlowTest extends TestCase
         $response->assertRedirect('/dashboard?tab=keuangan');
         $response->assertSessionHas('success');
 
-        $ck = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
+        $ck = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
         $this->assertNotNull($ck);
         $this->assertStringEndsWith('.xlsx', $ck->foto_bukti);
 
@@ -241,7 +244,7 @@ class DashboardFlowTest extends TestCase
 
     public function test_csv_or_excel_auto_detects_income_and_expenses_when_nominal_not_filled()
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $user = User::factory()->create([
             'role' => 'umkm',
@@ -258,12 +261,12 @@ class DashboardFlowTest extends TestCase
         ]);
 
         // Buat file CSV kas dengan kolom Pemasukan & Pengeluaran
-        $csvContent = "Tanggal,Keterangan,Pemasukan,Pengeluaran\n" .
-                      "01/10/2026,Omzet Penjualan Harian,25000000,0\n" .
-                      "02/10/2026,Belanja Daging & Sayur,0,10000000\n" .
+        $csvContent = "Tanggal,Keterangan,Pemasukan,Pengeluaran\n".
+                      "01/10/2026,Omzet Penjualan Harian,25000000,0\n".
+                      "02/10/2026,Belanja Daging & Sayur,0,10000000\n".
                       "03/10/2026,Biaya Listrik & Sewa,0,5000000\n";
 
-        $csvFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('buku_kas_oktober.csv', $csvContent);
+        $csvFile = UploadedFile::fake()->createWithContent('buku_kas_oktober.csv', $csvContent);
 
         // Submit form TANPA mengisi pendapatan secara manual (hanya lampirkan berkas kas)
         $response = $this->actingAs($user)->post('/dashboard/umkm/keuangan', [
@@ -276,7 +279,7 @@ class DashboardFlowTest extends TestCase
         $response->assertSessionHas('success');
 
         // Pastikan sistem berhasil mendeteksi pemasukan 25jt dan total beban 15jt -> Laba 10jt (Untung)
-        $ck = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
+        $ck = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
         $this->assertNotNull($ck);
         $this->assertEquals(25000000, (float) $ck->pendapatan);
         $this->assertEquals(15000000, (float) ($ck->hpp + $ck->beban_operasional + $ck->beban_lain));
@@ -286,7 +289,7 @@ class DashboardFlowTest extends TestCase
 
     public function test_sales_receipt_nota_spreadsheet_detects_income_and_computes_profit()
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $user = User::factory()->create([
             'role' => 'umkm',
@@ -303,13 +306,13 @@ class DashboardFlowTest extends TestCase
         ]);
 
         // Format CSV menyerupai Nota Penjualan kasir
-        $notaContent = "No,Nama Barang,Qty,Harga,Subtotal\n" .
-                       "1,Kopi Arabika Gayo,200,30000,6000000\n" .
-                       "2,Kopi Robusta Lampung,250,20000,5000000\n" .
-                       "3,Pastry Croissant,100,40000,4000000\n" .
+        $notaContent = "No,Nama Barang,Qty,Harga,Subtotal\n".
+                       "1,Kopi Arabika Gayo,200,30000,6000000\n".
+                       "2,Kopi Robusta Lampung,250,20000,5000000\n".
+                       "3,Pastry Croissant,100,40000,4000000\n".
                        "Total,,,,15000000\n";
 
-        $notaFile = \Illuminate\Http\UploadedFile::fake()->createWithContent('Nota_Penjualan.csv', $notaContent);
+        $notaFile = UploadedFile::fake()->createWithContent('Nota_Penjualan.csv', $notaContent);
 
         // User mengisi HPP 6jt, Beban Ops 3.5jt, Beban Lain 500rb, melampirkan Nota_Penjualan.csv tanpa mengisi omzet secara manual
         $response = $this->actingAs($user)->post('/dashboard/umkm/keuangan', [
@@ -324,7 +327,7 @@ class DashboardFlowTest extends TestCase
         $response->assertRedirect('/dashboard?tab=keuangan');
         $response->assertSessionHas('success');
 
-        $ck = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
+        $ck = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
         $this->assertNotNull($ck);
         // Pendapatan terdeteksi otomatis 15.000.000 dari nota
         $this->assertEquals(15000000, (float) $ck->pendapatan);
@@ -337,7 +340,7 @@ class DashboardFlowTest extends TestCase
 
     public function test_actual_nota_penjualan_layout_with_title_and_numbered_items_does_not_sum_no_column()
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $user = User::factory()->create([
             'role' => 'umkm',
@@ -354,19 +357,19 @@ class DashboardFlowTest extends TestCase
         ]);
 
         // Layout persis seperti Nota_Penjualan.xlsx pengguna
-        $notaContent = "NAMA USAHA ANDA,,,,,\n" .
-                       "Alamat usaha · Telp/WA: 08xx-xxxx-xxxx,,,,,\n" .
-                       "NOTA PENJUALAN,,,,,\n" .
-                       "No. Nota,,NP-2026-001,,Tanggal,15/10/2026\n" .
-                       "Pelanggan,,Budi Santoso,,Jatuh Tempo,15/10/2026\n" .
-                       "No,Nama Barang / Jasa,Qty,Satuan,Harga Satuan (Rp),Diskon (%),Jumlah (Rp)\n" .
-                       "1,Beras premium 5 kg,2,karung,68000,0,136000\n" .
-                       "2,Minyak goreng 2 L,3,botol,38000,0.05,108300\n" .
-                       "3,Gula pasir 1 kg,5,kg,17000,0,85000\n" .
-                       "Subtotal,,,,,,329300\n" .
+        $notaContent = "NAMA USAHA ANDA,,,,,\n".
+                       "Alamat usaha · Telp/WA: 08xx-xxxx-xxxx,,,,,\n".
+                       "NOTA PENJUALAN,,,,,\n".
+                       "No. Nota,,NP-2026-001,,Tanggal,15/10/2026\n".
+                       "Pelanggan,,Budi Santoso,,Jatuh Tempo,15/10/2026\n".
+                       "No,Nama Barang / Jasa,Qty,Satuan,Harga Satuan (Rp),Diskon (%),Jumlah (Rp)\n".
+                       "1,Beras premium 5 kg,2,karung,68000,0,136000\n".
+                       "2,Minyak goreng 2 L,3,botol,38000,0.05,108300\n".
+                       "3,Gula pasir 1 kg,5,kg,17000,0,85000\n".
+                       "Subtotal,,,,,,329300\n".
                        "TOTAL,,,,,,329300\n";
 
-        $file = \Illuminate\Http\UploadedFile::fake()->createWithContent('Nota_Penjualan.csv', $notaContent);
+        $file = UploadedFile::fake()->createWithContent('Nota_Penjualan.csv', $notaContent);
 
         $response = $this->actingAs($user)->post('/dashboard/umkm/keuangan', [
             'bulan_tahun' => 'Oktober 2026',
@@ -379,7 +382,7 @@ class DashboardFlowTest extends TestCase
         $response->assertRedirect('/dashboard?tab=keuangan');
         $response->assertSessionHas('success');
 
-        $ck = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
+        $ck = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->first();
         $this->assertNotNull($ck);
         // Pastikan pendapatan terdeteksi 329.300 (BUKAN 6 dari penjumlahan nomor urut 1+2+3)
         $this->assertEquals(329300, (float) $ck->pendapatan);
@@ -424,7 +427,7 @@ class DashboardFlowTest extends TestCase
             'mode_aksi' => 'akumulasi',
         ]);
 
-        $ck = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->first();
+        $ck = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->first();
         $this->assertNotNull($ck);
         // Total omzet tertotalkan: 10jt + 5jt = 15jt
         $this->assertEquals(15000000, (float) $ck->pendapatan);
@@ -452,7 +455,7 @@ class DashboardFlowTest extends TestCase
             'status_pengajuan' => 'terverifikasi',
         ]);
 
-        $ck = \App\Models\CatatanKeuangan::create([
+        $ck = CatatanKeuangan::create([
             'id_umkm' => $umkm->id_umkm,
             'bulan_tahun' => 'Oktober 2026',
             'pendapatan' => 8000000,
@@ -473,7 +476,7 @@ class DashboardFlowTest extends TestCase
             'beban_operasional' => 2000000,
         ]);
 
-        $updated = \App\Models\CatatanKeuangan::find($ck->id_keuangan);
+        $updated = CatatanKeuangan::find($ck->id_keuangan);
         $this->assertEquals(12000000, (float) $updated->pendapatan);
         $this->assertEquals(6000000, (float) $updated->laba_bersih);
     }
@@ -495,7 +498,7 @@ class DashboardFlowTest extends TestCase
         ]);
 
         // Buat 2 catatan terpisah di bulan Oktober 2026
-        \App\Models\CatatanKeuangan::create([
+        CatatanKeuangan::create([
             'id_umkm' => $umkm->id_umkm,
             'bulan_tahun' => 'Oktober 2026',
             'pendapatan' => 10000000,
@@ -507,7 +510,7 @@ class DashboardFlowTest extends TestCase
             'status_laba' => 'untung',
         ]);
 
-        \App\Models\CatatanKeuangan::create([
+        CatatanKeuangan::create([
             'id_umkm' => $umkm->id_umkm,
             'bulan_tahun' => 'Oktober 2026',
             'pendapatan' => 5000000,
@@ -519,7 +522,7 @@ class DashboardFlowTest extends TestCase
             'status_laba' => 'untung',
         ]);
 
-        $this->assertEquals(2, \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->count());
+        $this->assertEquals(2, CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->count());
 
         // Jalankan aksi penggabungan
         $response = $this->actingAs($user)->post('/dashboard/umkm/keuangan/gabung', [
@@ -527,9 +530,9 @@ class DashboardFlowTest extends TestCase
         ]);
 
         $response->assertRedirect('/dashboard?tab=keuangan');
-        $this->assertEquals(1, \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->count());
+        $this->assertEquals(1, CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->count());
 
-        $merged = \App\Models\CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->first();
+        $merged = CatatanKeuangan::where('id_umkm', $umkm->id_umkm)->where('bulan_tahun', 'Oktober 2026')->first();
         // Total pendapatan gabungan: 10jt + 5jt = 15jt
         $this->assertEquals(15000000, (float) $merged->pendapatan);
         // Total laba gabungan: 7jt + 3jt = 10jt
@@ -540,14 +543,12 @@ class DashboardFlowTest extends TestCase
     {
         $responseInvestor = $this->get('/gabung/investor');
         $responseInvestor->assertStatus(200);
-        $responseInvestor->assertSee('Gabung Jadi');
-        $responseInvestor->assertSee('Investor DAYA UMKM');
+        $responseInvestor->assertSee('Gabung Jadi Investor');
         $responseInvestor->assertSee(route('register.investor'));
 
         $responseUmkm = $this->get('/gabung/umkm');
         $responseUmkm->assertStatus(200);
-        $responseUmkm->assertSee('Gabung Jadi');
-        $responseUmkm->assertSee('Pelaku UMKM DAYA');
+        $responseUmkm->assertSee('Gabung Jadi Pelaku UMKM');
         $responseUmkm->assertSee(route('register.umkm'));
 
         // Pastikan halaman Beranda dan navbar mengarah ke halaman edukasi gabung ini

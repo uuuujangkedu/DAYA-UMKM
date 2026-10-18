@@ -15,12 +15,12 @@ return new class extends Migration
             $table->decimal('nominal_diterima', 15, 2);
             $table->string('bukti_transfer', 255)->nullable();
             $table->timestamps();
-            
+
             $table->foreign('id_investasi')
-                  ->references('id_investasi')
-                  ->on('investasi')
-                  ->onDelete('cascade');
-            
+                ->references('id_investasi')
+                ->on('investasi')
+                ->onDelete('cascade');
+
             $table->index('id_investasi');
             $table->index('tanggal_distribusi');
         });

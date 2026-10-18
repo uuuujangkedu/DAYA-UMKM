@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class LogAktivitasAdmin extends Model
 {
     protected $table = 'log_aktivitas_admin';
+
     protected $primaryKey = 'id_log_admin';
 
     protected $fillable = [

@@ -15,20 +15,20 @@ return new class extends Migration
         Schema::dropIfExists('verification_codes');
 
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'phone_number')) {
+            if (! Schema::hasColumn('users', 'phone_number')) {
                 $table->string('phone_number', 25)->nullable()->after('email');
             }
             $table->string('password')->nullable()->change();
-            if (!Schema::hasColumn('users', 'role')) {
+            if (! Schema::hasColumn('users', 'role')) {
                 $table->string('role', 30)->default('investor')->after('password');
             }
-            if (!Schema::hasColumn('users', 'phone_verified_at')) {
+            if (! Schema::hasColumn('users', 'phone_verified_at')) {
                 $table->timestamp('phone_verified_at')->nullable()->after('email_verified_at');
             }
-            if (!Schema::hasColumn('users', 'status')) {
+            if (! Schema::hasColumn('users', 'status')) {
                 $table->string('status', 30)->default('menunggu_verifikasi')->after('phone_verified_at');
             }
-            if (!Schema::hasColumn('users', 'avatar_url')) {
+            if (! Schema::hasColumn('users', 'avatar_url')) {
                 $table->text('avatar_url')->nullable()->after('status');
             }
         });

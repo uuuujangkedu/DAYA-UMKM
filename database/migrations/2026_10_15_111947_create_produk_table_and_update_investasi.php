@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasTable('produk')) {
+        if (! Schema::hasTable('produk')) {
             Schema::create('produk', function (Blueprint $table) {
                 $table->id('id_produk');
                 $table->unsignedBigInteger('id_umkm');
@@ -31,10 +31,10 @@ return new class extends Migration
 
         if (Schema::hasTable('investasi')) {
             Schema::table('investasi', function (Blueprint $table) {
-                if (!Schema::hasColumn('investasi', 'catatan')) {
+                if (! Schema::hasColumn('investasi', 'catatan')) {
                     $table->text('catatan')->nullable()->after('status');
                 }
-                if (!Schema::hasColumn('investasi', 'dibaca')) {
+                if (! Schema::hasColumn('investasi', 'dibaca')) {
                     $table->boolean('dibaca')->default(false)->after('catatan');
                 }
             });

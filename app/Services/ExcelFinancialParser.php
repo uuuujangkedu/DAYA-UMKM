@@ -10,22 +10,22 @@ class ExcelFinancialParser
     /**
      * Parse file Excel (.xlsx) atau CSV (.csv) untuk mendeteksi pemasukan dan pengeluaran secara otomatis.
      *
-     * @param string $filePath Path fisik berkas
-     * @param string|null $extension Ekstensi berkas ('xlsx', 'csv', dsb)
+     * @param  string  $filePath  Path fisik berkas
+     * @param  string|null  $extension  Ekstensi berkas ('xlsx', 'csv', dsb)
      * @return array [
-     *     'success' => bool,
-     *     'pendapatan' => float,
-     *     'hpp' => float,
-     *     'beban_operasional' => float,
-     *     'beban_lain' => float,
-     *     'total_beban' => float,
-     *     'detected_items' => int,
-     *     'message' => string
-     * ]
+     *               'success' => bool,
+     *               'pendapatan' => float,
+     *               'hpp' => float,
+     *               'beban_operasional' => float,
+     *               'beban_lain' => float,
+     *               'total_beban' => float,
+     *               'detected_items' => int,
+     *               'message' => string
+     *               ]
      */
     public static function parse(string $filePath, ?string $extension = null): array
     {
-        if (!file_exists($filePath)) {
+        if (! file_exists($filePath)) {
             return [
                 'success' => false,
                 'pendapatan' => 0,
@@ -71,7 +71,7 @@ class ExcelFinancialParser
                 'beban_lain' => 0,
                 'total_beban' => 0,
                 'detected_items' => 0,
-                'message' => 'Gagal membaca isi berkas Excel: ' . $e->getMessage(),
+                'message' => 'Gagal membaca isi berkas Excel: '.$e->getMessage(),
             ];
         }
     }
@@ -83,7 +83,7 @@ class ExcelFinancialParser
     {
         $rows = [];
         $handle = fopen($filePath, 'r');
-        if (!$handle) {
+        if (! $handle) {
             return $rows;
         }
 
@@ -110,6 +110,7 @@ class ExcelFinancialParser
         }
 
         fclose($handle);
+
         return $rows;
     }
 
@@ -119,7 +120,7 @@ class ExcelFinancialParser
     private static function readXlsx(string $filePath): array
     {
         $rows = [];
-        $zip = new ZipArchive();
+        $zip = new ZipArchive;
         if ($zip->open($filePath) !== true) {
             return $rows;
         }
@@ -148,7 +149,7 @@ class ExcelFinancialParser
 
         // 2. Baca worksheet pertama (sheet1.xml)
         $sheetXml = $zip->getFromName('xl/worksheets/sheet1.xml');
-        if (!$sheetXml) {
+        if (! $sheetXml) {
             // Fallback coba worksheet lain
             for ($i = 1; $i <= 5; $i++) {
                 $candidate = $zip->getFromName("xl/worksheets/sheet{$i}.xml");
@@ -161,12 +162,12 @@ class ExcelFinancialParser
 
         $zip->close();
 
-        if (!$sheetXml) {
+        if (! $sheetXml) {
             return $rows;
         }
 
         $sheet = simplexml_load_string($sheetXml);
-        if (!$sheet || !isset($sheet->sheetData->row)) {
+        if (! $sheet || ! isset($sheet->sheetData->row)) {
             return $rows;
         }
 
@@ -192,7 +193,7 @@ class ExcelFinancialParser
             }
 
             // Normalisasi baris menjadi array berurutan
-            if (!empty($rowCells)) {
+            if (! empty($rowCells)) {
                 $normalizedRow = [];
                 for ($i = 0; $i <= $maxColIdx; $i++) {
                     $normalizedRow[$i] = $rowCells[$i] ?? '';
@@ -216,6 +217,7 @@ class ExcelFinancialParser
         for ($i = 0; $i < $len; $i++) {
             $index = $index * 26 + (ord($letter[$i]) - 64);
         }
+
         return max(0, $index - 1);
     }
 
@@ -244,17 +246,17 @@ class ExcelFinancialParser
                 if ($num > 0) {
                     $numbers[] = $num;
                 } elseif (preg_match('/[a-zA-Z]/', $str)) {
-                    $textCombined .= ' ' . strtolower($str);
+                    $textCombined .= ' '.strtolower($str);
                 }
             }
             $textCombined = trim($textCombined);
 
-            if (!empty($numbers)) {
+            if (! empty($numbers)) {
                 $lastNumber = end($numbers); // Di baris summary seperti [TOTAL, "", "", 329300], angka terakhir adalah totalnya
 
                 if (self::containsAny($textCombined, ['grand total', 'total tagihan', 'sisa tagihan', 'total bayar', 'total penjualan', 'total omzet', 'total pendapatan', 'total pemasukan', 'jumlah total'])) {
                     $grandTotal = $lastNumber;
-                } elseif (preg_match('/\b(total)\b/i', $textCombined) && !self::containsAny($textCombined, ['pengeluaran', 'beban', 'biaya'])) {
+                } elseif (preg_match('/\b(total)\b/i', $textCombined) && ! self::containsAny($textCombined, ['pengeluaran', 'beban', 'biaya'])) {
                     $totalFound = $lastNumber;
                 } elseif (self::containsAny($textCombined, ['subtotal', 'sub total'])) {
                     $subtotal = $lastNumber;
@@ -391,7 +393,7 @@ class ExcelFinancialParser
                 }
             }
 
-            if (!empty($allNumbers)) {
+            if (! empty($allNumbers)) {
                 // Ambil nilai terbesar sebagai estimasi omzet jika ada
                 rsort($allNumbers);
                 $pendapatan = $allNumbers[0];
@@ -413,7 +415,7 @@ class ExcelFinancialParser
             'total_beban' => $totalBeban,
             'detected_items' => $detectedCount,
             'message' => ($pendapatan > 0 || $totalBeban > 0)
-                ? 'Berhasil mendeteksi Pemasukan Rp ' . number_format($pendapatan, 0, ',', '.') . ' dan Pengeluaran Rp ' . number_format($totalBeban, 0, ',', '.')
+                ? 'Berhasil mendeteksi Pemasukan Rp '.number_format($pendapatan, 0, ',', '.').' dan Pengeluaran Rp '.number_format($totalBeban, 0, ',', '.')
                 : 'Tidak dapat menemukan angka pemasukan atau pengeluaran yang jelas di dalam berkas Excel.',
         ];
     }
@@ -428,7 +430,7 @@ class ExcelFinancialParser
             return (float) $raw;
         }
 
-        if (empty($raw) || !is_string($raw)) {
+        if (empty($raw) || ! is_string($raw)) {
             return 0.0;
         }
 
@@ -450,12 +452,12 @@ class ExcelFinancialParser
                 // 15,000,000.50
                 $str = str_replace(',', '', $str);
             }
-        } elseif (str_contains($str, '.') && !str_contains($str, ',')) {
+        } elseif (str_contains($str, '.') && ! str_contains($str, ',')) {
             // Cek apakah titik dipakai sebagai pemisah ribuan "15.000.000"
             if (preg_match('/\.\d{3}/', $str)) {
                 $str = str_replace('.', '', $str);
             }
-        } elseif (str_contains($str, ',') && !str_contains($str, '.')) {
+        } elseif (str_contains($str, ',') && ! str_contains($str, '.')) {
             // Cek apakah koma dipakai sebagai pemisah ribuan "15,000,000"
             if (preg_match('/,\d{3}/', $str)) {
                 $str = str_replace(',', '', $str);
@@ -478,6 +480,7 @@ class ExcelFinancialParser
                 return true;
             }
         }
+
         return false;
     }
 }
