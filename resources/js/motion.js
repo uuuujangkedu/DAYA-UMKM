@@ -33,80 +33,108 @@ function initMotion() {
     // 4. Header sticky scrolled state synced with Lenis
     const header = document.getElementById('site-header');
     if (header) {
-        lenis.on('scroll', (e) => {
-            const scrollY = typeof e.scroll === 'number' ? e.scroll : window.scrollY;
-            if (scrollY > 8) {
-                header.classList.add('scrolled');
+        const updateHeaderTransparency = () => {
+            const isScrolled = (window.scrollY || window.pageYOffset || 0) > 15;
+            if (isScrolled) {
+                header.classList.remove('header-transparent');
+                header.classList.add('header-scrolled');
             } else {
-                header.classList.remove('scrolled');
+                header.classList.add('header-transparent');
+                header.classList.remove('header-scrolled');
+            }
+        };
+
+        lenis.on('scroll', () => {
+            updateHeaderTransparency();
+            if (typeof window.updateScrollSpy === 'function') {
+                window.updateScrollSpy();
             }
         });
+        updateHeaderTransparency();
     }
 
-    // 5. Shared Reveal Configuration for all sections (Landing page & Gabung pages)
-    //    Each section has [data-reveal], children have [data-reveal-item]
-    const revealSections = document.querySelectorAll('[data-reveal]');
-    const sectionTimelines = new Map();
+    // 5. Dynamic "Slide Pop-Up Ke Atas" Motion on Text & Elements (Landing Page & Public Pages)
+    // Find all groups with [data-reveal-group] or fallback [data-reveal]
+    const revealGroups = document.querySelectorAll('[data-reveal-group], [data-reveal]');
+    const groupTimelines = new Map();
 
-    revealSections.forEach((section, index) => {
-        const isHero = section.id === 'beranda' || section.hasAttribute('data-hero') || index === 0;
-        const items = section.querySelectorAll('[data-reveal-item]');
-
-        // Single coordinated timeline for the section and its children
-        const tl = gsap.timeline({
-            paused: true,
-            defaults: {
-                ease: 'power3.out',
-            }
+    revealGroups.forEach((group) => {
+        // Find direct data-reveal-item children for this specific group
+        const allItems = group.querySelectorAll('[data-reveal-item]');
+        const items = Array.from(allItems).filter(item => {
+            const closest = item.closest('[data-reveal-group], [data-reveal]');
+            return closest === group;
         });
 
-        // Step 1: Section container slides up 40px (MOTION.md §3 & §4)
-        tl.from(section, {
+        if (items.length === 0) return;
+
+        const isHero = group.id === 'beranda' || 
+                        group.hasAttribute('data-hero') || 
+                        Boolean(group.closest('#beranda'));
+
+        // Set initial pop-up state: lower down (y: 44px), slightly scaled down (scale: 0.94), opacity: 0
+        gsap.set(items, {
             opacity: 0,
-            y: 40,
-            duration: isHero ? 1.0 : 0.9,
+            y: 44,
+            scale: 0.94,
+            transformOrigin: '50% 100%',
+            force3D: true,
+        });
+
+        const tl = gsap.timeline({
+            paused: true,
+        });
+
+        tl.to(items, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.78,
+            stagger: 0.11,
+            ease: 'back.out(1.5)',
             clearProps: 'transform,opacity',
         });
 
-        // Step 2: Children stagger 0.15s, slide up 32px
-        if (items.length > 0) {
-            tl.from(items, {
-                opacity: 0,
-                y: 32,
-                duration: 0.9,
-                stagger: 0.15,
-                clearProps: 'transform,opacity',
-            }, '-=0.5'); // Overlap so children begin revealing right as section slides in
-        }
-
-        sectionTimelines.set(section, tl);
+        groupTimelines.set(group, tl);
 
         if (isHero) {
-            // Hero section reveals on initial page load after 0.1s delay
-            gsap.delayedCall(0.1, () => {
+            // Hero section animates with a crisp pop after brief entry delay on initial load
+            gsap.delayedCall(0.18, () => {
                 tl.play();
             });
         } else {
-            // Scroll sections trigger at top 85%, play once
+            // ScrollTrigger triggers exactly as the text enters the active viewport (top 82%)
             ScrollTrigger.create({
-                trigger: section,
-                start: 'top 85%',
-                once: true,
+                trigger: group,
+                start: 'top 82%',
                 onEnter: () => {
                     tl.play();
+                },
+                onLeaveBack: () => {
+                    // Reset when scrolled completely back above viewport so it pops up again when scrolling down
+                    tl.pause(0);
+                    gsap.set(items, {
+                        opacity: 0,
+                        y: 44,
+                        scale: 0.94,
+                        transformOrigin: '50% 100%',
+                    });
                 }
             });
         }
     });
 
-    // Safety net: ensure no element can stay hidden if scroll trigger is never reached
+    // Safety net: ensure elements currently in viewport are revealed
     setTimeout(() => {
-        sectionTimelines.forEach((tl) => {
+        groupTimelines.forEach((tl, group) => {
             if (tl.progress() === 0) {
-                tl.play();
+                const rect = group.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    tl.play();
+                }
             }
         });
-    }, 4500);
+    }, 1200);
 
     // 6. Anchor link navigation coordinated with Lenis and Section Reveals
     function navigateToSection(targetEl, hash) {
@@ -118,10 +146,11 @@ function initMotion() {
             onComplete: () => {
                 history.pushState(null, null, hash);
                 // Guarantee the section has played its reveal animation upon reaching it
-                const tl = sectionTimelines.get(targetEl);
-                if (tl && tl.progress() === 0) {
-                    tl.play();
-                }
+                groupTimelines.forEach((tl, group) => {
+                    if (targetEl.contains(group) || group === targetEl) {
+                        tl.play();
+                    }
+                });
                 ScrollTrigger.refresh();
             }
         });

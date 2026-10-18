@@ -7,52 +7,88 @@
 @theme {
     --font-sans: 'Plus Jakarta Sans', 'IBM Plex Sans', "Segoe UI", system-ui, sans-serif;
 
-    --color-bg: #F4F7F5;
+    /* Base canvas & text */
+    --color-bg: #FAFBF9;
     --color-surface: #ffffff;
-    --color-ink: #1A1A1A;
-    --color-ink-2: #4A5E57;
-    --color-line: rgba(15, 90, 71, 0.12);
-    --color-green: #0F5A47;
-    --color-green-dark: #0F5A47;
-    --color-green-mid: #1A7A5E;
-    --color-green-light: #C8E6DC;
-    --color-green-hover: #0A4738;
-    --color-mint: #D8EBE5;
-    --color-gold: #F5C842;
-    --color-gold-hover: #E5B832;
-    --color-yellow-accent: #F5C842;
+    --color-ink: #15241C;
+    --color-ink-2: #3E5445;
+    --color-line: #C8BFB0;
+
+    /* User Palette Settings */
+    /* Biru langit (#A8D8F0 → #79BEE8) — hero background, section CTA */
+    --color-sky-light: #A8D8F0;
+    --color-sky: #79BEE8;
+
+    /* Hijau rumput cerah (#6FC142) — section features, wave divider di hero */
+    --color-grass-bright: #6FC142;
+
+    /* Hijau rumput gelap (#4A9A2E, #2D6B22) — tombol utama, badge, aksen */
+    --color-grass-mid: #4A9A2E;
+    --color-grass-dark: #2D6B22;
+
+    /* Krem tembok rumah (#F7E8C8, #EDD9A3) — section listings, card */
+    --color-cream-light: #F7E8C8;
+    --color-cream: #EDD9A3;
+
+    /* Hijau genteng/pohon gelap (#1E4A1A) — footer */
+    --color-roof-dark: #1E4A1A;
+
+    /* Abu trotoar (#C8BFB0) — border dan detail kecil */
+    --color-pavement: #C8BFB0;
+
+    /* Semantic Aliases */
+    --color-green: #2D6B22;
+    --color-green-dark: #1E4A1A;
+    --color-green-mid: #4A9A2E;
+    --color-green-light: #F7E8C8;
+    --color-green-hover: #1E4A1A;
+    --color-mint: #F2F8ED;
+    --color-gold: #EDD9A3;
+    --color-gold-hover: #E2CA8F;
+    --color-yellow-accent: #6FC142;
 
     /* Legacy tokens for compatibility */
-    --color-primary: #0F5A47;
-    --color-primary-dark: #0A4738;
-    --color-primary-light: #C8E6DC;
-    --color-secondary: #0F5A47;
-    --color-neutral-bg: #F4F7F5;
+    --color-primary: #2D6B22;
+    --color-primary-dark: #1E4A1A;
+    --color-primary-light: #F7E8C8;
+    --color-secondary: #4A9A2E;
+    --color-neutral-bg: #FAFBF9;
     --color-neutral-card: #ffffff;
-    --color-neutral-border: rgba(15, 90, 71, 0.12);
-    --color-neutral-text: #1A1A1A;
-    --color-neutral-muted: #4A5E57;
-    --color-accent: #F5C842;
-    --color-accent-hover: #E5B832;
+    --color-neutral-border: #C8BFB0;
+    --color-neutral-text: #15241C;
+    --color-neutral-muted: #3E5445;
+    --color-accent: #6FC142;
+    --color-accent-hover: #4A9A2E;
 }
 
 :root {
-    --bg: #F4F7F5;
+    --bg: #FAFBF9;
     --surface: #ffffff;
-    --ink: #1A1A1A;
-    --ink-2: #4A5E57;
-    --line: rgba(15, 90, 71, 0.12);
-    --green: #0F5A47;
-    --green-dark: #0F5A47;
-    --green-mid: #1A7A5E;
-    --green-light: #C8E6DC;
-    --green-hover: #0A4738;
-    --mint: #D8EBE5;
-    --gold: #F5C842;
-    --gold-hover: #E5B832;
-    --yellow-accent: #F5C842;
-    --teal-glow: rgba(26, 122, 94, 0.12);
-    --yellow-soft: rgba(245, 200, 66, 0.15);
+    --ink: #15241C;
+    --ink-2: #3E5445;
+    --line: #C8BFB0;
+
+    --sky-light: #A8D8F0;
+    --sky: #79BEE8;
+    --grass-bright: #6FC142;
+    --grass-mid: #4A9A2E;
+    --grass-dark: #2D6B22;
+    --cream-light: #F7E8C8;
+    --cream: #EDD9A3;
+    --roof-dark: #1E4A1A;
+    --pavement: #C8BFB0;
+
+    --green: #2D6B22;
+    --green-dark: #1E4A1A;
+    --green-mid: #4A9A2E;
+    --green-light: #F7E8C8;
+    --green-hover: #1E4A1A;
+    --mint: #F2F8ED;
+    --gold: #EDD9A3;
+    --gold-hover: #E2CA8F;
+    --yellow-accent: #6FC142;
+    --teal-glow: rgba(111, 193, 66, 0.16);
+    --yellow-soft: rgba(247, 232, 200, 0.45);
 }
 
 body {
@@ -285,20 +321,32 @@ section[id] {
     scroll-margin-top: 100px;
 }
 
-/* Public Header Styles (Frosted Glass Sesuai new-design.jpg) */
+/* Public Header Styles (Sesuai new-design.jpg) */
 .header-public {
-    background-color: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     color: #1A1A1A;
-    border-bottom: 1px solid rgba(15, 90, 71, 0.08);
-    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                backdrop-filter 0.3s ease;
 }
 
-.header-public.scrolled {
-    background-color: rgba(255, 255, 255, 0.98);
-    border-bottom-color: rgba(15, 90, 71, 0.12);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+/* Transparan saat berada di area animasi sequence beranda */
+.header-public.header-transparent {
+    background-color: transparent !important;
+    border-bottom: 1px solid transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Putih frosted saat scroll masuk ke konten web utama (hero, tentang kami, dll) */
+.header-public.header-scrolled,
+.header-public:not(.header-transparent) {
+    background-color: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-bottom: 1px solid rgba(26, 91, 54, 0.10) !important;
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.04) !important;
 }
 
 .header-public .brand-text {
@@ -317,7 +365,7 @@ section[id] {
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
-    color: #1A1A1A;
+    color: var(--ink);
     transition: color 0.15s ease, border-color 0.15s ease;
     cursor: pointer;
     background: transparent;
@@ -328,7 +376,7 @@ section[id] {
 
 .header-public .nav-item:hover {
     color: var(--green-dark);
-    border-bottom-color: rgba(15, 90, 71, 0.3);
+    border-bottom-color: rgba(26, 91, 54, 0.3);
 }
 
 .header-public .nav-item.active {
@@ -403,42 +451,69 @@ section[id] {
     border-color: var(--line);
 }
 
-.lang-btn {
-    border: none;
-    background: transparent;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1.2;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.85);
-    transition: all 0.2s ease;
+/* Language Switcher Component (Capsule Pill Design with Crystal Clear Active State) */
+.lang-switch-container {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1.5px solid rgba(45, 107, 34, 0.25);
+    border-radius: 9999px;
+    padding: 3px;
+    gap: 2px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.lang-btn:hover {
-    color: #ffffff;
+.lang-btn {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+    cursor: pointer;
+    color: #3E5445;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+}
+
+.lang-btn:hover:not(.active) {
+    color: #15241C;
+    background-color: rgba(45, 107, 34, 0.08);
 }
 
 .lang-btn.active {
-    background-color: #ffffff;
-    color: var(--green);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    background-color: #2D6B22 !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 2px 8px rgba(45, 107, 34, 0.35) !important;
 }
 
-.header-public.scrolled .lang-btn {
-    color: var(--ink-2);
+.header-public.header-scrolled .lang-switch-container {
+    background: rgba(245, 248, 244, 0.95);
+    border-color: rgba(45, 107, 34, 0.28);
 }
 
-.header-public.scrolled .lang-btn:hover {
-    color: var(--green);
+.header-public.header-scrolled .lang-btn {
+    color: #3E5445;
 }
 
-.header-public.scrolled .lang-btn.active {
-    background-color: var(--green);
-    color: #ffffff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+.header-public.header-scrolled .lang-btn:hover:not(.active) {
+    color: #15241C;
+    background-color: rgba(45, 107, 34, 0.08);
 }
+
+.header-public.header-scrolled .lang-btn.active {
+    background-color: #2D6B22 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(45, 107, 34, 0.35) !important;
+}
+
+
 
 /* ========================================================
    MODUL AKSESIBILITAS & DISABILITAS (WCAG Standards)

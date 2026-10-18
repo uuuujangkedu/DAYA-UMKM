@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kode OTP Verifikasi - DAYA UMKM</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -84,7 +86,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>DAYA UMKM</h1>
+            <div style="background: rgba(255,255,255,0.95); display: inline-block; padding: 6px 14px; border-radius: 10px; margin-bottom: 10px;">
+                <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM" style="height: 36px; vertical-align: middle;">
+            </div>
             <p>Platform Investasi UMKM & Sewa Ruko</p>
         </div>
         <div class="body-content">

@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Dashboard Pelaku UMKM') - DAYA UMKM</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.png') }}">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -51,6 +56,13 @@
     <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0 shadow-2xl md:shadow-none">
         
         <div>
+            <!-- Brand Logo TIKUM -->
+            <div class="px-6 pt-6 pb-2">
+                <a href="{{ url('/') }}" class="bg-white/95 hover:bg-white px-3 py-2 rounded-xl flex items-center justify-center transition shadow-sm" title="Kembali ke Beranda TIKUM">
+                    <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM - Titik UMKM" class="h-8 w-auto object-contain">
+                </a>
+            </div>
+
             <!-- Profil UMKM Top Left (Sesuai Gambar 2) -->
             <div class="p-6 sm:p-7 border-b border-white/10">
                 <div class="flex items-center gap-3.5">
@@ -189,7 +201,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
-                <span class="font-extrabold text-sm tracking-wider uppercase">DAYA UMKM</span>
+                <a href="{{ url('/') }}" class="bg-white/95 px-2.5 py-1 rounded-lg flex items-center">
+                    <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM" class="h-6 w-auto object-contain">
+                </a>
             </div>
             <div class="text-xs text-teal-200">
                 {{ $user->name }}
