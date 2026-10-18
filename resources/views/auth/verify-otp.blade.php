@@ -3,30 +3,30 @@
 @section('title', 'Verifikasi Kode OTP')
 
 @section('content')
-<div class="w-full max-w-md mx-auto my-8 px-4">
-    <div class="bg-white rounded-[12px] border border-[#e2e1d8] p-7 sm:p-9 text-left space-y-6">
+<div class="w-full max-w-md mx-auto my-6 px-4">
+    <div class="bg-white/92 backdrop-blur-md rounded-3xl border border-[#C8BFB0]/70 p-7 sm:p-9 text-left space-y-6 shadow-[0_16px_40px_rgba(45,107,34,0.12)]">
         
         <!-- Header -->
         <div class="space-y-1">
-            <h1 class="text-[24px] font-bold text-[#161d1a] leading-tight">
+            <h1 class="text-[24px] font-bold text-[#15241C] leading-tight" data-i18n="auth.otp_title">
                 Verifikasi email Anda
             </h1>
-            <p class="text-[14px] text-[#4b5551]">
+            <p class="text-[14px] text-[#3E5445]" data-i18n="auth.otp_subtitle">
                 Masukkan 6 digit kode OTP yang telah dikirimkan ke alamat email terdaftar.
             </p>
         </div>
 
         <!-- Alert Messages -->
         @if (session('success'))
-            <div class="p-3.5 rounded-[6px] bg-[#d8ebe5] border border-[#b2d5cc] text-[#084539] text-[14px]">
+            <div class="p-3.5 rounded-xl bg-[#F2F8ED] border border-[#2D6B22]/30 text-[#1E4A1A] text-[14px]">
                 {{ session('success') }}
             </div>
         @endif
 
         <!-- Info Email Tujuan -->
-        <div class="p-3.5 bg-[#f7f6f1] border border-[#e2e1d8] rounded-[6px] text-[13px] text-[#4b5551]">
-            <span>Kode dikirimkan ke:</span>
-            <div class="font-bold text-[#0b5a4a] text-[14px] mt-0.5 break-all">
+        <div class="p-3.5 bg-[#FAFBF9] border border-[#C8BFB0]/70 rounded-xl text-[13px] text-[#3E5445]">
+            <span data-i18n="auth.otp_sent_to">Kode dikirimkan ke:</span>
+            <div class="font-bold text-[#2D6B22] text-[14px] mt-0.5 break-all">
                 {{ $email }}
             </div>
         </div>
@@ -36,7 +36,7 @@
             @csrf
 
             <div>
-                <label for="otp" class="block text-[14px] font-semibold text-center text-[#161d1a] mb-2">
+                <label for="otp" class="block text-[14px] font-semibold text-center text-[#15241C] mb-2" data-i18n="auth.otp_input_label">
                     Kode verifikasi 6 digit
                 </label>
                 <div class="flex justify-center">
@@ -50,7 +50,7 @@
                            autofocus
                            placeholder="123456"
                            autocomplete="one-time-code"
-                           class="w-48 text-center tracking-[10px] text-[24px] font-bold py-2.5 bg-white border @error('otp') border-red-500 @else border-[#e2e1d8] @enderror rounded-[6px] text-[#0b5a4a] focus:outline-none focus:border-[#0b5a4a] transition">
+                           class="w-48 text-center tracking-[10px] text-[24px] font-bold py-2.5 bg-white border @error('otp') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[#2D6B22] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
                 </div>
                 @error('otp')
                     <p class="mt-2 text-center text-[12px] text-red-600">{{ $message }}</p>
@@ -58,22 +58,22 @@
             </div>
 
             <!-- Timer Expired Display -->
-            <div class="text-center text-[13px] text-[#4b5551]">
-                Kode kedaluwarsa dalam: <span id="countdown" class="font-bold text-[#0b5a4a]">05:00</span>
+            <div class="text-center text-[13px] text-[#3E5445]">
+                <span data-i18n="auth.otp_expires_in">Kode kedaluwarsa dalam:</span> <span id="countdown" class="font-bold text-[#2D6B22]">05:00</span>
             </div>
 
             <!-- Submit Button -->
-            <button type="submit" class="btn-primary w-full py-[12px] text-[15px]">
+            <button type="submit" class="w-full py-3.5 px-4 bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-150" data-i18n="auth.otp_verify_btn">
                 Verifikasi dan masuk
             </button>
         </form>
 
         <!-- Kirim Ulang OTP -->
-        <div class="pt-4 border-t border-[#e2e1d8] text-center text-[14px] text-[#4b5551]">
-            Belum menerima kode OTP? 
+        <div class="pt-4 border-t border-[#C8BFB0]/60 text-center text-[14px] text-[#3E5445]">
+            <span data-i18n="auth.otp_no_code">Belum menerima kode OTP?</span> 
             <form action="{{ route('otp.resend') }}" method="POST" class="inline">
                 @csrf
-                <button type="submit" id="resend-btn" class="font-semibold text-[#0b5a4a] hover:underline ml-1">
+                <button type="submit" id="resend-btn" class="font-semibold text-[#2D6B22] hover:text-[#1E4A1A] hover:underline ml-1" data-i18n="auth.otp_resend_btn">
                     Kirim ulang kode
                 </button>
             </form>
@@ -81,7 +81,7 @@
 
         <!-- Ganti Akun -->
         <div class="text-center text-[13px]">
-            <a href="{{ route('login') }}" class="text-[#4b5551] hover:text-[#0b5a4a] hover:underline transition">
+            <a href="{{ route('login') }}" class="text-[#3E5445] hover:text-[#2D6B22] hover:underline transition" data-i18n="auth.otp_switch_account">
                 Gunakan akun atau email lain
             </a>
         </div>
