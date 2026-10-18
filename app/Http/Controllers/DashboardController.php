@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BagiHasilLog;
 use App\Models\CatatanKeuangan;
 use App\Models\Investasi;
+use App\Models\PesanInvestasi;
 use App\Models\Produk;
+use App\Models\RekomendasiRuko;
 use App\Models\Ruko;
+use App\Models\TransaksiSewa;
 use App\Models\Umkm;
 use App\Services\ExcelFinancialParser;
 use Illuminate\Http\Request;
@@ -136,6 +140,50 @@ class DashboardController extends Controller
 
             $rukos = Ruko::where('status_ketersediaan', 'tersedia')->latest('id_ruko')->get();
 
+            // SINERGI INVESTASI DENGAN INVESTOR (Investasi Aktif & Riwayat Setoran Dividen)
+            $investasiAktif = Investasi::with(['pengguna', 'bagiHasilLog'])
+                ->where('id_umkm', $umkm->id_umkm)
+                ->where('status', 'aktif')
+                ->latest('tanggal_investasi')
+                ->get();
+            $totalModalTerkumpul = (float) $investasiAktif->sum('jumlah_modal');
+
+            $semuaInvestasiIds = $umkm->investasi()->pluck('id_investasi');
+            $riwayatSetorDividen = BagiHasilLog::with('investasi.pengguna')
+                ->whereIn('id_investasi', $semuaInvestasiIds)
+                ->latest('tanggal_distribusi')
+                ->get();
+            $totalDividenDisetor = (float) $riwayatSetorDividen->sum('nominal_diterima');
+
+            // Sewa Ruko yang Disponsori oleh Investor
+            $sewaDisponsori = TransaksiSewa::with(['ruko', 'investor'])
+                ->where('id_umkm', $umkm->id_umkm)
+                ->latest('id_sewa')
+                ->get();
+
+            // INBOX & PERCAKAPAN INVESTASI
+            $selectedInvestasiId = $request->query('investasi_id');
+            $selectedInvestasi = null;
+            if ($notifikasiInvestasi->isNotEmpty()) {
+                $targetId = $selectedInvestasiId ?: $notifikasiInvestasi->first()->id_investasi;
+                $selectedInvestasi = Investasi::with(['pengguna', 'pesanInvestasi.pengirim'])->find($targetId);
+                
+                // Jika belum punya pesan, masukkan catatan awal sebagai pesan pertama
+                if ($selectedInvestasi && $selectedInvestasi->pesanInvestasi->isEmpty() && !empty($selectedInvestasi->catatan)) {
+                    PesanInvestasi::create([
+                        'id_investasi' => $selectedInvestasi->id_investasi,
+                        'id_pengirim' => $selectedInvestasi->id_pengguna,
+                        'pesan' => $selectedInvestasi->catatan,
+                        'created_at' => $selectedInvestasi->tanggal_investasi ?? now(),
+                    ]);
+                    $selectedInvestasi->load('pesanInvestasi.pengirim');
+                }
+
+                if ($activeTab === 'inbox' && $selectedInvestasi && !$selectedInvestasi->dibaca) {
+                    $selectedInvestasi->update(['dibaca' => true]);
+                }
+            }
+
             return view('dashboard.umkm', compact(
                 'user',
                 'umkm',
@@ -149,6 +197,12 @@ class DashboardController extends Controller
                 'allProduks',
                 'notifikasiInvestasi',
                 'unreadInvestasiCount',
+                'selectedInvestasi',
+                'investasiAktif',
+                'totalModalTerkumpul',
+                'riwayatSetorDividen',
+                'totalDividenDisetor',
+                'sewaDisponsori',
                 'catatanKeuangan',
                 'latestKeuangan',
                 'bulanAktif',
@@ -173,18 +227,109 @@ class DashboardController extends Controller
             }
 
             $activeTab = $request->query('tab', 'beranda');
+            $statusFilter = $request->query('status', 'semua');
 
-            // Riwayat investasi investor saat ini
-            $investasiSaya = Investasi::with('umkm.user')
+            // Riwayat investasi investor saat ini (dengan relasi lengkap)
+            $investasiQuery = Investasi::with(['umkm.user', 'umkm.ruko', 'umkm.produks'])
+                ->where('id_pengguna', $user->id);
+
+            // Filter status untuk tab portofolio
+            if ($statusFilter !== 'semua' && in_array($statusFilter, ['aktif', 'pending', 'selesai'])) {
+                if ($statusFilter === 'aktif') {
+                    $investasiQuery->whereIn('status', ['aktif', 'disetujui']);
+                } else {
+                    $investasiQuery->where('status', $statusFilter);
+                }
+            }
+
+            $investasiSaya = $investasiQuery->latest('tanggal_investasi')->get();
+
+            // Seluruh investasi modal usaha UMKM
+            $semuaInvestasiSaya = Investasi::with(['umkm.user', 'umkm.ruko'])
                 ->where('id_pengguna', $user->id)
                 ->latest('tanggal_investasi')
                 ->get();
 
-            $totalModalDiinvestasikan = $investasiSaya->sum('jumlah_modal');
-            if ($totalModalDiinvestasikan == 0) {
-                $totalModalDiinvestasikan = 50000000; // Baseline portofolio
+            // Seluruh komitmen sewa ruko yang disponsori/didanai oleh investor ini
+            $sewaDisponsoriSaya = TransaksiSewa::with(['umkm', 'ruko'])
+                ->where('id_investor', $user->id)
+                ->latest('id_sewa')
+                ->get();
+
+            $realTotalModalUsaha = (float) $semuaInvestasiSaya->sum('jumlah_modal');
+            $realTotalModalSewa = (float) $sewaDisponsoriSaya->sum('total_harga');
+            $totalModalDiinvestasikan = $realTotalModalUsaha + $realTotalModalSewa;
+            $realInvestasiCount = $semuaInvestasiSaya->count() + $sewaDisponsoriSaya->count();
+            $hasRealInvestments = $totalModalDiinvestasikan > 0;
+
+            // Gabungan mitra UMKM unik yang didanai (baik modal kerja maupun sewa ruko komersial)
+            $umkmModalIds = $semuaInvestasiSaya->pluck('id_umkm')->filter()->toArray();
+            $umkmSewaIds = $sewaDisponsoriSaya->pluck('id_umkm')->filter()->toArray();
+            $allUmkmDidanaiIds = array_unique(array_merge($umkmModalIds, $umkmSewaIds));
+            $umkmDidanaiCount = count($allUmkmDidanaiIds);
+
+            $rataRataBagiHasil = $semuaInvestasiSaya->count() > 0
+                ? round((float) $semuaInvestasiSaya->avg('persentase_bagi_hasil'), 1)
+                : 0.0;
+
+            // Proyeksi dividen bulanan riil (berdasarkan modal usaha aktif)
+            $proyeksiDividenBulanIni = ($realTotalModalUsaha > 0 && $rataRataBagiHasil > 0)
+                ? round(($realTotalModalUsaha * ($rataRataBagiHasil / 100)) / 12)
+                : 0;
+
+            // Perhitungan Alokasi Sektor Riil (Dihitung dari modal usaha + sewa ruko komersial)
+            $alokasiSektor = [];
+            if ($totalModalDiinvestasikan > 0) {
+                $sektorGroups = $semuaInvestasiSaya->groupBy(function ($inv) {
+                    return $inv->umkm->jenis_usaha ?? 'Lainnya';
+                });
+
+                $colors = ['#0F433C', '#20675D', '#6B9E8A', '#E69F24', '#4F73D9', '#E74C3C'];
+                $colorIndex = 0;
+                foreach ($sektorGroups as $namaSektor => $groupItems) {
+                    $nominalSektor = (float) $groupItems->sum('jumlah_modal');
+                    $persenSektor = round(($nominalSektor / $totalModalDiinvestasikan) * 100, 1);
+                    $alokasiSektor[] = [
+                        'nama' => $namaSektor,
+                        'nominal' => $nominalSektor,
+                        'persentase' => $persenSektor,
+                        'jumlah_proyek' => $groupItems->count(),
+                        'color' => $colors[$colorIndex % count($colors)],
+                    ];
+                    $colorIndex++;
+                }
+
+                // Tambahkan sektor Sewa Ruko Komersial jika investor mendanai sewa ruko
+                if ($realTotalModalSewa > 0) {
+                    $persenSewa = round(($realTotalModalSewa / $totalModalDiinvestasikan) * 100, 1);
+                    $alokasiSektor[] = [
+                        'nama' => 'Sewa Ruko & Properti',
+                        'nominal' => $realTotalModalSewa,
+                        'persentase' => $persenSewa,
+                        'jumlah_proyek' => $sewaDisponsoriSaya->count(),
+                        'color' => '#14B8A6',
+                    ];
+                }
+
+                usort($alokasiSektor, fn ($a, $b) => $b['persentase'] <=> $a['persentase']);
             }
-            $umkmDidanaiCount = max($investasiSaya->pluck('id_umkm')->unique()->count(), 3);
+
+            // Real Produk Mitra UMKM dari Database (Opsi B: Menggantikan seksi dummy kabar/milestone)
+            $produkMitra = Produk::with('umkm')
+                ->latest('id_produk')
+                ->take(4)
+                ->get();
+
+            // Real Riwayat Bagi Hasil dari Database (Tabel bagi_hasil_log)
+            $riwayatBagiHasil = BagiHasilLog::with(['investasi.umkm'])
+                ->whereHas('investasi', function ($q) use ($user) {
+                    $q->where('id_pengguna', $user->id);
+                })->latest('tanggal_distribusi')->get();
+
+            $totalDividenDiterima = (float) $riwayatBagiHasil->sum('nominal_diterima');
+            $persentasePengembalianModal = $totalModalDiinvestasikan > 0
+                ? min(100, round(($totalDividenDiterima / $totalModalDiinvestasikan) * 100, 1))
+                : 0.0;
 
             // DAFTAR PROPOSAL UMKM (PROPOSAL LIST)
             $queryProposal = Umkm::with('user', 'ruko', 'produks')
@@ -206,20 +351,102 @@ class DashboardController extends Controller
             $availableProposals = $queryProposal->latest('updated_at')->get();
             $availableProposalsCount = $availableProposals->count();
 
-            $rukos = Ruko::where('status_ketersediaan', 'tersedia')
-                ->latest('id_ruko')
-                ->take(6)
+            // KATALOG RUKO STRATEGIS (Pilar Sewa Komersial UMKM)
+            $rukoFilter = $request->query('ruko_status', 'semua');
+            $rukoQuery = Ruko::with('penyedia');
+
+            if ($rukoFilter !== 'semua' && in_array($rukoFilter, ['tersedia', 'tersewa'])) {
+                $rukoQuery->where('status_ketersediaan', $rukoFilter);
+            }
+
+            if ($request->filled('ruko_q')) {
+                $rSearch = '%'.$request->ruko_q.'%';
+                $rukoQuery->where(function ($rq) use ($rSearch) {
+                    $rq->where('nama_ruko', 'like', $rSearch)
+                        ->orWhere('lokasi', 'like', $rSearch);
+                });
+            }
+
+            $semuaRukos = $rukoQuery->latest('id_ruko')->get();
+            $rukos = $semuaRukos->where('status_ketersediaan', 'tersedia')->take(6);
+
+            // Rekomendasi Ruko yang diajukan oleh investor ini
+            $rekomendasiSaya = RekomendasiRuko::where('id_pengguna', $user->id)
+                ->latest('id_rekomendasi')
                 ->get();
+
+            // Mitra UMKM terverifikasi untuk tujuan sponsor sewa ruko
+            $mitraUmkmTersedia = Umkm::whereIn('status_pengajuan', ['terverifikasi', 'menunggu_verifikasi'])->get();
+
+            // PERCAKAPAN & OBROLAN KEMITRAAN DENGAN UMKM (IN-APP CHAT INVESTOR)
+            $investasiSayaWithChat = Investasi::with(['umkm.user', 'pesanInvestasi.pengirim'])
+                ->where('id_pengguna', $user->id)
+                ->latest('tanggal_investasi')
+                ->get();
+
+            $unreadInvestorChatCount = PesanInvestasi::whereHas('investasi', function ($q) use ($user) {
+                    $q->where('id_pengguna', $user->id);
+                })
+                ->where('id_pengirim', '!=', $user->id)
+                ->where('dibaca', false)
+                ->count();
+
+            $selectedChatInvestasiId = $request->query('investasi_id');
+            $selectedChatInvestasi = null;
+            if ($investasiSayaWithChat->isNotEmpty()) {
+                $targetId = $selectedChatInvestasiId ?: $investasiSayaWithChat->first()->id_investasi;
+                $selectedChatInvestasi = Investasi::with(['umkm.user', 'pesanInvestasi.pengirim'])->find($targetId);
+
+                // Pastikan catatan awal investor saat mengajukan investasi muncul sebagai pesan pembuka jika belum ada
+                if ($selectedChatInvestasi && $selectedChatInvestasi->pesanInvestasi->isEmpty() && !empty($selectedChatInvestasi->catatan)) {
+                    PesanInvestasi::create([
+                        'id_investasi' => $selectedChatInvestasi->id_investasi,
+                        'id_pengirim' => $selectedChatInvestasi->id_pengguna,
+                        'pesan' => $selectedChatInvestasi->catatan,
+                        'created_at' => $selectedChatInvestasi->tanggal_investasi ?? now(),
+                    ]);
+                    $selectedChatInvestasi->load('pesanInvestasi.pengirim');
+                }
+
+                // Tandai pesan dari UMKM sebagai dibaca saat investor membuka tab pesan
+                if (in_array($activeTab, ['pesan', 'inbox']) && $selectedChatInvestasi) {
+                    PesanInvestasi::where('id_investasi', $selectedChatInvestasi->id_investasi)
+                        ->where('id_pengirim', '!=', $user->id)
+                        ->where('dibaca', false)
+                        ->update(['dibaca' => true]);
+                }
+            }
 
             return view('dashboard.investor', compact(
                 'user',
                 'activeTab',
+                'statusFilter',
                 'investasiSaya',
+                'semuaInvestasiSaya',
+                'realInvestasiCount',
+                'hasRealInvestments',
                 'totalModalDiinvestasikan',
+                'realTotalModalUsaha',
+                'realTotalModalSewa',
                 'umkmDidanaiCount',
+                'rataRataBagiHasil',
+                'proyeksiDividenBulanIni',
+                'alokasiSektor',
+                'produkMitra',
+                'riwayatBagiHasil',
+                'totalDividenDiterima',
+                'persentasePengembalianModal',
                 'availableProposals',
                 'availableProposalsCount',
-                'rukos'
+                'rukos',
+                'semuaRukos',
+                'rukoFilter',
+                'rekomendasiSaya',
+                'sewaDisponsoriSaya',
+                'mitraUmkmTersedia',
+                'investasiSayaWithChat',
+                'selectedChatInvestasi',
+                'unreadInvestorChatCount'
             ));
         }
 
@@ -582,7 +809,7 @@ class DashboardController extends Controller
             'catatan' => 'nullable|string|max:500',
         ]);
 
-        Investasi::create([
+        $inv = Investasi::create([
             'id_pengguna' => $user->id,
             'id_umkm' => $umkm->id_umkm,
             'jumlah_modal' => $validated['jumlah_modal'],
@@ -592,6 +819,12 @@ class DashboardController extends Controller
             'catatan' => $validated['catatan'] ?? 'Saya sangat tertarik dengan proposal usaha Anda dan siap berdiskusi untuk menyalurkan modal pendanaan.',
             'dibaca' => false,
             'tanggal_investasi' => now(),
+        ]);
+
+        PesanInvestasi::create([
+            'id_investasi' => $inv->id_investasi,
+            'id_pengirim' => $user->id,
+            'pesan' => $inv->catatan,
         ]);
 
         return back()->with('success', 'Selamat! Pengajuan minat investasi sebesar Rp '.number_format($validated['jumlah_modal'], 0, ',', '.').' pada usaha "'.$umkm->nama_usaha.'" BERHASIL DIKIRIMKAN! Pelaku UMKM telah menerima notifikasi resmi Anda.');
@@ -760,5 +993,317 @@ class DashboardController extends Controller
         ]);
 
         return redirect()->route('dashboard')->with('success', $message);
+    }
+
+    /**
+     * Memperbarui Data Rekening Bank Mitra Investor untuk Penyaluran Dividen
+     */
+    public function updateRekeningBank(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'investor') {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'bank_name' => 'required|string|max:50',
+            'nomor_rekening' => 'required|string|max:50',
+            'nama_pemilik_rekening' => 'required|string|max:100',
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('dashboard', ['tab' => 'keuangan'])
+            ->with('success', 'Rekening bank pencairan dividen berhasil disimpan! Dividen bagi hasil Anda berikutnya akan ditransfer ke rekening ini.');
+    }
+
+    /**
+     * Investor Mengajukan Rekomendasi Ruko Strategis Baru
+     */
+    public function storeRekomendasiRuko(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'investor') {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'nama_ruko' => 'required|string|max:100',
+            'lokasi' => 'required|string|max:500',
+            'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'potensi_usaha' => 'nullable|string|max:500',
+            'kontak_pemilik' => 'nullable|string|max:50',
+            'siap_danai' => 'nullable|boolean',
+            'foto_ruko' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('foto_ruko')) {
+            $file = $request->file('foto_ruko');
+            $fileName = 'ruko_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/ruko');
+            if (! file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $fileName);
+            $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
+        }
+
+        $validated['id_pengguna'] = $user->id;
+        $validated['nama_pengusul'] = $user->name;
+        $validated['kontak_pengusul'] = $user->phone_number ?: $user->email;
+        $validated['tipe_pengusul'] = 'investor';
+        $validated['siap_danai'] = $request->has('siap_danai');
+        $validated['status'] = 'menunggu_verifikasi';
+
+        RekomendasiRuko::create($validated);
+
+        return redirect()->route('dashboard', ['tab' => 'ruko'])
+            ->with('success', 'Rekomendasi ruko strategis "'.$validated['nama_ruko'].'" berhasil diajukan! Tim kurator TIKUM akan meninjau lokasi tersebut.');
+    }
+
+    /**
+     * Pelaku UMKM Mengajukan Rekomendasi Ruko Strategis
+     */
+    public function storeRekomendasiRukoUmkm(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'nama_ruko' => 'required|string|max:100',
+            'lokasi' => 'required|string|max:500',
+            'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'potensi_usaha' => 'nullable|string|max:500',
+            'kontak_pemilik' => 'nullable|string|max:50',
+            'foto_ruko' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('foto_ruko')) {
+            $file = $request->file('foto_ruko');
+            $fileName = 'ruko_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/ruko');
+            if (! file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $fileName);
+            $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
+        }
+
+        $validated['id_pengguna'] = $user->id;
+        $validated['nama_pengusul'] = $user->name;
+        $validated['kontak_pengusul'] = $user->phone_number ?: $user->email;
+        $validated['tipe_pengusul'] = 'umkm';
+        $validated['siap_danai'] = false;
+        $validated['status'] = 'menunggu_verifikasi';
+
+        RekomendasiRuko::create($validated);
+
+        return redirect()->route('dashboard', ['tab' => 'ruko'])
+            ->with('success', 'Rekomendasi ruko "'.$validated['nama_ruko'].'" berhasil diajukan! Tim kurator TIKUM akan meninjau kelayakannya untuk katalog UMKM.');
+    }
+
+    /**
+     * Halaman Publik Pengusulan Ruko (Masyarakat Luar & Pemilik Ruko)
+     */
+    public function showPublicUsulkanRuko()
+    {
+        $user = Auth::user();
+        return view('pages.usulkan-ruko', compact('user'));
+    }
+
+    /**
+     * Simpan Pengusulan Ruko dari Halaman Publik (Crowdsourcing Umum)
+     */
+    public function storePublicUsulkanRuko(Request $request)
+    {
+        $user = Auth::user();
+
+        $validated = $request->validate([
+            'nama_pengusul' => 'required|string|max:100',
+            'kontak_pengusul' => 'required|string|max:50',
+            'nama_ruko' => 'required|string|max:100',
+            'lokasi' => 'required|string|max:500',
+            'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'potensi_usaha' => 'nullable|string|max:500',
+            'kontak_pemilik' => 'nullable|string|max:50',
+            'foto_ruko' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        if ($request->hasFile('foto_ruko')) {
+            $file = $request->file('foto_ruko');
+            $fileName = 'ruko_public_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $destinationPath = public_path('uploads/ruko');
+            if (! file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $fileName);
+            $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
+        }
+
+        $validated['id_pengguna'] = $user ? $user->id : null;
+        $validated['tipe_pengusul'] = $user ? ($user->role === 'investor' ? 'investor' : ($user->role === 'umkm' ? 'umkm' : 'publik')) : 'publik';
+        $validated['siap_danai'] = false;
+        $validated['status'] = 'menunggu_verifikasi';
+
+        RekomendasiRuko::create($validated);
+
+        return redirect()->route('ruko.usulkan.public')
+            ->with('success', 'Terima kasih banyak! Usulan ruko "'.$validated['nama_ruko'].'" telah berhasil diterima. Tim kurator TIKUM akan meninjau kelayakan lokasi tersebut untuk membantu tempat usaha UMKM.');
+    }
+
+    /**
+     * Investor Mendanai / Mensponsori Biaya Sewa Ruko untuk Mitra UMKM
+     */
+    public function sponsorSewaRuko(Request $request, $id_ruko)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'investor') {
+            abort(403);
+        }
+
+        $ruko = Ruko::findOrFail($id_ruko);
+
+        $validated = $request->validate([
+            'id_umkm' => 'required|exists:umkm,id_umkm',
+            'durasi_bulan' => 'required|integer|min:1|max:36',
+            'catatan_sponsor' => 'nullable|string|max:500',
+        ]);
+
+        $durasi = (int) $validated['durasi_bulan'];
+        $totalHarga = $ruko->harga_sewa_per_bulan * $durasi;
+        $tanggalMulai = now()->toDateString();
+        $tanggalSelesai = now()->addMonths($durasi)->toDateString();
+
+        TransaksiSewa::create([
+            'id_umkm' => $validated['id_umkm'],
+            'id_investor' => $user->id,
+            'id_ruko' => $ruko->id_ruko,
+            'tanggal_mulai' => $tanggalMulai,
+            'tanggal_selesai' => $tanggalSelesai,
+            'total_harga' => $totalHarga,
+            'status_pembayaran' => 'menunggu_konfirmasi',
+            'catatan_sponsor' => $validated['catatan_sponsor'] ?? 'Sponsor dana sewa ruko komersial dari mitra investor.',
+        ]);
+
+        $umkm = Umkm::find($validated['id_umkm']);
+
+        return redirect()->route('dashboard', ['tab' => 'ruko'])
+            ->with('success', 'Komitmen pendanaan sewa ruko "'.$ruko->nama_ruko.'" untuk UMKM "'.($umkm->nama_usaha ?? 'Mitra').'" senilai Rp '.number_format($totalHarga, 0, ',', '.').' berhasil diajukan! Admin akan memfasilitasi serah terima ruko.');
+    }
+
+    /**
+     * UMKM Menerima Komitmen Investasi dari Calon Investor
+     */
+    public function terimaInvestasi($id)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
+        $investasi = Investasi::with('pengguna')->where('id_umkm', $umkm->id_umkm)->findOrFail($id);
+
+        $investasi->status = 'aktif';
+        $investasi->dibaca = true;
+        $investasi->save();
+
+        return back()->with('success', 'Komitmen investasi modal sebesar Rp '.number_format($investasi->jumlah_modal, 0, ',', '.').' dari '.($investasi->pengguna->name ?? 'Investor').' BERHASIL DITERIMA! Kemitraan kini resmi berjalan (Status: Aktif).');
+    }
+
+    /**
+     * UMKM Menolak Komitmen Investasi
+     */
+    public function tolakInvestasi($id)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
+        $investasi = Investasi::where('id_umkm', $umkm->id_umkm)->findOrFail($id);
+
+        $investasi->status = 'ditolak';
+        $investasi->dibaca = true;
+        $investasi->save();
+
+        return back()->with('info', 'Pengajuan minat investasi telah ditolak.');
+    }
+
+    /**
+     * UMKM Menyetorkan Dividen Bagi Hasil Riil ke Rekening Investor
+     */
+    public function storeSetorDividen(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
+
+        $validated = $request->validate([
+            'id_investasi' => 'required|exists:investasi,id_investasi',
+            'nominal_diterima' => 'required|numeric|min:10000',
+            'bukti_transfer' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'tanggal_distribusi' => 'nullable|date',
+        ]);
+
+        $investasi = Investasi::with('pengguna')->where('id_umkm', $umkm->id_umkm)->findOrFail($validated['id_investasi']);
+
+        // Upload bukti transfer
+        $file = $request->file('bukti_transfer');
+        $fileName = 'struk_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+        $destinationPath = public_path('uploads/bukti_transfer');
+        if (! file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+        $file->move($destinationPath, $fileName);
+        $filePath = '/uploads/bukti_transfer/'.$fileName;
+
+        BagiHasilLog::create([
+            'id_investasi' => $investasi->id_investasi,
+            'tanggal_distribusi' => $validated['tanggal_distribusi'] ? $validated['tanggal_distribusi'] : now(),
+            'nominal_diterima' => $validated['nominal_diterima'],
+            'bukti_transfer' => $filePath,
+        ]);
+
+        $investorName = $investasi->pengguna->name ?? 'Investor';
+        $bankName = $investasi->pengguna->bank_name ?? 'Bank Tujuan';
+        $rek = $investasi->pengguna->nomor_rekening ?? '-';
+
+        return back()->with('success', 'Bagi hasil dividen sebesar Rp '.number_format($validated['nominal_diterima'], 0, ',', '.').' berhasil disetorkan ke rekening '.$bankName.' ('.$rek.') milik '.$investorName.'! Struk transfer otomatis tercatat di buku dividen investor.');
+    }
+
+    /**
+     * Kirim Pesan Diskusi Langsung (In-App Chat) Antara Investor dan UMKM
+     */
+    public function kirimPesanInvestasi(Request $request, $id)
+    {
+        $user = Auth::user();
+        $investasi = Investasi::with('umkm')->findOrFail($id);
+
+        $isInvestor = ($investasi->id_pengguna === $user->id);
+        $isUmkmOwner = ($investasi->umkm && $investasi->umkm->user_id === $user->id);
+
+        if (! $isInvestor && ! $isUmkmOwner) {
+            abort(403, 'Anda tidak memiliki hak akses percakapan ini.');
+        }
+
+        $validated = $request->validate([
+            'pesan' => 'required|string|max:2000',
+        ]);
+
+        PesanInvestasi::create([
+            'id_investasi' => $investasi->id_investasi,
+            'id_pengirim' => $user->id,
+            'pesan' => $validated['pesan'],
+            'dibaca' => false,
+        ]);
+
+        return back()->with('success', 'Pesan diskusi berhasil dikirim!');
     }
 }

@@ -13,11 +13,13 @@ class TransaksiSewa extends Model
 
     protected $fillable = [
         'id_umkm',
+        'id_investor',
         'id_ruko',
         'tanggal_mulai',
         'tanggal_selesai',
         'total_harga',
         'status_pembayaran',
+        'catatan_sponsor',
     ];
 
     protected $casts = [
@@ -34,5 +36,10 @@ class TransaksiSewa extends Model
     public function ruko(): BelongsTo
     {
         return $this->belongsTo(Ruko::class, 'id_ruko', 'id_ruko');
+    }
+
+    public function investor(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id_investor', 'id');
     }
 }

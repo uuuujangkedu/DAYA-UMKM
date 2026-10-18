@@ -53,7 +53,8 @@
 <body class="bg-[#F9F8F3] min-h-screen text-[#1A202C] flex">
 
     <!-- SIDEBAR UMKM (Sesuai Gambar 2: Mockup Dashboard UMKM) -->
-    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0 shadow-2xl md:shadow-none">
+    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
+           style="background-color: #0F433C !important; height: 100vh; min-height: 100vh;">
         
         <div>
             <!-- Brand Logo TIKUM -->
@@ -106,7 +107,23 @@
                     @endif
                 </a>
 
-                <!-- 2. PRODUK -->
+                <!-- 2. INBOX PENDANAAN (Komunikasi & Minat Modal Investor) -->
+                <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                   class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'inbox' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>INBOX PENDANAAN</span>
+                    </div>
+                    @if(isset($unreadInvestasiCount) && $unreadInvestasiCount > 0)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-400 text-teal-950 shadow-sm animate-pulse">
+                            {{ $unreadInvestasiCount }}
+                        </span>
+                    @endif
+                </a>
+
+                <!-- 3. PRODUK -->
                 <a href="{{ route('dashboard', ['tab' => 'produk']) }}" 
                    class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'produk' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
@@ -167,7 +184,8 @@
         </div>
 
         <!-- Bawah Sidebar: Tautan Web & Keluar -->
-        <div class="p-4 border-t border-white/10 space-y-2">
+        <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0"
+             style="background-color: #0F433C !important;">
             <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/80 hover:bg-white/10 hover:text-white transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -244,6 +262,47 @@
         </main>
     </div>
 
+    <!-- MODAL KONFIRMASI MODERN & ELEGAN (PENGGANTI NATIVE BROWSER CONFIRM/ALERT) -->
+    <div id="app-custom-confirm-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+        <!-- Backdrop Blur Halus -->
+        <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" onclick="closeAppConfirmModal()"></div>
+
+        <!-- Box Modal -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-gray-100 z-10 transform transition-all animate-fadeIn">
+            <div class="flex items-start gap-4">
+                <div id="app-confirm-icon-box" class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 id="app-confirm-title" class="text-base sm:text-lg font-black text-[#1A202C] leading-snug">
+                        Konfirmasi Tindakan
+                    </h3>
+                    <div id="app-confirm-badge" class="mt-1.5 hidden">
+                        <span id="app-confirm-badge-text" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-50 text-teal-900 border border-teal-200"></span>
+                    </div>
+                    <div id="app-confirm-message" class="mt-2 text-xs text-gray-600 leading-relaxed font-medium">
+                        Apakah Anda yakin ingin melanjutkan tindakan ini?
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" 
+                        onclick="closeAppConfirmModal()" 
+                        class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="button" 
+                        id="app-confirm-submit-btn" 
+                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebarUmkm() {
             const sidebar = document.getElementById('sidebar-umkm');
@@ -254,6 +313,62 @@
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
+            }
+        }
+
+        // FUNGSI MODAL KONFIRMASI MODERN DAYA-UMKM
+        function openAppConfirmModal(config) {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (!modal) return;
+            
+            document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
+            document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            
+            const badgeEl = document.getElementById('app-confirm-badge');
+            const badgeText = document.getElementById('app-confirm-badge-text');
+            if (config.badge) {
+                badgeText.innerHTML = config.badge;
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
+            
+            const iconContainer = document.getElementById('app-confirm-icon-box');
+            const iconType = config.icon || 'check';
+            if (iconType === 'check' || iconType === 'success') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>';
+            } else if (iconType === 'danger' || iconType === 'rose') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-rose-100 text-rose-600 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+            } else {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            }
+            
+            const submitBtn = document.getElementById('app-confirm-submit-btn');
+            submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+                (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
+            
+            submitBtn.onclick = function() {
+                closeAppConfirmModal();
+                if (config.form) {
+                    config.form.submit();
+                } else if (typeof config.onConfirm === 'function') {
+                    config.onConfirm();
+                }
+            };
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAppConfirmModal() {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         }
     </script>

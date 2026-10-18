@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +25,10 @@ Route::get('/gabung/investor', function () {
 Route::get('/gabung/umkm', function () {
     return view('pages.gabung-umkm');
 })->name('gabung.umkm');
+
+// Halaman Publik Usulkan Ruko Strategis (Crowdsourcing Tempat Usaha UMKM)
+Route::get('/usulkan-ruko', [DashboardController::class, 'showPublicUsulkanRuko'])->name('ruko.usulkan.public');
+Route::post('/usulkan-ruko', [DashboardController::class, 'storePublicUsulkanRuko'])->name('ruko.usulkan.store');
 
 // URL Aliases agar tautan lama atau akses langsung tetap berjalan mulus
 Route::get('/gabung-investor', function () {
@@ -69,9 +75,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/auth/google/callback', [AuthController::class, 'googleCallback'])->name('google.callback');
 });
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SuperAdminController;
-
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -90,14 +93,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/umkm/produk/{id}/update', [DashboardController::class, 'updateProduk'])->name('dashboard.umkm.produk.update');
     Route::post('/dashboard/umkm/produk/{id}/delete', [DashboardController::class, 'deleteProduk'])->name('dashboard.umkm.produk.delete');
     Route::post('/dashboard/umkm/notifikasi/{id}/read', [DashboardController::class, 'markInvestasiRead'])->name('dashboard.umkm.notifikasi.read');
+    Route::post('/dashboard/umkm/investasi/{id}/terima', [DashboardController::class, 'terimaInvestasi'])->name('dashboard.umkm.investasi.terima');
+    Route::post('/dashboard/umkm/investasi/{id}/tolak', [DashboardController::class, 'tolakInvestasi'])->name('dashboard.umkm.investasi.tolak');
+    Route::post('/dashboard/umkm/setor-dividen', [DashboardController::class, 'storeSetorDividen'])->name('dashboard.umkm.dividen.store');
+    Route::post('/dashboard/investasi/{id}/pesan', [DashboardController::class, 'kirimPesanInvestasi'])->name('dashboard.investasi.pesan');
 
     // Analisis Keuangan UMKM (Input Form & Catatan Laba Rugi)
     Route::post('/dashboard/umkm/keuangan', [DashboardController::class, 'storeKeuangan'])->name('dashboard.umkm.keuangan.store');
     Route::post('/dashboard/umkm/keuangan/{id}/delete', [DashboardController::class, 'deleteKeuangan'])->name('dashboard.umkm.keuangan.delete');
     Route::post('/dashboard/umkm/keuangan/gabung', [DashboardController::class, 'gabungKeuanganPeriode'])->name('dashboard.umkm.keuangan.gabung');
+    Route::post('/dashboard/umkm/rekomendasi-ruko', [DashboardController::class, 'storeRekomendasiRukoUmkm'])->name('dashboard.umkm.ruko.rekomendasi');
 
-    // Aksi Investasi dari Investor ke Proposal UMKM
+    // Aksi Investasi & Operasional Mitra Investor
     Route::post('/dashboard/investor/invest/{id_umkm}', [DashboardController::class, 'investProposal'])->name('dashboard.investor.invest');
+    Route::post('/dashboard/investor/rekening-bank', [DashboardController::class, 'updateRekeningBank'])->name('dashboard.investor.bank');
+    Route::post('/dashboard/investor/rekomendasi-ruko', [DashboardController::class, 'storeRekomendasiRuko'])->name('dashboard.investor.ruko.rekomendasi');
+    Route::post('/dashboard/investor/sponsor-ruko/{id_ruko}', [DashboardController::class, 'sponsorSewaRuko'])->name('dashboard.investor.ruko.sponsor');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -117,6 +128,8 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/log-aktivitas', [SuperAdminController::class, 'logAktivitas'])->name('logs');
         Route::get('/ruko', [SuperAdminController::class, 'ruko'])->name('ruko');
+        Route::post('/ruko/rekomendasi/{id}/approve', [SuperAdminController::class, 'approveRekomendasiRuko'])->name('ruko.rekomendasi.approve');
+        Route::post('/ruko/rekomendasi/{id}/reject', [SuperAdminController::class, 'rejectRekomendasiRuko'])->name('ruko.rekomendasi.reject');
     });
 });
 

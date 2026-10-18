@@ -156,11 +156,24 @@
                                 <span class="text-[12.5px] text-[#3E5445] block mt-0.5" data-i18n="nav.gabung_umkm_sub">
                                     Dapatkan akses modal dan sewa ruko
                                 </span>
+                            <div class="h-px bg-[#C8BFB0]/40 my-1"></div>
+
+                            <a href="{{ route('ruko.usulkan.public') }}" 
+                               class="block p-3 rounded-[8px] hover:bg-teal-50 transition group/item">
+                                <span class="font-semibold text-[14px] text-[#0F433C] flex items-center gap-1.5">
+                                    <span>📍</span> Usulkan Ruko Kosong
+                                </span>
+                                <span class="text-[12.5px] text-[#3E5445] block mt-0.5">
+                                    Titip sewa tempat usaha komersial
+                                </span>
                             </a>
                         </div>
                     </div>
                 </div>
 
+                <a href="{{ route('ruko.usulkan.public') }}" id="nav-link-usulkan-ruko" class="nav-item transition-all py-1 {{ request()->routeIs('ruko.usulkan*') ? 'active text-[#2D6B22] font-semibold border-b-2 border-[#2D6B22]' : 'text-[#15241C] hover:text-[#2D6B22]' }}">
+                    Usulkan Ruko
+                </a>
                 <a href="{{ url('/#tutorial') }}" id="nav-link-tutorial" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.tutorial">Tutorial</a>
                 <a href="{{ url('/#bantuan') }}" id="nav-link-bantuan" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.bantuan">Bantuan</a>
                 <a href="{{ url('/#kontak') }}" id="nav-link-kontak" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.kontak">Kontak</a>

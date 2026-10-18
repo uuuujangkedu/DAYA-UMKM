@@ -13,7 +13,7 @@
         <!-- NOTIFIKASI MINAT INVESTASI MASUK DARI INVESTOR (Fitur Inti Permintaan User) -->
         @if(isset($notifikasiInvestasi) && $notifikasiInvestasi->count() > 0)
             <div class="bg-gradient-to-r from-amber-50 via-yellow-50 to-emerald-50 rounded-3xl p-6 sm:p-7 border-2 border-amber-300 shadow-sm animate-fade-in">
-                <div class="flex items-start justify-between gap-4 mb-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-2xl bg-amber-400 text-amber-950 flex items-center justify-center font-black text-xl shadow-sm shrink-0 animate-bounce">
                             🎉
@@ -30,10 +30,19 @@
                                 @endif
                             </div>
                             <p class="text-xs text-gray-600 mt-0.5 font-medium">
-                                Calon investor berikut telah meninjau proposal Anda dan menyatakan komitmen pendanaan:
+                                Calon investor telah meninjau proposal Anda dan menyatakan komitmen pendanaan:
                             </p>
                         </div>
                     </div>
+
+                    <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                       class="px-4 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-black shadow-md transition flex items-center gap-1.5 shrink-0 self-start sm:self-center">
+                        <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Buka Inbox Pendanaan</span>
+                        <span>&rarr;</span>
+                    </a>
                 </div>
 
                 <!-- Daftar Notifikasi Investor -->
@@ -49,11 +58,22 @@
                                         <h4 class="text-sm font-extrabold text-[#1A202C]">
                                             {{ $notif->pengguna->name ?? 'Investor' }}
                                         </h4>
-                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-blue-100 text-blue-800">
-                                            Calon Investor
-                                        </span>
+                                        @if($notif->status === 'aktif')
+                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-100 text-emerald-800">
+                                                🟢 Kemitraan Aktif
+                                            </span>
+                                        @elseif($notif->status === 'ditolak')
+                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-gray-100 text-gray-600">
+                                                Ditolak
+                                            </span>
+                                        @else
+                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-100 text-amber-800">
+                                                Menunggu Respon Anda
+                                            </span>
+                                        @endif
+
                                         @if(!$notif->dibaca)
-                                            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Belum dibaca"></span>
                                         @endif
                                     </div>
                                     <p class="text-xs text-gray-700 mt-1">
@@ -66,29 +86,80 @@
                                         </p>
                                     @endif
                                     <span class="text-[10px] text-gray-400 mt-1 block font-medium">
-                                        {{ $notif->tanggal_investasi ? $notif->tanggal_investasi->diffForHumans() : '-' }}
+                                        Diajukan {{ $notif->tanggal_investasi ? $notif->tanggal_investasi->diffForHumans() : '-' }}
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Tombol Tindak Lanjut UMKM -->
-                            <div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+                            <!-- Tombol Tindak Lanjut UMKM (Sinergi Dua Arah) -->
+                            <div class="flex flex-wrap items-center gap-2 shrink-0 self-end md:self-center">
+                                @if($notif->status === 'pending')
+                                    <!-- Aksi Terima Investasi -->
+                                    <form id="form-terima-beranda-{{ $notif->id_investasi }}" action="{{ route('dashboard.umkm.investasi.terima', $notif->id_investasi) }}" method="POST">
+                                        @csrf
+                                        <button type="button" 
+                                                onclick="openAppConfirmModal({
+                                                    title: 'Terima Komitmen Investasi',
+                                                    message: 'Apakah Anda yakin ingin menerima komitmen investasi ini dari <strong>{{ addslashes($notif->pengguna->name ?? 'Investor') }}</strong>? Status kemitraan akan resmi berstatus <strong>AKTIF</strong> dan tercatat dalam permodalan usaha.',
+                                                    badge: 'Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }} &bull; {{ $notif->persentase_bagi_hasil }}% Bagi Hasil',
+                                                    confirmText: '✓ Ya, Terima Investasi',
+                                                    confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
+                                                    icon: 'check',
+                                                    form: document.getElementById('form-terima-beranda-{{ $notif->id_investasi }}')
+                                                })"
+                                                class="px-3.5 py-2 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                            <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                                            </svg>
+                                            <span>✓ Terima Investasi</span>
+                                        </button>
+                                    </form>
+
+                                    <!-- Aksi Tolak Investasi -->
+                                    <form id="form-tolak-beranda-{{ $notif->id_investasi }}" action="{{ route('dashboard.umkm.investasi.tolak', $notif->id_investasi) }}" method="POST">
+                                        @csrf
+                                        <button type="button"
+                                                onclick="openAppConfirmModal({
+                                                    title: 'Tolak Minat Investasi',
+                                                    message: 'Apakah Anda yakin ingin menolak minat pendanaan dari <strong>{{ addslashes($notif->pengguna->name ?? 'Investor') }}</strong>? Penolakan ini akan mengembalikan status pengajuan.',
+                                                    badge: 'Tolak Tawaran Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }}',
+                                                    confirmText: '✕ Ya, Tolak Investasi',
+                                                    confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                                                    icon: 'danger',
+                                                    form: document.getElementById('form-tolak-beranda-{{ $notif->id_investasi }}')
+                                                })"
+                                                class="px-3 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">
+                                            ✕ Tolak
+                                        </button>
+                                    </form>
+                                @elseif($notif->status === 'aktif')
+                                    <!-- Tombol Setor Dividen Cepat -->
+                                    <button type="button" 
+                                            onclick="openSetorDividenModal('{{ $notif->id_investasi }}', '{{ addslashes($notif->pengguna->name) }}', '{{ addslashes($notif->pengguna->bank_name ?? 'Belum Diatur') }}', '{{ $notif->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($notif->pengguna->nama_pemilik_rekening ?? $notif->pengguna->name) }}')"
+                                            class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>💸 Setor Dividen</span>
+                                    </button>
+                                @endif
+
                                 @if(!empty($notif->pengguna->phone_number))
                                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $notif->pengguna->phone_number) }}?text=Halo%20{{ urlencode($notif->pengguna->name) }},%20terima%20kasih%20atas%20minat%20investasi%20Anda%20di%20usaha%20{{ urlencode($umkm->nama_usaha) }}%20melalui%20DAYA%20UMKM." 
                                        target="_blank"
-                                       class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                       class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 2.012.85 2.796.85 3.177 0 5.766-2.587 5.766-5.766 0-3.18-2.586-5.767-5.766-5.767zm7.55 5.766c0 4.164-3.393 7.552-7.55 7.552-1.312 0-2.539-.344-3.61-.951l-4.043 1.059 1.082-3.947c-.707-1.144-1.116-2.483-1.116-3.713 0-4.165 3.39-7.553 7.55-7.553 4.163 0 7.687 3.388 7.687 7.552z"/>
                                         </svg>
-                                        <span>Hubungi Investor via WA</span>
+                                        <span>WA</span>
                                     </a>
                                 @endif
 
                                 @if(!$notif->dibaca)
                                     <form action="{{ route('dashboard.umkm.notifikasi.read', $notif->id_investasi) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-3 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-700 text-xs font-bold transition">
-                                            Tandai Dibaca
+                                        <button type="submit" class="px-2.5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-600 text-xs font-semibold transition" title="Tandai Sudah Dibaca">
+                                            ✓
                                         </button>
                                     </form>
                                 @endif
@@ -164,6 +235,131 @@
 
         </div>
 
+        <!-- FITUR SINERGI 1: BANNER SEWA RUKO DISPONSORI INVESTOR -->
+        @if(isset($sewaDisponsori) && $sewaDisponsori->isNotEmpty())
+            <div class="rounded-3xl p-6 sm:p-7 shadow-lg border border-teal-900/30"
+                 style="background: #0F433C; background: linear-gradient(135deg, #0F433C 0%, #16534A 100%) !important; color: #ffffff !important;">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-start gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-white/10 text-amber-300 border border-white/20 flex items-center justify-center text-2xl shrink-0">
+                            🏢
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-teal-300 block">Sponsor Sewa Ruko Komersial</span>
+                            <h3 class="text-base sm:text-lg font-black text-white mt-0.5">
+                                Selamat! Biaya Sewa Ruko Anda Telah Disponsori oleh Investor
+                            </h3>
+                            @foreach($sewaDisponsori as $sewa)
+                                <p class="text-xs text-teal-100/90 mt-1">
+                                    Ruko <strong>{{ $sewa->ruko->nama_ruko ?? 'Komersial' }}</strong> ({{ $sewa->ruko->lokasi ?? '-' }}) disponsori oleh <strong>{{ $sewa->investor->name ?? 'Mitra Investor' }}</strong> senilai <strong class="text-amber-300">Rp {{ number_format($sewa->total_harga, 0, ',', '.') }}</strong> (Periode sewa: {{ $sewa->tanggal_mulai }} s/d {{ $sewa->tanggal_selesai }}).
+                                </p>
+                            @endforeach
+                        </div>
+                    </div>
+                    <span class="px-3.5 py-2 rounded-xl bg-white text-[#0F433C] text-xs font-black self-start sm:self-auto shadow-sm">
+                        ✓ Sewa Ditanggung Investor
+                    </span>
+                </div>
+            </div>
+        @endif
+
+        <!-- FITUR SINERGI 2: SINERGI MODAL INVESTOR & KEMITRAAN AKTIF -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-100 text-teal-800">
+                            Sinergi Finansial Riil
+                        </span>
+                        <h2 class="text-lg font-black text-[#1A202C]">Mitra Pemodal & Pembagian Dividen Usaha</h2>
+                    </div>
+                    <p class="text-xs text-gray-500 font-medium mt-0.5">
+                        Kelola dana kemitraan dari investor dan salurkan dividen bagi hasil langsung ke rekening bank mereka.
+                    </p>
+                </div>
+
+                <!-- Ringkasan Akumulasi Modal & Dividen -->
+                <div class="flex items-center gap-3">
+                    <div class="px-4 py-2.5 rounded-2xl bg-teal-50 border border-teal-200 text-left">
+                        <span class="text-[10px] font-bold text-teal-800 uppercase block">Modal Investor Terkumpul</span>
+                        <span class="text-sm font-black text-[#0F433C]">Rp {{ number_format($totalModalTerkumpul ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="px-4 py-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-left">
+                        <span class="text-[10px] font-bold text-amber-800 uppercase block">Total Dividen Disetor</span>
+                        <span class="text-sm font-black text-amber-900">Rp {{ number_format($totalDividenDisetor ?? 0, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DAFTAR MITRA INVESTOR AKTIF -->
+            @if(isset($investasiAktif) && $investasiAktif->isNotEmpty())
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    @foreach($investasiAktif as $inv)
+                        <div class="p-5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] flex flex-col justify-between gap-4 hover:shadow-md transition">
+                            <div>
+                                <div class="flex items-start justify-between gap-2">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+                                            {{ strtoupper(substr($inv->pengguna->name ?? 'I', 0, 2)) }}
+                                        </div>
+                                        <div>
+                                            <h4 class="text-sm font-black text-[#1A202C]">{{ $inv->pengguna->name ?? 'Investor Mitra' }}</h4>
+                                            <span class="text-[10px] text-gray-500">Mulai: {{ $inv->tanggal_investasi ? $inv->tanggal_investasi->format('d M Y') : '-' }}</span>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-100 text-emerald-800">
+                                        Aktif
+                                    </span>
+                                </div>
+
+                                <div class="mt-4 space-y-1.5 text-xs">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Modal Disalurkan:</span>
+                                        <span class="font-black text-[#0F433C]">Rp {{ number_format($inv->jumlah_modal, 0, ',', '.') }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Porsi Bagi Hasil:</span>
+                                        <span class="font-bold text-gray-700">{{ $inv->persentase_bagi_hasil }}% ({{ $inv->periode_pembagian }})</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-400">Dividen Terbayar:</span>
+                                        <span class="font-black text-emerald-700">Rp {{ number_format($inv->bagiHasilLog->sum('nominal_diterima'), 0, ',', '.') }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- KARTU REKENING BANK TUJUAN INVESTOR (TERHUBUNG KE FITUR 3 INVESTOR) -->
+                                <div class="mt-3.5 p-3 rounded-xl bg-white border border-gray-200 text-xs">
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase block mb-1">Rekening Transfer Investor:</span>
+                                    <div class="flex items-center justify-between font-mono">
+                                        <span class="font-bold text-[#0F433C]">{{ $inv->pengguna->bank_name ?? 'Bank Belum Diatur' }}</span>
+                                        <span class="font-bold text-[#1A202C]">{{ $inv->pengguna->nomor_rekening ?? '-' }}</span>
+                                    </div>
+                                    <span class="text-[11px] text-gray-500 block mt-0.5 truncate">a.n. {{ $inv->pengguna->nama_pemilik_rekening ?? ($inv->pengguna->name ?? '-') }}</span>
+                                </div>
+                            </div>
+
+                            <button type="button"
+                                    onclick="openSetorDividenModal('{{ $inv->id_investasi }}', '{{ addslashes($inv->pengguna->name) }}', '{{ addslashes($inv->pengguna->bank_name ?? 'Bank Belum Diatur') }}', '{{ $inv->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name) }}')"
+                                    class="w-full py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5">
+                                <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span>Setor Dividen Bagi Hasil</span>
+                            </button>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="p-8 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-center space-y-2">
+                    <span class="text-3xl block">🤝</span>
+                    <h3 class="text-sm font-bold text-gray-700">Belum Ada Kemitraan Investor Aktif</h3>
+                    <p class="text-xs text-gray-400 max-w-md mx-auto">
+                        Ketika Anda menyetujui komitmen pendanaan dari calon investor pada notifikasi di atas, profil investor dan nomor rekeningnya akan langsung muncul di sini.
+                    </p>
+                </div>
+            @endif
+        </div>
+
         <!-- BAGIAN GRAFIK 7 HARI & PRODUK TERLARIS (Presisi Sesuai Mockup Gambar 2) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
             
@@ -237,6 +433,276 @@
                         </div>
                     @endforelse
                 </div>
+            </div>
+
+        </div>
+
+    {{-- ========================================================================= --}}
+    {{-- TAB INBOX: KOTAK MASUK PENDANAAN & OBROLAN INVESTOR (Fitur Permintaan)   --}}
+    {{-- ========================================================================= --}}
+    @elseif(($activeTab ?? '') === 'inbox')
+
+        <!-- PAGE HEADER INBOX PENDANAAN -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-100 text-teal-800">
+                        Pusat Komunikasi Kemitraan
+                    </span>
+                    <span class="text-xs text-gray-400 font-bold">&bull;</span>
+                    <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">INBOX PENDANAAN</h1>
+                </div>
+                <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
+                    Tinjau komitmen modal masuk dari calon investor, lakukan negosiasi langsung di dalam web, dan sepakati kontrak kemitraan.
+                </p>
+            </div>
+
+            <!-- Filter Badge Ringkasan -->
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+                <span class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold">
+                    {{ $notifikasiInvestasi->where('status', 'pending')->count() }} Menunggu Respon
+                </span>
+                <span class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
+                    {{ $notifikasiInvestasi->where('status', 'aktif')->count() }} Kemitraan Aktif
+                </span>
+            </div>
+        </div>
+
+        <!-- MAIN TWO-COLUMN INBOX LAYOUT (GRID 12) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- KOLOM KIRI (5 COLS): DAFTAR PENGAJUAN MASUK & UTAS OBROLAN -->
+            <div class="lg:col-span-5 bg-white rounded-3xl p-5 border border-[#E8E6DF] shadow-sm space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                    <span class="text-xs font-black uppercase tracking-wider text-gray-400">Daftar Investor Masuk</span>
+                    <span class="text-xs font-bold text-[#0F433C]">{{ $notifikasiInvestasi->count() }} Percakapan</span>
+                </div>
+
+                <div class="space-y-2.5 max-h-[620px] overflow-y-auto pr-1">
+                    @forelse($notifikasiInvestasi as $invItem)
+                        @php
+                            $isSelected = ($selectedInvestasi && $selectedInvestasi->id_investasi === $invItem->id_investasi);
+                        @endphp
+                        <a href="{{ route('dashboard', ['tab' => 'inbox', 'investasi_id' => $invItem->id_investasi]) }}"
+                           class="block p-4 rounded-2xl border transition-all {{ $isSelected ? 'border-2 border-[#0F433C] bg-teal-50/60 shadow-sm' : 'border-[#E8E6DF] bg-white hover:bg-gray-50/80 hover:border-gray-300' }}">
+                            <div class="flex items-start justify-between gap-2 mb-1.5">
+                                <div class="flex items-center gap-2.5 min-w-0">
+                                    <div class="w-9 h-9 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                                        {{ strtoupper(substr($invItem->pengguna->name ?? 'I', 0, 2)) }}
+                                    </div>
+                                    <div class="min-w-0">
+                                        <h4 class="text-xs font-black text-[#1A202C] truncate">
+                                            {{ $invItem->pengguna->name ?? 'Calon Investor' }}
+                                        </h4>
+                                        <span class="text-[10px] text-gray-400 block">
+                                            {{ $invItem->tanggal_investasi ? $invItem->tanggal_investasi->diffForHumans() : '-' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge -->
+                                @if($invItem->status === 'aktif')
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-100 text-emerald-800 shrink-0">
+                                        🟢 Aktif
+                                    </span>
+                                @elseif($invItem->status === 'ditolak')
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-gray-100 text-gray-500 shrink-0">
+                                        Ditolak
+                                    </span>
+                                @else
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-100 text-amber-800 shrink-0">
+                                        Menunggu
+                                    </span>
+                                @endif
+                            </div>
+
+                            <!-- Detail Nominal -->
+                            <div class="mt-2 text-xs flex justify-between items-center bg-white/70 p-2 rounded-xl border border-gray-100">
+                                <span class="text-[11px] text-gray-500">Tawaran Modal:</span>
+                                <span class="font-extrabold text-[#0F433C]">Rp {{ number_format($invItem->jumlah_modal, 0, ',', '.') }}</span>
+                            </div>
+
+                            <!-- Cuplikan Pesan Terakhir -->
+                            <p class="text-[11px] text-gray-600 mt-2 line-clamp-1 italic">
+                                "{{ $invItem->pesanInvestasi->last()?->pesan ?? $invItem->catatan ?? 'Menunggu diskusi awal...' }}"
+                            </p>
+                        </a>
+                    @empty
+                        <div class="p-8 text-center text-xs text-gray-400">
+                            Belum ada minat pendanaan dari investor yang masuk saat ini.
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            <!-- KOLOM KANAN (7 COLS): RUANG DISKUSI CHAT & LEMBAR KOMITMEN INVESTOR -->
+            <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm flex flex-col justify-between min-h-[620px]">
+                @if($selectedInvestasi)
+                    <div>
+                        <!-- HEADER OBROLAN & PROFIL INVESTOR -->
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+                                    {{ strtoupper(substr($selectedInvestasi->pengguna->name ?? 'I', 0, 2)) }}
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-base font-black text-[#1A202C]">
+                                            {{ $selectedInvestasi->pengguna->name ?? 'Calon Investor' }}
+                                        </h3>
+                                        @if($selectedInvestasi->status === 'aktif')
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800">
+                                                🟢 Kemitraan Aktif
+                                            </span>
+                                        @elseif($selectedInvestasi->status === 'ditolak')
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-gray-100 text-gray-600">
+                                                Ditolak
+                                            </span>
+                                        @else
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-800">
+                                                Menunggu Respon Anda
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <p class="text-xs text-gray-400 font-medium mt-0.5">
+                                        Diajukan pada {{ $selectedInvestasi->tanggal_investasi ? $selectedInvestasi->tanggal_investasi->format('d M Y, H:i') : '-' }} WIB
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Aksi Kontak & WhatsApp -->
+                            <div class="flex items-center gap-2 self-start sm:self-auto">
+                                @if(!empty($selectedInvestasi->pengguna->phone_number))
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $selectedInvestasi->pengguna->phone_number) }}?text=Halo%20{{ urlencode($selectedInvestasi->pengguna->name) }},%20saya%20pemilik%20usaha%20{{ urlencode($umkm->nama_usaha) }}%20di%20DAYA%20UMKM."
+                                       target="_blank"
+                                       class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5"
+                                       title="Lanjutkan Diskusi ke WhatsApp">
+                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 2.012.85 2.796.85 3.177 0 5.766-2.587 5.766-5.766 0-3.18-2.586-5.767-5.766-5.767zm7.55 5.766c0 4.164-3.393 7.552-7.55 7.552-1.312 0-2.539-.344-3.61-.951l-4.043 1.059 1.082-3.947c-.707-1.144-1.116-2.483-1.116-3.713 0-4.165 3.39-7.553 7.55-7.553 4.163 0 7.687 3.388 7.687 7.552z"/>
+                                        </svg>
+                                        <span>Lanjut ke WA</span>
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- KARTU RINGKASAN LEMBAR KOMITMEN MODAL -->
+                        <div class="mt-4 p-4 rounded-2xl bg-teal-50/70 border border-teal-200/80 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-black uppercase tracking-wider text-[#0F433C]">Parameter Usulan Investasi:</span>
+                                @if($selectedInvestasi->status === 'pending')
+                                    <div class="flex items-center gap-2">
+                                        <!-- Form Terima -->
+                                        <form id="form-terima-inbox-{{ $selectedInvestasi->id_investasi }}" action="{{ route('dashboard.umkm.investasi.terima', $selectedInvestasi->id_investasi) }}" method="POST">
+                                            @csrf
+                                            <button type="button"
+                                                    onclick="openAppConfirmModal({
+                                                        title: 'Terima Komitmen Investasi',
+                                                        message: 'Terima komitmen investasi sebesar <strong>Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</strong> dari <strong>{{ addslashes($selectedInvestasi->pengguna->name ?? 'Investor') }}</strong>? Status kemitraan akan resmi berstatus <strong>AKTIF</strong>.',
+                                                        badge: 'Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }} &bull; {{ $selectedInvestasi->persentase_bagi_hasil }}% Bagi Hasil',
+                                                        confirmText: '✓ Ya, Terima Investasi',
+                                                        confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
+                                                        icon: 'check',
+                                                        form: document.getElementById('form-terima-inbox-{{ $selectedInvestasi->id_investasi }}')
+                                                    })"
+                                                    class="px-3 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm">
+                                                ✓ Terima Investasi
+                                            </button>
+                                        </form>
+                                        <!-- Form Tolak -->
+                                        <form id="form-tolak-inbox-{{ $selectedInvestasi->id_investasi }}" action="{{ route('dashboard.umkm.investasi.tolak', $selectedInvestasi->id_investasi) }}" method="POST">
+                                            @csrf
+                                            <button type="button"
+                                                    onclick="openAppConfirmModal({
+                                                        title: 'Tolak Minat Investasi',
+                                                        message: 'Tolak pengajuan minat investasi sebesar <strong>Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</strong> dari <strong>{{ addslashes($selectedInvestasi->pengguna->name ?? 'Investor') }}</strong>?',
+                                                        badge: 'Tolak Penawaran',
+                                                        confirmText: '✕ Ya, Tolak Investasi',
+                                                        confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                                                        icon: 'danger',
+                                                        form: document.getElementById('form-tolak-inbox-{{ $selectedInvestasi->id_investasi }}')
+                                                    })"
+                                                    class="px-3 py-1.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">
+                                                ✕ Tolak
+                                            </button>
+                                        </form>
+                                    </div>
+                                @elseif($selectedInvestasi->status === 'aktif')
+                                    <button type="button" 
+                                            onclick="openSetorDividenModal('{{ $selectedInvestasi->id_investasi }}', '{{ addslashes($selectedInvestasi->pengguna->name) }}', '{{ addslashes($selectedInvestasi->pengguna->bank_name ?? 'Belum Diatur') }}', '{{ $selectedInvestasi->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($selectedInvestasi->pengguna->nama_pemilik_rekening ?? $selectedInvestasi->pengguna->name) }}')"
+                                            class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                        <span>💸 Setor Dividen</span>
+                                    </button>
+                                @endif
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-3 pt-1 text-xs">
+                                <div>
+                                    <span class="text-[10px] text-gray-500 block">Komitmen Modal</span>
+                                    <span class="font-extrabold text-[#0F433C] text-sm">Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-500 block">Target Bagi Hasil</span>
+                                    <span class="font-bold text-gray-800">{{ $selectedInvestasi->persentase_bagi_hasil }}% p.a.</span>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-gray-500 block">Distribusi Dividen</span>
+                                    <span class="font-bold text-gray-800">{{ $selectedInvestasi->periode_pembagian }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RUANG CHAT / PERCAKAPAN IN-APP LANGSUNG (Fitur Inti Diskusi Web) -->
+                        <div class="mt-4">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-gray-400 block mb-2">Riwayat Diskusi Resmi:</span>
+                            <div class="space-y-3 max-h-[300px] overflow-y-auto p-4 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF]">
+                                @forelse($selectedInvestasi->pesanInvestasi as $msg)
+                                    @php
+                                        $isMe = ($msg->id_pengirim === Auth::id());
+                                    @endphp
+                                    <div class="flex {{ $isMe ? 'justify-end' : 'justify-start' }}">
+                                        <div class="max-w-[80%] rounded-2xl p-3 text-xs shadow-sm {{ $isMe ? 'bg-[#0F433C] text-white rounded-br-sm' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-sm' }}">
+                                            <div class="flex items-center justify-between gap-2 mb-1">
+                                                <span class="font-bold text-[10px] {{ $isMe ? 'text-teal-200' : 'text-[#0F433C]' }}">
+                                                    {{ $isMe ? 'Anda (UMKM)' : ($msg->pengirim->name ?? 'Investor') }}
+                                                </span>
+                                                <span class="text-[9px] {{ $isMe ? 'text-teal-300/70' : 'text-gray-400' }}">
+                                                    {{ $msg->created_at ? $msg->created_at->format('H:i') : '' }}
+                                                </span>
+                                            </div>
+                                            <p class="leading-relaxed whitespace-pre-wrap">{{ $msg->pesan }}</p>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center py-6 text-xs text-gray-400">
+                                        Belum ada pesan obrolan lanjutan. Kirim pesan pertama Anda untuk menyapa investor!
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FORM KIRIM PESAN CHAT LANGSUNG DI DALAM WEB -->
+                    <form action="{{ route('dashboard.investasi.pesan', $selectedInvestasi->id_investasi) }}" method="POST" class="mt-4 pt-3 border-t border-gray-100 flex items-center gap-2">
+                        @csrf
+                        <input type="text" name="pesan" required placeholder="Tulis pesan atau pertanyaan untuk {{ $selectedInvestasi->pengguna->name }}..."
+                               class="flex-1 px-4 py-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                        <button type="submit" class="px-5 py-3 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-black transition shadow-sm flex items-center gap-1.5 shrink-0">
+                            <span>Kirim</span>
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            </svg>
+                        </button>
+                    </form>
+                @else
+                    <div class="flex flex-col items-center justify-center h-full text-center py-16 text-gray-400 space-y-3">
+                        <span class="text-4xl">📬</span>
+                        <h3 class="text-sm font-bold text-gray-700">Pilih Percakapan di Sisi Kiri</h3>
+                        <p class="text-xs max-w-sm">
+                            Klik salah satu calon investor di daftar sebelah kiri untuk meninjau penawaran modal dan memulai percakapan langsung.
+                        </p>
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -329,9 +795,19 @@
                             </button>
 
                             <!-- Tombol Hapus -->
-                            <form action="{{ route('dashboard.umkm.produk.delete', $p->id_produk) }}" method="POST" onsubmit="return confirm('Hapus produk {{ $p->nama_produk }}?');">
+                            <form id="form-delete-produk-{{ $p->id_produk }}" action="{{ route('dashboard.umkm.produk.delete', $p->id_produk) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="p-1 rounded-full text-rose-500 hover:bg-rose-50 transition" title="Hapus Produk">
+                                <button type="button" 
+                                        onclick="openAppConfirmModal({
+                                            title: 'Hapus Produk',
+                                            message: 'Apakah Anda yakin ingin menghapus produk <strong>{{ addslashes($p->nama_produk) }}</strong> dari etalase?',
+                                            badge: '{{ addslashes($p->nama_produk) }}',
+                                            confirmText: '✕ Ya, Hapus',
+                                            confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                                            icon: 'danger',
+                                            form: document.getElementById('form-delete-produk-{{ $p->id_produk }}')
+                                        })"
+                                        class="p-1 rounded-full text-rose-500 hover:bg-rose-50 transition" title="Hapus Produk">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                     </svg>
@@ -462,10 +938,20 @@
                                 Anda memiliki <strong>{{ $jumlahCatatanBulanAktif }} transaksi</strong> terpisah di periode <strong>{{ $bulanAktif }}</strong> yang otomatis <strong>ditotalkan secara kumulatif</strong>.
                             </span>
                         </div>
-                        <form action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST" onsubmit="return confirm('Satukan seluruh {{ $jumlahCatatanBulanAktif }} transaksi pada periode {{ $bulanAktif }} menjadi 1 catatan kumulatif?')">
+                        <form id="form-gabung-keuangan-top" action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST">
                             @csrf
                             <input type="hidden" name="bulan_tahun" value="{{ $bulanAktif }}">
-                            <button type="submit" class="px-3.5 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-[11px] font-black shadow-sm transition flex items-center gap-1.5">
+                            <button type="button" 
+                                    onclick="openAppConfirmModal({
+                                        title: 'Satukan Catatan Keuangan',
+                                        message: 'Satukan seluruh <strong>{{ $jumlahCatatanBulanAktif }} transaksi</strong> pada periode <strong>{{ $bulanAktif }}</strong> menjadi 1 catatan kumulatif konsolidasi?',
+                                        badge: 'Periode {{ $bulanAktif }}',
+                                        confirmText: '⚡ Satukan Catatan',
+                                        confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
+                                        icon: 'check',
+                                        form: document.getElementById('form-gabung-keuangan-top')
+                                    })"
+                                    class="px-3.5 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-[11px] font-black shadow-sm transition flex items-center gap-1.5">
                                 <span>⚡ Satukan Menjadi 1 Catatan Kumulatif</span>
                             </button>
                         </form>
@@ -761,9 +1247,19 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                             </svg>
                                         </button>
-                                        <form action="{{ route('dashboard.umkm.keuangan.delete', $ck->id_keuangan) }}" method="POST" onsubmit="return confirm('Hapus catatan keuangan periode {{ $ck->bulan_tahun }}?');">
+                                        <form id="form-delete-keuangan-{{ $ck->id_keuangan }}" action="{{ route('dashboard.umkm.keuangan.delete', $ck->id_keuangan) }}" method="POST">
                                             @csrf
-                                            <button type="submit" class="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition" title="Hapus">
+                                            <button type="button" 
+                                                    onclick="openAppConfirmModal({
+                                                        title: 'Hapus Catatan Keuangan',
+                                                        message: 'Apakah Anda yakin ingin menghapus catatan keuangan periode <strong>{{ $ck->bulan_tahun }}</strong>?',
+                                                        badge: 'Periode {{ $ck->bulan_tahun }}',
+                                                        confirmText: '✕ Ya, Hapus',
+                                                        confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                                                        icon: 'danger',
+                                                        form: document.getElementById('form-delete-keuangan-{{ $ck->id_keuangan }}')
+                                                    })"
+                                                    class="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition" title="Hapus">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                                 </svg>
@@ -804,10 +1300,20 @@
                                     </span>
                                 </td>
                                 <td colspan="2" class="py-3.5 px-5 text-right">
-                                    <form action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST" onsubmit="return confirm('Satukan seluruh catatan di periode {{ $bulanAktif }}?')">
+                                    <form id="form-gabung-keuangan-table" action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="bulan_tahun" value="{{ $bulanAktif }}">
-                                        <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-[11px] font-bold shadow-sm transition">
+                                        <button type="button" 
+                                                onclick="openAppConfirmModal({
+                                                    title: 'Satukan Catatan Keuangan',
+                                                    message: 'Satukan seluruh transaksi di periode <strong>{{ $bulanAktif }}</strong>?',
+                                                    badge: 'Periode {{ $bulanAktif }}',
+                                                    confirmText: '⚡ Satukan Jadi 1 Catatan',
+                                                    confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
+                                                    icon: 'check',
+                                                    form: document.getElementById('form-gabung-keuangan-table')
+                                                })"
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-[11px] font-bold shadow-sm transition">
                                             ⚡ Satukan Jadi 1 Catatan
                                         </button>
                                     </form>
@@ -1454,21 +1960,51 @@
     {{-- ========================================================================= --}}
     @elseif(($activeTab ?? '') === 'ruko')
 
-        <div>
-            <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">Informasi Ruko Komersial</h1>
-            <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
-                Ruko strategis yang dapat Anda sewa setelah pendanaan disetujui.
-            </p>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div>
+                <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">Katalog Ruko Komersial</h1>
+                <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
+                    Tempat usaha strategis terkurasi yang siap disewa atau disponsori pendanaannya oleh investor ekosistem.
+                </p>
+            </div>
+            <button type="button" onclick="openUsulkanRukoUmkmModal()"
+                    class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
+                <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span>+ Usulkan Ruko Baru</span>
+            </button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($rukos as $ruko)
-                <div class="bg-white rounded-3xl p-6 border border-[#E8E6DF] shadow-sm">
-                    <div class="w-full h-36 rounded-2xl bg-[#6B9E8A] text-white flex items-center justify-center font-bold mb-4">
-                        Unit Ruko Komersial
+                <div class="bg-white rounded-3xl p-6 border border-[#E8E6DF] shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="w-full h-40 rounded-2xl bg-gray-100 mb-4 overflow-hidden shadow-inner border border-gray-100">
+                            @if(!empty($ruko->foto_ruko))
+                                <img src="{{ asset($ruko->foto_ruko) }}" alt="{{ $ruko->nama_ruko }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-[#6B9E8A] text-white flex items-center justify-center font-bold">
+                                    <div class="text-center">
+                                        <svg class="w-8 h-8 mx-auto opacity-80 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                        <span class="text-xs uppercase tracking-wider block">Unit Ruko Komersial</span>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <h3 class="text-base font-black text-[#1A202C]">{{ $ruko->nama_ruko }}</h3>
+                        <p class="text-xs text-gray-500 mt-1 flex items-start gap-1">
+                            <span>📍</span>
+                            <span>{{ $ruko->lokasi }}</span>
+                        </p>
+                        @if(!empty($ruko->deskripsi_potensi))
+                            <p class="text-[11px] text-gray-600 mt-2 line-clamp-2 italic">
+                                "{{ $ruko->deskripsi_potensi }}"
+                            </p>
+                        @endif
                     </div>
-                    <h3 class="text-base font-black text-[#1A202C]">{{ $ruko->nama_ruko }}</h3>
-                    <p class="text-xs text-gray-500 mt-1">{{ $ruko->lokasi }}</p>
                     <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
                         <span class="text-xs font-black text-[#0F433C]">
                             Rp {{ number_format($ruko->harga_sewa_per_bulan, 0, ',', '.') }} / bln
@@ -1479,8 +2015,8 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-full bg-white rounded-3xl p-8 text-center text-xs text-gray-500">
-                    Belum ada unit ruko yang terdaftar.
+                <div class="col-span-full bg-white rounded-3xl p-12 text-center text-xs text-gray-500 border border-[#E8E6DF]">
+                    Belum ada unit ruko yang terdaftar saat ini. Anda dapat mengusulkan ruko strategis melalui tombol di atas.
                 </div>
             @endforelse
         </div>
@@ -1588,6 +2124,95 @@
     </div>
 </div>
 
+<!-- MODAL SETOR DIVIDEN BAGI HASIL KE INVESTOR -->
+<div id="modal-setor-dividen" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center text-base font-black">💸</span>
+                <h3 class="text-xl font-black text-[#1A202C]">Setor Dividen Bagi Hasil</h3>
+            </div>
+            <button type="button" onclick="closeSetorDividenModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">✕</button>
+        </div>
+        <p class="text-xs text-gray-500 mb-5">
+            Salurkan keuntungan bagi hasil riil ke nomor rekening bank mitra investor Anda, lalu lampirkan bukti/struk transfer.
+        </p>
+
+        <form action="{{ route('dashboard.umkm.dividen.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+            @csrf
+            
+            <!-- Pilih Mitra Investor -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Mitra Investor Penerima *</label>
+                <select id="modal-select-investasi" name="id_investasi" required onchange="onModalInvestorChange()"
+                        class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                    @foreach($investasiAktif as $inv)
+                        <option value="{{ $inv->id_investasi }}"
+                                data-investor="{{ $inv->pengguna->name }}"
+                                data-bank="{{ $inv->pengguna->bank_name ?? 'Bank Belum Diatur' }}"
+                                data-rek="{{ $inv->pengguna->nomor_rekening ?? '-' }}"
+                                data-nama="{{ $inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name }}">
+                            {{ $inv->pengguna->name }} - Modal Rp {{ number_format($inv->jumlah_modal, 0, ',', '.') }} (Bagi Hasil {{ $inv->persentase_bagi_hasil }}%)
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <!-- KOTAK REKENING BANK INVESTOR (INFO TRANSFER) -->
+            <div class="p-4 rounded-2xl bg-teal-50/80 border border-teal-200/90 text-xs space-y-1.5">
+                <span class="text-[10px] font-black uppercase tracking-wider text-[#0F433C] block">Rekening Bank Tujuan Transfer:</span>
+                <div class="flex items-center justify-between pt-1">
+                    <span class="text-gray-500">Nama Bank:</span>
+                    <span id="modal-dividen-bank" class="font-extrabold text-[#0F433C] text-sm">-</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Nomor Rekening:</span>
+                    <span id="modal-dividen-rek" class="font-black text-[#1A202C] text-sm font-mono tracking-wider">-</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-gray-500">Atas Nama Pemilik:</span>
+                    <span id="modal-dividen-nama" class="font-bold text-gray-800">-</span>
+                </div>
+            </div>
+
+            <!-- Nominal Dividen -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Nominal Dividen Ditransfer (Rp) *</label>
+                <input type="number" name="nominal_diterima" required min="10000" step="1000" placeholder="Contoh: 150000"
+                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-sm font-black text-[#0F433C] focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                <span class="text-[10px] text-gray-400 mt-1 block">Pastikan nominal sesuai dengan mutasi transfer yang Anda lakukan.</span>
+            </div>
+
+            <!-- Tanggal Transfer -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Tanggal Transfer *</label>
+                <input type="date" name="tanggal_distribusi" value="{{ date('Y-m-d') }}" required
+                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+            </div>
+
+            <!-- Upload Struk Bukti Transfer -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Foto Struk / Resi Bukti Transfer *</label>
+                <input type="file" name="bukti_transfer" accept="image/*" required
+                       class="w-full text-xs text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white hover:file:bg-[#19584F] file:cursor-pointer">
+                <span class="text-[10px] text-gray-400 mt-1 block">Format: JPG, PNG, atau WEBP. Maksimal 5MB. Struk ini otomatis dapat diunduh/dilihat oleh investor.</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeSetorDividenModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>Kirim & Catat Dividen</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function openAddProductModal() {
         document.getElementById('add-product-modal').classList.remove('hidden');
@@ -1607,5 +2232,105 @@
     function closeEditProductModal() {
         document.getElementById('edit-product-modal').classList.add('hidden');
     }
+
+    // Modal Setor Dividen
+    function openSetorDividenModal(idInvestasi, investorName, bankName, noRek, namaRek) {
+        const select = document.getElementById('modal-select-investasi');
+        if (select && idInvestasi) {
+            select.value = idInvestasi;
+        }
+        document.getElementById('modal-dividen-bank').innerText = bankName || 'Bank Belum Diatur';
+        document.getElementById('modal-dividen-rek').innerText = noRek || '-';
+        document.getElementById('modal-dividen-nama').innerText = namaRek || '-';
+        document.getElementById('modal-setor-dividen').classList.remove('hidden');
+    }
+
+    function onModalInvestorChange() {
+        const select = document.getElementById('modal-select-investasi');
+        if (!select) return;
+        const opt = select.options[select.selectedIndex];
+        if (opt) {
+            document.getElementById('modal-dividen-bank').innerText = opt.getAttribute('data-bank') || 'Bank Belum Diatur';
+            document.getElementById('modal-dividen-rek').innerText = opt.getAttribute('data-rek') || '-';
+            document.getElementById('modal-dividen-nama').innerText = opt.getAttribute('data-nama') || '-';
+        }
+    }
+
+    function closeSetorDividenModal() {
+        document.getElementById('modal-setor-dividen').classList.add('hidden');
+    }
+
+    // Modal Usulkan Ruko UMKM
+    function openUsulkanRukoUmkmModal() {
+        document.getElementById('modal-usulkan-ruko-umkm').classList.remove('hidden');
+    }
+    function closeUsulkanRukoUmkmModal() {
+        document.getElementById('modal-usulkan-ruko-umkm').classList.add('hidden');
+    }
 </script>
+
+<!-- MODAL USULKAN RUKO STRATEGIS (PELAKU UMKM) -->
+<div id="modal-usulkan-ruko-umkm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#0F433C] flex items-center justify-center text-xl font-black shrink-0">
+                📍
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-[#1A202C]">Usulkan Lokasi Ruko Baru</h3>
+                <p class="text-xs text-gray-500">Rekomendasikan tempat usaha yang potensial untuk usaha Anda ke tim kurator TIKUM</p>
+            </div>
+        </div>
+
+        <form action="{{ route('dashboard.umkm.ruko.rekomendasi') }}" method="POST" enctype="multipart/form-data" class="space-y-3.5">
+            @csrf
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Nama Ruko / Kawasan *</label>
+                <input type="text" name="nama_ruko" required placeholder="Contoh: Ruko Golden City Blok B No. 7"
+                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Alamat Lengkap & Kota *</label>
+                <textarea name="lokasi" required rows="2" placeholder="Contoh: Jl. Kaliurang Km 5 No. 10, Sleman, D.I. Yogyakarta"
+                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
+            </div>
+
+            <!-- FOTO RUKO -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Foto Ruko / Lokasi</label>
+                <input type="file" name="foto_ruko" accept="image/*"
+                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white cursor-pointer">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Perkiraan Sewa / Bulan *</label>
+                    <input type="number" name="harga_sewa_per_bulan" required min="100000" step="100000" placeholder="3500000"
+                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kontak Pemilik / Pengelola</label>
+                    <input type="text" name="kontak_pemilik" placeholder="081234567890"
+                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Potensi Pasar & Target Konsumen</label>
+                <textarea name="potensi_usaha" rows="2" placeholder="Contoh: Dekat pemukiman padat dan kampus, ramai dilewati kendaraan, cocok untuk cabang gerai baru."
+                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="closeUsulkanRukoUmkmModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm">
+                    Kirim Usulan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

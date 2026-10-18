@@ -35,6 +35,9 @@ class User extends Authenticatable implements FilamentUser
         'phone_verified_at',
         'status',
         'avatar_url',
+        'bank_name',
+        'nomor_rekening',
+        'nama_pemilik_rekening',
     ];
 
     /**
@@ -95,5 +98,15 @@ class User extends Authenticatable implements FilamentUser
     public function investasis(): HasMany
     {
         return $this->hasMany(Investasi::class, 'id_pengguna', 'id');
+    }
+
+    public function rekomendasiRukos(): HasMany
+    {
+        return $this->hasMany(RekomendasiRuko::class, 'id_pengguna', 'id');
+    }
+
+    public function sewaDisponsori(): HasMany
+    {
+        return $this->hasMany(TransaksiSewa::class, 'id_investor', 'id');
     }
 }

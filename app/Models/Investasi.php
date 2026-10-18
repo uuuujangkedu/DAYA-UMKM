@@ -44,4 +44,9 @@ class Investasi extends Model
     {
         return $this->hasMany(BagiHasilLog::class, 'id_investasi', 'id_investasi');
     }
+
+    public function pesanInvestasi(): HasMany
+    {
+        return $this->hasMany(PesanInvestasi::class, 'id_investasi', 'id_investasi')->oldest();
+    }
 }

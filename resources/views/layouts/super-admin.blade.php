@@ -160,15 +160,23 @@
                     </a>
                 @endif
 
-                <!-- 5. INFORMASI RUKO -->
+                <!-- 5. KURASI & KATALOG RUKO -->
                 <a href="{{ route('superadmin.ruko') }}" 
                    class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.ruko*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.ruko*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
-                        <span>INFORMASI RUKO</span>
+                        <span>KURASI & RUKO</span>
                     </div>
+                    @php
+                        $pendingRukoBadge = \App\Models\RekomendasiRuko::where('status', 'menunggu_verifikasi')->count();
+                    @endphp
+                    @if($pendingRukoBadge > 0)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-400 text-amber-950 animate-pulse">
+                            {{ $pendingRukoBadge }}
+                        </span>
+                    @endif
                 </a>
             </nav>
         </div>
@@ -252,6 +260,47 @@
         </main>
     </div>
 
+    <!-- MODAL KONFIRMASI MODERN & ELEGAN SUPER ADMIN -->
+    <div id="app-custom-confirm-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+        <!-- Backdrop Blur Halus -->
+        <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" onclick="closeAppConfirmModal()"></div>
+
+        <!-- Box Modal -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-gray-100 z-10 transform transition-all animate-fadeIn">
+            <div class="flex items-start gap-4">
+                <div id="app-confirm-icon-box" class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 id="app-confirm-title" class="text-base sm:text-lg font-black text-[#1A202C] leading-snug">
+                        Konfirmasi Tindakan
+                    </h3>
+                    <div id="app-confirm-badge" class="mt-1.5 hidden">
+                        <span id="app-confirm-badge-text" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-50 text-teal-900 border border-teal-200"></span>
+                    </div>
+                    <div id="app-confirm-message" class="mt-2 text-xs text-gray-600 leading-relaxed font-medium">
+                        Apakah Anda yakin ingin melanjutkan tindakan ini?
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" 
+                        onclick="closeAppConfirmModal()" 
+                        class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="button" 
+                        id="app-confirm-submit-btn" 
+                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -262,6 +311,62 @@
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
+            }
+        }
+
+        // FUNGSI MODAL KONFIRMASI MODERN SUPER ADMIN
+        function openAppConfirmModal(config) {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (!modal) return;
+            
+            document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
+            document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            
+            const badgeEl = document.getElementById('app-confirm-badge');
+            const badgeText = document.getElementById('app-confirm-badge-text');
+            if (config.badge) {
+                badgeText.innerHTML = config.badge;
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
+            
+            const iconContainer = document.getElementById('app-confirm-icon-box');
+            const iconType = config.icon || 'check';
+            if (iconType === 'check' || iconType === 'success') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>';
+            } else if (iconType === 'danger' || iconType === 'rose') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-rose-100 text-rose-600 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+            } else {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            }
+            
+            const submitBtn = document.getElementById('app-confirm-submit-btn');
+            submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+                (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
+            
+            submitBtn.onclick = function() {
+                closeAppConfirmModal();
+                if (config.form) {
+                    config.form.submit();
+                } else if (typeof config.onConfirm === 'function') {
+                    config.onConfirm();
+                }
+            };
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAppConfirmModal() {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         }
     </script>

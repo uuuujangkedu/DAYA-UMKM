@@ -16,6 +16,9 @@ class Ruko extends Model
         'id_penyedia',
         'nama_ruko',
         'lokasi',
+        'foto_ruko',
+        'deskripsi_potensi',
+        'kontak_pemilik',
         'harga_sewa_per_bulan',
         'status_ketersediaan',
     ];

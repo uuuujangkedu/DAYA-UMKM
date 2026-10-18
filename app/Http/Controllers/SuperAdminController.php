@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\LogAktivitasAdmin;
+use App\Models\PenyediaRuko;
+use App\Models\RekomendasiRuko;
 use App\Models\Ruko;
 use App\Models\Umkm;
 use App\Models\User;
@@ -472,15 +474,103 @@ class SuperAdminController extends Controller
     }
 
     /**
-     * 5. Halaman Informasi Ruko
+     * 5. Halaman Informasi & Kurasi Ruko
      */
     public function ruko(Request $request)
     {
         $this->checkSuperAdmin();
         $user = Auth::user();
 
+        $activeTab = $request->query('tab', 'kurasi');
+
+        // Data 1: Katalog Ruko Resmi
         $rukos = Ruko::with('penyedia')->latest('id_ruko')->paginate(12);
 
-        return view('super-admin.ruko', compact('user', 'rukos'));
+        // Data 2: Daftar Usulan Ruko Masuk (Crowdsourcing)
+        $rekomendasiRukos = RekomendasiRuko::with('pengguna')->latest('id_rekomendasi')->get();
+        $pendingRukoCount = $rekomendasiRukos->where('status', 'menunggu_verifikasi')->count();
+
+        return view('super-admin.ruko', compact('user', 'rukos', 'rekomendasiRukos', 'pendingRukoCount', 'activeTab'));
+    }
+
+    /**
+     * Setujui (ACC) Usulan Ruko & Terbitkan ke Katalog Resmi
+     */
+    public function approveRekomendasiRuko(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $rekomendasi = RekomendasiRuko::findOrFail($id);
+
+        // Cari atau buat entitas penyedia fallback untuk ruko dari rekomendasi warga/komunitas
+        $penyedia = PenyediaRuko::firstOrCreate(
+            ['nama_perusahaan' => 'Mitra Komunitas / Warga'],
+            [
+                'kontak' => $rekomendasi->kontak_pemilik ?: ($rekomendasi->kontak_pengusul ?: '08123456789'),
+                'alamat' => $rekomendasi->lokasi,
+            ]
+        );
+
+        // Terbitkan langsung ke tabel ruko resmi
+        $rukoBaru = Ruko::create([
+            'id_penyedia' => $penyedia->id_penyedia,
+            'nama_ruko' => $rekomendasi->nama_ruko,
+            'lokasi' => $rekomendasi->lokasi,
+            'foto_ruko' => $rekomendasi->foto_ruko,
+            'deskripsi_potensi' => $rekomendasi->potensi_usaha,
+            'kontak_pemilik' => $rekomendasi->kontak_pemilik ?: $rekomendasi->kontak_pengusul,
+            'harga_sewa_per_bulan' => $rekomendasi->harga_sewa_per_bulan,
+            'status_ketersediaan' => 'tersedia',
+        ]);
+
+        $rekomendasi->update([
+            'status' => 'disetujui',
+            'catatan_admin' => $request->input('catatan_admin', 'Usulan ruko disetujui (ACC) oleh Admin dan telah resmi diterbitkan ke Katalog Ruko.'),
+        ]);
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => 'ACC & Terbitkan Ruko Baru',
+            'detail_perubahan' => [
+                'id_rekomendasi' => $rekomendasi->id_rekomendasi,
+                'id_ruko_terbit' => $rukoBaru->id_ruko,
+                'nama_ruko' => $rekomendasi->nama_ruko,
+                'lokasi' => $rekomendasi->lokasi,
+                'pengusul' => $rekomendasi->label_pengusul,
+                'harga_sewa' => $rekomendasi->harga_sewa_per_bulan,
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        return back()->with('success', 'Ruko "'.$rekomendasi->nama_ruko.'" BERHASIL DI-ACC & DITERBITKAN ke Katalog Ruko Resmi! Mitra UMKM kini dapat memilih ruko ini untuk tempat usahanya.');
+    }
+
+    /**
+     * Tolak Usulan Ruko (Tidak Layak)
+     */
+    public function rejectRekomendasiRuko(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $rekomendasi = RekomendasiRuko::findOrFail($id);
+
+        $catatan = $request->input('catatan_admin', 'Lokasi ruko dinilai belum memenuhi kriteria kelayakan komersial untuk UMKM.');
+
+        $rekomendasi->update([
+            'status' => 'ditolak',
+            'catatan_admin' => $catatan,
+        ]);
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => 'Tolak Usulan Ruko',
+            'detail_perubahan' => [
+                'id_rekomendasi' => $rekomendasi->id_rekomendasi,
+                'nama_ruko' => $rekomendasi->nama_ruko,
+                'pengusul' => $rekomendasi->label_pengusul,
+                'alasan_penolakan' => $catatan,
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        return back()->with('success', 'Usulan ruko "'.$rekomendasi->nama_ruko.'" ditandai TIDAK LAYAK (Ditolak) dengan catatan kurasi.');
     }
 }

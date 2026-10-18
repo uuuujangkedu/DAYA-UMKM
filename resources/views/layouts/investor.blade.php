@@ -53,7 +53,8 @@
 <body class="bg-[#F9F8F3] min-h-screen text-[#1A202C] flex">
 
     <!-- SIDEBAR INVESTOR (Sesuai Gambar 3: Mockup Dashboard Investor) -->
-    <aside id="sidebar-investor" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0 shadow-2xl md:shadow-none">
+    <aside id="sidebar-investor" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
+           style="background-color: #0F433C !important; height: 100vh; min-height: 100vh;">
         
         <div>
             <!-- Brand Logo TIKUM -->
@@ -87,7 +88,7 @@
                 </div>
             </div>
 
-            <!-- Navigation Links Investor (Sesuai Gambar 3: BERANDA, KOMUNITAS, PROPOSAL LIST, LAPORAN KEUANGAN) -->
+            <!-- Navigation Links Investor (BERANDA, PORTOFOLIO SAYA, PROPOSAL LIST, LAPORAN KEUANGAN, KOMUNITAS) -->
             <nav class="mt-8 px-4 space-y-2.5">
                 <!-- 1. BERANDA -->
                 <a href="{{ route('dashboard', ['tab' => 'beranda']) }}" 
@@ -100,15 +101,36 @@
                     </div>
                 </a>
 
-                <!-- 2. KOMUNITAS -->
-                <a href="{{ route('dashboard', ['tab' => 'komunitas']) }}" 
-                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'komunitas' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                <!-- 2. PORTOFOLIO SAYA (Fitur Baru Menu Portofolio) -->
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
+                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'portofolio' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
-                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'komunitas' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'portofolio' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                         </svg>
-                        <span>KOMUNITAS</span>
+                        <span>PORTOFOLIO SAYA</span>
                     </div>
+                    @if(isset($realInvestasiCount) && $realInvestasiCount > 0)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-teal-300 text-teal-950">
+                            {{ $realInvestasiCount }}
+                        </span>
+                    @endif
+                </a>
+
+                <!-- 2.5 OBROLAN KEMITRAAN (Tempat Chat & Diskusi Langsung Investor dengan UMKM) -->
+                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}" 
+                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ in_array(($activeTab ?? ''), ['pesan', 'inbox']) ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 {{ in_array(($activeTab ?? ''), ['pesan', 'inbox']) ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <span>OBROLAN KEMITRAAN</span>
+                    </div>
+                    @if(isset($unreadInvestorChatCount) && $unreadInvestorChatCount > 0)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-400 text-amber-950 animate-pulse">
+                            {{ $unreadInvestorChatCount }} Baru
+                        </span>
+                    @endif
                 </a>
 
                 <!-- 3. PROPOSAL LIST (Fitur Inti) -->
@@ -127,7 +149,18 @@
                     @endif
                 </a>
 
-                <!-- 4. LAPORAN KEUANGAN -->
+                <!-- 4. KATALOG RUKO (Pilar Sewa Komersial UMKM) -->
+                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}" 
+                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'ruko' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <span>KATALOG RUKO</span>
+                    </div>
+                </a>
+
+                <!-- 5. LAPORAN KEUANGAN & DIVIDEN -->
                 <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
@@ -137,11 +170,33 @@
                         <span>LAPORAN KEUANGAN</span>
                     </div>
                 </a>
+
+                <!-- 6. KALKULATOR SIMULASI INVESTASI -->
+                <a href="{{ route('dashboard', ['tab' => 'kalkulator']) }}" 
+                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'kalkulator' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'kalkulator' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                        <span>KALKULATOR SIMULASI</span>
+                    </div>
+                </a>
+
+                <!-- 7. KOMUNITAS -->
+                <a href="{{ route('dashboard', ['tab' => 'komunitas']) }}" 
+                   class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'komunitas' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'komunitas' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        <span>KOMUNITAS</span>
+                    </div>
+                </a>
             </nav>
         </div>
 
         <!-- Bagian Bawah: Tautan Web & Keluar -->
-        <div class="p-4 border-t border-white/10 space-y-2">
+        <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0 bg-[#0F433C]">
             <a href="{{ route('home') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/80 hover:bg-white/10 hover:text-white transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -167,6 +222,44 @@
     <!-- MAIN CONTENT AREA -->
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         
+        <!-- Desktop Header Top Bar -->
+        <header class="hidden md:flex bg-white border-b border-[#E8E6DF] px-8 py-4 items-center justify-between sticky top-0 z-20 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#0F433C]/10 text-[#0F433C]">
+                    Dashboard Investor
+                </span>
+                <span class="text-xs text-gray-400 font-bold">&bull;</span>
+                <span class="text-xs font-bold text-gray-600">
+                    {{ ($activeTab ?? 'beranda') === 'portofolio' ? 'Portofolio Investasi Saya' : (($activeTab ?? 'beranda') === 'proposal' ? 'Katalog Proposal UMKM' : (($activeTab ?? 'beranda') === 'ruko' ? 'Katalog Ruko Strategis & Sewa Komersial' : (($activeTab ?? 'beranda') === 'keuangan' ? 'Laporan Keuangan & Riwayat Dividen' : (($activeTab ?? 'beranda') === 'kalkulator' ? 'Kalkulator Simulasi Investasi' : (($activeTab ?? 'beranda') === 'komunitas' ? 'Forum Komunitas Mitra' : 'Ringkasan Portofolio'))))) }}
+                </span>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <!-- Badge Total Modal -->
+                <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-xs">
+                    <span class="text-gray-400 font-bold">Total Portofolio:</span>
+                    <span class="font-black text-[#0F433C]">
+                        Rp {{ number_format($totalModalDiinvestasikan ?? 0, 0, ',', '.') }}
+                    </span>
+                </div>
+
+                <!-- KYC Badge -->
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                    KYC Terverifikasi
+                </span>
+
+                <!-- Quick Action CTA -->
+                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                   class="px-4 py-2 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Danai UMKM</span>
+                </a>
+            </div>
+        </header>
+
         <!-- Mobile Header Top Bar -->
         <header class="md:hidden bg-[#0F433C] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
             <div class="flex items-center gap-3">
@@ -219,6 +312,47 @@
         </main>
     </div>
 
+    <!-- MODAL KONFIRMASI MODERN & ELEGAN (PENGGANTI NATIVE BROWSER CONFIRM/ALERT) -->
+    <div id="app-custom-confirm-modal" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+        <!-- Backdrop Blur Halus -->
+        <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm transition-opacity" onclick="closeAppConfirmModal()"></div>
+
+        <!-- Box Modal -->
+        <div class="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-gray-100 z-10 transform transition-all animate-fadeIn">
+            <div class="flex items-start gap-4">
+                <div id="app-confirm-icon-box" class="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 id="app-confirm-title" class="text-base sm:text-lg font-black text-[#1A202C] leading-snug">
+                        Konfirmasi Tindakan
+                    </h3>
+                    <div id="app-confirm-badge" class="mt-1.5 hidden">
+                        <span id="app-confirm-badge-text" class="inline-block px-2.5 py-0.5 rounded-full text-xs font-black bg-teal-50 text-teal-900 border border-teal-200"></span>
+                    </div>
+                    <div id="app-confirm-message" class="mt-2 text-xs text-gray-600 leading-relaxed font-medium">
+                        Apakah Anda yakin ingin melanjutkan tindakan ini?
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" 
+                        onclick="closeAppConfirmModal()" 
+                        class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="button" 
+                        id="app-confirm-submit-btn" 
+                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebarInvestor() {
             const sidebar = document.getElementById('sidebar-investor');
@@ -229,6 +363,62 @@
             } else {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
+            }
+        }
+
+        // FUNGSI MODAL KONFIRMASI MODERN DAYA-UMKM
+        function openAppConfirmModal(config) {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (!modal) return;
+            
+            document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
+            document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
+            
+            const badgeEl = document.getElementById('app-confirm-badge');
+            const badgeText = document.getElementById('app-confirm-badge-text');
+            if (config.badge) {
+                badgeText.innerHTML = config.badge;
+                badgeEl.classList.remove('hidden');
+            } else {
+                badgeEl.classList.add('hidden');
+            }
+            
+            const iconContainer = document.getElementById('app-confirm-icon-box');
+            const iconType = config.icon || 'check';
+            if (iconType === 'check' || iconType === 'success') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-emerald-100 text-emerald-700 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>';
+            } else if (iconType === 'danger' || iconType === 'rose') {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-rose-100 text-rose-600 shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
+            } else {
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
+                iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
+            }
+            
+            const submitBtn = document.getElementById('app-confirm-submit-btn');
+            submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+                (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
+            
+            submitBtn.onclick = function() {
+                closeAppConfirmModal();
+                if (config.form) {
+                    config.form.submit();
+                } else if (typeof config.onConfirm === 'function') {
+                    config.onConfirm();
+                }
+            };
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAppConfirmModal() {
+            const modal = document.getElementById('app-custom-confirm-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         }
     </script>
