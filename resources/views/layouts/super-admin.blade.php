@@ -183,6 +183,17 @@
 
         <!-- Bagian Bawah Sidebar (Akses Web & Keluar) -->
         <div class="p-4 border-t border-white/10 space-y-2">
+            <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
+            <button type="button" 
+                    class="a11y-trigger w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/90 hover:bg-white/10 hover:text-white transition cursor-pointer group text-left"
+                    aria-label="Aksesibilitas & Disabilitas"
+                    title="Buka menu aksesibilitas disabilitas">
+                <svg class="w-4 h-4 text-teal-300 group-hover:text-white transition shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
+                </svg>
+                <span>Aksesibilitas</span>
+            </button>
+
             <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/80 hover:bg-white/10 hover:text-white transition">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
@@ -221,8 +232,19 @@
                 </a>
                 <span class="font-extrabold text-xs tracking-wider uppercase text-teal-200">ADMIN</span>
             </div>
-            <div class="text-xs text-teal-200">
-                {{ $user->name }}
+            <div class="flex items-center gap-2.5">
+                <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
+                <button type="button" 
+                        class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
+                        aria-label="Aksesibilitas & Disabilitas"
+                        title="Buka menu aksesibilitas disabilitas">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
+                    </svg>
+                </button>
+                <div class="text-xs text-teal-200">
+                    {{ $user->name }}
+                </div>
             </div>
         </header>
 
@@ -372,6 +394,6 @@
     </script>
 
     <!-- Komponen Aksesibilitas Disabilitas -->
-    @include('components.accessibility-widget')
+    @include('components.accessibility-widget', ['isDashboardLayout' => true])
 </body>
 </html>

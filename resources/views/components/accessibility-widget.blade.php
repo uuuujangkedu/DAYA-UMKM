@@ -3,25 +3,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+@php
+    $isDashboardLayout = $isDashboardLayout ?? false;
+@endphp
+
 <div id="a11y-widget-root" class="a11y-ignore">
 
-    <!-- 1. Floating Action Button (FAB) -->
+    <!-- 1. Floating Action Button (FAB) Aksesibilitas (Digeser ke Kanan Bawah di Dashboard agar tidak menimpa Sidebar) -->
     <button type="button" 
             id="a11y-trigger-btn"
-            class="a11y-ignore fixed bottom-6 left-6 z-[9999] w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#0b5a4a] hover:bg-[#084539] text-white flex items-center justify-center shadow-2xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#0b5a4a]/40"
+            class="a11y-ignore a11y-trigger fixed {{ $isDashboardLayout ? 'bottom-6 right-6' : 'bottom-6 left-6' }} z-[9990] w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#0b5a4a] hover:bg-[#084539] text-white flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#0b5a4a]/40 border-2 border-white/80"
             aria-label="Buka menu aksesibilitas disabilitas"
             aria-haspopup="dialog"
             aria-expanded="false"
             title="Aksesibilitas & Disabilitas">
         <!-- Universal Accessibility Icon -->
-        <svg class="w-9 h-9 md:w-11 md:h-11 text-white pointer-events-none" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <svg class="w-8 h-8 sm:w-9 sm:h-9 text-white pointer-events-none" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
         </svg>
     </button>
 
     <!-- 2. Panel Menu Aksesibilitas (Super Simpel & Bersih) -->
     <div id="a11y-panel" 
-         class="a11y-ignore hidden fixed bottom-[100px] md:bottom-[116px] left-6 z-[9999] w-[320px] sm:w-[350px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
+         class="a11y-ignore hidden fixed {{ $isDashboardLayout ? 'bottom-24 right-4 sm:right-6' : 'bottom-24 left-4 sm:left-6' }} z-[99999] w-[320px] sm:w-[350px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl border border-[#e2e1d8] shadow-2xl p-5 max-h-[85vh] overflow-y-auto text-left"
          role="dialog"
          aria-modal="true"
          aria-label="Panel Pengaturan Aksesibilitas">
@@ -398,26 +402,30 @@
             const isHidden = panel.classList.contains('hidden');
             if (isHidden) {
                 panel.classList.remove('hidden');
-                if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'true');
+                document.querySelectorAll('.a11y-trigger, #a11y-trigger-btn').forEach(btn => btn.setAttribute('aria-expanded', 'true'));
             } else {
                 panel.classList.add('hidden');
-                if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'false');
+                document.querySelectorAll('.a11y-trigger, #a11y-trigger-btn').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
             }
         }
 
-        if (triggerBtn) {
-            triggerBtn.addEventListener('click', togglePanel);
-        }
         if (closeBtn) {
             closeBtn.addEventListener('click', togglePanel);
         }
 
-        // Tutup jika klik di luar panel
+        // Delegated trigger & outside click handler
         document.addEventListener('click', function(e) {
+            const triggerEl = e.target.closest('.a11y-trigger') || e.target.closest('#a11y-trigger-btn');
+            if (triggerEl) {
+                e.preventDefault();
+                togglePanel();
+                return;
+            }
+
             if (!panel || panel.classList.contains('hidden')) return;
-            if (!panel.contains(e.target) && !triggerBtn.contains(e.target)) {
+            if (!panel.contains(e.target)) {
                 panel.classList.add('hidden');
-                if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'false');
+                document.querySelectorAll('.a11y-trigger, #a11y-trigger-btn').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
             }
         });
 
@@ -425,7 +433,7 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && panel && !panel.classList.contains('hidden')) {
                 panel.classList.add('hidden');
-                if (triggerBtn) triggerBtn.setAttribute('aria-expanded', 'false');
+                document.querySelectorAll('.a11y-trigger, #a11y-trigger-btn').forEach(btn => btn.setAttribute('aria-expanded', 'false'));
             }
         });
 
