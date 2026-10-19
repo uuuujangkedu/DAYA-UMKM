@@ -49,4 +49,9 @@ class Investasi extends Model
     {
         return $this->hasMany(PesanInvestasi::class, 'id_investasi', 'id_investasi')->oldest();
     }
+
+    public function ulasan()
+    {
+        return $this->hasOne(UlasanUmkm::class, 'id_investasi', 'id_investasi');
+    }
 }

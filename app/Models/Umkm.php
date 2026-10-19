@@ -64,4 +64,26 @@ class Umkm extends Model
     {
         return $this->hasMany(CatatanKeuangan::class, 'id_umkm', 'id_umkm');
     }
+
+    public function ulasanUmkm(): HasMany
+    {
+        return $this->hasMany(UlasanUmkm::class, 'id_umkm', 'id_umkm')->where('status', 'tayang');
+    }
+
+    /**
+     * Rating rata-rata dari seluruh investor terverifikasi (skala 1-5)
+     */
+    public function getRatingRataRataAttribute(): float
+    {
+        $avg = $this->ulasanUmkm()->avg('rating');
+        return $avg ? round((float) $avg, 1) : 0.0;
+    }
+
+    /**
+     * Total ulasan terverifikasi yang diterima
+     */
+    public function getTotalUlasanAttribute(): int
+    {
+        return $this->ulasanUmkm()->count();
+    }
 }

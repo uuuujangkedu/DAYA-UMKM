@@ -186,8 +186,8 @@
                         <h2 class="text-base sm:text-lg font-black text-gray-900">Perkiraan Biaya Sewa & Potensi Usaha</h2>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
                             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                                 Perkiraan Harga Sewa per Bulan (Rp) *
                             </label>
@@ -203,6 +203,21 @@
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                                Jumlah Unit / Pintu *
+                            </label>
+                            <input type="number" name="total_unit" required min="1" max="50"
+                                   value="{{ old('total_unit', 1) }}"
+                                   placeholder="1"
+                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-black text-[#0F433C] focus:ring-2 focus:ring-[#0F433C] outline-none">
+                            <span class="text-[10px] text-gray-400 mt-1 block">Total pintu ruko di lokasi.</span>
+                            @error('total_unit')
+                                <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
                                 Kontak Pemilik Ruko / Agen Pemasar
                             </label>
                             <input type="text" name="kontak_pemilik" 
@@ -211,7 +226,6 @@
                                    class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">
                             <span class="text-[10px] text-gray-400 mt-1 block">Boleh dikosongkan jika pengusul adalah pemilik langsung.</span>
                         </div>
-                    </div>
 
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">

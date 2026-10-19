@@ -20,6 +20,7 @@ class RekomendasiRuko extends Model
         'lokasi',
         'foto_ruko',
         'harga_sewa_per_bulan',
+        'total_unit',
         'potensi_usaha',
         'kontak_pemilik',
         'siap_danai',
@@ -29,6 +30,7 @@ class RekomendasiRuko extends Model
 
     protected $casts = [
         'harga_sewa_per_bulan' => 'decimal:2',
+        'total_unit' => 'integer',
         'siap_danai' => 'boolean',
     ];
 

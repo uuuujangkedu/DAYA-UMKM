@@ -385,6 +385,12 @@
                             </div>
                             <h3 class="text-sm font-black text-[#1A202C] truncate">{{ $umkm->nama_usaha }}</h3>
                             <p class="text-[11px] text-gray-500 mt-0.5">Pemilik: {{ $umkm->pemilik }} &bull; {{ $umkm->provinsi_kota ?? '-' }}</p>
+                            @if($umkm->total_ulasan > 0)
+                                <div class="mt-1 flex items-center gap-1.5">
+                                    <span class="text-amber-500 font-black text-xs">★ {{ number_format($umkm->rating_rata_rata, 1) }}</span>
+                                    <span class="text-gray-400 text-[10px]">({{ $umkm->total_ulasan }} ulasan investor)</span>
+                                </div>
+                            @endif
                             <p class="text-xs font-extrabold text-[#0F433C] mt-2">
                                 Target: Rp {{ number_format($umkm->target_pendanaan ?: ($umkm->modal_dibutuhkan ?: 25000000), 0, ',', '.') }}
                             </p>
@@ -633,6 +639,26 @@
                             </svg>
                             <span>💬 Ruang Obrolan</span>
                         </a>
+
+                        <!-- Tombol Beri / Edit Ulasan Kredibilitas Mitra UMKM -->
+                        @if($inv->status === 'aktif' || $inv->status === 'disetujui' || $inv->status === 'selesai')
+                            @if($inv->ulasan)
+                                <button type="button" 
+                                    onclick="openModalReview('{{ $inv->id_investasi }}', '{{ addslashes($inv->umkm->nama_usaha ?? 'Mitra UMKM') }}', '{{ $inv->ulasan->rating }}', '{{ $inv->ulasan->rating_transparansi ?? 5 }}', '{{ $inv->ulasan->rating_dividen ?? 5 }}', `{{ addslashes($inv->ulasan->ulasan) }}`)"
+                                    class="py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm">
+                                    <span class="text-amber-500 font-black">★</span>
+                                    <span>Nilai Anda: {{ $inv->ulasan->rating }}/5</span>
+                                    <span class="text-[10px] text-amber-700 underline font-normal">(Edit)</span>
+                                </button>
+                            @else
+                                <button type="button" 
+                                    onclick="openModalReview('{{ $inv->id_investasi }}', '{{ addslashes($inv->umkm->nama_usaha ?? 'Mitra UMKM') }}', 5, 5, 5, '')"
+                                    class="py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm">
+                                    <span class="text-amber-200">★</span>
+                                    <span>Beri Ulasan Mitra</span>
+                                </button>
+                            @endif
+                        @endif
 
                         @if(!empty($inv->umkm->nomor_whatsapp))
                             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $inv->umkm->nomor_whatsapp) }}?text=Halo%20{{ urlencode($inv->umkm->pemilik) }},%20saya%20investor%20dari%20platform%20DAYA%20UMKM." 
@@ -1121,6 +1147,82 @@
                             Pemilik: <span class="font-bold text-gray-700">{{ $umkm->pemilik }}</span> &bull; {{ $umkm->provinsi_kota ?? 'Lokasi belum diisi' }}
                         </p>
 
+                        <!-- Rating Kredibilitas Mitra UMKM -->
+                        <div class="mt-2.5 flex items-center justify-between gap-2">
+                            @if($umkm->total_ulasan > 0)
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-black">
+                                        <span class="text-amber-500">★</span>
+                                        <span>{{ number_format($umkm->rating_rata_rata, 1) }}</span>
+                                    </span>
+                                    <button type="button" 
+                                            onclick="openReviewsModal('{{ $umkm->id_umkm }}', '{{ addslashes($umkm->nama_usaha) }}', '{{ number_format($umkm->rating_rata_rata, 1) }}', '{{ $umkm->total_ulasan }}')"
+                                            class="text-[11px] font-bold text-[#0F433C] hover:underline flex items-center gap-1">
+                                        <span>{{ $umkm->total_ulasan }} Ulasan Investor</span> &rarr;
+                                    </button>
+                                </div>
+                            @else
+                                <span class="px-2.5 py-0.5 rounded-full bg-teal-50 border border-teal-200 text-teal-800 text-[10px] font-semibold">
+                                    ✨ Mitra Baru (Belum ada ulasan)
+                                </span>
+                            @endif
+                        </div>
+
+                        @if($umkm->total_ulasan > 0)
+                            <!-- Template Data Ulasan Investor untuk Modal -->
+                            <template id="reviews-tmpl-{{ $umkm->id_umkm }}">
+                                <div class="space-y-3.5">
+                                    @foreach($umkm->ulasanUmkm as $rev)
+                                        <div class="p-4 rounded-2xl bg-[#F8F6F0] border border-[#E8E6DF] space-y-2.5">
+                                            <div class="flex items-center justify-between gap-2">
+                                                <div class="flex items-center gap-2.5">
+                                                    <div class="w-8 h-8 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                                                        {{ strtoupper(substr($rev->investor->name ?? 'I', 0, 1)) }}
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                                            <span class="text-xs font-bold text-gray-800">{{ $rev->nama_investor_tersensor }}</span>
+                                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                                                ✓ Investor Terverifikasi
+                                                            </span>
+                                                        </div>
+                                                        <span class="text-[10px] text-gray-400 font-medium">{{ $rev->created_at ? $rev->created_at->format('d M Y') : '-' }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-1 text-amber-500 font-black text-xs bg-white px-2.5 py-1 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                                                    <span>★</span>
+                                                    <span>{{ $rev->rating }}/5</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-wrap gap-2 text-[10px]">
+                                                <span class="px-2 py-0.5 rounded-lg bg-white text-gray-600 border border-gray-100 font-medium">
+                                                    Transparansi: <strong class="text-emerald-700">{{ $rev->rating_transparansi ?? 5 }}/5</strong>
+                                                </span>
+                                                <span class="px-2 py-0.5 rounded-lg bg-white text-gray-600 border border-gray-100 font-medium">
+                                                    Dividen: <strong class="text-emerald-700">{{ $rev->rating_dividen ?? 5 }}/5</strong>
+                                                </span>
+                                            </div>
+
+                                            <div class="p-3 rounded-xl bg-white/80 border border-gray-100 text-xs text-gray-700 italic">
+                                                "{{ $rev->ulasan }}"
+                                            </div>
+
+                                            @if(!empty($rev->balasan_umkm))
+                                                <div class="p-3 rounded-xl bg-teal-50 border border-teal-100 text-xs text-teal-900 mt-2">
+                                                    <div class="flex items-center gap-1 font-bold text-teal-900 text-[11px] mb-1">
+                                                        <span>💬 Tanggapan Pemilik UMKM:</span>
+                                                    </div>
+                                                    <p class="text-teal-800 text-[11px]">{{ $rev->balasan_umkm }}</p>
+                                                    <span class="text-[9px] text-teal-600 block mt-1">{{ $rev->tanggal_balasan ? $rev->tanggal_balasan->diffForHumans() : '' }}</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </template>
+                        @endif
+
                         <!-- Nilai Pendanaan & Bagi Hasil -->
                         <div class="mt-4 p-4 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] space-y-2 text-xs">
                             <div class="flex justify-between items-center">
@@ -1549,23 +1651,33 @@
                     <div class="bg-white rounded-3xl p-6 border border-[#E8E6DF] shadow-sm hover:shadow-md transition flex flex-col justify-between">
                         <div>
                             <!-- Visual Banner Ruko -->
-                            <div class="w-full h-40 rounded-2xl text-white flex flex-col items-center justify-center p-4 mb-4 relative overflow-hidden"
-                                 style="background: #0F433C; background: linear-gradient(135deg, #0F433C 0%, #20675D 100%) !important; color: #ffffff !important;">
+                            <div class="w-full h-40 rounded-2xl bg-gray-100 mb-4 overflow-hidden shadow-inner border border-gray-100 relative">
+                                @if(!empty($ruko->foto_ruko))
+                                    <img src="{{ asset($ruko->foto_ruko) }}" alt="{{ $ruko->nama_ruko }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full text-white flex flex-col items-center justify-center p-4 relative"
+                                         style="background: #0F433C; background: linear-gradient(135deg, #0F433C 0%, #20675D 100%) !important; color: #ffffff !important;">
+                                        <svg class="w-12 h-12 text-teal-200/80 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                        </svg>
+                                        <span class="text-xs font-black tracking-wider uppercase text-teal-100">Unit Ruko Komersial</span>
+                                    </div>
+                                @endif
                                 <div class="absolute top-3 right-3">
-                                    @if($ruko->status_ketersediaan === 'tersedia')
-                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-400 text-emerald-950 shadow-sm">
-                                            ✓ Tersedia
+                                    @if($ruko->is_penuh)
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-rose-600 text-white shadow-sm flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span> Sudah Diisi (Penuh)
+                                        </span>
+                                    @elseif(($ruko->unit_terisi ?? 0) > 0)
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-500 text-white shadow-sm flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-white"></span> Sisa {{ $ruko->sisa_unit }} Unit
                                         </span>
                                     @else
-                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gray-200 text-gray-800 shadow-sm">
-                                            Tersewa
+                                        <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-600 text-white shadow-sm flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-white"></span> Kosong (Sisa {{ $ruko->sisa_unit }} Unit)
                                         </span>
                                     @endif
                                 </div>
-                                <svg class="w-12 h-12 text-teal-200/80 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
-                                <span class="text-xs font-black tracking-wider uppercase text-teal-100">Unit Ruko Komersial</span>
                             </div>
 
                             <h3 class="text-base font-black text-[#1A202C] leading-snug truncate">
@@ -1579,7 +1691,7 @@
                                 <span>{{ $ruko->lokasi }}</span>
                             </p>
 
-                            <!-- Penyedia & Harga Sewa -->
+                            <!-- Penyedia & Harga Sewa & Kapasitas -->
                             <div class="mt-4 p-3.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] space-y-1.5 text-xs">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-400 font-medium text-[11px]">Harga Sewa / Bulan:</span>
@@ -1588,28 +1700,55 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-between items-center text-[11px]">
-                                    <span class="text-gray-400 font-medium">Penyedia:</span>
-                                    <span class="font-bold text-gray-700 truncate max-w-[130px]">
-                                        {{ $ruko->penyedia->nama_penyedia ?? 'Mitra Properti TIKUM' }}
+                                    <span class="text-gray-400 font-medium">Kondisi Lapak:</span>
+                                    @if($ruko->is_penuh)
+                                        <span class="font-bold text-rose-600">🔴 Sudah Diisi Penuh</span>
+                                    @elseif(($ruko->unit_terisi ?? 0) > 0)
+                                        <span class="font-bold text-amber-700">🟡 Terisi Sebagian ({{ $ruko->unit_terisi }}/{{ $ruko->total_unit }} Unit)</span>
+                                    @else
+                                        <span class="font-bold text-emerald-700">🟢 Kosong (Siap Huni)</span>
+                                    @endif
+                                </div>
+                                <div class="flex justify-between items-center text-[11px]">
+                                    <span class="text-gray-400 font-medium">Sisa Unit Kosong:</span>
+                                    <span class="font-black text-xs">
+                                        <span class="{{ $ruko->sisa_unit > 0 ? 'text-emerald-700' : 'text-rose-600' }}">
+                                            {{ $ruko->sisa_unit }} Unit
+                                        </span>
+                                        <span class="text-gray-400 font-normal text-[11px]">/ {{ $ruko->total_unit ?? 1 }} Total</span>
                                     </span>
                                 </div>
+                                <div class="flex justify-between items-center text-[11px]">
+                                    <span class="text-gray-400 font-medium">Penyedia:</span>
+                                    <span class="font-bold text-gray-700 truncate max-w-[130px]">
+                                        {{ $ruko->penyedia->nama_penyedia ?? ($ruko->penyedia->nama_perusahaan ?? 'Mitra Komunitas') }}
+                                    </span>
+                                </div>
+                                @if(!empty($ruko->kontak_pemilik))
+                                    <div class="flex justify-between items-center text-[11px] pt-1.5 border-t border-gray-200/50">
+                                        <span class="text-gray-400 font-medium">Kontak Pemilik:</span>
+                                        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $ruko->kontak_pemilik) }}" target="_blank" class="font-bold text-emerald-700 hover:underline">
+                                            {{ $ruko->kontak_pemilik }} ↗
+                                        </a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
                         <!-- CTA BUTTON SPONSOR SEWA -->
                         <div class="mt-5 pt-3 border-t border-gray-100">
-                            @if($ruko->status_ketersediaan === 'tersedia')
+                            @if(!$ruko->is_penuh)
                                 <button onclick="openSponsorRukoModal('{{ $ruko->id_ruko }}', '{{ addslashes($ruko->nama_ruko) }}', '{{ $ruko->harga_sewa_per_bulan }}', '{{ addslashes($ruko->lokasi) }}')"
                                         class="w-full py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-black transition shadow-sm flex items-center justify-center gap-2">
                                     <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
                                         <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
                                     </svg>
-                                    <span>Danai / Sponsori Sewa untuk UMKM</span>
+                                    <span>Danai / Sponsori (Sisa {{ $ruko->sisa_unit }} Unit)</span>
                                 </button>
                             @else
                                 <button disabled class="w-full py-2.5 px-4 rounded-xl bg-gray-100 text-gray-400 text-xs font-bold cursor-not-allowed">
-                                    Unit Sedang Disewa
+                                    🔴 Unit Ruko Sudah Penuh (Terisi)
                                 </button>
                             @endif
                         </div>
@@ -2035,6 +2174,12 @@
 
                             <h3 class="text-base font-black text-[#1A202C] truncate">{{ $umkm->nama_usaha }}</h3>
                             <p class="text-xs text-gray-500 mt-0.5">Pengelola: {{ $umkm->pemilik }} &bull; {{ $umkm->provinsi_kota ?? '-' }}</p>
+                            @if($umkm->total_ulasan > 0)
+                                <div class="mt-1 flex items-center gap-1.5">
+                                    <span class="text-amber-500 font-black text-xs">★ {{ number_format($umkm->rating_rata_rata, 1) }}</span>
+                                    <span class="text-gray-400 text-[10px]">({{ $umkm->total_ulasan }} ulasan investor)</span>
+                                </div>
+                            @endif
 
                             <div class="mt-4 p-3.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] space-y-1.5 text-xs">
                                 <div class="flex justify-between items-center">
@@ -2236,17 +2381,23 @@
                        class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white cursor-pointer">
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="sm:col-span-2">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Harga Sewa / Bulan (Rp) *</label>
                     <input type="number" name="harga_sewa_per_bulan" required min="100000" step="100000" placeholder="5000000"
                            class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kontak Pemilik / Agen</label>
-                    <input type="text" name="kontak_pemilik" placeholder="081234567890"
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Jumlah Unit *</label>
+                    <input type="number" name="total_unit" value="1" required min="1" max="50"
                            class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kontak Pemilik / Agen (HP/WA)</label>
+                <input type="text" name="kontak_pemilik" placeholder="081234567890"
+                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
             </div>
 
             <div>
@@ -2365,7 +2516,211 @@
     </div>
 </div>
 
+<!-- MODAL 6: BERI ULASAN & RATING KREDIBILITAS UMKM OLEH INVESTOR -->
+<div id="modal-review-investor" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black shrink-0">
+                    ⭐
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-[#1A202C]">Beri Ulasan Mitra UMKM</h3>
+                    <p class="text-xs text-gray-500">Kemitraan Usaha: <span id="review-modal-mitra-nama" class="font-bold text-[#0F433C]"></span></p>
+                </div>
+            </div>
+            <button onclick="closeModalReview()" class="p-2 rounded-xl text-gray-400 hover:bg-gray-100 transition">✕</button>
+        </div>
+
+        <!-- Banner Privasi & Kredibilitas -->
+        <div class="p-3 bg-teal-50 rounded-2xl border border-teal-200 text-xs text-teal-950 mb-4 flex items-start gap-2">
+            <span class="text-base">🔒</span>
+            <p class="leading-relaxed">
+                <strong>Privasi Terlindungi:</strong> Identitas nama Anda akan disensor secara otomatis (contoh: <em>{{ substr(Auth::user()->name ?? 'Investor', 0, 1) }}***</em>) dengan lencana <strong>Investor Terverifikasi</strong> demi kebebasan berpendapat yang objektif.
+            </p>
+        </div>
+
+        <form id="form-review-investor" action="" method="POST" class="space-y-4">
+            @csrf
+            
+            <!-- Overall Star Rating (1 - 5) -->
+            <div class="p-4 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-center space-y-2">
+                <label class="block text-xs font-black text-gray-800 uppercase tracking-wider">
+                    Rating Keseluruhan Kemitraan *
+                </label>
+                <input type="hidden" id="input-review-rating" name="rating" value="5" required>
+                
+                <div class="flex justify-center items-center gap-2 py-1">
+                    @for($s = 1; $s <= 5; $s++)
+                        <button type="button" 
+                                onclick="setStarRating({{ $s }})" 
+                                id="star-btn-{{ $s }}"
+                                class="text-3xl text-amber-400 hover:scale-125 transition-transform focus:outline-none">
+                            ★
+                        </button>
+                    @endfor
+                </div>
+                <div id="star-rating-label" class="text-xs font-extrabold text-amber-900">
+                    5 / 5 - Sangat Memuaskan & Direkomendasikan
+                </div>
+            </div>
+
+            <!-- Sub Rating 1: Transparansi Finansial -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF]">
+                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                        Transparansi Laporan Finansial
+                    </label>
+                    <select id="input-review-transparansi" name="rating_transparansi" class="w-full px-3 py-2 rounded-xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                        <option value="5">⭐⭐⭐⭐⭐ (Sangat Transparan)</option>
+                        <option value="4">⭐⭐⭐⭐ (Transparan & Rapi)</option>
+                        <option value="3">⭐⭐⭐ (Cukup Terbuka)</option>
+                        <option value="2">⭐⭐ (Kurang Terbuka)</option>
+                        <option value="1">⭐ (Tidak Transparan)</option>
+                    </select>
+                </div>
+
+                <!-- Sub Rating 2: Ketepatan Pembagian Dividen -->
+                <div class="p-3.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF]">
+                    <label class="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                        Ketepatan Dividen Bagi Hasil
+                    </label>
+                    <select id="input-review-dividen" name="rating_dividen" class="w-full px-3 py-2 rounded-xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                        <option value="5">⭐⭐⭐⭐⭐ (Sangat Tepat Waktu)</option>
+                        <option value="4">⭐⭐⭐⭐ (Tepat Waktu)</option>
+                        <option value="3">⭐⭐⭐ (Cukup Tepat)</option>
+                        <option value="2">⭐⭐ (Sering Terlambat)</option>
+                        <option value="1">⭐ (Tidak Sesuai Akad)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Testimoni / Pengalaman Tertulis -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                    Pengalaman & Testimoni Anda (Wajib) *
+                </label>
+                <textarea id="input-review-text" name="ulasan" rows="4" required minlength="5" maxlength="1000"
+                          placeholder="Ceritakan pengalaman Anda bermitra dengan UMKM ini, seperti keteraturan pelaporan keuangan, etika komunikasi pengelola, dan kelancaran pembayaran dividen..."
+                          class="w-full p-3.5 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
+                <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1">
+                    <span>Minimal 5 karakter, maksimal 1.000 karakter</span>
+                    <span>Tersimpan & Tayang di Publik</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" onclick="closeModalReview()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm">
+                    Simpan Ulasan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL 7: DAFTAR ULASAN INVESTOR TERVERIFIKASI PADA PROPOSAL UMKM -->
+<div id="modal-reviews-list" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up max-h-[85vh] flex flex-col justify-between">
+        <div>
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">⭐</span>
+                        <h3 class="text-lg font-black text-[#1A202C]" id="reviews-list-modal-nama-usaha">Ulasan Mitra UMKM</h3>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                        Rating Kredibilitas: <strong id="reviews-list-modal-score" class="text-amber-600 font-black"></strong> &bull; <span id="reviews-list-modal-count" class="text-gray-500"></span>
+                    </p>
+                </div>
+                <button onclick="closeReviewsModal()" class="p-2 rounded-xl text-gray-400 hover:bg-gray-100 transition">✕</button>
+            </div>
+
+            <!-- Kontainer Scroll Ulasan -->
+            <div id="reviews-modal-body" class="overflow-y-auto max-h-[50vh] pr-1 space-y-3">
+                <!-- Diisi via JavaScript dari template proposal terkait -->
+            </div>
+        </div>
+
+        <div class="mt-5 pt-3 border-t border-gray-100">
+            <button type="button" onclick="closeReviewsModal()" class="w-full py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition">
+                Tutup Jendela Ulasan
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
+    // -------------------------------------------------------------
+    // MODAL BERI ULASAN KREDIBILITAS UMKM OLEH INVESTOR
+    // -------------------------------------------------------------
+    const ratingLabels = {
+        1: '1 / 5 - Kurang Memuaskan & Perlu Perbaikan Komitmen',
+        2: '2 / 5 - Di Bawah Ekspektasi Akad',
+        3: '3 / 5 - Cukup Baik / Sesuai Standar',
+        4: '4 / 5 - Bagus & Transparan',
+        5: '5 / 5 - Sangat Memuaskan & Direkomendasikan'
+    };
+
+    function setStarRating(score) {
+        score = parseInt(score) || 5;
+        document.getElementById('input-review-rating').value = score;
+        for (let i = 1; i <= 5; i++) {
+            const btn = document.getElementById('star-btn-' + i);
+            if (btn) {
+                if (i <= score) {
+                    btn.classList.add('text-amber-400');
+                    btn.classList.remove('text-gray-300');
+                } else {
+                    btn.classList.remove('text-amber-400');
+                    btn.classList.add('text-gray-300');
+                }
+            }
+        }
+        const lbl = document.getElementById('star-rating-label');
+        if (lbl) {
+            lbl.innerText = ratingLabels[score] || (score + ' / 5');
+        }
+    }
+
+    function openModalReview(idInvestasi, namaMitra, initialRating, ratingTransparansi, ratingDividen, initialReview) {
+        document.getElementById('review-modal-mitra-nama').innerText = namaMitra;
+        document.getElementById('form-review-investor').action = '/dashboard/investor/ulasan/' + idInvestasi;
+        setStarRating(initialRating || 5);
+        document.getElementById('input-review-transparansi').value = ratingTransparansi || 5;
+        document.getElementById('input-review-dividen').value = ratingDividen || 5;
+        document.getElementById('input-review-text').value = initialReview || '';
+        document.getElementById('modal-review-investor').classList.remove('hidden');
+    }
+
+    function closeModalReview() {
+        document.getElementById('modal-review-investor').classList.add('hidden');
+    }
+
+    // -------------------------------------------------------------
+    // MODAL DAFTAR ULASAN PROPOSAL UMKM (INSPEKSI INVESTOR)
+    // -------------------------------------------------------------
+    function openReviewsModal(idUmkm, namaUsaha, avgRating, totalReviews) {
+        document.getElementById('reviews-list-modal-nama-usaha').innerText = 'Ulasan ' + namaUsaha;
+        document.getElementById('reviews-list-modal-score').innerText = '★ ' + avgRating + ' / 5.0';
+        document.getElementById('reviews-list-modal-count').innerText = totalReviews + ' Ulasan Investor Terverifikasi';
+        
+        const tmpl = document.getElementById('reviews-tmpl-' + idUmkm);
+        const container = document.getElementById('reviews-modal-body');
+        if (tmpl && container) {
+            container.innerHTML = tmpl.innerHTML;
+        } else if (container) {
+            container.innerHTML = '<div class="p-6 text-center text-xs text-gray-400">Belum ada ulasan untuk proposal ini.</div>';
+        }
+        document.getElementById('modal-reviews-list').classList.remove('hidden');
+    }
+
+    function closeReviewsModal() {
+        document.getElementById('modal-reviews-list').classList.add('hidden');
+    }
+
     // -------------------------------------------------------------
     // MODAL INVESTASI PROPOSAL
     // -------------------------------------------------------------

@@ -110,6 +110,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/investor/rekomendasi-ruko', [DashboardController::class, 'storeRekomendasiRuko'])->name('dashboard.investor.ruko.rekomendasi');
     Route::post('/dashboard/investor/sponsor-ruko/{id_ruko}', [DashboardController::class, 'sponsorSewaRuko'])->name('dashboard.investor.ruko.sponsor');
 
+    // Rating & Ulasan Kredibilitas UMKM oleh Investor
+    Route::post('/dashboard/investor/ulasan/{id_investasi}', [DashboardController::class, 'storeUlasanUmkm'])->name('dashboard.investor.ulasan.store');
+    Route::post('/dashboard/umkm/ulasan/{id_ulasan}/balas', [DashboardController::class, 'storeBalasanUlasanUmkm'])->name('dashboard.umkm.ulasan.balas');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // ==========================================
@@ -130,6 +134,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/ruko', [SuperAdminController::class, 'ruko'])->name('ruko');
         Route::post('/ruko/rekomendasi/{id}/approve', [SuperAdminController::class, 'approveRekomendasiRuko'])->name('ruko.rekomendasi.approve');
         Route::post('/ruko/rekomendasi/{id}/reject', [SuperAdminController::class, 'rejectRekomendasiRuko'])->name('ruko.rekomendasi.reject');
+        Route::post('/ruko/{id}/update-ketersediaan', [SuperAdminController::class, 'updateRukoKetersediaan'])->name('ruko.update-ketersediaan');
     });
 });
 

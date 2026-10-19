@@ -10,6 +10,7 @@ use App\Models\Produk;
 use App\Models\RekomendasiRuko;
 use App\Models\Ruko;
 use App\Models\TransaksiSewa;
+use App\Models\UlasanUmkm;
 use App\Models\Umkm;
 use App\Services\ExcelFinancialParser;
 use Illuminate\Http\Request;
@@ -138,7 +139,18 @@ class DashboardController extends Controller
             $marginLabaBulanAktif = $totalOmzetBulanAktif > 0 ? round(($totalLabaBersihBulanAktif / $totalOmzetBulanAktif) * 100, 2) : 0;
             $statusLabaBulanAktif = $totalLabaBersihBulanAktif > 0 ? 'untung' : ($totalLabaBersihBulanAktif < 0 ? 'rugi' : 'impas');
 
-            $rukos = Ruko::where('status_ketersediaan', 'tersedia')->latest('id_ruko')->get();
+            $rukoStatusFilter = $request->query('ruko_status', 'semua');
+            $rukoQuery = Ruko::with(['penyedia', 'transaksiSewa.umkm']);
+            if ($rukoStatusFilter === 'kosong') {
+                $rukoQuery->where('status_ketersediaan', 'tersedia')
+                    ->whereRaw('(total_unit - unit_terisi) > 0');
+            } elseif ($rukoStatusFilter === 'terisi') {
+                $rukoQuery->where(function ($q) {
+                    $q->where('status_ketersediaan', 'tersewa')
+                        ->orWhereRaw('unit_terisi >= total_unit');
+                });
+            }
+            $rukos = $rukoQuery->latest('id_ruko')->get();
 
             // SINERGI INVESTASI DENGAN INVESTOR (Investasi Aktif & Riwayat Setoran Dividen)
             $investasiAktif = Investasi::with(['pengguna', 'bagiHasilLog'])
@@ -184,6 +196,15 @@ class DashboardController extends Controller
                 }
             }
 
+            // Ulasan & Rating Kredibilitas dari Mitra Investor
+            $ulasanDiterima = UlasanUmkm::with('investor')
+                ->where('id_umkm', $umkm->id_umkm)
+                ->where('status', 'tayang')
+                ->latest('created_at')
+                ->get();
+            $ratingRataRata = $umkm->rating_rata_rata;
+            $totalUlasan = $umkm->total_ulasan;
+
             return view('dashboard.umkm', compact(
                 'user',
                 'umkm',
@@ -214,7 +235,11 @@ class DashboardController extends Controller
                 'totalLabaBersihBulanAktif',
                 'marginLabaBulanAktif',
                 'statusLabaBulanAktif',
-                'rukos'
+                'rukos',
+                'rukoStatusFilter',
+                'ulasanDiterima',
+                'ratingRataRata',
+                'totalUlasan'
             ));
         }
 
@@ -230,7 +255,7 @@ class DashboardController extends Controller
             $statusFilter = $request->query('status', 'semua');
 
             // Riwayat investasi investor saat ini (dengan relasi lengkap)
-            $investasiQuery = Investasi::with(['umkm.user', 'umkm.ruko', 'umkm.produks'])
+            $investasiQuery = Investasi::with(['umkm.user', 'umkm.ruko', 'umkm.produks', 'umkm.ulasanUmkm.investor', 'ulasan'])
                 ->where('id_pengguna', $user->id);
 
             // Filter status untuk tab portofolio
@@ -332,7 +357,7 @@ class DashboardController extends Controller
                 : 0.0;
 
             // DAFTAR PROPOSAL UMKM (PROPOSAL LIST)
-            $queryProposal = Umkm::with('user', 'ruko', 'produks')
+            $queryProposal = Umkm::with(['user', 'ruko', 'produks', 'ulasanUmkm.investor'])
                 ->whereIn('status_pengajuan', ['terverifikasi', 'menunggu_verifikasi']);
 
             if ($request->filled('q')) {
@@ -1031,6 +1056,7 @@ class DashboardController extends Controller
             'nama_ruko' => 'required|string|max:100',
             'lokasi' => 'required|string|max:500',
             'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'total_unit' => 'nullable|integer|min:1|max:50',
             'potensi_usaha' => 'nullable|string|max:500',
             'kontak_pemilik' => 'nullable|string|max:50',
             'siap_danai' => 'nullable|boolean',
@@ -1048,6 +1074,7 @@ class DashboardController extends Controller
             $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
         }
 
+        $validated['total_unit'] = (int) ($request->input('total_unit', 1) ?: 1);
         $validated['id_pengguna'] = $user->id;
         $validated['nama_pengusul'] = $user->name;
         $validated['kontak_pengusul'] = $user->phone_number ?: $user->email;
@@ -1075,6 +1102,7 @@ class DashboardController extends Controller
             'nama_ruko' => 'required|string|max:100',
             'lokasi' => 'required|string|max:500',
             'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'total_unit' => 'nullable|integer|min:1|max:50',
             'potensi_usaha' => 'nullable|string|max:500',
             'kontak_pemilik' => 'nullable|string|max:50',
             'foto_ruko' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
@@ -1091,6 +1119,7 @@ class DashboardController extends Controller
             $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
         }
 
+        $validated['total_unit'] = (int) ($request->input('total_unit', 1) ?: 1);
         $validated['id_pengguna'] = $user->id;
         $validated['nama_pengusul'] = $user->name;
         $validated['kontak_pengusul'] = $user->phone_number ?: $user->email;
@@ -1126,6 +1155,7 @@ class DashboardController extends Controller
             'nama_ruko' => 'required|string|max:100',
             'lokasi' => 'required|string|max:500',
             'harga_sewa_per_bulan' => 'required|numeric|min:100000',
+            'total_unit' => 'nullable|integer|min:1|max:50',
             'potensi_usaha' => 'nullable|string|max:500',
             'kontak_pemilik' => 'nullable|string|max:50',
             'foto_ruko' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
@@ -1142,6 +1172,7 @@ class DashboardController extends Controller
             $validated['foto_ruko'] = '/uploads/ruko/'.$fileName;
         }
 
+        $validated['total_unit'] = (int) ($request->input('total_unit', 1) ?: 1);
         $validated['id_pengguna'] = $user ? $user->id : null;
         $validated['tipe_pengusul'] = $user ? ($user->role === 'investor' ? 'investor' : ($user->role === 'umkm' ? 'umkm' : 'publik')) : 'publik';
         $validated['siap_danai'] = false;
@@ -1165,6 +1196,10 @@ class DashboardController extends Controller
 
         $ruko = Ruko::findOrFail($id_ruko);
 
+        if ($ruko->is_penuh) {
+            return back()->with('error', 'Maaf, ruko "'.$ruko->nama_ruko.'" sudah terisi penuh.');
+        }
+
         $validated = $request->validate([
             'id_umkm' => 'required|exists:umkm,id_umkm',
             'durasi_bulan' => 'required|integer|min:1|max:36',
@@ -1185,6 +1220,14 @@ class DashboardController extends Controller
             'total_harga' => $totalHarga,
             'status_pembayaran' => 'menunggu_konfirmasi',
             'catatan_sponsor' => $validated['catatan_sponsor'] ?? 'Sponsor dana sewa ruko komersial dari mitra investor.',
+        ]);
+
+        // Tambah unit terisi dan perbarui status ketersediaan
+        $newUnitTerisi = min($ruko->total_unit ?? 1, ($ruko->unit_terisi ?? 0) + 1);
+        $newStatus = ($newUnitTerisi >= ($ruko->total_unit ?? 1)) ? 'tersewa' : 'tersedia';
+        $ruko->update([
+            'unit_terisi' => $newUnitTerisi,
+            'status_ketersediaan' => $newStatus,
         ]);
 
         $umkm = Umkm::find($validated['id_umkm']);
@@ -1305,5 +1348,65 @@ class DashboardController extends Controller
         ]);
 
         return back()->with('success', 'Pesan diskusi berhasil dikirim!');
+    }
+
+    /**
+     * Investor Menyimpan Rating & Ulasan Kredibilitas untuk Mitra UMKM
+     */
+    public function storeUlasanUmkm(Request $request, $id_investasi)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'investor') {
+            abort(403);
+        }
+
+        $investasi = Investasi::with('umkm')->where('id_pengguna', $user->id)->findOrFail($id_investasi);
+
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'rating_transparansi' => 'nullable|integer|min:1|max:5',
+            'rating_dividen' => 'nullable|integer|min:1|max:5',
+            'ulasan' => 'required|string|min:5|max:1000',
+        ]);
+
+        UlasanUmkm::updateOrCreate(
+            ['id_investasi' => $investasi->id_investasi],
+            [
+                'id_umkm' => $investasi->id_umkm,
+                'id_investor' => $user->id,
+                'rating' => (int) $validated['rating'],
+                'rating_transparansi' => (int) ($validated['rating_transparansi'] ?? $validated['rating']),
+                'rating_dividen' => (int) ($validated['rating_dividen'] ?? $validated['rating']),
+                'ulasan' => $validated['ulasan'],
+                'status' => 'tayang',
+            ]
+        );
+
+        return back()->with('success', 'Terima kasih! Ulasan & rating kepuasan Anda untuk mitra UMKM "'.($investasi->umkm->nama_usaha ?? 'Mitra').'" berhasil disimpan dan kini tayang membantu sesama investor.');
+    }
+
+    /**
+     * Pelaku UMKM Memberi Balasan / Apresiasi atas Ulasan Investor
+     */
+    public function storeBalasanUlasanUmkm(Request $request, $id_ulasan)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
+        $ulasan = UlasanUmkm::where('id_umkm', $umkm->id_umkm)->findOrFail($id_ulasan);
+
+        $validated = $request->validate([
+            'balasan_umkm' => 'required|string|min:3|max:1000',
+        ]);
+
+        $ulasan->update([
+            'balasan_umkm' => $validated['balasan_umkm'],
+            'tanggal_balasan' => now(),
+        ]);
+
+        return back()->with('success', 'Balasan apresiasi/tanggapan Anda atas ulasan investor berhasil dipublikasikan!');
     }
 }

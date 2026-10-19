@@ -146,6 +146,12 @@
                                     </span>
                                 </div>
                                 <div class="flex justify-between items-center">
+                                    <span class="text-gray-500 font-medium">Kapasitas Unit:</span>
+                                    <span class="font-bold text-gray-800">
+                                        {{ $item->total_unit ?? 1 }} Unit Ruko
+                                    </span>
+                                </div>
+                                <div class="flex justify-between items-center">
                                     <span class="text-gray-500 font-medium">Diajukan Oleh:</span>
                                     <span class="font-bold text-gray-800 truncate max-w-[170px]" title="{{ $item->label_pengusul }}">
                                         {{ $item->label_pengusul }}
@@ -198,7 +204,7 @@
                                             <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                             </svg>
-                                            <span>✓ ACC (Terbitkan)</span>
+                                            <span>ACC (Terbitkan)</span>
                                         </button>
                                     </form>
 
@@ -253,13 +259,17 @@
                         <div>
                             <div class="flex items-center justify-between gap-2 mb-4">
                                 <span class="text-xs font-mono font-bold text-gray-400">#RUKO-{{ $ruko->id_ruko }}</span>
-                                @if($ruko->status_ketersediaan === 'tersedia')
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
-                                        Tersedia
+                                @if($ruko->is_penuh)
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-rose-100 text-rose-800 border border-rose-200 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span> Sudah Diisi (Penuh)
+                                    </span>
+                                @elseif(($ruko->unit_terisi ?? 0) > 0)
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Sisa {{ $ruko->sisa_unit }} Unit
                                     </span>
                                 @else
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-800 border border-amber-200">
-                                        Disewa
+                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Kosong (Sisa {{ $ruko->sisa_unit }} Unit)
                                     </span>
                                 @endif
                             </div>
@@ -293,6 +303,27 @@
                                     "{{ $ruko->deskripsi_potensi }}"
                                 </p>
                             @endif
+
+                            <!-- Box Kapasitas & Sisa Unit -->
+                            <div class="mt-3.5 p-3 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] space-y-1.5 text-xs">
+                                <div class="flex justify-between items-center text-[11px]">
+                                    <span class="text-gray-400 font-medium">Kondisi Lapak:</span>
+                                    @if($ruko->is_penuh)
+                                        <span class="font-bold text-rose-600">🔴 Sudah Diisi Penuh</span>
+                                    @elseif(($ruko->unit_terisi ?? 0) > 0)
+                                        <span class="font-bold text-amber-700">🟡 Terisi Sebagian ({{ $ruko->unit_terisi }}/{{ $ruko->total_unit }} Unit)</span>
+                                    @else
+                                        <span class="font-bold text-emerald-700">🟢 Kosong (Siap Huni)</span>
+                                    @endif
+                                </div>
+                                <div class="flex justify-between items-center text-[11px]">
+                                    <span class="text-gray-400 font-medium">Kapasitas & Ketersediaan:</span>
+                                    <span class="font-black text-gray-800">
+                                        <span class="{{ $ruko->sisa_unit > 0 ? 'text-emerald-700' : 'text-rose-600' }}">{{ $ruko->sisa_unit }} Unit Kosong</span>
+                                        <span class="text-gray-400 font-normal">/ {{ $ruko->total_unit ?? 1 }} Total</span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
@@ -305,6 +336,26 @@
                             <div class="text-[11px] font-semibold text-gray-500">
                                 {{ $ruko->penyedia->nama_perusahaan ?? 'Mitra Komunitas' }}
                             </div>
+                        </div>
+
+                        @if(!empty($ruko->kontak_pemilik))
+                            <div class="mt-3 pt-2.5 border-t border-dashed border-gray-200 flex items-center justify-between text-xs">
+                                <span class="text-gray-400 font-medium text-[11px]">Kontak Pemilik / WA:</span>
+                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $ruko->kontak_pemilik) }}" target="_blank"
+                                   class="font-bold text-emerald-700 hover:underline inline-flex items-center gap-1 text-[11px]">
+                                    <span>{{ $ruko->kontak_pemilik }}</span>
+                                    <span>↗</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        <!-- Tombol Kelola Unit & Ketersediaan -->
+                        <div class="mt-3.5 pt-3 border-t border-gray-100">
+                            <button type="button"
+                                    onclick="openUpdateKetersediaanModal('{{ $ruko->id_ruko }}', '{{ addslashes($ruko->nama_ruko) }}', {{ $ruko->total_unit ?? 1 }}, {{ $ruko->unit_terisi ?? 0 }})"
+                                    class="w-full py-2.5 px-3 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-xs">
+                                <span>⚙️ Atur Kapasitas Unit & Status</span>
+                            </button>
                         </div>
                     </div>
                 @empty
@@ -377,5 +428,94 @@
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
+
+    // Modal Kelola Kapasitas & Status Unit Ruko
+    function openUpdateKetersediaanModal(id, nama, totalUnit, unitTerisi) {
+        const modal = document.getElementById('modal-update-ketersediaan');
+        const form = document.getElementById('form-update-ketersediaan-submit');
+        const subtitle = document.getElementById('update-ketersediaan-subtitle');
+        const inputTotal = document.getElementById('input-modal-total-unit');
+        const inputTerisi = document.getElementById('input-modal-unit-terisi');
+
+        form.action = '/super-admin/ruko/' + id + '/update-ketersediaan';
+        subtitle.innerText = 'Unit Ruko: ' + nama;
+        inputTotal.value = totalUnit || 1;
+        inputTerisi.value = unitTerisi || 0;
+
+        recalcModalSisa();
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function recalcModalSisa() {
+        const total = parseInt(document.getElementById('input-modal-total-unit').value) || 0;
+        const terisi = parseInt(document.getElementById('input-modal-unit-terisi').value) || 0;
+        const sisa = Math.max(0, total - terisi);
+        const el = document.getElementById('modal-preview-sisa-unit');
+
+        if (sisa === 0) {
+            el.innerHTML = '<span class="text-rose-600 font-black">0 Unit (Sudah Diisi Penuh)</span>';
+        } else if (terisi > 0) {
+            el.innerHTML = '<span class="text-amber-700 font-black">' + sisa + ' Unit Kosong (Terisi Sebagian)</span>';
+        } else {
+            el.innerHTML = '<span class="text-emerald-700 font-black">' + sisa + ' Unit Kosong (Siap Huni)</span>';
+        }
+    }
+
+    function closeUpdateKetersediaanModal() {
+        const modal = document.getElementById('modal-update-ketersediaan');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
 </script>
+
+<!-- MODAL ATUR KAPASITAS & STATUS UNIT RUKO (SUPER ADMIN) -->
+<div id="modal-update-ketersediaan" class="fixed inset-0 z-[9999] hidden items-center justify-center p-4">
+    <div class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm" onclick="closeUpdateKetersediaanModal()"></div>
+    <div class="relative w-full max-w-md bg-white rounded-3xl p-6 sm:p-7 shadow-2xl border border-gray-100 z-10 animate-fadeIn">
+        <div class="flex items-start gap-3.5 mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#0F433C] flex items-center justify-center shrink-0 text-xl font-black">
+                🏢
+            </div>
+            <div>
+                <h3 class="text-base font-black text-gray-900">Kelola Kapasitas & Status Unit</h3>
+                <p id="update-ketersediaan-subtitle" class="text-xs text-gray-500 mt-0.5">Nama Ruko</p>
+            </div>
+        </div>
+
+        <form id="form-update-ketersediaan-submit" method="POST" action="" class="space-y-4">
+            @csrf
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Jumlah Total Unit / Pintu *</label>
+                <input type="number" id="input-modal-total-unit" name="total_unit" required min="1" max="100"
+                       class="w-full p-3 rounded-2xl border border-gray-200 text-xs font-bold focus:ring-2 focus:ring-[#0F433C] focus:outline-none"
+                       oninput="recalcModalSisa()">
+                <span class="text-[10px] text-gray-400 mt-1 block">Total keseluruhan unit pintu ruko di lokasi ini.</span>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Jumlah Unit yang Sudah Terisi *</label>
+                <input type="number" id="input-modal-unit-terisi" name="unit_terisi" required min="0"
+                       class="w-full p-3 rounded-2xl border border-gray-200 text-xs font-bold focus:ring-2 focus:ring-[#0F433C] focus:outline-none"
+                       oninput="recalcModalSisa()">
+                <span class="text-[10px] text-gray-400 mt-1 block">Berapa unit yang sedang disewa atau ditempati saat ini.</span>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] flex items-center justify-between text-xs">
+                <span class="text-gray-500 font-medium">Estimasi Sisa Unit Kosong:</span>
+                <span id="modal-preview-sisa-unit" class="font-black text-[#0F433C] text-sm">0 Unit</span>
+            </div>
+
+            <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeUpdateKetersediaanModal()" class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
+                    Batal
+                </button>
+                <button type="submit" class="px-5 py-2.5 rounded-xl text-xs font-black shadow-md bg-[#0F433C] hover:bg-[#19584F] text-white transition">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection

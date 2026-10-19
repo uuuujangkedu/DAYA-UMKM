@@ -519,6 +519,8 @@ class SuperAdminController extends Controller
             'deskripsi_potensi' => $rekomendasi->potensi_usaha,
             'kontak_pemilik' => $rekomendasi->kontak_pemilik ?: $rekomendasi->kontak_pengusul,
             'harga_sewa_per_bulan' => $rekomendasi->harga_sewa_per_bulan,
+            'total_unit' => $rekomendasi->total_unit ?: 1,
+            'unit_terisi' => 0,
             'status_ketersediaan' => 'tersedia',
         ]);
 
@@ -572,5 +574,45 @@ class SuperAdminController extends Controller
         ]);
 
         return back()->with('success', 'Usulan ruko "'.$rekomendasi->nama_ruko.'" ditandai TIDAK LAYAK (Ditolak) dengan catatan kurasi.');
+    }
+
+    /**
+     * Perbarui Kapasitas dan Ketersediaan Unit Ruko Resmi
+     */
+    public function updateRukoKetersediaan(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $ruko = Ruko::findOrFail($id);
+
+        $validated = $request->validate([
+            'total_unit' => 'required|integer|min:1|max:100',
+            'unit_terisi' => 'required|integer|min:0',
+        ]);
+
+        $totalUnit = (int) $validated['total_unit'];
+        $unitTerisi = min($totalUnit, (int) $validated['unit_terisi']);
+        $status = ($unitTerisi >= $totalUnit) ? 'tersewa' : 'tersedia';
+
+        $ruko->update([
+            'total_unit' => $totalUnit,
+            'unit_terisi' => $unitTerisi,
+            'status_ketersediaan' => $status,
+        ]);
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => 'Update Ketersediaan Unit Ruko',
+            'detail_perubahan' => [
+                'id_ruko' => $ruko->id_ruko,
+                'nama_ruko' => $ruko->nama_ruko,
+                'total_unit' => $totalUnit,
+                'unit_terisi' => $unitTerisi,
+                'sisa_unit' => $totalUnit - $unitTerisi,
+                'status' => $status,
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        return back()->with('success', 'Kapasitas dan ketersediaan ruko "'.$ruko->nama_ruko.'" berhasil diperbarui (Sisa: '.($totalUnit - $unitTerisi).' dari '.$totalUnit.' unit).');
     }
 }
