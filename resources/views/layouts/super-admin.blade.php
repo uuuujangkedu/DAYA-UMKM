@@ -54,9 +54,8 @@
 <body class="bg-[#F9F8F3] min-h-screen text-[#1A202C] flex">
 
     <!-- SIDEBAR (Dark Emerald #0F433C - Sesuai Mockup) -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0 shadow-2xl md:shadow-none">
-        
-        <div>
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full flex-col bg-[#0F433C] text-white shadow-2xl transition-transform duration-300 ease-in-out md:static md:h-screen md:shrink-0 md:translate-x-0 md:shadow-none">
+        <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
             <!-- Brand Logo TIKUM -->
             <div class="px-6 pt-6 pb-2">
                 <a href="{{ url('/') }}" class="bg-white/95 hover:bg-white px-3 py-2 rounded-xl flex items-center justify-center transition shadow-sm" title="Kembali ke Beranda TIKUM">
@@ -65,8 +64,8 @@
             </div>
 
             <!-- Profil Super Admin (Mockup Top Left) -->
-            <div class="p-6 sm:p-7 border-b border-white/10">
-                <div class="flex items-center gap-3.5">
+            <div class="px-5 py-5 border-b border-white/10">
+                <div class="flex min-w-0 items-center gap-3">
                     <div class="w-12 h-12 rounded-full bg-[#D1D5DB] text-[#0F433C] font-black text-lg flex items-center justify-center shrink-0 shadow-inner border-2 border-white/20">
                         @if(!empty($user->avatar))
                             <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
@@ -95,11 +94,11 @@
             </div>
 
             <!-- Navigation Links -->
-            <nav class="mt-6 px-4 space-y-2">
+            <nav class="mt-4 space-y-1 px-3 pb-4">
                 <!-- 1. BERANDA -->
                 <a href="{{ route('superadmin.dashboard') }}" 
-                   class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.dashboard') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
+                   class="group flex items-center justify-between min-h-11 gap-3 rounded-lg px-3 py-2.5 text-left text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.dashboard') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.dashboard') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                         </svg>
@@ -109,12 +108,12 @@
 
                 <!-- 2. PENGAJUAN UMKM (PRODUK / PROPOSAL) -->
                 <a href="{{ route('superadmin.pengajuan') }}" 
-                   class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.pengajuan*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
+                   class="group flex items-center justify-between min-h-11 gap-3 rounded-lg px-3 py-2.5 text-left text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.pengajuan*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.pengajuan*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
-                        <span>PENGAJUAN UMKM</span>
+                        <span class="min-w-0 flex-1 leading-snug">PENGAJUAN UMKM</span>
                     </div>
                     @php
                         $pendingBadge = \App\Models\Umkm::where('status_pengajuan', 'menunggu_verifikasi')->count();
@@ -128,12 +127,12 @@
 
                 <!-- 3. MANAJEMEN AKUN & VERIFIKASI -->
                 <a href="{{ route('superadmin.users') }}" 
-                   class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.users*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
+                   class="group flex items-center justify-between min-h-11 gap-3 rounded-lg px-3 py-2.5 text-left text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.users*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.users*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
-                        <span>MANAJEMEN AKUN</span>
+                        <span class="min-w-0 flex-1 leading-snug">MANAJEMEN AKUN</span>
                     </div>
                     @php
                         $totalUsersCount = \App\Models\User::count();
@@ -146,8 +145,8 @@
                 @if(auth()->user()->role === 'super_admin')
                     <!-- 4. LOG AKTIVITAS (Khusus Super Admin) -->
                     <a href="{{ route('superadmin.logs') }}" 
-                       class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.logs*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
-                        <div class="flex items-center gap-3">
+                       class="group flex items-center justify-between min-h-11 gap-3 rounded-lg px-3 py-2.5 text-left text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.logs*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                        <div class="flex min-w-0 items-center gap-3">
                             <svg class="w-4 h-4 {{ request()->routeIs('superadmin.logs*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                             </svg>
@@ -162,12 +161,12 @@
 
                 <!-- 5. KURASI & KATALOG RUKO -->
                 <a href="{{ route('superadmin.ruko') }}" 
-                   class="group flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ request()->routeIs('superadmin.ruko*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
+                   class="group flex items-center justify-between min-h-11 gap-3 rounded-lg px-3 py-2.5 text-left text-[11px] font-bold tracking-wide uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.ruko*') ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.ruko*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                         </svg>
-                        <span>KURASI & RUKO</span>
+                        <span class="min-w-0 flex-1 leading-snug">KURASI & RUKO</span>
                     </div>
                     @php
                         $pendingRukoBadge = \App\Models\RekomendasiRuko::where('status', 'menunggu_verifikasi')->count();
@@ -182,32 +181,17 @@
         </div>
 
         <!-- Bagian Bawah Sidebar (Akses Web & Keluar) -->
-        <div class="p-4 border-t border-white/10 space-y-2">
-            <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
-            <button type="button" 
-                    class="a11y-trigger w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/90 hover:bg-white/10 hover:text-white transition cursor-pointer group text-left"
-                    aria-label="Aksesibilitas & Disabilitas"
-                    title="Buka menu aksesibilitas disabilitas">
-                <svg class="w-4 h-4 text-teal-300 group-hover:text-white transition shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
-                </svg>
-                <span>Aksesibilitas</span>
+        <div class="shrink-0 border-t border-white/10 bg-[#0F433C] p-3 space-y-1">
+            <button type="button" class="a11y-trigger flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-xs font-semibold text-teal-100 hover:bg-white/10 hover:text-white transition" aria-label="Aksesibilitas & Disabilitas" title="Buka menu aksesibilitas disabilitas">
+                <span aria-hidden="true">♿</span><span>Aksesibilitas</span>
             </button>
-
-            <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/80 hover:bg-white/10 hover:text-white transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                </svg>
-                <span>Lihat Web Pengunjung</span>
+            <a href="{{ route('home') }}" target="_blank" class="flex min-h-11 items-center gap-3 rounded-lg px-3 text-xs font-semibold text-teal-100 hover:bg-white/10 hover:text-white transition">
+                <span aria-hidden="true">↗</span><span>Lihat Web Pengunjung</span>
             </a>
-
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-rose-300 hover:bg-rose-500/20 hover:text-rose-200 transition">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
-                    </svg>
-                    <span>KELUAR</span>
+                <button type="submit" class="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-left text-xs font-semibold text-rose-200 hover:bg-rose-500/20 hover:text-white transition">
+                    <span aria-hidden="true">⇥</span><span>KELUAR</span>
                 </button>
             </form>
         </div>
@@ -221,8 +205,8 @@
         
         <!-- Top bar mobile header -->
         <header class="md:hidden bg-[#0F433C] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
-            <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white focus:outline-none">
+            <div class="flex min-w-0 items-center gap-3">
+                <button type="button" onclick="toggleSidebar()" aria-label="Buka navigasi" class="min-h-11 min-w-11 rounded-lg bg-white/10 text-white hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -233,6 +217,7 @@
                 <span class="font-extrabold text-xs tracking-wider uppercase text-teal-200">ADMIN</span>
             </div>
             <div class="flex items-center gap-2.5">
+                @include('components.language-switcher', ['id' => 'admin-mobile-lang'])
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button" 
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
@@ -254,7 +239,7 @@
             <!-- Alert Notifikasi Flash -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in">
-                    <div class="flex items-center gap-3">
+                    <div class="flex min-w-0 items-center gap-3">
                         <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0">
                             ✓
                         </div>
@@ -266,7 +251,7 @@
 
             @if(session('error'))
                 <div class="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
-                    <div class="flex items-center gap-3">
+                    <div class="flex min-w-0 items-center gap-3">
                         <div class="w-7 h-7 rounded-full bg-rose-500 text-white flex items-center justify-center shrink-0">
                             !
                         </div>
@@ -395,5 +380,8 @@
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget', ['isDashboardLayout' => true])
+    <!-- Multi-Language (i18n) Engine -->
+    <script src="{{ asset('js/i18n.js') }}"></script>
+
 </body>
 </html>

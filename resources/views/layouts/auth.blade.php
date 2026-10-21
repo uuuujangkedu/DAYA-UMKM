@@ -156,23 +156,24 @@
                                 <span class="text-[12.5px] text-[#3E5445] block mt-0.5" data-i18n="nav.gabung_umkm_sub">
                                     Dapatkan akses modal dan sewa ruko
                                 </span>
+                            </a>
                             <div class="h-px bg-[#C8BFB0]/40 my-1"></div>
 
                             <a href="{{ route('ruko.usulkan.public') }}" 
                                class="block p-3 rounded-[8px] hover:bg-teal-50 transition group/item">
-                                <span class="font-semibold text-[14px] text-[#0F433C] flex items-center gap-1.5">
-                                    <span>📍</span> Usulkan Ruko Kosong
+                                <span class="font-semibold text-[14px] text-[#0F433C] block" data-i18n="nav.usulkan_ruko">
+                                    Ajukan Lokasi Ruko
                                 </span>
-                                <span class="text-[12.5px] text-[#3E5445] block mt-0.5">
-                                    Titip sewa tempat usaha komersial
+                                <span class="text-[12.5px] text-[#3E5445] block mt-0.5" data-i18n="nav.usulkan_ruko_desc">
+                                    Ajukan lokasi ruko untuk ditinjau
                                 </span>
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <a href="{{ route('ruko.usulkan.public') }}" id="nav-link-usulkan-ruko" class="nav-item transition-all py-1 {{ request()->routeIs('ruko.usulkan*') ? 'active text-[#2D6B22] font-semibold border-b-2 border-[#2D6B22]' : 'text-[#15241C] hover:text-[#2D6B22]' }}">
-                    Usulkan Ruko
+                <a href="{{ route('ruko.usulkan.public') }}" id="nav-link-usulkan-ruko" class="nav-item transition-all py-1 {{ request()->routeIs('ruko.usulkan*') ? 'active text-[#2D6B22] font-semibold border-b-2 border-[#2D6B22]' : 'text-[#15241C] hover:text-[#2D6B22]' }}" data-i18n="nav.usulkan_ruko">
+                    Ajukan Lokasi Ruko
                 </a>
                 <a href="{{ url('/#tutorial') }}" id="nav-link-tutorial" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.tutorial">Tutorial</a>
                 <a href="{{ url('/#bantuan') }}" id="nav-link-bantuan" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.bantuan">Bantuan</a>
@@ -225,6 +226,7 @@
                 </div>
             </div>
 
+            <a href="{{ route('ruko.usulkan.public') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.usulkan_ruko">Ajukan Lokasi Ruko</a>
             <a href="{{ url('/#tutorial') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.tutorial">Tutorial</a>
             <a href="{{ url('/#bantuan') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.bantuan">Bantuan</a>
             <a href="{{ url('/#kontak') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.kontak">Kontak</a>
@@ -446,6 +448,8 @@
                     'nav.gabung_investor_sub': 'Mulai danai dan kembangkan usaha',
                     'nav.gabung_umkm_title': 'Daftar pelaku UMKM',
                     'nav.gabung_umkm_sub': 'Dapatkan akses modal dan sewa ruko',
+                    'nav.usulkan_ruko': 'Ajukan Lokasi Ruko',
+                    'nav.usulkan_ruko_desc': 'Kirim lokasi untuk ditinjau',
                     'nav.tutorial': 'Tutorial',
                     'nav.bantuan': 'Bantuan',
                     'nav.kontak': 'Kontak',
@@ -648,6 +652,8 @@
                     'nav.gabung_investor_sub': 'Fund and scale promising businesses',
                     'nav.gabung_umkm_title': 'Register as MSME Entrepreneur',
                     'nav.gabung_umkm_sub': 'Access productive capital and rentals',
+                    'nav.usulkan_ruko': 'Suggest a Shophouse',
+                    'nav.usulkan_ruko_desc': 'Submit a location for review',
                     'nav.tutorial': 'How It Works',
                     'nav.bantuan': 'Support',
                     'nav.kontak': 'Contact',

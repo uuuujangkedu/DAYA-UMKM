@@ -166,6 +166,35 @@ class AuthTest extends TestCase
         ]);
     }
 
+    public function test_google_registration_saves_selected_role_before_redirect(): void
+    {
+        $this->get('/register?role=umkm')->assertSee('auth/google?role=umkm', false);
+        $this->get('/register/investor')->assertSee('auth/google?role=investor', false);
+        $this->get('/register/umkm')->assertSee('auth/google?role=umkm', false);
+    }
+
+    public function test_google_registration_uses_selected_umkm_role(): void
+    {
+        $abstractUser = Mockery::mock(SocialiteUser::class);
+        $abstractUser->shouldReceive('getId')->andReturn('google-umkm-id');
+        $abstractUser->shouldReceive('getName')->andReturn('UMKM User');
+        $abstractUser->shouldReceive('getEmail')->andReturn('umkm-google@example.com');
+        $abstractUser->shouldReceive('getAvatar')->andReturn(null);
+
+        $provider = Mockery::mock('Laravel\\Socialite\\Two\\GoogleProvider');
+        $provider->shouldReceive('user')->andReturn($abstractUser);
+        Socialite::shouldReceive('driver')->with('google')->andReturn($provider);
+
+        $this->withSession(['google_registration_role' => 'umkm'])
+            ->get('/auth/google/callback')
+            ->assertRedirect('/dashboard');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'umkm-google@example.com',
+            'role' => 'umkm',
+        ]);
+    }
+
     public function test_forgot_password_sends_otp_and_resets_password(): void
     {
         Mail::fake();
@@ -225,16 +254,16 @@ class AuthTest extends TestCase
     {
         $response = $this->get('/gabung/investor');
         $response->assertStatus(200);
-        $response->assertSee('Ekosistem Mitra Investor');
-        $response->assertSee('Daftar sebagai investor');
+        $response->assertSee('Gabung Jadi Investor');
+        $response->assertSee('Kemitraan permodalan bagi investor produktif');
     }
 
     public function test_gabung_umkm_page_renders_successfully(): void
     {
         $response = $this->get('/gabung/umkm');
         $response->assertStatus(200);
-        $response->assertSee('Ekosistem Pelaku UMKM');
-        $response->assertSee('Daftar sebagai pelaku UMKM');
+        $response->assertSee('Gabung Jadi Pelaku UMKM');
+        $response->assertSee('Solusi modal dan sewa ruko bagi pelaku usaha');
     }
 
     public function test_register_investor_form_renders_successfully(): void
@@ -267,6 +296,8 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Formulir pendaftaran pelaku UMKM');
         $response->assertSee('Identitas pengaju UMKM');
+        $response->assertSee('Informasi usaha & produk', false);
+        $response->assertSee('Lokasi ruko (pilihan minat sewa)');
         $response->assertSee('Simpan draf');
         $response->assertSee('Kirim pengajuan ke admin');
     }
@@ -328,9 +359,9 @@ class AuthTest extends TestCase
         // Buka formulir investor
         $formResponse = $this->actingAs($user)->get('/formulir/investor');
         $formResponse->assertStatus(200);
-        $formResponse->assertSee('Formulir pendaftaran investor');
-        $formResponse->assertSee('Identitas pendaftar investor');
-        $formResponse->assertSee('Katalog minat pendanaan');
+        $formResponse->assertSee('Formulir pendaftaran investor', false);
+        $formResponse->assertSee('Identitas pendaftar investor', false);
+        $formResponse->assertSee('Katalog minat pendanaan', false);
 
         // Kirim formulir investor
         $saveResponse = $this->actingAs($user)->post('/formulir/investor', [

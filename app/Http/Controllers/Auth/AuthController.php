@@ -390,9 +390,18 @@ class AuthController extends Controller
     /**
      * Redirect ke Google OAuth
      */
-    public function googleRedirect()
+    public function googleRedirect(Request $request)
     {
         try {
+            if ($request->query->has('role')) {
+                $role = $request->query('role');
+                if (! in_array($role, ['investor', 'umkm'], true)) {
+                    return redirect()->route('register')->with('error', 'Peran pendaftaran tidak valid.');
+                }
+
+                $request->session()->put('google_registration_role', $role);
+            }
+
             return Socialite::driver('google')->redirect();
         } catch (Throwable $e) {
             return redirect()->route('login')->with('error', 'Gagal menghubungkan ke Google: '.$e->getMessage().'. Pastikan Client ID dan Secret sudah diisi.');
@@ -415,10 +424,11 @@ class AuthController extends Controller
 
         if (! $user) {
             // Pengguna baru mendaftar via Google -> otomatis terverifikasi & aktif sesuai ERD
+            $role = request()->session()->pull('google_registration_role', 'investor');
             $user = User::create([
                 'name' => $googleUser->getName() ?? 'Pengguna Google',
                 'email' => $googleUser->getEmail(),
-                'role' => 'investor', // default role
+                'role' => $role,
                 'email_verified_at' => Carbon::now(),
                 'status' => 'aktif',
                 'avatar_url' => $googleUser->getAvatar(),
