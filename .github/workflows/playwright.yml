@@ -10,11 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+        extensions: mbstring, pdo_sqlite, sqlite3
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
+    - name: Install PHP dependencies
+      run: composer install --no-interaction --prefer-dist
+    - name: Prepare application
+      run: |
+        cp .env.example .env
+        php artisan key:generate
+        touch database/database.sqlite
+        php artisan migrate --force
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
