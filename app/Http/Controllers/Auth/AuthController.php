@@ -92,8 +92,6 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
-        $role = $request->input('role', 'umkm');
-
         $rules = [
             'nama' => ['required', 'string', 'max:100'],
             'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email'],
@@ -124,6 +122,8 @@ class AuthController extends Controller
             'password.symbols' => 'Kata sandi harus mengandung simbol/karakter khusus.',
             'role.required' => 'Pilih peran pendaftaran.',
         ]);
+
+        $role = $validated['role'];
 
         // Simpan data akun pengguna baru
         $user = User::create([

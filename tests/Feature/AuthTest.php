@@ -59,6 +59,29 @@ class AuthTest extends TestCase
         ]);
     }
 
+    public function test_registration_saves_umkm_role_selected_by_user(): void
+    {
+        Mail::fake();
+
+        $this->post('/register', [
+            'nama' => 'Sari Usaha',
+            'email' => 'sari@example.com',
+            'nomor_telepon' => '081234567890',
+            'role' => 'umkm',
+            'password' => 'Rahasia123!',
+            'password_confirmation' => 'Rahasia123!',
+        ])->assertRedirect('/verify-otp');
+
+        $this->assertDatabaseHas('users', [
+            'email' => 'sari@example.com',
+            'role' => 'umkm',
+        ]);
+
+        $this->assertDatabaseHas('umkm', [
+            'pemilik' => 'Sari Usaha',
+        ]);
+    }
+
     public function test_active_user_can_login_directly_without_otp(): void
     {
         $user = User::create([

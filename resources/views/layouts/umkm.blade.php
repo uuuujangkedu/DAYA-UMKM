@@ -251,6 +251,9 @@
                 </a>
             </div>
             <div class="flex items-center gap-2.5">
+                <!-- Language Switcher Mobile -->
+                @include('components.language-switcher', ['id' => 'umkm-mobile-lang'])
+
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button" 
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
@@ -413,5 +416,8 @@
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget', ['isDashboardLayout' => true])
+    <!-- Multi-Language (i18n) Engine -->
+    <script src="{{ asset('js/i18n.js') }}"></script>
+
 </body>
 </html>

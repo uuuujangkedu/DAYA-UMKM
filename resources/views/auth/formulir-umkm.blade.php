@@ -313,7 +313,10 @@
                     <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 3</span>
                     <h3 class="text-[18px] font-bold text-[#161d1a]">Lokasi ruko (pilihan minat sewa)</h3>
                 </div>
-                <span class="text-[13px] text-[#4b5551]">Opsional: Pilih jika Anda membutuhkan tempat ruko</span>
+                <div class="flex items-center gap-3">
+                    <button type="button" id="clear-ruko-selection" class="min-h-11 px-3 text-[13px] font-semibold text-[#0b5a4a] underline underline-offset-2 hover:text-[#083f35] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0b5a4a]">Hapus pilihan</button>
+                    <span class="text-[13px] text-[#4b5551]">Opsional: Pilih jika Anda membutuhkan tempat ruko</span>
+                </div>
             </div>
 
             <div class="relative">
@@ -400,6 +403,13 @@
             label.classList.add('bg-[#d8ebe5]', 'border-[#0b5a4a]');
         }
     }
+
+    document.getElementById('clear-ruko-selection').addEventListener('click', () => {
+        document.querySelectorAll('input[name="id_ruko_diminati"]').forEach(input => {
+            input.checked = false;
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        });
+    });
 
     function filterRukoCards() {
         const query = document.getElementById('ruko-search').value.toLowerCase();

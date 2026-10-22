@@ -151,8 +151,8 @@ class DashboardFlowTest extends TestCase
         // 4. Setelah di-ACC, investor membuka dashboard dan melihat katalog PROPOSAL LIST
         $activeResponse = $this->actingAs($investor->fresh())->get('/dashboard');
         $activeResponse->assertStatus(200);
-        $activeResponse->assertSee('BERANDA');
-        $activeResponse->assertSee('Jelajahi Proposal UMKM');
+        $activeResponse->assertSee('BERANDA', false);
+        $activeResponse->assertSee('Jelajahi Proposal UMKM', false);
     }
 
     public function test_umkm_can_input_financial_analysis_and_view_profit_loss()

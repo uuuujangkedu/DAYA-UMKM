@@ -27,13 +27,8 @@ class Umkm extends Model
         'id_ruko_diminati',
         'status_pengajuan',
         'modal_dibutuhkan',
-        'target_pendanaan',
         'estimasi_bagi_hasil',
-        'persentase_bagi_hasil',
-        'dokumen_proposal',
-        'nib',
-        'omzet_bulanan',
-    ];
+    ]; // ponytail: tambah kolom (target_pendanaan, nib, omzet_bulanan, dsb) via migrasi jika produk butuh.
 
     public function user()
     {
@@ -76,6 +71,7 @@ class Umkm extends Model
     public function getRatingRataRataAttribute(): float
     {
         $avg = $this->ulasanUmkm()->avg('rating');
+
         return $avg ? round((float) $avg, 1) : 0.0;
     }
 

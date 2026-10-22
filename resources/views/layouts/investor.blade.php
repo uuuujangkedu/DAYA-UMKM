@@ -246,9 +246,12 @@
             </div>
 
             <div class="flex items-center gap-4">
+                <!-- Language Switcher -->
+                @include('components.language-switcher', ['id' => 'desktop-lang'])
+
                 <!-- Badge Total Modal -->
                 <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-xs">
-                    <span class="text-gray-400 font-bold">Total Portofolio:</span>
+                    <span class="text-gray-400 font-bold" data-i18n="dashboard.total_portfolio">Total Portofolio:</span>
                     <span class="font-black text-[#0F433C]">
                         Rp {{ number_format($totalModalDiinvestasikan ?? 0, 0, ',', '.') }}
                     </span>
@@ -257,7 +260,7 @@
                 <!-- KYC Badge -->
                 <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                    KYC Terverifikasi
+                    <span data-i18n="dashboard.kyc_verified">KYC Terverifikasi</span>
                 </span>
 
                 <!-- Quick Action CTA -->
@@ -266,7 +269,7 @@
                     <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
-                    <span>Danai UMKM</span>
+                    <span data-i18n="dashboard.fund_umkm">Danai UMKM</span>
                 </a>
             </div>
         </header>
@@ -285,6 +288,9 @@
                 <span class="font-extrabold text-xs tracking-wider uppercase text-teal-200">INVESTOR</span>
             </div>
             <div class="flex items-center gap-2.5">
+                <!-- Language Switcher Mobile -->
+                @include('components.language-switcher', ['id' => 'mobile-lang'])
+
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button" 
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
@@ -444,6 +450,9 @@
             }
         }
     </script>
+
+    <!-- Multi-Language (i18n) Engine -->
+    <script src="{{ asset('js/i18n.js') }}"></script>
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget', ['isDashboardLayout' => true])
