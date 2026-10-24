@@ -18,6 +18,8 @@ class Umkm extends Model
         'pemilik',
         'nik_penanggung_jawab',
         'nomor_whatsapp',
+        'provinsi',
+        'kota',
         'provinsi_kota',
         'kecamatan',
         'kelurahan',

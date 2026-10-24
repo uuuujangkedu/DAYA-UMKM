@@ -102,6 +102,8 @@ class AuthController extends Controller
                 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols(),
             ],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
@@ -126,13 +128,18 @@ class AuthController extends Controller
         ]);
 
         $role = $validated['role'];
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: null)));
 
         // Simpan data akun pengguna baru
         $user = User::create([
             'name' => $validated['nama'],
             'email' => $validated['email'],
             'phone_number' => $validated['nomor_telepon'],
-            'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+            'provinsi' => $provinsi,
+            'kota' => $kota,
+            'provinsi_kota' => $provinsiKota,
             'kecamatan' => $validated['kecamatan'] ?? null,
             'kelurahan' => $validated['kelurahan'] ?? null,
             'rt' => $validated['rt'] ?? null,
@@ -152,7 +159,9 @@ class AuthController extends Controller
                     'jenis_usaha' => 'Makanan',
                     'pemilik' => $validated['nama'],
                     'nomor_whatsapp' => $validated['nomor_telepon'],
-                    'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+                    'provinsi' => $provinsi,
+                    'kota' => $kota,
+                    'provinsi_kota' => $provinsiKota,
                     'kecamatan' => $validated['kecamatan'] ?? null,
                     'kelurahan' => $validated['kelurahan'] ?? null,
                     'rt' => $validated['rt'] ?? null,

@@ -859,6 +859,8 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:100'],
             'nomor_telepon' => ['required', 'string', 'max:25'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
@@ -867,10 +869,16 @@ class DashboardController extends Controller
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
         ]);
 
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: $user->provinsi_kota)));
+
         $user->update([
             'name' => $validated['nama'],
             'phone_number' => $validated['nomor_telepon'],
-            'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
+            'provinsi' => $provinsi ?? $user->provinsi,
+            'kota' => $kota ?? $user->kota,
+            'provinsi_kota' => $provinsiKota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
             'rt' => $validated['rt'] ?? $user->rt,
@@ -895,6 +903,8 @@ class DashboardController extends Controller
                 'jenis_usaha' => 'Makanan',
                 'pemilik' => $user->name,
                 'nomor_whatsapp' => $user->phone_number,
+                'provinsi' => $user->provinsi,
+                'kota' => $user->kota,
                 'provinsi_kota' => $user->provinsi_kota,
                 'kecamatan' => $user->kecamatan,
                 'kelurahan' => $user->kelurahan,
@@ -930,6 +940,8 @@ class DashboardController extends Controller
             'pemilik' => ['required', 'string', 'max:100'],
             'nik_penanggung_jawab' => ['nullable', 'string', 'max:30'],
             'nomor_whatsapp' => ['required', 'string', 'max:25'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
@@ -954,6 +966,13 @@ class DashboardController extends Controller
             'file_proposal.max' => 'Ukuran file proposal maksimal 10MB.',
         ]);
 
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: $user->provinsi_kota)));
+        $validated['provinsi'] = $provinsi ?? $user->provinsi;
+        $validated['kota'] = $kota ?? $user->kota;
+        $validated['provinsi_kota'] = $provinsiKota;
+
         $umkm = Umkm::firstOrCreate(
             ['user_id' => $user->id],
             [
@@ -961,7 +980,9 @@ class DashboardController extends Controller
                 'jenis_usaha' => $validated['jenis_usaha'] ?? 'Makanan',
                 'pemilik' => $validated['pemilik'] ?? $user->name,
                 'nomor_whatsapp' => $validated['nomor_whatsapp'] ?? $user->phone_number,
-                'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
+                'provinsi' => $validated['provinsi'],
+                'kota' => $validated['kota'],
+                'provinsi_kota' => $validated['provinsi_kota'],
                 'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
                 'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
                 'rt' => $validated['rt'] ?? $user->rt,
@@ -990,6 +1011,8 @@ class DashboardController extends Controller
 
         $user->update([
             'phone_number' => $validated['nomor_whatsapp'],
+            'provinsi' => $validated['provinsi'] ?? $user->provinsi,
+            'kota' => $validated['kota'] ?? $user->kota,
             'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,

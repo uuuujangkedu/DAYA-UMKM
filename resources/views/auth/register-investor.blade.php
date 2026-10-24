@@ -118,6 +118,8 @@
             <!-- Wilayah Domisili / Kantor -->
             <x-wilayah-domisili 
                 label="Wilayah domisili / kantor"
+                :provinsi="old('provinsi')"
+                :kota="old('kota')"
                 :provinsi-kota="old('provinsi_kota')"
                 :kecamatan="old('kecamatan')"
                 :kelurahan="old('kelurahan')"

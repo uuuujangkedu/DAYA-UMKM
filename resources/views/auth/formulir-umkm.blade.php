@@ -152,6 +152,8 @@
             <!-- Wilayah Usaha -->
             <x-wilayah-domisili 
                 label="Wilayah domisili usaha"
+                :provinsi="old('provinsi', $umkm->provinsi ?? $user->provinsi)"
+                :kota="old('kota', $umkm->kota ?? $user->kota)"
                 :provinsi-kota="old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota)"
                 :kecamatan="old('kecamatan', $umkm->kecamatan ?? $user->kecamatan)"
                 :kelurahan="old('kelurahan', $umkm->kelurahan ?? $user->kelurahan)"

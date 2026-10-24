@@ -25,6 +25,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'phone_number',
+        'provinsi',
+        'kota',
         'provinsi_kota',
         'kecamatan',
         'kelurahan',

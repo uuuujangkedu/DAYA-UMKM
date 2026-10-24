@@ -150,6 +150,8 @@
             <!-- Wilayah Domisili -->
             <x-wilayah-domisili 
                 label="Wilayah domisili / kantor"
+                :provinsi="old('provinsi', $user->provinsi)"
+                :kota="old('kota', $user->kota)"
                 :provinsi-kota="old('provinsi_kota', $user->provinsi_kota)"
                 :kecamatan="old('kecamatan', $user->kecamatan)"
                 :kelurahan="old('kelurahan', $user->kelurahan)"
