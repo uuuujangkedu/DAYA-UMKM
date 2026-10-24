@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\WilayahController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,9 @@ Route::get('/admin/{any?}', function () {
 // Chatbot AI Assistant Routes
 Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage'])->name('chatbot.message');
 Route::post('/chatbot/reset', [ChatbotController::class, 'resetChat'])->name('chatbot.reset');
+
+// API Publik Wilayah Indonesia (Daftar Kelurahan / Desa)
+Route::get('/api/wilayah/kelurahan', [WilayahController::class, 'getKelurahan'])->name('api.wilayah.kelurahan');
 
 // Guest Auth Routes
 Route::middleware('guest')->group(function () {

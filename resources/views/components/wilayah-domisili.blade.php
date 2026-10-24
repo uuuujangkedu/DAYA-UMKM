@@ -893,7 +893,12 @@
 
     // Fungsi seleksi awal saat halaman dimuat
     function setInitialValues() {
-        if (!initialProv) return;
+        if (!initialProv) {
+            if (initialKel) {
+                selectKelurahanValue(initialKel);
+            }
+            return;
+        }
 
         for (let i = 0; i < provSelect.options.length; i++) {
             const val = provSelect.options[i].value;
@@ -967,20 +972,53 @@
                         break;
                     }
                 }
-                onKecamatanChange(false);
+                onKecamatanChange(false, initialKel);
             }
         }
     }
 
-    // Handler ketika Kecamatan berubah
-    function onKecamatanChange(isUserEvent = true) {
+    let currentKelurahanAbortController = null;
+
+    // Helper untuk memilih kelurahan secara akurat
+    function selectKelurahanValue(targetVal) {
+        if (!targetVal) return;
+        const cleanTarget = targetVal.toLowerCase().trim();
+        for (let i = 0; i < kelSelect.options.length; i++) {
+            const optVal = kelSelect.options[i].value;
+            if (optVal && optVal.toLowerCase().trim() === cleanTarget) {
+                kelSelect.selectedIndex = i;
+                return;
+            }
+        }
+        // Jika tidak ada di daftar opsi yang dimuat, sisipkan opsi dan pilih
+        const opt = document.createElement('option');
+        opt.value = targetVal;
+        opt.textContent = targetVal;
+        // Sisipkan sebelum opsi custom (jika ada)
+        const customOpt = kelSelect.querySelector('option[value="__custom__"]');
+        if (customOpt) {
+            kelSelect.insertBefore(opt, customOpt);
+        } else {
+            kelSelect.appendChild(opt);
+        }
+        kelSelect.value = targetVal;
+    }
+
+    // Handler ketika Kecamatan berubah (Dukungan database lokal & fetch otomatis se-Indonesia)
+    function onKecamatanChange(isUserEvent = true, autoSelectedKel = null) {
         const provVal = provSelect.value;
         const kotaVal = kotaSelect.value;
         const kecVal = kecSelect.value;
+        const kelToSelect = autoSelectedKel || (!isUserEvent ? initialKel : null);
 
         kelSelect.innerHTML = '<option value="">-- Pilih Kelurahan / Desa --</option>';
 
-        if (provVal && databaseWilayah[provVal] && 
+        if (!provVal || !kotaVal || !kecVal) {
+            return;
+        }
+
+        // 1. Cek apakah ada data lokal instan (seperti Demak, Jepara, Kudus, Pati, Semarang)
+        if (databaseWilayah[provVal] && 
             databaseWilayah[provVal][kotaVal] && 
             !Array.isArray(databaseWilayah[provVal][kotaVal]) && 
             databaseWilayah[provVal][kotaVal][kecVal]) {
@@ -993,16 +1031,86 @@
                 kelSelect.appendChild(opt);
             });
 
-            if (!isUserEvent && initialKel) {
-                for (let i = 0; i < kelSelect.options.length; i++) {
-                    if (kelSelect.options[i].value.toLowerCase() === initialKel.toLowerCase()) {
-                        kelSelect.selectedIndex = i;
-                        break;
-                    }
-                }
+            // Opsi ketik mandiri jika diperlukan
+            const manualOpt = document.createElement('option');
+            manualOpt.value = '__custom__';
+            manualOpt.textContent = '+ Ketik Kelurahan Lainnya...';
+            kelSelect.appendChild(manualOpt);
+
+            if (kelToSelect) {
+                selectKelurahanValue(kelToSelect);
+            }
+            return;
+        }
+
+        // 2. Jika tidak ada di memori lokal, ambil otomatis via API backend ber-cache
+        if (currentKelurahanAbortController) {
+            currentKelurahanAbortController.abort();
+        }
+        currentKelurahanAbortController = new AbortController();
+
+        kelSelect.innerHTML = '<option value="">-- Memuat Kelurahan / Desa... --</option>';
+        kelSelect.disabled = true;
+
+        fetch(`/api/wilayah/kelurahan?provinsi=${encodeURIComponent(provVal)}&kota=${encodeURIComponent(kotaVal)}&kecamatan=${encodeURIComponent(kecVal)}`, {
+            signal: currentKelurahanAbortController.signal
+        })
+        .then(res => res.json())
+        .then(res => {
+            kelSelect.disabled = false;
+            kelSelect.innerHTML = '<option value="">-- Pilih Kelurahan / Desa --</option>';
+
+            if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                res.data.forEach(kel => {
+                    const opt = document.createElement('option');
+                    opt.value = kel;
+                    opt.textContent = kel;
+                    kelSelect.appendChild(opt);
+                });
+            }
+
+            // Opsi alternatif ketik mandiri
+            const manualOpt = document.createElement('option');
+            manualOpt.value = '__custom__';
+            manualOpt.textContent = '+ Ketik Kelurahan Lainnya...';
+            kelSelect.appendChild(manualOpt);
+
+            if (kelToSelect) {
+                selectKelurahanValue(kelToSelect);
+            }
+        })
+        .catch(err => {
+            if (err.name === 'AbortError') return;
+            kelSelect.disabled = false;
+            kelSelect.innerHTML = '<option value="">-- Pilih Kelurahan / Desa --</option>';
+
+            if (kelToSelect) {
+                selectKelurahanValue(kelToSelect);
+            }
+
+            const manualOpt = document.createElement('option');
+            manualOpt.value = '__custom__';
+            manualOpt.textContent = '+ Ketik Kelurahan Lainnya...';
+            kelSelect.appendChild(manualOpt);
+        });
+    }
+
+    // Listener jika pengguna memilih opsi '+ Ketik Kelurahan Lainnya...'
+    kelSelect.addEventListener('change', function() {
+        if (this.value === '__custom__') {
+            const userInput = prompt('Masukkan nama Kelurahan / Desa Anda:');
+            if (userInput && userInput.trim().length > 0) {
+                const cleanInput = userInput.trim();
+                const opt = document.createElement('option');
+                opt.value = cleanInput;
+                opt.textContent = cleanInput;
+                this.insertBefore(opt, this.lastElementChild);
+                this.value = cleanInput;
+            } else {
+                this.value = '';
             }
         }
-    }
+    });
 
     // Event Listeners
     provSelect.addEventListener('change', () => onProvinsiChange(true));
@@ -1124,20 +1232,24 @@
                                         kotaSelect.selectedIndex = kotaIdx;
                                         onKotaChange(false);
 
-                                        // Cocokkan Kecamatan jika tersedia
-                                        if (geoData.kecamatan) {
-                                            setTimeout(() => {
+                                        // Cocokkan Kecamatan jika tersedia, lalu muat & pilih Kelurahan
+                                        setTimeout(() => {
+                                            if (geoData.kecamatan) {
                                                 const kecIdx = findMatchingOption(kecSelect, geoData.kecamatan);
                                                 if (kecIdx > 0) {
                                                     kecSelect.selectedIndex = kecIdx;
-                                                    onKecamatanChange(false);
+                                                    onKecamatanChange(false, geoData.kelurahan);
+                                                } else if (geoData.kelurahan) {
+                                                    onKecamatanChange(false, geoData.kelurahan);
                                                 }
-                                            }, 50);
-                                        }
+                                            } else if (geoData.kelurahan) {
+                                                onKecamatanChange(false, geoData.kelurahan);
+                                            }
+                                        }, 80);
                                     }
-                                }, 50);
+                                }, 80);
 
-                                const detectedStr = [geoData.kecamatan, geoData.kota, geoData.provinsi].filter(Boolean).join(', ');
+                                const detectedStr = [geoData.kelurahan, geoData.kecamatan, geoData.kota, geoData.provinsi].filter(Boolean).join(', ');
                                 showLocationMessage(`✓ Lokasi terdeteksi akurat: ${detectedStr}`);
                             } else {
                                 showLocationMessage(`Lokasi terdeteksi (${geoData.provinsi}), silakan sesuaikan dropdown provinsi.`);
