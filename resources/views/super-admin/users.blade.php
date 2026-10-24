@@ -191,9 +191,19 @@
                                     <div class="flex items-center justify-end gap-1.5 flex-wrap">
                                         <!-- 1. Tombol ACC Akun (Bisa dilakukan Super Admin & Admin Biasa) -->
                                         @if($u->status === 'menunggu_verifikasi')
-                                            <form action="{{ route('superadmin.users.approve', $u->id) }}" method="POST" onsubmit="return confirm('Apakah Anda ingin MENYETUJUI (ACC) akun {{ $u->role }} {{ $u->name }}?');">
+                                            <form id="form-approve-user-{{ $u->id }}" action="{{ route('superadmin.users.approve', $u->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition shadow-sm flex items-center gap-1">
+                                                <button type="button"
+                                                        onclick="openAppConfirmModal({
+                                                            title: 'Setujui (ACC) Pendaftaran Akun',
+                                                            message: 'Apakah Anda yakin ingin <strong>MENYETUJUI (ACC)</strong> akun <strong>{{ addslashes($u->name) }}</strong> sebagai <strong>{{ strtoupper($u->role) }}</strong>?',
+                                                            badge: 'Role: {{ strtoupper($u->role) }} &bull; {{ $u->email }}',
+                                                            confirmText: '✓ Ya, Setujui Akun',
+                                                            confirmClass: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+                                                            icon: 'check',
+                                                            form: document.getElementById('form-approve-user-{{ $u->id }}')
+                                                        })"
+                                                        class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition shadow-sm flex items-center gap-1">
                                                     ✓ ACC Akun
                                                 </button>
                                             </form>
@@ -212,14 +222,34 @@
                                             </button>
 
                                             <!-- Tombol Suspend / Aktifkan -->
-                                            <form action="{{ route('superadmin.users.toggle', $u->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status akun {{ $u->name }}?');">
+                                            <form id="form-toggle-user-{{ $u->id }}" action="{{ route('superadmin.users.toggle', $u->id) }}" method="POST">
                                                 @csrf
                                                 @if($u->status === 'aktif')
-                                                    <button type="submit" class="px-2.5 py-1.5 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold transition">
+                                                    <button type="button"
+                                                            onclick="openAppConfirmModal({
+                                                                title: 'Tangguhkan Akun Pengguna',
+                                                                message: 'Apakah Anda yakin ingin <strong>menangguhkan akun {{ addslashes($u->name) }}</strong>? Pengguna tidak akan dapat masuk ke sistem sampai akun diaktifkan kembali.',
+                                                                badge: 'Status: Ditangguhkan &bull; {{ $u->email }}',
+                                                                confirmText: 'Tangguhkan Akun',
+                                                                confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                                                                icon: 'danger',
+                                                                form: document.getElementById('form-toggle-user-{{ $u->id }}')
+                                                            })"
+                                                            class="px-2.5 py-1.5 rounded-xl border border-rose-200 hover:bg-rose-50 text-rose-600 text-xs font-bold transition">
                                                         Tangguhkan
                                                     </button>
                                                 @elseif($u->status !== 'menunggu_verifikasi')
-                                                    <button type="submit" class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm">
+                                                    <button type="button"
+                                                            onclick="openAppConfirmModal({
+                                                                title: 'Aktifkan Kembali Akun',
+                                                                message: 'Apakah Anda yakin ingin <strong>mengaktifkan kembali akun {{ addslashes($u->name) }}</strong>?',
+                                                                badge: 'Status: Aktif &bull; {{ $u->email }}',
+                                                                confirmText: '✓ Ya, Aktifkan Akun',
+                                                                confirmClass: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+                                                                icon: 'check',
+                                                                form: document.getElementById('form-toggle-user-{{ $u->id }}')
+                                                            })"
+                                                            class="px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm">
                                                         Aktifkan
                                                     </button>
                                                 @endif

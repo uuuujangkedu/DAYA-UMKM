@@ -339,23 +339,43 @@
 
     // Reset Chat Button
     resetBtn.addEventListener('click', async () => {
-        if (!confirm('Apakah kamu ingin membersihkan percakapan ini?')) return;
+        const executeReset = async () => {
+            const csrfTokenMeta = document.querySelector('meta[name=\"csrf-token\"]');
+            const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '{{ csrf_token() }}';
 
-        const csrfTokenMeta = document.querySelector('meta[name=\"csrf-token\"]');
-        const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '{{ csrf_token() }}';
+            try {
+                await fetch("{{ route('chatbot.reset') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    },
+                });
+            } catch (e) {
+                // silent fail
+            }
 
-        try {
-            await fetch("{{ route('chatbot.reset') }}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
+            // Clear UI messages except initial greeting & chips
+            const allBubbles = messagesContainer.querySelectorAll('.flex-col:not(#chatbot-typing-indicator)');
+            allBubbles.forEach((el, index) => {
+                if (index > 0) el.remove(); // keep only the first greeting
             });
-        } catch (e) {
-            // silent fail
+        };
+
+        if (typeof openAppConfirmModal === 'function') {
+            openAppConfirmModal({
+                title: 'Bersihkan Obrolan AI',
+                message: 'Apakah Anda ingin membersihkan seluruh percakapan dan memulai obrolan baru dengan AI Assistant?',
+                confirmText: 'Bersihkan',
+                confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                icon: 'danger',
+                onConfirm: executeReset
+            });
+        } else {
+            executeReset();
         }
+    });
 
         // Clear UI messages except initial greeting & chips
         const allBubbles = messagesContainer.querySelectorAll('.flex-col:not(#chatbot-typing-indicator)');

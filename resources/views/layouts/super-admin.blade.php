@@ -177,6 +177,25 @@
                         </span>
                     @endif
                 </a>
+
+                <!-- 6. MONITORING DIVIDEN & KEPATUHAN -->
+                <a href="{{ route('superadmin.dividen') }}" 
+                   class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.dividen*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                    <div class="flex min-w-0 items-center gap-3">
+                        <svg class="w-4 h-4 {{ request()->routeIs('superadmin.dividen*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span class="min-w-0 flex-1 leading-snug">MONITORING DIVIDEN</span>
+                    </div>
+                    @php
+                        $pendingKlarifikasiBadge = \App\Models\KlarifikasiDividen::where('status', 'menunggu_tinjauan')->count();
+                    @endphp
+                    @if($pendingKlarifikasiBadge > 0)
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
+                            {{ $pendingKlarifikasiBadge }}
+                        </span>
+                    @endif
+                </a>
             </nav>
         </div>
 

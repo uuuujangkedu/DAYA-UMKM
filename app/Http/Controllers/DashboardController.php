@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\BagiHasilLog;
 use App\Models\CatatanKeuangan;
 use App\Models\Investasi;
+use App\Models\KlarifikasiDividen;
 use App\Models\PesanInvestasi;
 use App\Models\Produk;
 use App\Models\RekomendasiRuko;
 use App\Models\Ruko;
+use App\Models\TeguranDividenLog;
 use App\Models\TransaksiSewa;
 use App\Models\UlasanUmkm;
 use App\Models\Umkm;
@@ -125,12 +127,18 @@ class DashboardController extends Controller
             $rukos = $rukoQuery->latest('id_ruko')->get();
 
             // SINERGI INVESTASI DENGAN INVESTOR (Investasi Aktif & Riwayat Setoran Dividen)
-            $investasiAktif = Investasi::with(['pengguna', 'bagiHasilLog'])
+            $investasiAktif = Investasi::with(['pengguna', 'bagiHasilLog', 'klarifikasiDividen', 'teguranDividen'])
                 ->where('id_umkm', $umkm->id_umkm)
                 ->where('status', 'aktif')
                 ->latest('tanggal_investasi')
                 ->get();
             $totalModalTerkumpul = (float) $investasiAktif->sum('jumlah_modal');
+
+            // Cek apakah ada kewajiban bagi hasil yang memasuki masa tenggang atau menunggak
+            $adaDividenTenggangAtauNunggak = $investasiAktif->contains(function ($inv) {
+                $statusCode = $inv->status_dividen_bulan_ini['code'] ?? '';
+                return in_array($statusCode, ['masa_tenggang', 'menunggak']);
+            });
 
             $semuaInvestasiIds = $umkm->investasi()->pluck('id_investasi');
             $riwayatSetorDividen = BagiHasilLog::with('investasi.pengguna')
@@ -177,6 +185,20 @@ class DashboardController extends Controller
             $ratingRataRata = $umkm->rating_rata_rata;
             $totalUlasan = $umkm->total_ulasan;
 
+            // Riwayat & Surat Peringatan (SP) Kepatuhan Dividen untuk UMKM
+            $daftarTeguranSp = TeguranDividenLog::with(['investasi.pengguna', 'admin'])
+                ->where('id_umkm', $umkm->id_umkm)
+                ->latest()
+                ->get();
+            $teguranSpTerbaru = $daftarTeguranSp->first();
+
+            // Laporan Klarifikasi Kendala yang Telah Di-ACC / Disetujui Admin
+            $klarifikasiDisetujuiTerbaru = KlarifikasiDividen::with(['investasi.pengguna'])
+                ->where('id_umkm', $umkm->id_umkm)
+                ->where('status', 'diverifikasi_admin')
+                ->latest('updated_at')
+                ->first();
+
             return view('dashboard.umkm', compact(
                 'user',
                 'umkm',
@@ -211,7 +233,11 @@ class DashboardController extends Controller
                 'rukoStatusFilter',
                 'ulasanDiterima',
                 'ratingRataRata',
-                'totalUlasan'
+                'totalUlasan',
+                'adaDividenTenggangAtauNunggak',
+                'daftarTeguranSp',
+                'teguranSpTerbaru',
+                'klarifikasiDisetujuiTerbaru'
             ));
         }
 
@@ -242,7 +268,7 @@ class DashboardController extends Controller
             $investasiSaya = $investasiQuery->latest('tanggal_investasi')->get();
 
             // Seluruh investasi modal usaha UMKM
-            $semuaInvestasiSaya = Investasi::with(['umkm.user', 'umkm.ruko'])
+            $semuaInvestasiSaya = Investasi::with(['umkm.user', 'umkm.ruko', 'bagiHasilLog', 'klarifikasiDividen', 'teguranDividen'])
                 ->where('id_pengguna', $user->id)
                 ->latest('tanggal_investasi')
                 ->get();
@@ -1285,6 +1311,68 @@ class DashboardController extends Controller
         $rek = $investasi->pengguna->nomor_rekening ?? '-';
 
         return back()->with('success', 'Bagi hasil dividen sebesar Rp '.number_format($validated['nominal_diterima'], 0, ',', '.').' berhasil disetorkan ke rekening '.$bankName.' ('.$rek.') milik '.$investorName.'! Struk transfer otomatis tercatat di buku dividen investor.');
+    }
+
+    /**
+     * Ajukan Klarifikasi Penundaan Dividen Akibat Kendala Usaha oleh Pelaku UMKM
+     */
+    public function storeKlarifikasiDividen(Request $request)
+    {
+        $user = Auth::user();
+        if ($user->role !== 'umkm') {
+            abort(403);
+        }
+
+        $umkm = Umkm::where('user_id', $user->id)->firstOrFail();
+
+        $validated = $request->validate([
+            'id_investasi' => 'required|exists:investasi,id_investasi',
+            'bulan_periode' => 'required|string|max:50',
+            'kategori_kendala' => 'required|string|in:omzet_menurun,beban_operasional,piutang_tertunda,force_majeure,lainnya',
+            'alasan' => 'required|string|min:10|max:3000',
+            'komitmen_solusi' => 'required|string|min:10|max:2000',
+            'lampiran_bukti' => 'nullable|file|mimes:jpeg,png,jpg,pdf,xlsx,csv|max:5120',
+        ]);
+
+        $investasi = Investasi::with('pengguna')->where('id_umkm', $umkm->id_umkm)->findOrFail($validated['id_investasi']);
+
+        $filePath = null;
+        if ($request->hasFile('lampiran_bukti')) {
+            $file = $request->file('lampiran_bukti');
+            $fileName = 'klarifikasi_'.time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+            $dest = public_path('uploads/klarifikasi_dividen');
+            if (! file_exists($dest)) {
+                mkdir($dest, 0755, true);
+            }
+            $file->move($dest, $fileName);
+            $filePath = '/uploads/klarifikasi_dividen/'.$fileName;
+        }
+
+        $klarifikasi = KlarifikasiDividen::create([
+            'id_investasi' => $investasi->id_investasi,
+            'id_umkm' => $umkm->id_umkm,
+            'bulan_periode' => $validated['bulan_periode'],
+            'kategori_kendala' => $validated['kategori_kendala'],
+            'alasan' => $validated['alasan'],
+            'komitmen_solusi' => $validated['komitmen_solusi'],
+            'lampiran_bukti' => $filePath,
+            'status' => 'menunggu_tinjauan',
+        ]);
+
+        // Kirim otomatis notifikasi klarifikasi resmi ke percakapan investor
+        $investorName = $investasi->pengguna->name ?? 'Mitra Investor';
+        PesanInvestasi::create([
+            'id_investasi' => $investasi->id_investasi,
+            'id_pengirim' => $user->id,
+            'pesan' => "📢 [Pemberitahuan Resmi Penundaan Bagi Hasil - {$validated['bulan_periode']}]\n"
+                . "Halo {$investorName}, kami mengajukan klarifikasi resmi penundaan bagi hasil dividen untuk periode {$validated['bulan_periode']} dikarenakan kendala: {$klarifikasi->kategori_label}.\n\n"
+                . "Detail Kendala: {$validated['alasan']}\n\n"
+                . "Komitmen & Rencana Pemulihan: {$validated['komitmen_solusi']}\n\n"
+                . "Status penundaan ini tercatat transparan di platform DAYA-UMKM untuk ditinjau bersama.",
+            'dibaca' => false,
+        ]);
+
+        return back()->with('success', 'Klarifikasi kendala usaha periode '.$validated['bulan_periode'].' berhasil dikirim dan dicatat transparan ke Mitra Investor.');
     }
 
     /**

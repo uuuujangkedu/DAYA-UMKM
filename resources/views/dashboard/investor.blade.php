@@ -557,6 +557,31 @@
                             </div>
                         </div>
 
+                        <!-- STATUS JATUH TEMPO & BAGI HASIL DIVIDEN BULAN BERJALAN -->
+                        @php
+                            $statusBulanIni = $inv->status_dividen_bulan_ini;
+                            $klarifikasiAktif = $statusBulanIni['klarifikasi'] ?? null;
+                        @endphp
+                        <div class="mt-3.5 p-3 rounded-2xl border flex items-center justify-between gap-2 {{ $statusBulanIni['badge_class'] }}">
+                            <div class="flex items-center gap-2">
+                                <span class="text-base">{{ $statusBulanIni['icon'] }}</span>
+                                <div>
+                                    <span class="text-[11px] font-extrabold block leading-tight">{{ $statusBulanIni['badge_label'] }}</span>
+                                    <span class="text-[10px] opacity-80">Jatuh tempo: 25 {{ $statusBulanIni['bulan_periode'] }}</span>
+                                </div>
+                            </div>
+                            @if($statusBulanIni['code'] === 'lancar')
+                                <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-600 text-white">Lunas</span>
+                            @elseif($statusBulanIni['code'] === 'klarifikasi' && $klarifikasiAktif)
+                                <button type="button"
+                                        onclick="openLihatKlarifikasiModal('{{ addslashes($inv->umkm->nama_usaha ?? 'UMKM') }}', '{{ $klarifikasiAktif->bulan_periode }}', '{{ addslashes($klarifikasiAktif->kategori_label) }}', `{{ addslashes($klarifikasiAktif->alasan) }}`, `{{ addslashes($klarifikasiAktif->komitmen_solusi) }}`, '{{ $klarifikasiAktif->lampiran_bukti ? asset('storage/' . $klarifikasiAktif->lampiran_bukti) : '' }}', '{{ $klarifikasiAktif->status }}', `{{ addslashes($klarifikasiAktif->catatan_admin ?? '') }}`)"
+                                        class="px-2.5 py-1 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-[10px] font-black transition shadow-sm shrink-0 flex items-center gap-1">
+                                    <span>Lihat Kendala</span>
+                                    <span>↗</span>
+                                </button>
+                            @endif
+                        </div>
+
                         <!-- Catatan Komitmen -->
                         @if(!empty($inv->catatan))
                             <div class="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100 text-[11px] text-gray-600 italic">
@@ -982,8 +1007,8 @@
                                        class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-2 focus:ring-[#0F433C] focus:border-transparent outline-none">
                                 <button type="submit" 
                                         class="px-5 py-2.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5 shrink-0">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                                    <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4l19 8-19 8 3-8-3-8zm3 8h10"/>
                                     </svg>
                                     <span>Kirim</span>
                                 </button>
@@ -2904,5 +2929,124 @@
             onCalcChange();
         }
     });
+
+    // Modal Lihat Klarifikasi Kendala Usaha UMKM
+    function openLihatKlarifikasiModal(namaUsaha, periode, kategori, alasan, solusi, lampiranUrl, status, catatanAdmin) {
+        document.getElementById('lihat-klr-umkm').innerText = namaUsaha;
+        document.getElementById('lihat-klr-periode').innerText = periode;
+        document.getElementById('lihat-klr-kategori').innerText = kategori;
+        document.getElementById('lihat-klr-alasan').innerText = alasan;
+        document.getElementById('lihat-klr-solusi').innerText = solusi;
+
+        const lampiranContainer = document.getElementById('lihat-klr-lampiran-container');
+        const lampiranLink = document.getElementById('lihat-klr-lampiran-link');
+        if (lampiranUrl) {
+            lampiranLink.href = lampiranUrl;
+            lampiranContainer.classList.remove('hidden');
+        } else {
+            lampiranContainer.classList.add('hidden');
+        }
+
+        const statusBadge = document.getElementById('lihat-klr-status');
+        const catatanAdminEl = document.getElementById('lihat-klr-catatan-admin');
+        if (status === 'diverifikasi_admin') {
+            statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-300';
+            statusBadge.innerText = 'Diverifikasi & Disetujui Admin';
+        } else if (status === 'ditolak') {
+            statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-black uppercase bg-rose-100 text-rose-800 border border-rose-300';
+            statusBadge.innerText = 'Ditolak Tim Admin';
+        } else {
+            statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-black uppercase bg-amber-100 text-amber-800 border border-amber-300';
+            statusBadge.innerText = 'Sedang Ditinjau Tim Compliance';
+        }
+
+        catatanAdminEl.innerText = catatanAdmin ? `Catatan Admin: "${catatanAdmin}"` : 'Menunggu tinjauan kepatuhan resmi dari administrator platform.';
+
+        document.getElementById('modal-lihat-klarifikasi').classList.remove('hidden');
+    }
+
+    function closeLihatKlarifikasiModal() {
+        document.getElementById('modal-lihat-klarifikasi').classList.add('hidden');
+    }
 </script>
+
+<!-- MODAL LIHAT KLARIFIKASI KENDALA USAHA DARI UMKM -->
+<div id="modal-lihat-klarifikasi" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-sky-100 text-sky-800 flex items-center justify-center text-lg font-black shrink-0">
+                    ℹ️
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-[#1A202C]">Laporan Kendala Usaha & Dividen</h3>
+                    <p class="text-xs text-gray-500">Transparansi resmi dari pengelola mitra UMKM</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeLihatKlarifikasiModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">✕</button>
+        </div>
+
+        <div class="space-y-4 text-xs">
+            <!-- Header Ringkasan Usaha & Periode -->
+            <div class="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/80 flex items-center justify-between">
+                <div>
+                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Mitra UMKM:</span>
+                    <strong id="lihat-klr-umkm" class="text-sm font-black text-gray-900">-</strong>
+                </div>
+                <div class="text-right">
+                    <span class="text-[10px] text-gray-400 uppercase font-bold block">Periode Kewajiban:</span>
+                    <strong id="lihat-klr-periode" class="text-xs font-bold text-gray-800">-</strong>
+                </div>
+            </div>
+
+            <!-- Kategori Kendala -->
+            <div>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Faktor Utama Kendala:</span>
+                <span id="lihat-klr-kategori" class="inline-block px-3 py-1 rounded-full text-xs font-black bg-purple-100 text-purple-900 border border-purple-200">
+                    -
+                </span>
+            </div>
+
+            <!-- Uraian Penjelasan -->
+            <div>
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Penjelasan Kondisi Usaha:</span>
+                <div id="lihat-klr-alasan" class="p-3.5 rounded-xl bg-gray-50 border border-gray-100 text-gray-700 leading-relaxed font-mono text-[11px]">
+                    -
+                </div>
+            </div>
+
+            <!-- Komitmen & Solusi Pemulihan -->
+            <div>
+                <span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block mb-1">Komitmen & Solusi Pemulihan Omzet:</span>
+                <div id="lihat-klr-solusi" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 leading-relaxed text-xs font-medium">
+                    -
+                </div>
+            </div>
+
+            <!-- Dokumen Lampiran -->
+            <div id="lihat-klr-lampiran-container" class="hidden">
+                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider block mb-1">Dokumen Lampiran Bukti:</span>
+                <a id="lihat-klr-lampiran-link" href="#" target="_blank" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200 transition">
+                    <span>📎 Unduh / Lihat Dokumen Pendukung</span>
+                    <span>↗</span>
+                </a>
+            </div>
+
+            <!-- Status Tinjauan Admin Platform -->
+            <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 text-amber-900 text-[11px] space-y-1">
+                <div class="flex items-center justify-between">
+                    <span class="font-bold">Status Verifikasi Compliance Admin:</span>
+                    <span id="lihat-klr-status" class="px-2 py-0.5 rounded text-[10px] font-black uppercase">-</span>
+                </div>
+                <p id="lihat-klr-catatan-admin" class="text-amber-800 italic pt-1"></p>
+            </div>
+
+            <div class="pt-2">
+                <button type="button" onclick="closeLihatKlarifikasiModal()" class="w-full py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm">
+                    Tutup Informasi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
