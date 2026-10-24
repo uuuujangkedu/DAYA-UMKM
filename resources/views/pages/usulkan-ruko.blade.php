@@ -204,10 +204,24 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
-                            Alamat Lengkap, Kota & Patokan <span class="text-rose-500">*</span>
-                        </label>
-                        <textarea name="lokasi" required rows="3" 
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <label for="lokasi_ruko" class="block text-xs font-bold text-[#15241C] uppercase tracking-wider">
+                                Alamat Lengkap, Kota & Patokan <span class="text-rose-500">*</span>
+                            </label>
+
+                            <!-- Opsi Nyalakan Lokasi untuk akurasi alamat ruko -->
+                            <button type="button" 
+                                    id="btn_detect_ruko_location"
+                                    title="Deteksi alamat ruko otomatis berdasarkan titik GPS perangkat Anda"
+                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#2D6B22]/10 hover:bg-[#2D6B22]/15 text-[#2D6B22] border border-[#2D6B22]/20 transition shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2D6B22]/30">
+                                <svg class="w-3.5 h-3.5 text-[#2D6B22]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.071-7.071l-1.414 1.414M8.343 15.657l-1.414 1.414m12.142 0l-1.414-1.414M8.343 8.343L6.929 6.929M12 17a5 5 0 100-10 5 5 0 000 10z"/>
+                                </svg>
+                                <span id="btn_detect_ruko_text">Nyalakan Lokasi</span>
+                            </button>
+                        </div>
+                        <div id="ruko_location_msg" class="hidden text-xs py-1.5 px-3 rounded-xl mb-2 font-medium"></div>
+                        <textarea name="lokasi" id="lokasi_ruko" required rows="3" 
                                   placeholder="Contoh: Jl. Boulevard Raya Barat No. 12, Kelapa Dua, Tangerang, Banten (Dekat Kampus UMN, Seberang SPBU Pertamina)"
                                   class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('lokasi') }}</textarea>
                         @error('lokasi')
@@ -377,6 +391,96 @@ document.addEventListener('DOMContentLoaded', function () {
                 hiddenInput.value = displayInput.value.replace(/\D/g, '');
             });
         }
+    }
+
+    // ==========================================
+    // HANDLER NYALAKAN LOKASI ALAMAT RUKO (GPS)
+    // ==========================================
+    const btnRukoLocation = document.getElementById('btn_detect_ruko_location');
+    const btnRukoText = document.getElementById('btn_detect_ruko_text');
+    const rukoLocationMsg = document.getElementById('ruko_location_msg');
+    const rukoTextarea = document.getElementById('lokasi_ruko');
+
+    function showRukoLocationMsg(text, isError = false) {
+        if (!rukoLocationMsg) return;
+        rukoLocationMsg.className = 'text-xs py-1.5 px-3 rounded-xl mb-2 font-medium ' +
+            (isError 
+                ? 'bg-amber-50 text-amber-900 border border-amber-200' 
+                : 'bg-[#F2F8ED] text-[#2D6B22] border border-[#C8BFB0]/70');
+        rukoLocationMsg.textContent = text;
+        rukoLocationMsg.classList.remove('hidden');
+    }
+
+    if (btnRukoLocation && rukoTextarea) {
+        btnRukoLocation.addEventListener('click', function() {
+            if (!navigator.geolocation) {
+                showRukoLocationMsg('Peramban web belum mendukung deteksi GPS.', true);
+                return;
+            }
+
+            const originalBtnHtml = btnRukoText.innerHTML;
+            btnRukoText.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span> Mendeteksi...';
+            btnRukoLocation.disabled = true;
+            btnRukoLocation.classList.add('opacity-75');
+
+            navigator.geolocation.getCurrentPosition(
+                async function(pos) {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+
+                    try {
+                        let formattedAddress = '';
+
+                        // 1. Coba OpenStreetMap Nominatim
+                        try {
+                            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`, {
+                                headers: { 'Accept-Language': 'id' }
+                            });
+                            if (res.ok) {
+                                const d = await res.json();
+                                if (d && d.display_name) {
+                                    formattedAddress = d.display_name;
+                                }
+                            }
+                        } catch (e) {}
+
+                        // 2. Fallback BigDataCloud client API
+                        if (!formattedAddress) {
+                            const res2 = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=id`);
+                            if (res2.ok) {
+                                const d2 = await res2.json();
+                                formattedAddress = [d2.locality, d2.city, d2.principalSubdivision, d2.countryName].filter(Boolean).join(', ');
+                            }
+                        }
+
+                        if (formattedAddress) {
+                            rukoTextarea.value = formattedAddress;
+                            showRukoLocationMsg('✓ Alamat ruko terisi otomatis sesuai GPS perangkat Anda.');
+                        } else {
+                            showRukoLocationMsg('Nama jalan tidak teridentifikasi untuk titik ini. Silakan tulis secara manual.', true);
+                        }
+                    } catch (err) {
+                        showRukoLocationMsg('Layanan geocoding peta sedang sibuk. Silakan tulis alamat secara manual.', true);
+                    } finally {
+                        btnRukoText.innerHTML = originalBtnHtml;
+                        btnRukoLocation.disabled = false;
+                        btnRukoLocation.classList.remove('opacity-75');
+                    }
+                },
+                function(err) {
+                    btnRukoText.innerHTML = originalBtnHtml;
+                    btnRukoLocation.disabled = false;
+                    btnRukoLocation.classList.remove('opacity-75');
+
+                    if (err.code === 1) {
+                        showRukoLocationMsg('Izin akses lokasi tidak diizinkan di peramban. Silakan tulis alamat secara manual.', true);
+                    } else {
+                        showRukoLocationMsg('Titik GPS tidak dapat dibaca. Silakan tulis alamat secara manual.', true);
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+            );
+        });
     }
 });
 </script>

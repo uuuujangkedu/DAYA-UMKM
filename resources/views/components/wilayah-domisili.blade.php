@@ -37,9 +37,24 @@
 
 <div class="space-y-3 wilayah-component" id="{{ $idPrefix }}_container">
     <div>
-        <label class="block text-[14px] font-semibold text-[#161d1a] mb-2">
-            {{ $label }} @if($required)<span class="text-red-500">*</span>@endif
-        </label>
+        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+            <label class="block text-[14px] font-semibold text-[#161d1a]">
+                {{ $label }} @if($required)<span class="text-red-500">*</span>@endif
+            </label>
+
+            <!-- Opsi Nyalakan Lokasi untuk akurasi alamat -->
+            <button type="button" 
+                    id="{{ $idPrefix }}_btn_location"
+                    title="Deteksi wilayah otomatis berdasarkan GPS perangkat Anda"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-[12px] font-semibold bg-[#eaf5e9] text-[#1e4a1a] border border-[#c8e6c9] hover:bg-[#d8eed9] transition shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2D6B22]/30">
+                <svg class="w-3.5 h-3.5 text-[#2D6B22]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.071-7.071l-1.414 1.414M8.343 15.657l-1.414 1.414m12.142 0l-1.414-1.414M8.343 8.343L6.929 6.929M12 17a5 5 0 100-10 5 5 0 000 10z"/>
+                </svg>
+                <span id="{{ $idPrefix }}_btn_text">Nyalakan Lokasi</span>
+            </button>
+        </div>
+
+        <div id="{{ $idPrefix }}_location_msg" class="hidden text-[12px] py-1.5 px-3 rounded-[6px] mb-2 font-medium"></div>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <!-- Provinsi -->
@@ -982,6 +997,166 @@
     provSelect.addEventListener('change', () => onProvinsiChange(true));
     kotaSelect.addEventListener('change', () => onKotaChange(true));
     kecSelect.addEventListener('change', () => onKecamatanChange(true));
+
+    // ==========================================
+    // HANDLER NYALAKAN LOKASI (GEOLOCATION GPS)
+    // ==========================================
+    const btnLocation = document.getElementById('{{ $idPrefix }}_btn_location');
+    const btnText = document.getElementById('{{ $idPrefix }}_btn_text');
+    const locationMsg = document.getElementById('{{ $idPrefix }}_location_msg');
+
+    function showLocationMessage(text, isError = false) {
+        if (!locationMsg) return;
+        locationMsg.className = 'text-[12px] py-1.5 px-3 rounded-[6px] mb-2 font-medium ' + 
+            (isError 
+                ? 'bg-amber-50 text-amber-900 border border-amber-200' 
+                : 'bg-[#f2f8ed] text-[#2D6B22] border border-[#c8bfb0]/70');
+        locationMsg.textContent = text;
+        locationMsg.classList.remove('hidden');
+    }
+
+    function findMatchingOption(selectEl, searchStr) {
+        if (!searchStr) return -1;
+        const cleanSearch = searchStr.toLowerCase()
+            .replace(/^(provinsi|prov\.|daerah khusus ibukota|daerah istimewa|d\.i\.|kota administrasi|kota|kabupaten|kab\.)\s+/i, '')
+            .trim();
+
+        // 1. Exact match setelah pembersihan prefiks
+        for (let i = 0; i < selectEl.options.length; i++) {
+            const optVal = selectEl.options[i].value;
+            if (!optVal) continue;
+            const cleanOpt = optVal.toLowerCase()
+                .replace(/^(provinsi|prov\.|daerah khusus ibukota|daerah istimewa|d\.i\.|kota administrasi|kota|kabupaten|kab\.)\s+/i, '')
+                .trim();
+            if (cleanOpt === cleanSearch) {
+                return i;
+            }
+        }
+
+        // 2. Substring match
+        for (let i = 0; i < selectEl.options.length; i++) {
+            const optVal = selectEl.options[i].value;
+            if (!optVal) continue;
+            const optLower = optVal.toLowerCase();
+            if (optLower.includes(cleanSearch) || (cleanSearch.length > 3 && cleanSearch.includes(optLower.replace(/^(kab\.|kota)\s+/i, '')))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    if (btnLocation) {
+        btnLocation.addEventListener('click', function() {
+            if (!navigator.geolocation) {
+                showLocationMessage('Peramban web tidak mendukung deteksi lokasi otomatis.', true);
+                return;
+            }
+
+            const originalBtnHtml = btnText.innerHTML;
+            btnText.innerHTML = '<span class="inline-block animate-spin mr-1">↻</span> Mendeteksi...';
+            btnLocation.disabled = true;
+            btnLocation.classList.add('opacity-75');
+
+            navigator.geolocation.getCurrentPosition(
+                async function(position) {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    try {
+                        let geoData = null;
+
+                        // 1. Coba reverse geocode OpenStreetMap Nominatim
+                        try {
+                            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&addressdetails=1`, {
+                                headers: { 'Accept-Language': 'id' }
+                            });
+                            if (res.ok) {
+                                const d = await res.json();
+                                if (d && d.address) {
+                                    geoData = {
+                                        provinsi: d.address.state || d.address.region || '',
+                                        kota: d.address.city || d.address.county || d.address.town || d.address.city_district || '',
+                                        kecamatan: d.address.suburb || d.address.municipality || d.address.district || '',
+                                        kelurahan: d.address.village || d.address.quarter || d.address.neighbourhood || ''
+                                    };
+                                }
+                            }
+                        } catch (e) {
+                            // Abaikan error jaringan OSM, lanjut fallback
+                        }
+
+                        // 2. Fallback BigDataCloud client API
+                        if (!geoData || !geoData.provinsi) {
+                            const res2 = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=id`);
+                            if (res2.ok) {
+                                const d2 = await res2.json();
+                                geoData = {
+                                    provinsi: d2.principalSubdivision || '',
+                                    kota: d2.city || '',
+                                    kecamatan: d2.locality || '',
+                                    kelurahan: ''
+                                };
+                            }
+                        }
+
+                        if (geoData && geoData.provinsi) {
+                            // Cocokkan Provinsi
+                            const provIdx = findMatchingOption(provSelect, geoData.provinsi);
+                            if (provIdx > 0) {
+                                provSelect.selectedIndex = provIdx;
+                                onProvinsiChange(false);
+
+                                // Cocokkan Kota / Kabupaten
+                                setTimeout(() => {
+                                    const kotaIdx = findMatchingOption(kotaSelect, geoData.kota);
+                                    if (kotaIdx > 0) {
+                                        kotaSelect.selectedIndex = kotaIdx;
+                                        onKotaChange(false);
+
+                                        // Cocokkan Kecamatan jika tersedia
+                                        if (geoData.kecamatan) {
+                                            setTimeout(() => {
+                                                const kecIdx = findMatchingOption(kecSelect, geoData.kecamatan);
+                                                if (kecIdx > 0) {
+                                                    kecSelect.selectedIndex = kecIdx;
+                                                    onKecamatanChange(false);
+                                                }
+                                            }, 50);
+                                        }
+                                    }
+                                }, 50);
+
+                                const detectedStr = [geoData.kecamatan, geoData.kota, geoData.provinsi].filter(Boolean).join(', ');
+                                showLocationMessage(`✓ Lokasi terdeteksi akurat: ${detectedStr}`);
+                            } else {
+                                showLocationMessage(`Lokasi terdeteksi (${geoData.provinsi}), silakan sesuaikan dropdown provinsi.`);
+                            }
+                        } else {
+                            showLocationMessage('Nama wilayah tidak teridentifikasi untuk titik ini. Silakan pilih secara manual.', true);
+                        }
+                    } catch (err) {
+                        showLocationMessage('Layanan geocoding peta sedang sibuk. Silakan pilih secara manual.', true);
+                    } finally {
+                        btnText.innerHTML = originalBtnHtml;
+                        btnLocation.disabled = false;
+                        btnLocation.classList.remove('opacity-75');
+                    }
+                },
+                function(err) {
+                    btnText.innerHTML = originalBtnHtml;
+                    btnLocation.disabled = false;
+                    btnLocation.classList.remove('opacity-75');
+
+                    if (err.code === 1) {
+                        showLocationMessage('Izin akses lokasi tidak diizinkan di peramban. Silakan pilih wilayah secara manual.', true);
+                    } else {
+                        showLocationMessage('Titik GPS tidak dapat dibaca. Silakan pilih wilayah secara manual.', true);
+                    }
+                },
+                { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
+            );
+        });
+    }
 
     // Jalankan inisialisasi awal
     setInitialValues();
