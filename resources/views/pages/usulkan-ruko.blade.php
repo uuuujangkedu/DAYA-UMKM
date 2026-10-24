@@ -3,77 +3,124 @@
 @section('title', 'Usulkan Lokasi Ruko & Tempat Usaha UMKM')
 
 @section('content')
-<main class="w-full flex-1 pt-28 sm:pt-32 pb-20">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- ========================================================
+     1. HERO SECTION USULKAN RUKO
+     Background: Sunny Miniature House on Rolling Hills (Blur 20%)
+     Wave divider menyatu mulus ke canvas form bawah (#93c6eb)
+     ======================================================== -->
+<section class="relative w-full overflow-hidden flex items-center justify-center select-none pt-24 sm:pt-28 pb-16 sm:pb-20" data-reveal data-hero aria-label="Hero Usulkan Ruko">
+    <!-- Gambar Visual Utama Miniatur Ruko 3D sebagai Background Blur 20% -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+        <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}" 
+             alt="Visual Miniatur Ruko Daya UMKM" 
+             class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
+        
+        <!-- Soft Tint Overlay agar kontras teks selalu tajam -->
+        <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
-        <!-- HEADER & HERO USULKAN RUKO -->
-        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
-            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-teal-100 text-[#0F433C] border border-teal-200 mb-4">
-                <span>📍</span>
-                <span>KEMITRAAN TEMPAT USAHA & CROWDSOURCING</span>
-            </span>
+        <!-- Biru Langit Gradient di Area Atas Hero -->
+        <div class="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#A8D8F0]/80 via-[#79BEE8]/30 to-transparent pointer-events-none"></div>
 
-            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-[#15241C] tracking-tight leading-tight">
-                Punya Info Ruko Kosong? <br class="hidden sm:inline">
-                <span class="text-[#0F433C]">Daftarkan Lokasi Usaha di TIKUM</span>
-            </h1>
-
-            <p class="text-sm sm:text-base text-gray-600 mt-3 sm:mt-4 leading-relaxed font-medium">
-                Bantu UMKM binaan menemukan tempat usaha komersial yang strategis. Siapa pun dapat mengusulkan lokasi ruko (pemilik, agen properti, maupun warga sekitar). Usulan yang lolos kurasi berpeluang <strong>didanai penuh sewa tahunannya</strong> oleh Mitra Investor ekosistem.
-            </p>
+        <!-- Wave divider di hero: Hijau rumput cerah (#6FC142) menyatu mulus ke seksi bawah (#93c6eb) -->
+        <div class="absolute inset-x-0 -bottom-px pointer-events-none z-10 leading-none">
+            <svg class="w-full h-14 sm:h-20 lg:h-24 block" viewBox="0 0 1440 100" fill="none" preserveAspectRatio="none">
+                <path d="M0,35 C360,75 540,15 820,48 C1100,80 1260,20 1440,52 L1440,100 L0,100 Z" fill="#6FC142" opacity="0.45" />
+                <path d="M0,55 C320,88 580,28 860,62 C1140,95 1300,42 1440,68 L1440,100 L0,100 Z" fill="#93c6eb" />
+            </svg>
         </div>
+    </div>
 
-        <!-- 3 NILAI KEUNTUNGAN MENDAFTARKAN RUKO -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-            <div class="bg-white rounded-2xl p-5 border border-[#E8E6DF] shadow-sm flex items-start gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#0F433C] flex items-center justify-center font-bold text-lg shrink-0">
-                    🏢
-                </div>
-                <div>
-                    <h2 class="text-xs font-black uppercase tracking-wider text-gray-900">Penyewa UMKM Terkurasi</h2>
-                    <p class="text-[11px] text-gray-500 mt-0.5">Ruko diisi oleh UMKM yang telah diverifikasi profil bisnis & legalitasnya.</p>
-                </div>
+    <!-- Konten Hero Usulkan Ruko -->
+    <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 relative z-10">
+        <div class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_12px_36px_rgba(45,107,34,0.08)] text-center max-w-4xl mx-auto" data-reveal-group>
+            
+            <div class="space-y-4">
+                <h1 class="text-[#15241C] font-bold text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] tracking-[-0.025em]" data-reveal-item>
+                    Punya Info Ruko Kosong? <br class="hidden sm:inline">
+                    <span class="text-[#2D6B22]">Daftarkan Lokasi Usaha di TIKUM</span>
+                </h1>
+
+                <p class="text-[#3E5445] text-[15px] sm:text-[17px] leading-[1.65] max-w-2xl mx-auto font-normal" data-reveal-item>
+                    Bantu UMKM binaan menemukan tempat usaha komersial yang strategis. Siapa pun dapat mengusulkan lokasi ruko (pemilik, agen properti, maupun warga sekitar). Usulan yang lolos kurasi berpeluang <strong class="text-[#15241C] font-bold">didanai penuh sewa tahunannya</strong> oleh Mitra Investor ekosistem.
+                </p>
             </div>
 
-            <div class="bg-white rounded-2xl p-5 border border-[#E8E6DF] shadow-sm flex items-start gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center font-bold text-lg shrink-0">
-                    💰
+            <!-- 3 NILAI KEUNTUNGAN MENDAFTARKAN RUKO -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 mt-8 sm:mt-10 pt-8 border-t border-[#C8BFB0]/50" data-reveal-item>
+                <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-[#C8BFB0]/70 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-3.5 text-left">
+                    <div class="w-11 h-11 rounded-xl bg-[#2D6B22]/10 text-[#2D6B22] flex items-center justify-center font-bold text-xl shrink-0">
+                        🏢
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-[#15241C]">Penyewa UMKM Terkurasi</h2>
+                        <p class="text-[12px] text-[#3E5445] mt-1 leading-relaxed">Ruko diisi oleh UMKM yang telah diverifikasi profil bisnis & legalitasnya.</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-xs font-black uppercase tracking-wider text-gray-900">Peluang Sponsor Investor</h2>
-                    <p class="text-[11px] text-gray-500 mt-0.5">Investor platform siap membayarkan dana sewa ruko bagi UMKM yang terpilih.</p>
-                </div>
-            </div>
 
-            <div class="bg-white rounded-2xl p-5 border border-[#E8E6DF] shadow-sm flex items-start gap-3.5">
-                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center font-bold text-lg shrink-0">
-                    ✓
+                <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-[#C8BFB0]/70 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-3.5 text-left">
+                    <div class="w-11 h-11 rounded-xl bg-[#2D6B22]/10 text-[#2D6B22] flex items-center justify-center font-bold text-xl shrink-0">
+                        💰
+                    </div>
+                    <div>
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-[#15241C]">Peluang Sponsor Investor</h2>
+                        <p class="text-[12px] text-[#3E5445] mt-1 leading-relaxed">Investor platform siap membayarkan dana sewa ruko bagi UMKM terpilih.</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-xs font-black uppercase tracking-wider text-gray-900">Kurasi & Publikasi Gratis</h2>
-                    <p class="text-[11px] text-gray-500 mt-0.5">Peninjauan kelayakan lokasi dan penayangan di katalog tanpa biaya.</p>
-                </div>
-            </div>
-        </div>
 
-        <!-- NOTIFIKASI BERHASIL -->
-        @if(session('success'))
-            <div class="mb-8 p-6 rounded-3xl bg-emerald-50 border-2 border-emerald-300 text-emerald-950 shadow-md">
-                <div class="flex items-start gap-4">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-black text-xl shrink-0">
+                <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-[#C8BFB0]/70 shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex items-start gap-3.5 text-left">
+                    <div class="w-11 h-11 rounded-xl bg-[#2D6B22]/10 text-[#2D6B22] flex items-center justify-center font-bold text-xl shrink-0">
                         ✓
                     </div>
                     <div>
-                        <h2 class="text-base font-extrabold text-emerald-900 leading-snug">Usulan Ruko Berhasil Dikirim!</h2>
-                        <p class="text-xs sm:text-sm text-emerald-800 mt-1 font-medium leading-relaxed">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-[#15241C]">Kurasi & Publikasi Gratis</h2>
+                        <p class="text-[12px] text-[#3E5445] mt-1 leading-relaxed">Peninjauan kelayakan lokasi dan penayangan di katalog tanpa pungutan biaya.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ========================================================
+     2. FORM SECTION USULKAN RUKO
+     Background: background-2.jpg (Blur 20%)
+     Menyambung mulus dari wave langit (#93c6eb)
+     ======================================================== -->
+<section class="relative w-full overflow-hidden py-12 sm:py-16 select-none" data-reveal aria-label="Formulir Usulan Ruko">
+    <!-- Visual Warung UMKM / Rolling Hills 3D sebagai Canvas Background -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
+        <img src="{{ asset('images/background-2.jpg') }}" 
+             alt="Visual Warung UMKM Daya UMKM" 
+             class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
+        
+        <!-- Soft Tint Overlay -->
+        <div class="absolute inset-0 bg-white/25 pointer-events-none"></div>
+
+        <!-- Gradasi Biru Langit (#93c6eb) di Area Atas Menghubungkan Mulus dari Wave Hero -->
+        <div class="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#93c6eb] via-[#93c6eb]/30 to-transparent pointer-events-none z-[1]"></div>
+    </div>
+
+    <div class="max-w-[1000px] w-full mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+
+        <!-- NOTIFIKASI BERHASIL -->
+        @if(session('success'))
+            <div class="mb-8 p-6 sm:p-7 rounded-3xl bg-white/95 backdrop-blur-md border-2 border-[#2D6B22]/30 text-[#15241C] shadow-[0_12px_36px_rgba(45,107,34,0.12)]" data-reveal-item>
+                <div class="flex items-start gap-4">
+                    <div class="w-11 h-11 rounded-2xl bg-[#2D6B22] text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-sm">
+                        ✓
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-lg font-bold text-[#15241C] leading-snug">Usulan Ruko Berhasil Dikirim!</h2>
+                        <p class="text-sm text-[#3E5445] mt-1 font-medium leading-relaxed">
                             {{ session('success') }}
                         </p>
                         <div class="mt-4 flex flex-wrap items-center gap-3">
-                            <a href="{{ route('home') }}" class="px-4 py-2 rounded-xl bg-[#0F433C] text-white text-xs font-bold hover:bg-[#19584F] transition">
+                            <a href="{{ route('home') }}" class="inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm transition">
                                 Kembali ke Beranda
                             </a>
                             @auth
-                                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-xl border border-emerald-300 text-emerald-900 text-xs font-bold hover:bg-emerald-100 transition">
+                                <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center border border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white text-xs font-bold px-4 py-2.5 rounded-xl transition">
                                     Buka Dashboard Saya
                                 </a>
                             @endauth
@@ -84,47 +131,49 @@
         @endif
 
         <!-- KARTU FORMULIR PENGUSULAN RUKO -->
-        <div class="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-[#E8E6DF]">
-            <form action="{{ route('ruko.usulkan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <div class="bg-white/90 sm:bg-white/92 backdrop-blur-md rounded-3xl p-6 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_16px_40px_rgba(45,107,34,0.10)] select-text" data-reveal-item>
+            <form action="{{ route('ruko.usulkan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-10">
                 @csrf
 
                 <!-- SEKSI 1: IDENTITAS PENGUSUL -->
-                <div class="space-y-4">
-                    <div class="border-b border-gray-100 pb-3 flex items-center justify-between">
+                <div class="space-y-5">
+                    <div class="border-b border-[#C8BFB0]/50 pb-4 flex items-center justify-between flex-wrap gap-2">
                         <div>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-teal-700 block">Langkah 1 dari 3</span>
-                            <h2 class="text-base sm:text-lg font-black text-gray-900">Identitas Pengusul</h2>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2D6B22]/10 text-[#2D6B22] border border-[#2D6B22]/20">
+                                Langkah 1 dari 3
+                            </span>
+                            <h2 class="text-lg sm:text-xl font-bold text-[#15241C] mt-2">Identitas Pengusul</h2>
                         </div>
                         @auth
-                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-50 text-[#0F433C] border border-teal-200">
+                            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-[#F2F8ED] text-[#2D6B22] border border-[#C8BFB0]/70">
                                 Akun Terdaftar: {{ Auth::user()->name }}
                             </span>
                         @endauth
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                                Nama Lengkap Pengusul *
+                            <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                                Nama Lengkap Pengusul <span class="text-rose-500">*</span>
                             </label>
                             <input type="text" name="nama_pengusul" required 
                                    value="{{ old('nama_pengusul', Auth::user()->name ?? '') }}"
                                    placeholder="Contoh: Bpk. Bambang Sutrisno"
-                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">
+                                   class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
                             @error('nama_pengusul')
                                 <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                                Nomor WhatsApp / Telepon *
+                            <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                                Nomor WhatsApp / Telepon <span class="text-rose-500">*</span>
                             </label>
                             <input type="text" name="kontak_pengusul" required 
                                    value="{{ old('kontak_pengusul', Auth::user()->phone_number ?? '') }}"
                                    placeholder="Contoh: 081234567890"
-                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Nomor ini digunakan tim kurator untuk konfirmasi detail lokasi.</span>
+                                   class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
+                            <span class="text-[11px] text-[#4b5551] mt-1 block">Nomor ini digunakan tim kurator untuk konfirmasi detail lokasi.</span>
                             @error('kontak_pengusul')
                                 <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                             @enderror
@@ -133,32 +182,34 @@
                 </div>
 
                 <!-- SEKSI 2: DETAIL RUKO & LOKASI -->
-                <div class="space-y-4 pt-4 border-t border-gray-100">
-                    <div class="border-b border-gray-100 pb-3">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-teal-700 block">Langkah 2 dari 3</span>
-                        <h2 class="text-base sm:text-lg font-black text-gray-900">Spesifikasi & Lokasi Ruko</h2>
+                <div class="space-y-5 pt-4 border-t border-[#C8BFB0]/50">
+                    <div class="border-b border-[#C8BFB0]/50 pb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2D6B22]/10 text-[#2D6B22] border border-[#2D6B22]/20">
+                            Langkah 2 dari 3
+                        </span>
+                        <h2 class="text-lg sm:text-xl font-bold text-[#15241C] mt-2">Spesifikasi & Lokasi Ruko</h2>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                            Nama Ruko / Kompleks Komersial *
+                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                            Nama Ruko / Kompleks Komersial <span class="text-rose-500">*</span>
                         </label>
                         <input type="text" name="nama_ruko" required 
                                value="{{ old('nama_ruko') }}"
                                placeholder="Contoh: Ruko Boulevard Gading Serpong Blok AA No. 12"
-                               class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">
+                               class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
                         @error('nama_ruko')
                             <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                            Alamat Lengkap, Kota & Patokan *
+                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                            Alamat Lengkap, Kota & Patokan <span class="text-rose-500">*</span>
                         </label>
                         <textarea name="lokasi" required rows="3" 
                                   placeholder="Contoh: Jl. Boulevard Raya Barat No. 12, Kelapa Dua, Tangerang, Banten (Dekat Kampus UMN, Seberang SPBU Pertamina)"
-                                  class="w-full p-4 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">{{ old('lokasi') }}</textarea>
+                                  class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('lokasi') }}</textarea>
                         @error('lokasi')
                             <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                         @enderror
@@ -166,12 +217,12 @@
 
                     <!-- UPLOAD FOTO RUKO -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                             Foto Fisik Ruko / Lokasi (Tampak Depan & Jalan)
                         </label>
-                        <div class="p-4 rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 text-center hover:bg-teal-50/50 hover:border-teal-300 transition">
-                            <input type="file" name="foto_ruko" id="foto_ruko" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white hover:file:bg-[#19584F] cursor-pointer">
-                            <p class="text-[11px] text-gray-400 mt-2">Mendukung format JPG, PNG, atau WebP (Maksimal 5MB). Foto tampak depan jalan sangat membantu kurasi.</p>
+                        <div class="p-5 sm:p-6 rounded-2xl border-2 border-dashed border-[#C8BFB0] bg-[#F2F8ED]/60 text-center hover:bg-[#F2F8ED] hover:border-[#2D6B22] transition group">
+                            <input type="file" name="foto_ruko" id="foto_ruko" accept="image/*" class="w-full text-xs text-[#3E5445] file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#2D6B22] file:text-white hover:file:bg-[#1E4A1A] file:cursor-pointer cursor-pointer">
+                            <p class="text-[12px] text-[#4b5551] mt-2">Mendukung format JPG, PNG, atau WebP (Maksimal 5MB). Foto tampak depan jalan sangat membantu kurasi.</p>
                         </div>
                         @error('foto_ruko')
                             <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
@@ -180,73 +231,75 @@
                 </div>
 
                 <!-- SEKSI 3: FINANSIAL & POTENSI USAHA -->
-                <div class="space-y-4 pt-4 border-t border-gray-100">
-                    <div class="border-b border-gray-100 pb-3">
-                        <span class="text-[10px] font-black uppercase tracking-widest text-teal-700 block">Langkah 3 dari 3</span>
-                        <h2 class="text-base sm:text-lg font-black text-gray-900">Perkiraan Biaya Sewa & Potensi Usaha</h2>
+                <div class="space-y-5 pt-4 border-t border-[#C8BFB0]/50">
+                    <div class="border-b border-[#C8BFB0]/50 pb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2D6B22]/10 text-[#2D6B22] border border-[#2D6B22]/20">
+                            Langkah 3 dari 3
+                        </span>
+                        <h2 class="text-lg sm:text-xl font-bold text-[#15241C] mt-2">Perkiraan Biaya Sewa & Potensi Usaha</h2>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                                Perkiraan Harga Sewa per Bulan (Rp) *
+                            <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                                Perkiraan Harga Sewa per Bulan (Rp) <span class="text-rose-500">*</span>
                             </label>
                             <input type="number" name="harga_sewa_per_bulan" required min="100000" step="100000"
                                    value="{{ old('harga_sewa_per_bulan') }}"
                                    placeholder="Contoh: 4500000"
-                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-black text-[#0F433C] focus:ring-2 focus:ring-[#0F433C] outline-none">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Jika sewa tahunan, bagi 12 bulan (misal Rp 60 jt/thn = Rp 5.000.000/bln).</span>
+                                   class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm font-bold text-[#2D6B22] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
+                            <span class="text-[11px] text-[#4b5551] mt-1 block">Jika sewa tahunan, bagi 12 bulan (misal Rp 60 jt/thn = Rp 5.000.000/bln).</span>
                             @error('harga_sewa_per_bulan')
                                 <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                                Jumlah Unit / Pintu *
+                            <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                                Jumlah Unit / Pintu <span class="text-rose-500">*</span>
                             </label>
                             <input type="number" name="total_unit" required min="1" max="50"
                                    value="{{ old('total_unit', 1) }}"
                                    placeholder="1"
-                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-black text-[#0F433C] focus:ring-2 focus:ring-[#0F433C] outline-none">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Total pintu ruko di lokasi.</span>
+                                   class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm font-bold text-[#2D6B22] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
+                            <span class="text-[11px] text-[#4b5551] mt-1 block">Total pintu ruko di lokasi.</span>
                             @error('total_unit')
                                 <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
-                        <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
-                                Kontak Pemilik Ruko / Agen Pemasar
-                            </label>
-                            <input type="text" name="kontak_pemilik" 
-                                   value="{{ old('kontak_pemilik') }}"
-                                   placeholder="Contoh: 081987654321 (Pak Haji Ahmad)"
-                                   class="w-full px-4 py-3 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">
-                            <span class="text-[10px] text-gray-400 mt-1 block">Boleh dikosongkan jika pengusul adalah pemilik langsung.</span>
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                            Kontak Pemilik Ruko / Agen Pemasar
+                        </label>
+                        <input type="text" name="kontak_pemilik" 
+                               value="{{ old('kontak_pemilik') }}"
+                               placeholder="Contoh: 081987654321 (Pak Haji Ahmad)"
+                               class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
+                        <span class="text-[11px] text-[#4b5551] mt-1 block">Boleh dikosongkan jika pengusul adalah pemilik langsung.</span>
+                    </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                        <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                             Potensi Usaha & Mengapa Tempat Ini Cocok untuk UMKM
                         </label>
                         <textarea name="potensi_usaha" rows="3" 
                                   placeholder="Contoh: Kawasan sangat ramai lalu-lintas pekerja dan mahasiswa. Dekat perkantoran, parkiran luas, cocok untuk gerai kuliner, kopi kekinian, laundry, atau apotek."
-                                  class="w-full p-4 rounded-2xl border border-gray-200 text-xs font-medium focus:ring-2 focus:ring-[#0F433C] outline-none">{{ old('potensi_usaha') }}</textarea>
+                                  class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('potensi_usaha') }}</textarea>
                     </div>
                 </div>
 
                 <!-- SUBMIT BUTTON -->
-                <div class="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p class="text-[11px] text-gray-400 max-w-md">
-                        Dengan menekan tombol di bawah, Anda mengonfirmasi bahwa data lokasi yang diusulkan adalah akurat untuk ditinjau oleh kurator TIKUM.
+                <div class="pt-6 border-t border-[#C8BFB0]/50 flex flex-col sm:flex-row items-center justify-between gap-5">
+                    <p class="text-xs text-[#4b5551] max-w-md leading-relaxed">
+                        Dengan menekan tombol di samping, Anda mengonfirmasi bahwa data lokasi yang diusulkan adalah akurat untuk ditinjau oleh kurator TIKUM.
                     </p>
 
                     <button type="submit" 
-                            class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-sm font-extrabold shadow-lg hover:shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2">
+                            class="w-full sm:w-auto inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-8 py-4 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer gap-2 shrink-0">
                         <span>Kirim Rekomendasi Ruko</span>
-                        <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-[#F4B838]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
                     </button>
@@ -256,5 +309,5 @@
         </div>
 
     </div>
-</main>
+</section>
 @endsection
