@@ -137,6 +137,7 @@ class DashboardController extends Controller
             // Cek apakah ada kewajiban bagi hasil yang memasuki masa tenggang atau menunggak
             $adaDividenTenggangAtauNunggak = $investasiAktif->contains(function ($inv) {
                 $statusCode = $inv->status_dividen_bulan_ini['code'] ?? '';
+
                 return in_array($statusCode, ['masa_tenggang', 'menunggak']);
             });
 
@@ -893,6 +894,8 @@ class DashboardController extends Controller
             'rt' => ['nullable', 'string', 'max:10'],
             'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
+            'umkm_diminati' => ['nullable', 'array'],
+            'umkm_diminati.*' => ['integer'],
         ]);
 
         $provinsi = $validated['provinsi'] ?? null;
@@ -1431,10 +1434,10 @@ class DashboardController extends Controller
             'id_investasi' => $investasi->id_investasi,
             'id_pengirim' => $user->id,
             'pesan' => "📢 [Pemberitahuan Resmi Penundaan Bagi Hasil - {$validated['bulan_periode']}]\n"
-                . "Halo {$investorName}, kami mengajukan klarifikasi resmi penundaan bagi hasil dividen untuk periode {$validated['bulan_periode']} dikarenakan kendala: {$klarifikasi->kategori_label}.\n\n"
-                . "Detail Kendala: {$validated['alasan']}\n\n"
-                . "Komitmen & Rencana Pemulihan: {$validated['komitmen_solusi']}\n\n"
-                . "Status penundaan ini tercatat transparan di platform DAYA-UMKM untuk ditinjau bersama.",
+                ."Halo {$investorName}, kami mengajukan klarifikasi resmi penundaan bagi hasil dividen untuk periode {$validated['bulan_periode']} dikarenakan kendala: {$klarifikasi->kategori_label}.\n\n"
+                ."Detail Kendala: {$validated['alasan']}\n\n"
+                ."Komitmen & Rencana Pemulihan: {$validated['komitmen_solusi']}\n\n"
+                .'Status penundaan ini tercatat transparan di platform DAYA-UMKM untuk ditinjau bersama.',
             'dibaca' => false,
         ]);
 

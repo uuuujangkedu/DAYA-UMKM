@@ -303,12 +303,15 @@
                                class="hidden peer"
                                {{ old('id_ruko') == $ruko->id_ruko ? 'checked' : '' }}>
                         
-                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] bg-white p-3 transition flex flex-col h-full">
-                            <div class="w-full aspect-[4/3] rounded-[6px] bg-[#d8ebe5] flex flex-col items-center justify-center p-3 text-center">
-                                <svg class="w-6 h-6 text-[#0b5a4a] mb-1" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                </svg>
-                                <span class="font-bold text-[12px] leading-tight text-[#0b5a4a]">{{ $ruko->nama_ruko }}</span>
+                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] bg-white p-3 transition flex flex-col h-full shadow-xs">
+                            <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
+                                <img src="{{ $ruko->foto_url }}" 
+                                     alt="{{ $ruko->nama_ruko }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                     loading="lazy">
+                                <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
+                                    Daya Ruko
+                                </span>
                             </div>
 
                             <!-- Detail Ruko -->

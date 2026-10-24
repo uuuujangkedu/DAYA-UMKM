@@ -100,4 +100,46 @@ class Umkm extends Model
     {
         return $this->hasMany(TeguranDividenLog::class, 'id_umkm', 'id_umkm')->latest();
     }
+
+    /**
+     * URL Foto produk atau profil usaha UMKM
+     */
+    public function getFotoUrlAttribute(): string
+    {
+        if (! empty($this->foto_produk)) {
+            if (str_starts_with($this->foto_produk, 'http://') || str_starts_with($this->foto_produk, 'https://')) {
+                return $this->foto_produk;
+            }
+            if (file_exists(public_path(ltrim($this->foto_produk, '/\\')))) {
+                return asset(ltrim($this->foto_produk, '/\\'));
+            }
+            if (file_exists(storage_path('app/public/'.ltrim($this->foto_produk, '/\\')))) {
+                return asset('storage/'.ltrim($this->foto_produk, '/\\'));
+            }
+        }
+
+        $nameLower = mb_strtolower($this->nama_usaha ?? '', 'UTF-8');
+        if (str_contains($nameLower, 'kopi')) {
+            return 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80';
+        }
+        if (str_contains($nameLower, 'sepatu') || str_contains($nameLower, 'laundry')) {
+            return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80';
+        }
+        if (str_contains($nameLower, 'batik') || str_contains($nameLower, 'tenun')) {
+            return 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=600&q=80';
+        }
+        if (str_contains($nameLower, 'sayur') || str_contains($nameLower, 'hidroponik')) {
+            return 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=600&q=80';
+        }
+
+        $categoryDefaults = [
+            'Makanan' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
+            'Minuman' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+            'Jasa' => 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80',
+            'Fashion' => 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?auto=format&fit=crop&w=600&q=80',
+            'Agribisnis' => 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80',
+        ];
+
+        return $categoryDefaults[$this->jenis_usaha] ?? 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=80';
+    }
 }

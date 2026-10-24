@@ -335,9 +335,14 @@
                                {{ $selectedRukoId == $ruko->id_ruko ? 'checked' : '' }}
                                class="absolute top-3 right-3 text-[#0b5a4a] focus:ring-[#0b5a4a]">
                         
-                        <div class="w-full h-24 rounded-[6px] bg-[#d8ebe5] flex flex-col items-center justify-center text-[#0b5a4a] mb-3">
-                            <span class="text-[13px] font-bold tracking-wider">Daya Ruko</span>
-                            <span class="text-[11px] opacity-80">{{ $ruko->nama_ruko }}</span>
+                        <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
+                            <img src="{{ $ruko->foto_url }}" 
+                                 alt="{{ $ruko->nama_ruko }}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                 loading="lazy">
+                            <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
+                                Daya Ruko
+                            </span>
                         </div>
 
                         <div class="space-y-1">

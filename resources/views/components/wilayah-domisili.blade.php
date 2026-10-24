@@ -66,8 +66,43 @@
         </div>
 
         <div id="{{ $idPrefix }}_location_msg" class="hidden text-[12px] py-2 px-3 rounded-xl mb-3 font-medium"></div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+
+        <!-- Preview Peta Google Maps Saat Lokasi GPS Ditemukan -->
+        <div id="{{ $idPrefix }}_map_preview" class="hidden mb-3.5 rounded-xl overflow-hidden border border-[#2D6B22]/30 shadow-xs bg-[#f2f8ed]">
+            <div class="px-3.5 py-2 bg-[#2D6B22] text-white flex items-center justify-between text-xs">
+                <div class="flex items-center gap-2 font-bold">
+                    <svg class="w-4 h-4 text-emerald-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Titik Lokasi Terdeteksi (Google Maps)</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <a id="{{ $idPrefix }}_gmaps_link" href="#" target="_blank" rel="noopener noreferrer" class="text-white/90 hover:text-white underline underline-offset-2 flex items-center gap-1 font-medium text-[11px]">
+                        Buka di Google Maps
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="relative w-full h-44 sm:h-52 bg-[#e2e1d8]">
+                <iframe id="{{ $idPrefix }}_gmaps_iframe" 
+                        class="w-full h-full border-0" 
+                        loading="lazy" 
+                        allowfullscreen 
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="px-3.5 py-1.5 bg-[#f2f8ed] text-[11px] text-[#3E5445] flex items-center justify-between border-t border-[#2D6B22]/20">
+                <span id="{{ $idPrefix }}_coords_text">Koordinat: -</span>
+                <span class="text-emerald-700 font-semibold flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Titik GPS akurat
+                </span>
+            </div>
+        </div>
+        <!-- Grid 4 Kolom: Provinsi, Kota, Kecamatan, Kelurahan -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
             <!-- Provinsi -->
             <div>
                 <label for="{{ $idPrefix }}_provinsi" class="block text-[12px] font-medium text-[#4b5551] mb-1">
@@ -75,7 +110,7 @@
                 </label>
                 <select id="{{ $idPrefix }}_provinsi" 
                         name="provinsi"
-                        class="w-full px-3 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Provinsi --</option>
                 </select>
             </div>
@@ -87,7 +122,7 @@
                 </label>
                 <select id="{{ $idPrefix }}_kota" 
                         name="kota"
-                        class="w-full px-3 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kota / Kab --</option>
                 </select>
             </div>
@@ -99,7 +134,7 @@
                 </label>
                 <select id="{{ $idPrefix }}_kecamatan" 
                         name="kecamatan"
-                        class="w-full px-3 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kecamatan --</option>
                 </select>
             </div>
@@ -111,7 +146,7 @@
                 </label>
                 <select id="{{ $idPrefix }}_kelurahan" 
                         name="kelurahan"
-                        class="w-full px-3 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kelurahan / Desa --</option>
                 </select>
             </div>
@@ -129,10 +164,10 @@
         <label class="block text-[12px] font-medium text-[#4b5551] mb-1.5">
             RT / RW (Rukun Tetangga & Rukun Warga)
         </label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
             <div>
-                <div class="flex items-center rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] bg-white overflow-hidden">
-                    <span class="px-2.5 py-2 bg-[#f7f6f1] text-[12px] text-[#6b7280] font-semibold border-r border-[#e2e1d8]">RT</span>
+                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden">
+                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[12px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center">RT</span>
                     <input type="text" 
                            name="rt" 
                            id="{{ $idPrefix }}_rt" 
@@ -140,13 +175,13 @@
                            maxlength="5" 
                            inputmode="numeric" 
                            placeholder="01" 
-                           class="w-full px-2.5 py-2 text-[13px] text-[#161d1a] outline-none bg-transparent">
+                           class="w-full h-full px-3 text-[13px] text-[#161d1a] outline-none bg-transparent">
                 </div>
             </div>
 
             <div>
-                <div class="flex items-center rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] bg-white overflow-hidden">
-                    <span class="px-2.5 py-2 bg-[#f7f6f1] text-[12px] text-[#6b7280] font-semibold border-r border-[#e2e1d8]">RW</span>
+                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden">
+                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[12px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center">RW</span>
                     <input type="text" 
                            name="rw" 
                            id="{{ $idPrefix }}_rw" 
@@ -154,7 +189,7 @@
                            maxlength="5" 
                            inputmode="numeric" 
                            placeholder="03" 
-                           class="w-full px-2.5 py-2 text-[13px] text-[#161d1a] outline-none bg-transparent">
+                           class="w-full h-full px-3 text-[13px] text-[#161d1a] outline-none bg-transparent">
                 </div>
             </div>
         </div>
@@ -1180,6 +1215,23 @@
                 async function(position) {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
+
+                    // Tampilkan Google Maps interaktif agar pengguna dapat memverifikasi titik lokasi
+                    const mapPreview = document.getElementById('{{ $idPrefix }}_map_preview');
+                    const gmapsIframe = document.getElementById('{{ $idPrefix }}_gmaps_iframe');
+                    const gmapsLink = document.getElementById('{{ $idPrefix }}_gmaps_link');
+                    const coordsText = document.getElementById('{{ $idPrefix }}_coords_text');
+
+                    if (mapPreview && gmapsIframe) {
+                        gmapsIframe.src = `https://maps.google.com/maps?q=${lat},${lon}&hl=id&z=16&output=embed`;
+                        if (gmapsLink) {
+                            gmapsLink.href = `https://www.google.com/maps?q=${lat},${lon}`;
+                        }
+                        if (coordsText) {
+                            coordsText.textContent = `Koordinat GPS: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+                        }
+                        mapPreview.classList.remove('hidden');
+                    }
 
                     try {
                         let geoData = null;

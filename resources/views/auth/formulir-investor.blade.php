@@ -168,7 +168,9 @@
                     <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 2</span>
                     <h3 class="text-[18px] font-bold text-[#161d1a]">Katalog minat pendanaan</h3>
                 </div>
-                <span class="text-[13px] text-[#4b5551]">Pilih kategori sektor yang ingin Anda danai</span>
+                <div class="text-[13px] text-[#4b5551]" id="umkm-count-container">
+                    Pilih kategori atau <span class="font-semibold text-[#0b5a4a]">klik kartu UMKM</span> yang diminati (<span id="umkm-count-label" class="font-bold text-[#0b5a4a]">0 dipilih</span>)
+                </div>
             </div>
 
             <!-- Kategori Filter Tabs -->
@@ -210,30 +212,51 @@
                        class="w-full px-3.5 py-2.5 bg-[#f7f6f1] border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
             </div>
 
-            <!-- UMKM Grid -->
+            <!-- UMKM Grid (Interaktif & Dapat Diklik/Dipilih) -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1" id="umkm-grid">
                 @forelse ($umkms as $index => $umkm)
-                    <div class="umkm-card block group" data-category="{{ $umkm->jenis_usaha }}">
-                        <div class="rounded-[10px] border border-[#e2e1d8] bg-white p-3 transition flex flex-col h-full">
-                            <div class="w-full aspect-[4/3] rounded-[6px] bg-[#d8ebe5] flex flex-col items-center justify-center p-3 text-center">
-                                <svg class="w-6 h-6 text-[#0b5a4a] mb-1" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
-                                <span class="font-bold text-[12px] leading-tight text-[#0b5a4a]">{{ $umkm->nama_usaha }}</span>
+                    <label class="umkm-card cursor-pointer block group select-none relative" data-category="{{ $umkm->jenis_usaha }}">
+                        <input type="checkbox" 
+                               name="umkm_diminati[]" 
+                               value="{{ $umkm->id_umkm }}" 
+                               class="hidden peer"
+                               onchange="updateSelectedUmkmCount()">
+
+                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] peer-checked:bg-[#f2f8ed]/40 bg-white p-3 transition flex flex-col h-full shadow-xs hover:border-[#0b5a4a] hover:shadow-md relative">
+                            
+                            <!-- Indikator Checkmark Terpilih di Pojok Kanan Atas -->
+                            <div class="absolute top-2.5 right-2.5 z-10">
+                                <span class="w-6 h-6 rounded-full bg-white/90 border border-gray-300 peer-checked:bg-[#0b5a4a] peer-checked:border-[#0b5a4a] flex items-center justify-center transition shadow-xs">
+                                    <svg class="w-3.5 h-3.5 text-gray-300 peer-checked:text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </span>
+                            </div>
+
+                            <!-- Foto Asli Produk / Usaha UMKM -->
+                            <div class="w-full aspect-[4/3] rounded-[8px] overflow-hidden mb-2.5 bg-[#d8ebe5] relative border border-[#e2e1d8]">
+                                <img src="{{ $umkm->foto_url }}" 
+                                     alt="{{ $umkm->nama_usaha }}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                     loading="lazy">
+                                <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
+                                    {{ $umkm->jenis_usaha }}
+                                </span>
                             </div>
 
                             <!-- Detail UMKM -->
-                            <div class="mt-2.5 text-left space-y-1">
-                                <div class="text-[13px] font-bold text-[#161d1a] line-clamp-1 umkm-title">{{ $umkm->nama_usaha }}</div>
-                                <div class="flex items-center gap-1.5">
-                                    <span class="inline-block px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#f7f6f1] border border-[#e2e1d8] text-[#4b5551] umkm-cat">
-                                        {{ $umkm->jenis_usaha }}
-                                    </span>
+                            <div class="mt-1 text-left space-y-1">
+                                <div class="text-[13px] font-bold text-[#161d1a] line-clamp-1 umkm-title group-hover:text-[#0b5a4a] transition">
+                                    {{ $umkm->nama_usaha }}
                                 </div>
-                                <div class="text-[12px] text-[#4b5551] line-clamp-1">Pemilik: {{ $umkm->pemilik }}</div>
+                                <div class="text-[11px] text-[#4b5551] line-clamp-1">Pemilik: {{ $umkm->pemilik }}</div>
+                                <div class="pt-1 text-[11px] font-semibold text-[#0b5a4a] flex items-center gap-1">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    Peluang Investasi
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </label>
                 @empty
                     <div class="col-span-4 p-6 text-center text-[14px] text-[#4b5551] bg-[#f7f6f1] rounded-[6px] border border-dashed border-[#e2e1d8]">
                         Belum ada data UMKM terdaftar saat ini.
@@ -288,6 +311,18 @@
                 card.style.display = 'none';
             }
         });
+    }
+
+    function updateSelectedUmkmCount() {
+        const checkedCount = document.querySelectorAll('input[name="umkm_diminati[]"]:checked').length;
+        const label = document.getElementById('umkm-count-label');
+        if (label) {
+            if (checkedCount > 0) {
+                label.textContent = `${checkedCount} UMKM dipilih ✓`;
+            } else {
+                label.textContent = '0 dipilih';
+            }
+        }
     }
 </script>
 @endsection
