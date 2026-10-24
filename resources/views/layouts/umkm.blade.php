@@ -139,20 +139,6 @@
                     @endif
                 </a>
 
-                <!-- 3. PRODUK -->
-                <a href="{{ route('dashboard', ['tab' => 'produk']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'produk' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'produk' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
-                        </svg>
-                        <span>PRODUK</span>
-                    </div>
-                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/10 text-teal-200">
-                        {{ $produksCount ?? 0 }}
-                    </span>
-                </a>
-
                 <!-- 3. ANALISIS KEUANGAN -->
                 <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">

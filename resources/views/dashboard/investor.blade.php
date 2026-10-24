@@ -234,129 +234,65 @@
 
         </div>
 
-        <!-- ROW KEDUA: ALOKASI SEKTOR MODAL (RIIL) & PRODUK UNGGULAN UMKM (DATA RIIL DARI DATABASE) -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <!-- ALOKASI SEKTOR MODAL (1/3) - 100% DIHITUNG DARI DATABASE -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm flex flex-col justify-between">
+        <!-- ALOKASI SEKTOR MODAL (100% DIHITUNG DARI DATABASE) -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                 <div>
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h2 class="text-lg font-black text-[#1A202C]">Alokasi Sektor Modal</h2>
-                            <p class="text-xs text-gray-400 font-medium">Diversifikasi investasi riil Anda</p>
-                        </div>
-                        <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" class="text-xs font-bold text-[#0F433C] hover:underline">
-                            Buka Portofolio &rarr;
-                        </a>
-                    </div>
-
-                    @if(!empty($alokasiSektor) && count($alokasiSektor) > 0)
-                        <!-- Visual Segmented Bar Riil -->
-                        <div class="w-full h-3.5 rounded-full bg-gray-100 flex overflow-hidden my-4 shadow-inner">
-                            @foreach($alokasiSektor as $sek)
-                                <div class="h-full transition-all duration-300" 
-                                     style="width: {{ $sek['persentase'] }}%; background-color: {{ $sek['color'] }};" 
-                                     title="{{ $sek['nama'] }}: {{ $sek['persentase'] }}% (Rp {{ number_format($sek['nominal'], 0, ',', '.') }})"></div>
-                            @endforeach
-                        </div>
-
-                        <!-- Legend Riil -->
-                        <div class="space-y-2.5 text-xs font-medium">
-                            @foreach($alokasiSektor as $sek)
-                                <div class="flex items-center justify-between">
-                                    <div class="flex items-center gap-2">
-                                        <span class="w-2.5 h-2.5 rounded-full" style="background-color: {{ $sek['color'] }};"></span>
-                                        <span class="text-gray-700 font-semibold">{{ $sek['nama'] }}</span>
-                                        <span class="text-[10px] text-gray-400">({{ $sek['jumlah_proyek'] }} Usaha)</span>
-                                    </div>
-                                    <div class="text-right">
-                                        <span class="font-black text-[#1A202C]">{{ $sek['persentase'] }}%</span>
-                                        <span class="text-[10px] text-gray-400 block">Rp {{ number_format($sek['nominal'], 0, ',', '.') }}</span>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <!-- State Kosong Riil Jika Investor Belum Menanam Modal -->
-                        <div class="py-8 px-4 text-center rounded-2xl bg-[#F9F8F3] border border-dashed border-[#E8E6DF] my-3">
-                            <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#0F433C] flex items-center justify-center font-bold mx-auto mb-2 text-sm">
-                                📊
-                            </div>
-                            <p class="text-xs font-extrabold text-gray-700">Belum Ada Alokasi Sektor</p>
-                            <p class="text-[11px] text-gray-400 mt-1 max-w-[200px] mx-auto leading-relaxed">
-                                Proporsi sektor usaha akan dihitung secara otomatis berdasarkan modal yang Anda salurkan ke UMKM.
-                            </p>
-                        </div>
-                    @endif
+                    <h2 class="text-lg font-black text-[#1A202C]">Alokasi Sektor Modal</h2>
+                    <p class="text-xs text-gray-400 font-medium">Diversifikasi investasi riil Anda</p>
                 </div>
-
-                <div class="mt-6 pt-4 border-t border-gray-100">
-                    <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
-                       class="w-full py-2.5 px-4 rounded-xl bg-[#F9F8F3] hover:bg-gray-100 text-[#0F433C] text-xs font-bold text-center block transition border border-[#E8E6DF]">
-                        Kelola Detail Investasi di Portofolio Saya &rarr;
-                    </a>
-                </div>
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" class="text-xs font-bold text-[#0F433C] hover:underline self-start sm:self-auto">
+                    Buka Portofolio &rarr;
+                </a>
             </div>
 
-            <!-- PRODUK UNGGULAN DARI MITRA UMKM (2/3) - MURNI DARI TABEL PRODUK DATABASE (OPSI B) -->
-            <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm flex flex-col justify-between">
-                <div>
-                    <div class="flex items-center justify-between mb-5">
-                        <div>
-                            <h2 class="text-lg font-black text-[#1A202C]">Produk Unggulan dari Mitra UMKM</h2>
-                            <p class="text-xs text-gray-400 font-medium">Katalog produk riil yang diproduksi dan dijual oleh UMKM terdaftar</p>
+            @if(!empty($alokasiSektor) && count($alokasiSektor) > 0)
+                <!-- Visual Segmented Bar Riil -->
+                <div class="w-full h-3.5 rounded-full bg-gray-100 flex overflow-hidden my-4 shadow-inner">
+                    @foreach($alokasiSektor as $sek)
+                        <div class="h-full transition-all duration-300" 
+                             style="width: {{ $sek['persentase'] }}%; background-color: {{ $sek['color'] }};" 
+                             title="{{ $sek['nama'] }}: {{ $sek['persentase'] }}% (Rp {{ number_format($sek['nominal'], 0, ',', '.') }})"></div>
+                    @endforeach
+                </div>
+
+                <!-- Legend Riil -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-medium mt-4">
+                    @foreach($alokasiSektor as $sek)
+                        <div class="flex items-center justify-between p-3 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF]">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $sek['color'] }};"></span>
+                                <div>
+                                    <span class="text-gray-700 font-semibold block">{{ $sek['nama'] }}</span>
+                                    <span class="text-[10px] text-gray-400 block">{{ $sek['jumlah_proyek'] }} Usaha</span>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="font-black text-[#1A202C]">{{ $sek['persentase'] }}%</span>
+                                <span class="text-[10px] text-gray-400 block">Rp {{ number_format($sek['nominal'], 0, ',', '.') }}</span>
+                            </div>
                         </div>
-                        <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase bg-teal-50 text-teal-800 border border-teal-200">
-                            Katalog Riil
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        @forelse($produkMitra as $prod)
-                            <div class="p-4 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] flex items-start gap-3.5 hover:border-teal-300 transition">
-                                <div class="w-12 h-12 rounded-2xl bg-[#0F433C] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm overflow-hidden">
-                                    @if(!empty($prod->foto))
-                                        <img src="{{ asset('storage/' . $prod->foto) }}" alt="{{ $prod->nama_produk }}" class="w-full h-full object-cover">
-                                    @else
-                                        🛍️
-                                    @endif
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center justify-between gap-2">
-                                        <h4 class="text-xs font-black text-[#1A202C] truncate">{{ $prod->nama_produk }}</h4>
-                                        <span class="text-[10px] font-extrabold text-emerald-700 shrink-0">
-                                            Terjual {{ $prod->terjual ?? 0 }}
-                                        </span>
-                                    </div>
-                                    <p class="text-[11px] text-gray-500 mt-0.5 truncate">
-                                        Usaha: <strong class="text-gray-700">{{ $prod->umkm->nama_usaha ?? 'UMKM Mitra' }}</strong>
-                                    </p>
-                                    <div class="mt-2 flex items-center justify-between">
-                                        <span class="text-xs font-black text-[#0F433C]">
-                                            Rp {{ number_format($prod->harga, 0, ',', '.') }}
-                                        </span>
-                                        <span class="text-[10px] text-gray-400 font-medium">
-                                            Stok: {{ $prod->stok ?? 0 }} unit
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="col-span-full p-8 text-center text-xs text-gray-400 bg-[#F9F8F3] rounded-2xl border border-dashed border-[#E8E6DF]">
-                                Belum ada data produk yang didaftarkan oleh pelaku UMKM.
-                            </div>
-                        @endforelse
-                    </div>
+                    @endforeach
                 </div>
-
-                <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs">
-                    <span class="text-gray-400 font-medium">Total produk terdaftar di platform: {{ $produkMitra->count() }} item</span>
-                    <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" class="text-[#0F433C] font-bold hover:underline">
-                        Dukung UMKM di Katalog Proposal &rarr;
-                    </a>
+            @else
+                <!-- State Kosong Riil Jika Investor Belum Menanam Modal -->
+                <div class="py-8 px-4 text-center rounded-2xl bg-[#F9F8F3] border border-dashed border-[#E8E6DF] my-3">
+                    <div class="w-10 h-10 rounded-xl bg-teal-50 text-[#0F433C] flex items-center justify-center font-bold mx-auto mb-2 text-sm">
+                        📊
+                    </div>
+                    <p class="text-xs font-extrabold text-gray-700">Belum Ada Alokasi Sektor</p>
+                    <p class="text-[11px] text-gray-400 mt-1 max-w-[320px] mx-auto leading-relaxed">
+                        Proporsi sektor usaha akan dihitung secara otomatis berdasarkan modal yang Anda salurkan ke UMKM.
+                    </p>
                 </div>
+            @endif
+
+            <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-end">
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
+                   class="py-2.5 px-4 rounded-xl bg-[#F9F8F3] hover:bg-gray-100 text-[#0F433C] text-xs font-bold transition border border-[#E8E6DF]">
+                    Kelola Detail Investasi di Portofolio Saya &rarr;
+                </a>
             </div>
-
         </div>
 
         <!-- SEKSI KATALOG PELUANG INVESTASI (Preview Proposal Pilihan) -->

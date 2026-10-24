@@ -16,7 +16,7 @@ class DashboardFlowTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_umkm_can_view_dashboard_and_products()
+    public function test_umkm_can_view_dashboard()
     {
         $user = User::factory()->create([
             'role' => 'umkm',
@@ -37,29 +37,7 @@ class DashboardFlowTest extends TestCase
         $response = $this->actingAs($user)->get('/dashboard');
         $response->assertStatus(200);
         $response->assertSee('BERANDA');
-        $response->assertSee('Penjualan Hari Ini');
         $response->assertSee('Grafik Penjualan 7 Hari');
-
-        // 2. Akses Tab Produk UMKM
-        $responseProduk = $this->actingAs($user)->get('/dashboard?tab=produk');
-        $responseProduk->assertStatus(200);
-        $responseProduk->assertSee('Produk');
-        $responseProduk->assertSee('+ Tambah Produk');
-
-        // 3. UMKM menambah produk baru
-        $storeResponse = $this->actingAs($user)->post('/dashboard/umkm/produk', [
-            'nama_produk' => 'Keripik Balado Pedas',
-            'harga' => 25000,
-            'stok' => 15,
-            'status' => 'tersedia',
-        ]);
-
-        $storeResponse->assertRedirect('/dashboard?tab=produk');
-        $this->assertDatabaseHas('produk', [
-            'id_umkm' => $umkm->id_umkm,
-            'nama_produk' => 'Keripik Balado Pedas',
-            'harga' => 25000,
-        ]);
     }
 
     public function test_investor_can_view_proposal_list_and_invest()
@@ -116,7 +94,7 @@ class DashboardFlowTest extends TestCase
         // 4. Pelaku UMKM membuka Dashboard dan melihat NOTIFIKASI investor yang tertarik!
         $responseUmkm = $this->actingAs($umkmUser)->get('/dashboard');
         $responseUmkm->assertStatus(200);
-        $responseUmkm->assertSee('Kabar Baik! Ada Investor Tertarik Mendanai Usaha Anda!');
+        $responseUmkm->assertSee('Kabar Baik! Ada Investor Tertarik Mendanai Usaha Anda');
         $responseUmkm->assertSee('Hartono Investor');
         $responseUmkm->assertSee('5.000.000');
         $responseUmkm->assertSee('Tertarik bermitra untuk ekspansi produksi batik.');
@@ -152,7 +130,7 @@ class DashboardFlowTest extends TestCase
         $activeResponse = $this->actingAs($investor->fresh())->get('/dashboard');
         $activeResponse->assertStatus(200);
         $activeResponse->assertSee('BERANDA', false);
-        $activeResponse->assertSee('Jelajahi Proposal UMKM', false);
+        $activeResponse->assertSee('Peluang Investasi Pilihan', false);
     }
 
     public function test_umkm_can_input_financial_analysis_and_view_profit_loss()

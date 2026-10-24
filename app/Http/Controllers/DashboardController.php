@@ -57,38 +57,10 @@ class DashboardController extends Controller
                 return redirect()->route('formulir.umkm')->with('info', 'Selamat datang! Silakan lengkapi formulir pendaftaran profil usaha UMKM Anda.');
             }
 
-            // Inisialisasi data sample produk jika UMKM belum punya produk (agar presisi dengan Gambar 2)
-            if ($umkm->produks()->count() === 0) {
-                Produk::create([
-                    'id_umkm' => $umkm->id_umkm,
-                    'nama_produk' => 'Produk 1 - Olahan Keripik Renyah',
-                    'harga' => 30000,
-                    'stok' => 8,
-                    'status' => 'tersedia',
-                    'terjual' => 20,
-                    'deskripsi' => 'Keripik gurih renyah dibuat dari bahan organik pilihan kualitas super.',
-                ]);
-                Produk::create([
-                    'id_umkm' => $umkm->id_umkm,
-                    'nama_produk' => 'Produk 2 - Paket Bumbu Rempah Alami',
-                    'harga' => 70000,
-                    'stok' => 4,
-                    'status' => 'tersedia',
-                    'terjual' => 11,
-                    'deskripsi' => 'Rempah tradisional siap pakai untuk sajian keluarga berkualitas.',
-                ]);
-                Produk::create([
-                    'id_umkm' => $umkm->id_umkm,
-                    'nama_produk' => 'Produk 3 - Minuman Herbal Jahe Segar',
-                    'harga' => 20000,
-                    'stok' => 9,
-                    'status' => 'tersedia',
-                    'terjual' => 8,
-                    'deskripsi' => 'Minuman sehat herbal menyegarkan dan menghangatkan tubuh sepanjang hari.',
-                ]);
-            }
-
             $activeTab = $request->query('tab', 'beranda');
+            if ($activeTab === 'produk') {
+                $activeTab = 'beranda';
+            }
 
             // Metrik KPI Dashboard UMKM (Sesuai Gambar 2)
             $salesToday = 200000;
@@ -339,11 +311,6 @@ class DashboardController extends Controller
                 usort($alokasiSektor, fn ($a, $b) => $b['persentase'] <=> $a['persentase']);
             }
 
-            // Real Produk Mitra UMKM dari Database (Opsi B: Menggantikan seksi dummy kabar/milestone)
-            $produkMitra = Produk::with('umkm')
-                ->latest('id_produk')
-                ->take(4)
-                ->get();
 
             // Real Riwayat Bagi Hasil dari Database (Tabel bagi_hasil_log)
             $riwayatBagiHasil = BagiHasilLog::with(['investasi.umkm'])
@@ -457,7 +424,6 @@ class DashboardController extends Controller
                 'rataRataBagiHasil',
                 'proyeksiDividenBulanIni',
                 'alokasiSektor',
-                'produkMitra',
                 'riwayatBagiHasil',
                 'totalDividenDiterima',
                 'persentasePengembalianModal',
