@@ -60,7 +60,7 @@
         <input type="hidden" name="role" value="investor">
 
         <!-- CARD 1: ALUR VERIFIKASI INVESTOR -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8]">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] shadow-xs">
             <h2 class="text-[16px] font-bold text-[#161d1a] mb-3">
                 Alur verifikasi investor
             </h2>
@@ -81,8 +81,8 @@
         </div>
 
         <!-- CARD 2: BAGIAN 1 - IDENTITAS PENDAFTAR INVESTOR -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5">
-            <div class="border-b border-[#e2e1d8] pb-3">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
+            <div class="border-b border-[#e2e1d8] pb-3.5">
                 <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 1</span>
                 <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pendaftar investor</h3>
             </div>
@@ -98,7 +98,7 @@
                        value="{{ old('nama') }}" 
                        required
                        placeholder="Contoh: Raka Wibian" 
-                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                       class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Nomor WhatsApp -->
@@ -112,7 +112,7 @@
                        value="{{ old('nomor_telepon') }}" 
                        required
                        placeholder="Contoh: 081234567890" 
-                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                       class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Wilayah Domisili / Kantor -->
@@ -141,10 +141,10 @@
                            value="{{ old('email') }}" 
                            required
                            placeholder="investor@email.com (Untuk masuk akun dan menerima kode OTP)" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                           class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div>
                         <label for="password" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Kata sandi akun <span class="text-red-500">*</span>
@@ -154,7 +154,7 @@
                                name="password" 
                                required
                                placeholder="Minimal 8 karakter" 
-                               class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                               class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
 
                     <div>
@@ -166,15 +166,15 @@
                                name="password_confirmation" 
                                required
                                placeholder="Ulangi kata sandi Anda" 
-                               class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                               class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- CARD 3: BAGIAN 2 - INFORMASI UMKM / MINAT INVESTASI -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5">
-            <div class="border-b border-[#e2e1d8] pb-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
+            <div class="border-b border-[#e2e1d8] pb-3.5 flex items-center justify-between flex-wrap gap-2">
                 <div>
                     <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 2</span>
                     <h3 class="text-[18px] font-bold text-[#161d1a]">Katalog minat pendanaan</h3>
@@ -187,45 +187,48 @@
             <div class="flex items-center gap-2 flex-wrap">
                 <button type="button" 
                         onclick="selectCategory('Semua', this)"
-                        class="cat-filter-btn px-3.5 py-2 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white transition">
+                        class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white transition">
                     Semua
                 </button>
                 <button type="button" 
                         onclick="selectCategory('Makanan', this)"
-                        class="cat-filter-btn px-3.5 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
+                        class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Makanan & minuman
                 </button>
                 <button type="button" 
                         onclick="selectCategory('Jasa', this)"
-                        class="cat-filter-btn px-3.5 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
+                        class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Jasa layanan
                 </button>
                 <button type="button" 
                         onclick="selectCategory('Fashion', this)"
-                        class="cat-filter-btn px-3.5 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
+                        class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Fashion
                 </button>
                 <button type="button" 
                         onclick="selectCategory('Agribisnis', this)"
-                        class="cat-filter-btn px-3.5 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
+                        class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Agribisnis
                 </button>
             </div>
 
             <!-- Search Bar UMKM -->
-            <div class="relative">
+            <div class="relative flex items-center">
+                <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
                 <input type="text" 
                        id="umkm-search" 
-                       onkeyup="filterUmkmCards()"
+                       onkeyup="filterUmkmCards()" 
                        placeholder="Telusuri UMKM berdasarkan nama atau bidang..." 
-                       class="w-full px-3.5 py-2.5 bg-[#f7f6f1] border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
+                       class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
             <!-- UMKM Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1" id="umkm-grid">
                 @forelse ($umkms as $index => $umkm)
                     <div class="umkm-card block group" data-category="{{ $umkm->jenis_usaha }}">
-                        <div class="rounded-[10px] border border-[#e2e1d8] bg-white p-3 transition flex flex-col h-full">
+                        <div class="rounded-[10px] border border-[#e2e1d8] bg-white p-3 transition flex flex-col h-full shadow-2xs hover:border-[#0b5a4a] hover:shadow-sm">
                             <div class="w-full aspect-[4/3] rounded-[6px] bg-[#d8ebe5] flex flex-col items-center justify-center p-3 text-center">
                                 <svg class="w-6 h-6 text-[#0b5a4a] mb-1" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -234,7 +237,7 @@
                             </div>
 
                             <!-- Detail UMKM -->
-                            <div class="mt-2.5 text-left space-y-1">
+                            <div class="mt-2 text-left space-y-1">
                                 <div class="text-[13px] font-bold text-[#161d1a] line-clamp-1 umkm-title">{{ $umkm->nama_usaha }}</div>
                                 <div class="flex items-center gap-1.5">
                                     <span class="inline-block px-2 py-0.5 rounded-[6px] text-[11px] font-medium bg-[#f7f6f1] border border-[#e2e1d8] text-[#4b5551] umkm-cat">
@@ -255,7 +258,7 @@
 
         <!-- Submit Button & Login Link -->
         <div class="pt-2 space-y-4">
-            <button type="submit" class="btn-primary w-full py-[14px] text-[15px]">
+            <button type="submit" class="btn-primary w-full h-12 rounded-[8px] text-[15px] font-bold shadow-xs flex items-center justify-center">
                 Daftar sebagai investor dan kirim kode OTP
             </button>
 

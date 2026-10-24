@@ -60,7 +60,7 @@
         <input type="hidden" name="role" value="umkm">
 
         <!-- CARD 1: ALUR VERIFIKASI UMKM -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8]">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] shadow-xs">
             <h2 class="text-[16px] font-bold text-[#161d1a] mb-3">
                 Alur verifikasi UMKM
             </h2>
@@ -81,8 +81,8 @@
         </div>
 
         <!-- CARD 2: BAGIAN 1 - IDENTITAS PENGAJU UMKM -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5">
-            <div class="border-b border-[#e2e1d8] pb-3">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
+            <div class="border-b border-[#e2e1d8] pb-3.5">
                 <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 1</span>
                 <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pengaju UMKM</h3>
             </div>
@@ -98,7 +98,7 @@
                        value="{{ old('nama') }}" 
                        required
                        placeholder="Contoh: Raka Wibian" 
-                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                       class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Nomor WhatsApp Usaha -->
@@ -112,7 +112,7 @@
                        value="{{ old('nomor_telepon') }}" 
                        required
                        placeholder="Contoh: 081234567890" 
-                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                       class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Wilayah Domisili Usaha -->
@@ -141,10 +141,10 @@
                            value="{{ old('email') }}" 
                            required
                            placeholder="usaha@email.com (Digunakan untuk masuk dan menerima OTP)" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                           class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                     <div>
                         <label for="password" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Kata sandi akun <span class="text-red-500">*</span>
@@ -154,7 +154,7 @@
                                name="password" 
                                required
                                placeholder="Minimal 8 karakter" 
-                               class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                               class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
 
                     <div>
@@ -166,15 +166,15 @@
                                name="password_confirmation" 
                                required
                                placeholder="Ulangi kata sandi Anda" 
-                               class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                               class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- CARD 3: BAGIAN 2 - INFORMASI USAHA & PRODUK -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5">
-            <div class="border-b border-[#e2e1d8] pb-3">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
+            <div class="border-b border-[#e2e1d8] pb-3.5">
                 <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 2</span>
                 <h3 class="text-[18px] font-bold text-[#161d1a]">Informasi usaha & produk</h3>
             </div>
@@ -190,11 +190,11 @@
                        value="{{ old('nama_usaha') }}" 
                        required
                        placeholder="Contoh: Kopi Muria Sejahtera" 
-                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                       class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Kategori Usaha & Foto Produk -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 items-start">
                 <div>
                     <label for="kategori_usaha" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Kategori usaha <span class="text-red-500">*</span>
@@ -202,7 +202,7 @@
                     <select id="kategori_usaha" 
                             name="kategori_usaha" 
                             required
-                            class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
+                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none cursor-pointer">
                         <option value="">Pilih kategori usaha</option>
                         <option value="Makanan" {{ old('kategori_usaha') === 'Makanan' ? 'selected' : '' }}>Makanan & minuman</option>
                         <option value="Jasa" {{ old('kategori_usaha') === 'Jasa' ? 'selected' : '' }}>Jasa layanan</option>
@@ -226,16 +226,16 @@
                                onchange="updateFileName(this, 'foto_produk_label')">
                         <label for="foto_produk" 
                                id="foto_produk_label"
-                               class="w-full px-3.5 py-2.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
+                               class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                             <span>Pilih file foto</span>
                         </label>
                     </div>
-                    <span class="text-[12px] text-[#4b5551] mt-1 block">Format: JPG, PNG, WEBP (Maks. 5MB)</span>
+                    <span class="text-[12px] text-[#4b5551] mt-1.5 block">Format: JPG, PNG, WEBP (Maks. 5MB)</span>
                 </div>
             </div>
 
             <!-- Deskripsi Usaha & File Proposal -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 items-start">
                 <div>
                     <label for="deskripsi" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Deskripsi singkat usaha
@@ -244,7 +244,7 @@
                               name="deskripsi" 
                               rows="3" 
                               placeholder="Jelaskan jenis produk, keunikan usaha, dan target pasar Anda..."
-                              class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">{{ old('deskripsi') }}</textarea>
+                              class="w-full px-3.5 py-3 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none min-h-[96px] resize-y">{{ old('deskripsi') }}</textarea>
                 </div>
 
                 <div>
@@ -265,18 +265,18 @@
                                onchange="updateFileName(this, 'file_proposal_label')">
                         <label for="file_proposal" 
                                id="file_proposal_label"
-                               class="w-full px-3.5 py-2.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
+                               class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                             <span>Pilih file dokumen</span>
                         </label>
                     </div>
-                    <span class="text-[12px] text-[#4b5551] mt-1 block">Format: PDF, DOC, DOCX, ZIP (Maks. 10MB)</span>
+                    <span class="text-[12px] text-[#4b5551] mt-1.5 block">Format: PDF, DOC, DOCX, ZIP (Maks. 10MB)</span>
                 </div>
             </div>
         </div>
 
         <!-- CARD 4: BAGIAN 3 - LOKASI RUKO -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5">
-            <div class="border-b border-[#e2e1d8] pb-3 flex items-center justify-between flex-wrap gap-2">
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
+            <div class="border-b border-[#e2e1d8] pb-3.5 flex items-center justify-between flex-wrap gap-2">
                 <div>
                     <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 3</span>
                     <h3 class="text-[18px] font-bold text-[#161d1a]">Lokasi ruko (pilihan minat sewa)</h3>
@@ -285,12 +285,15 @@
             </div>
 
             <!-- Search Bar Ruko -->
-            <div class="relative">
+            <div class="relative flex items-center">
+                <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
                 <input type="text" 
                        id="ruko-search" 
-                       onkeyup="filterRukoCards()"
+                       onkeyup="filterRukoCards()" 
                        placeholder="Telusuri ruko berdasarkan nama atau lokasi..." 
-                       class="w-full px-3.5 py-2.5 bg-[#f7f6f1] border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
+                       class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
             <!-- Grid Ruko -->
@@ -303,7 +306,7 @@
                                class="hidden peer"
                                {{ old('id_ruko') == $ruko->id_ruko ? 'checked' : '' }}>
                         
-                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] bg-white p-3 transition flex flex-col h-full shadow-xs">
+                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] bg-white p-3 transition flex flex-col h-full shadow-2xs hover:border-[#0b5a4a] hover:shadow-sm">
                             <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
                                 <img src="{{ $ruko->foto_url }}" 
                                      alt="{{ $ruko->nama_ruko }}" 
@@ -315,7 +318,7 @@
                             </div>
 
                             <!-- Detail Ruko -->
-                            <div class="mt-2.5 text-left space-y-1">
+                            <div class="mt-2 text-left space-y-1">
                                 <div class="text-[13px] font-bold text-[#161d1a] line-clamp-1 ruko-title">{{ $ruko->nama_ruko }}</div>
                                 <div class="text-[12px] text-[#4b5551] line-clamp-1 ruko-loc">{{ $ruko->lokasi }}</div>
                                 <div class="text-[12px] font-semibold text-[#0b5a4a]">
@@ -334,7 +337,7 @@
 
         <!-- Submit Button & Login Link -->
         <div class="pt-2 space-y-4">
-            <button type="submit" class="btn-primary w-full py-[14px] text-[15px]">
+            <button type="submit" class="btn-primary w-full h-12 rounded-[8px] text-[15px] font-bold shadow-xs flex items-center justify-center">
                 Daftar pelaku UMKM dan kirim kode OTP
             </button>
 

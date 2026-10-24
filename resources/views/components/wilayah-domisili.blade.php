@@ -102,51 +102,51 @@
             </div>
         </div>
         <!-- Grid 4 Kolom: Provinsi, Kota, Kecamatan, Kelurahan -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
             <!-- Provinsi -->
             <div>
-                <label for="{{ $idPrefix }}_provinsi" class="block text-[12px] font-medium text-[#4b5551] mb-1">
+                <label for="{{ $idPrefix }}_provinsi" class="block text-[13px] font-semibold text-[#161d1a] mb-1.5">
                     Provinsi @if($required)<span class="text-red-500">*</span>@endif
                 </label>
                 <select id="{{ $idPrefix }}_provinsi" 
                         name="provinsi"
-                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Provinsi --</option>
                 </select>
             </div>
 
             <!-- Kota / Kabupaten -->
             <div>
-                <label for="{{ $idPrefix }}_kota" class="block text-[12px] font-medium text-[#4b5551] mb-1">
+                <label for="{{ $idPrefix }}_kota" class="block text-[13px] font-semibold text-[#161d1a] mb-1.5">
                     Kota / Kabupaten @if($required)<span class="text-red-500">*</span>@endif
                 </label>
                 <select id="{{ $idPrefix }}_kota" 
                         name="kota"
-                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kota / Kab --</option>
                 </select>
             </div>
 
             <!-- Kecamatan -->
             <div>
-                <label for="{{ $idPrefix }}_kecamatan" class="block text-[12px] font-medium text-[#4b5551] mb-1">
+                <label for="{{ $idPrefix }}_kecamatan" class="block text-[13px] font-semibold text-[#161d1a] mb-1.5">
                     Kecamatan
                 </label>
                 <select id="{{ $idPrefix }}_kecamatan" 
                         name="kecamatan"
-                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kecamatan --</option>
                 </select>
             </div>
 
             <!-- Kelurahan / Desa -->
             <div>
-                <label for="{{ $idPrefix }}_kelurahan" class="block text-[12px] font-medium text-[#4b5551] mb-1">
+                <label for="{{ $idPrefix }}_kelurahan" class="block text-[13px] font-semibold text-[#161d1a] mb-1.5">
                     Kelurahan / Desa
                 </label>
                 <select id="{{ $idPrefix }}_kelurahan" 
                         name="kelurahan"
-                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[13px] text-[#161d1a] outline-none transition cursor-pointer">
+                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kelurahan / Desa --</option>
                 </select>
             </div>
@@ -160,14 +160,14 @@
     </div>
 
     <!-- Tambahan RT & RW -->
-    <div class="pt-1">
-        <label class="block text-[12px] font-medium text-[#4b5551] mb-1.5">
+    <div class="pt-1.5">
+        <label class="block text-[13px] font-semibold text-[#161d1a] mb-1.5">
             RT / RW (Rukun Tetangga & Rukun Warga)
         </label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4">
             <div>
-                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden">
-                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[12px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center">RT</span>
+                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden transition">
+                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[13px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center select-none">RT</span>
                     <input type="text" 
                            name="rt" 
                            id="{{ $idPrefix }}_rt" 
@@ -175,13 +175,13 @@
                            maxlength="5" 
                            inputmode="numeric" 
                            placeholder="01" 
-                           class="w-full h-full px-3 text-[13px] text-[#161d1a] outline-none bg-transparent">
+                           class="w-full h-full px-3 text-[14px] text-[#161d1a] outline-none bg-transparent">
                 </div>
             </div>
 
             <div>
-                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden">
-                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[12px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center">RW</span>
+                <div class="flex items-center h-11 rounded-[6px] border border-[#e2e1d8] focus-within:border-[#0b5a4a] focus-within:ring-1 focus-within:ring-[#0b5a4a] bg-white overflow-hidden transition">
+                    <span class="h-full px-3.5 bg-[#f7f6f1] text-[13px] text-[#4b5551] font-semibold border-r border-[#e2e1d8] flex items-center justify-center select-none">RW</span>
                     <input type="text" 
                            name="rw" 
                            id="{{ $idPrefix }}_rw" 
@@ -189,7 +189,7 @@
                            maxlength="5" 
                            inputmode="numeric" 
                            placeholder="03" 
-                           class="w-full h-full px-3 text-[13px] text-[#161d1a] outline-none bg-transparent">
+                           class="w-full h-full px-3 text-[14px] text-[#161d1a] outline-none bg-transparent">
                 </div>
             </div>
         </div>
