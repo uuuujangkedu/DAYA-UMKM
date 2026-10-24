@@ -204,23 +204,34 @@
                     </div>
 
                     <div>
-                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
-                            <label for="lokasi_ruko" class="block text-xs font-bold text-[#15241C] uppercase tracking-wider">
-                                Alamat Lengkap, Kota & Patokan <span class="text-rose-500">*</span>
-                            </label>
+                        <label for="lokasi_ruko" class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                            Alamat Lengkap, Kota & Patokan <span class="text-rose-500">*</span>
+                        </label>
 
-                            <!-- Opsi Nyalakan Lokasi untuk akurasi alamat ruko -->
+                        <!-- Opsi Nyalakan Lokasi Ruko: Banner Aksi Jelas & Menonjol -->
+                        <div class="mb-3 p-3.5 sm:p-4 rounded-2xl bg-[#F2F8ED] border border-[#2D6B22]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                            <div class="flex items-center gap-3">
+                                <div class="w-9 h-9 rounded-xl bg-[#2D6B22] text-white flex items-center justify-center shrink-0 shadow-xs">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.071-7.071l-1.414 1.414M8.343 15.657l-1.414 1.414m12.142 0l-1.414-1.414M8.343 8.343L6.929 6.929M12 17a5 5 0 100-10 5 5 0 000 10z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="text-[13px] font-bold text-[#15241C] block">Sedang berada di lokasi ruko?</span>
+                                    <span class="text-[11px] text-[#3E5445] block">Nyalakan GPS untuk mengisi nama jalan, kelurahan, dan kota ruko secara otomatis</span>
+                                </div>
+                            </div>
                             <button type="button" 
                                     id="btn_detect_ruko_location"
-                                    title="Deteksi alamat ruko otomatis berdasarkan titik GPS perangkat Anda"
-                                    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#2D6B22]/10 hover:bg-[#2D6B22]/15 text-[#2D6B22] border border-[#2D6B22]/20 transition shadow-xs cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#2D6B22]/30">
-                                <svg class="w-3.5 h-3.5 text-[#2D6B22]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.071-7.071l-1.414 1.414M8.343 15.657l-1.414 1.414m12.142 0l-1.414-1.414M8.343 8.343L6.929 6.929M12 17a5 5 0 100-10 5 5 0 000 10z"/>
+                                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#2D6B22] hover:bg-[#1E4A1A] text-white text-[12px] font-bold shadow-sm hover:shadow transition shrink-0 cursor-pointer w-full sm:w-auto">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                                 <span id="btn_detect_ruko_text">Nyalakan Lokasi</span>
                             </button>
                         </div>
-                        <div id="ruko_location_msg" class="hidden text-xs py-1.5 px-3 rounded-xl mb-2 font-medium"></div>
+                        <div id="ruko_location_msg" class="hidden text-xs py-2 px-3 rounded-xl mb-3 font-medium"></div>
                         <textarea name="lokasi" id="lokasi_ruko" required rows="3" 
                                   placeholder="Contoh: Jl. Boulevard Raya Barat No. 12, Kelapa Dua, Tangerang, Banten (Dekat Kampus UMN, Seberang SPBU Pertamina)"
                                   class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('lokasi') }}</textarea>
