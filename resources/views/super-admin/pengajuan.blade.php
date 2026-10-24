@@ -163,9 +163,19 @@
                 <div class="pt-4 border-t border-gray-100">
                     <div class="grid grid-cols-2 gap-2">
                         <!-- Tombol Setujui -->
-                        <form action="{{ route('superadmin.pengajuan.approve', $umkm->id_umkm) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin MENYETUJUI proposal usaha {{ $umkm->nama_usaha }}? Usaha ini akan tayang dan dapat diinvestasikan.');">
+                        <form id="form-approve-proposal-{{ $umkm->id_umkm }}" action="{{ route('superadmin.pengajuan.approve', $umkm->id_umkm) }}" method="POST">
                             @csrf
-                            <button type="submit" class="w-full py-2.5 px-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition shadow-sm flex items-center justify-center gap-1.5 {{ $umkm->status_pengajuan === 'terverifikasi' ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $umkm->status_pengajuan === 'terverifikasi' ? 'disabled' : '' }}>
+                            <button type="button"
+                                    onclick="openAppConfirmModal({
+                                        title: 'Setujui Proposal Usaha',
+                                        message: 'Apakah Anda yakin ingin <strong>MENYETUJUI proposal usaha {{ addslashes($umkm->nama_usaha) }}</strong>? Usaha ini akan langsung terverifikasi dan tayang di katalog investasi untuk didanai.',
+                                        badge: 'Usaha: {{ addslashes($umkm->nama_usaha) }} &bull; Target Rp {{ number_format($umkm->modal_dibutuhkan, 0, ',', '.') }}',
+                                        confirmText: '✓ Ya, Setujui Proposal',
+                                        confirmClass: 'bg-emerald-600 hover:bg-emerald-700 text-white',
+                                        icon: 'check',
+                                        form: document.getElementById('form-approve-proposal-{{ $umkm->id_umkm }}')
+                                    })"
+                                    class="w-full py-2.5 px-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold transition shadow-sm flex items-center justify-center gap-1.5 {{ $umkm->status_pengajuan === 'terverifikasi' ? 'opacity-50 cursor-not-allowed' : '' }}" {{ $umkm->status_pengajuan === 'terverifikasi' ? 'disabled' : '' }}>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                 </svg>

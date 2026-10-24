@@ -409,7 +409,7 @@ class AuthTest extends TestCase
         $approvedResponse = $this->actingAs($user->fresh())->get('/dashboard');
         $approvedResponse->assertStatus(200);
         $approvedResponse->assertSee('BERANDA');
-        $approvedResponse->assertSee('Katalog Peluang Investasi');
+        $approvedResponse->assertSee('Peluang Investasi Pilihan');
         $approvedResponse->assertSee('Ruko Strategis Siap Ditempati UMKM');
     }
 }

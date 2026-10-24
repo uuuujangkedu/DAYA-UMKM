@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Investasi;
+use App\Models\KlarifikasiDividen;
 use App\Models\LogAktivitasAdmin;
 use App\Models\PenyediaRuko;
+use App\Models\PesanInvestasi;
 use App\Models\RekomendasiRuko;
 use App\Models\Ruko;
+use App\Models\TeguranDividenLog;
 use App\Models\Umkm;
 use App\Models\User;
 use Carbon\Carbon;
@@ -614,5 +618,242 @@ class SuperAdminController extends Controller
         ]);
 
         return back()->with('success', 'Kapasitas dan ketersediaan ruko "'.$ruko->nama_ruko.'" berhasil diperbarui (Sisa: '.($totalUnit - $unitTerisi).' dari '.$totalUnit.' unit).');
+    }
+
+    /**
+     * Dashboard Monitoring Kepatuhan Dividen & Kemitraan UMKM
+     */
+    public function dividen(Request $request)
+    {
+        $this->checkAdminAccess();
+        $user = Auth::user();
+
+        $filter = $request->query('status', 'semua');
+
+        $investasis = Investasi::whereIn('status', ['aktif', 'diterima'])
+            ->with(['umkm.user', 'pengguna', 'bagiHasilLog', 'klarifikasiDividen', 'teguranDividen'])
+            ->latest('tanggal_investasi')
+            ->get();
+
+        // Statistik kepatuhan bulan berjalan
+        $stats = [
+            'total_kemitraan' => $investasis->count(),
+            'lancar' => 0,
+            'menjelang_jatuh_tempo' => 0,
+            'masa_tenggang' => 0,
+            'menunggak' => 0,
+            'klarifikasi' => 0,
+            'dibekukan' => Umkm::where('status_kepatuhan_dividen', 'dibekukan')->count(),
+        ];
+
+        foreach ($investasis as $inv) {
+            $code = $inv->status_dividen_bulan_ini['code'] ?? 'lancar';
+            if (isset($stats[$code])) {
+                $stats[$code]++;
+            }
+        }
+
+        // Terapkan filter jika ada
+        if ($filter !== 'semua') {
+            $investasis = $investasis->filter(function ($inv) use ($filter) {
+                return ($inv->status_dividen_bulan_ini['code'] ?? '') === $filter;
+            });
+        }
+
+        // Daftar klarifikasi kendala yang membutuhkan tinjauan admin
+        $klarifikasisPending = KlarifikasiDividen::with(['investasi.umkm', 'investasi.pengguna'])
+            ->where('status', 'menunggu_tinjauan')
+            ->latest()
+            ->get();
+
+        // Riwayat teguran resmi yang telah diterbitkan
+        $riwayatTeguran = TeguranDividenLog::with(['investasi.umkm', 'investasi.pengguna', 'admin'])
+            ->latest()
+            ->take(25)
+            ->get();
+
+        return view('super-admin.dividen', compact('user', 'investasis', 'stats', 'filter', 'klarifikasisPending', 'riwayatTeguran'));
+    }
+
+    /**
+     * Menerbitkan Surat Peringatan (SP-1, SP-2, SP-3) atas tunggakan dividen
+     */
+    public function kirimTeguranDividen(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $investasi = Investasi::with('umkm.user', 'pengguna')->findOrFail($id);
+
+        $validated = $request->validate([
+            'tingkat_sp' => 'required|in:SP-1,SP-2,SP-3',
+            'pesan_teguran' => 'required|string|min:10',
+            'tenggat_penyelesaian' => 'nullable|date',
+        ]);
+
+        $tenggat = ! empty($validated['tenggat_penyelesaian'])
+            ? Carbon::parse($validated['tenggat_penyelesaian'])
+            : Carbon::now()->addDays(3);
+
+        $log = TeguranDividenLog::create([
+            'id_investasi' => $investasi->id_investasi,
+            'id_umkm' => $investasi->id_umkm,
+            'dikirim_oleh' => Auth::id(),
+            'tingkat_sp' => $validated['tingkat_sp'],
+            'pesan_teguran' => $validated['pesan_teguran'],
+        ]);
+
+        // Perbarui data kepatuhan di UMKM
+        $umkm = $investasi->umkm;
+        if ($umkm) {
+            $umkm->increment('jumlah_teguran_sp');
+            $umkm->teguran_sp_terakhir = Carbon::now();
+            if ($validated['tingkat_sp'] === 'SP-3') {
+                $umkm->status_kepatuhan_dividen = 'teguran_keras';
+            }
+            $umkm->save();
+        }
+
+        // Kirimkan notifikasi ke pesan internal kemitraan (PesanInvestasi)
+        PesanInvestasi::create([
+            'id_investasi' => $investasi->id_investasi,
+            'id_pengirim' => Auth::id(),
+            'pesan' => "⚠️ [SURAT PERINGATAN RESMI TIM COMPLIANCE DAYA UMKM - {$validated['tingkat_sp']}]\n\n".
+                       "Kepada Yth. Mitra {$umkm->nama_usaha},\n\n".
+                       "{$validated['pesan_teguran']}\n\n".
+                       'Tenggat batas penyelesaian: '.$tenggat->translatedFormat('d F Y').".\n".
+                       'Mohon segera lakukan penyetoran bagi hasil dividen atau ajukan klarifikasi resmi melalui menu dashboard kemitraan Anda.',
+        ]);
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => 'Menerbitkan '.$validated['tingkat_sp'].' Dividen UMKM',
+            'detail_perubahan' => [
+                'id_investasi' => $investasi->id_investasi,
+                'umkm' => $umkm->nama_usaha ?? '-',
+                'tingkat_sp' => $validated['tingkat_sp'],
+                'tenggat' => $tenggat->toDateString(),
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        // Tautan WhatsApp langsung ke nomor telepon pemilik UMKM
+        $phone = $umkm->nomor_whatsapp ?? ($umkm->user->phone_number ?? null);
+        $waUrl = null;
+        if ($phone) {
+            $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+            if (str_starts_with($cleanPhone, '0')) {
+                $cleanPhone = '62'.substr($cleanPhone, 1);
+            }
+            $waMsg = urlencode("Halo {$umkm->nama_usaha}, ini Tim Kepatuhan DAYA UMKM. Kami telah menerbitkan surat peringatan resmi ({$validated['tingkat_sp']}) terkait keterlambatan penyetoran dividen bagi hasil. Mohon segera cek dashboard kemitraan Anda. Terima kasih.");
+            $waUrl = "https://wa.me/{$cleanPhone}?text={$waMsg}";
+        }
+
+        return back()->with('success', "Surat Peringatan {$validated['tingkat_sp']} berhasil diterbitkan dan dicatat dalam audit kepatuhan.")
+            ->with('wa_url', $waUrl)
+            ->with('wa_target', $umkm->nama_usaha);
+    }
+
+    /**
+     * Verifikasi laporan klarifikasi kendala usaha dari UMKM
+     */
+    public function verifikasiKlarifikasiDividen(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $klarifikasi = KlarifikasiDividen::with(['investasi.umkm', 'investasi.pengguna'])->findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => 'required|in:diverifikasi_admin,ditolak',
+            'catatan_admin' => 'required|string|min:5',
+        ]);
+
+        $klarifikasi->update([
+            'status' => $validated['status'],
+            'catatan_admin' => $validated['catatan_admin'],
+        ]);
+
+        $statusLabel = $validated['status'] === 'diverifikasi_admin' ? 'DISETUJUI & DIVERIFIKASI' : 'DITOLAK';
+
+        $namaUsaha = $klarifikasi->investasi && $klarifikasi->investasi->umkm ? $klarifikasi->investasi->umkm->nama_usaha : 'Mitra UMKM';
+
+        $pesanNotif = $validated['status'] === 'diverifikasi_admin'
+            ? "✅ [DISPENSASI DISETUJUI - PENYELESAIAN BULAN DEPAN]\n\n".
+              "Kepada Yth. {$namaUsaha},\n\n".
+              "Klarifikasi laporan kendala usaha Anda untuk periode {$klarifikasi->bulan_periode} telah DISETUJUI & DIVERIFIKASI oleh Tim Compliance Platform.\n\n".
+              "STATUS DISPENSASI: Anda resmi diberikan toleransi untuk menyelesaikan kewajiban bagi hasil dividen pada periode BULAN DEPAN tanpa sanksi Surat Peringatan (SP).\n\n".
+              "Catatan Verifikator Admin: {$validated['catatan_admin']}\n\n".
+              "Terima kasih atas transparansi dan itikad baik Anda dalam menjaga kemitraan sehat bersama mitra investor."
+            : "❌ [KLARIFIKASI DIVIDEN TIDAK DAPAT DISETUJUI]\n\n".
+              "Kepada Yth. {$namaUsaha},\n\n".
+              "Laporan klarifikasi penundaan dividen periode {$klarifikasi->bulan_periode} TIDAK DAPAT DISETUJUI oleh Tim Compliance Platform.\n\n".
+              "Alasan / Catatan Admin: {$validated['catatan_admin']}\n\n".
+              "Mohon segera lakukan penyetoran dividen bagi hasil untuk menghindari penerbitan Surat Peringatan (SP).";
+
+        PesanInvestasi::create([
+            'id_investasi' => $klarifikasi->id_investasi,
+            'id_pengirim' => Auth::id(),
+            'pesan' => $pesanNotif,
+        ]);
+
+        if ($validated['status'] === 'diverifikasi_admin') {
+            $umkm = $klarifikasi->investasi ? $klarifikasi->investasi->umkm : null;
+            if ($umkm) {
+                $umkm->status_kepatuhan_dividen = 'lancar';
+                if ($umkm->jumlah_teguran_sp > 0) {
+                    $umkm->jumlah_teguran_sp = max(0, $umkm->jumlah_teguran_sp - 1);
+                }
+                $umkm->save();
+            }
+        }
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => 'Verifikasi Klarifikasi Dividen',
+            'detail_perubahan' => [
+                'id_klarifikasi' => $klarifikasi->id_klarifikasi,
+                'status' => $validated['status'],
+                'catatan' => $validated['catatan_admin'],
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        return back()->with('success', "Laporan klarifikasi dividen periode {$klarifikasi->bulan_periode} berhasil {$statusLabel}.");
+    }
+
+    /**
+     * Bekukan atau pulihkan hak pendanaan UMKM
+     */
+    public function toggleFreezeUmkm(Request $request, $id)
+    {
+        $this->checkAdminAccess();
+        $umkm = Umkm::findOrFail($id);
+
+        $isCurrentlyFrozen = $umkm->status_kepatuhan_dividen === 'dibekukan';
+        $newStatus = $isCurrentlyFrozen ? 'lancar' : 'dibekukan';
+
+        $catatan = $request->input('catatan_pembekuan', $isCurrentlyFrozen ? 'Pembekuan dicabut oleh Tim Admin.' : 'Akun dibekukan sementara karena keterlambatan dividen berulang / wanprestasi.');
+
+        $umkm->update([
+            'status_kepatuhan_dividen' => $newStatus,
+            'catatan_pembekuan' => $catatan,
+        ]);
+
+        $aksiText = $newStatus === 'dibekukan' ? 'Membekukan Fasilitas Pendanaan UMKM' : 'Mencabut Pembekuan Hak Pendanaan UMKM';
+
+        LogAktivitasAdmin::create([
+            'id_pengguna' => Auth::id(),
+            'aksi' => $aksiText,
+            'detail_perubahan' => [
+                'umkm_id' => $umkm->id_umkm,
+                'nama_usaha' => $umkm->nama_usaha,
+                'status_baru' => $newStatus,
+                'catatan' => $catatan,
+            ],
+            'ip_address' => $request->ip() ?? '127.0.0.1',
+        ]);
+
+        $msg = $newStatus === 'dibekukan'
+            ? "Fasilitas pengajuan pendanaan & listing UMKM \"{$umkm->nama_usaha}\" berhasil DIBEKUKAN sementara."
+            : "Status pembekuan UMKM \"{$umkm->nama_usaha}\" berhasil DICABUT. Status kini kembali normal.";
+
+        return back()->with('success', $msg);
     }
 }

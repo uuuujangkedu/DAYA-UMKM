@@ -32,7 +32,11 @@ class Umkm extends Model
         'status_pengajuan',
         'modal_dibutuhkan',
         'estimasi_bagi_hasil',
-    ]; // ponytail: tambah kolom (target_pendanaan, nib, omzet_bulanan, dsb) via migrasi jika produk butuh.
+        'status_kepatuhan_dividen',
+        'jumlah_teguran_sp',
+        'teguran_sp_terakhir',
+        'catatan_pembekuan',
+    ];
 
     public function user()
     {
@@ -85,5 +89,15 @@ class Umkm extends Model
     public function getTotalUlasanAttribute(): int
     {
         return $this->ulasanUmkm()->count();
+    }
+
+    public function klarifikasiDividen(): HasMany
+    {
+        return $this->hasMany(KlarifikasiDividen::class, 'id_umkm', 'id_umkm')->latest();
+    }
+
+    public function teguranDividen(): HasMany
+    {
+        return $this->hasMany(TeguranDividenLog::class, 'id_umkm', 'id_umkm')->latest();
     }
 }

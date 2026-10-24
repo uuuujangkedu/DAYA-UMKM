@@ -178,6 +178,198 @@
             </p>
         </div>
 
+        <!-- BANNER NOTIFIKASI: KLARIFIKASI KENDALA USAHA DI-ACC OLEH ADMIN (PENYELESAIAN BULAN DEPAN) -->
+        @if(!empty($klarifikasiDisetujuiTerbaru))
+            <div class="rounded-3xl p-6 sm:p-7 border-2 border-emerald-500 bg-gradient-to-r from-emerald-50 via-teal-50 to-green-50 shadow-xl relative overflow-hidden animate-fade-in mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-3xl shrink-0 shadow-lg ring-4 ring-white">
+                            ✅
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-700 text-white shadow-sm">
+                                    Dispensasi Disetujui Admin
+                                </span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-emerald-800 border border-emerald-200">
+                                    Periode: {{ $klarifikasiDisetujuiTerbaru->bulan_periode }}
+                                </span>
+                                @if($klarifikasiDisetujuiTerbaru->investasi && $klarifikasiDisetujuiTerbaru->investasi->pengguna)
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-emerald-800 border border-emerald-200">
+                                        Mitra Investor: <strong>{{ $klarifikasiDisetujuiTerbaru->investasi->pengguna->name }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+
+                            <h3 class="text-base sm:text-xl font-black text-emerald-950 mt-2">
+                                Klarifikasi Kendala Usaha Telah Di-ACC! Kewajiban Dapat Diselesaikan Bulan Depan
+                            </h3>
+
+                            <p class="text-xs sm:text-sm text-emerald-900/90 font-medium mt-1.5 leading-relaxed max-w-3xl">
+                                Laporan kendala usaha Anda telah diverifikasi dan <strong>disetujui oleh Tim Compliance Platform</strong>. Anda resmi diberikan kelonggaran waktu untuk menyelesaikan penyetoran bagi hasil dividen pada jadwal <strong>bulan depan</strong> tanpa dikenakan penalti atau sanksi kepatuhan (SP).
+                            </p>
+
+                            @if(!empty($klarifikasiDisetujuiTerbaru->catatan_admin))
+                                <div class="mt-3 p-3.5 rounded-2xl bg-white/90 border border-emerald-300 text-xs text-emerald-950 shadow-sm">
+                                    <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800 block mb-0.5">Catatan Verifikator Admin:</span>
+                                    <p class="italic font-medium">"{{ $klarifikasiDisetujuiTerbaru->catatan_admin }}"</p>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="shrink-0 self-stretch lg:self-center flex flex-col gap-2">
+                        <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                           class="px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
+                           style="background-color: #065F46 !important; color: #FFFFFF !important;">
+                            <span>💬 Buka Pesan Persetujuan</span>
+                            <span>&rarr;</span>
+                        </a>
+                        <span class="text-[11px] text-center text-emerald-800 font-bold">
+                            ✓ Status Kemitraan: Aman
+                        </span>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- BANNER PERINGATAN RESMI: SURAT PERINGATAN (SP) KEPATUHAN DIVIDEN -->
+        @if(!empty($teguranSpTerbaru) || ($umkm->jumlah_teguran_sp ?? 0) > 0)
+            @php
+                $spTerbaru = $teguranSpTerbaru;
+                $tingkatSp = $spTerbaru ? $spTerbaru->tingkat_sp : ('SP-' . ($umkm->jumlah_teguran_sp ?? 1));
+                $tenggatSp = $spTerbaru && $spTerbaru->created_at ? $spTerbaru->created_at->addDays(3) : now()->addDays(3);
+                $sisaHari = now()->diffInDays($tenggatSp, false);
+                $isDanger = in_array($tingkatSp, ['SP-2', 'SP-3']);
+                $invTerkait = $spTerbaru ? $spTerbaru->investasi : null;
+                $namaInvestor = $invTerkait && $invTerkait->pengguna ? $invTerkait->pengguna->name : 'Mitra Investor';
+                $bankInvestor = $invTerkait && $invTerkait->pengguna ? ($invTerkait->pengguna->bank_name ?? 'Bank Belum Diatur') : 'Bank Belum Diatur';
+                $rekInvestor = $invTerkait && $invTerkait->pengguna ? ($invTerkait->pengguna->nomor_rekening ?? '-') : '-';
+                $namaRekInvestor = $invTerkait && $invTerkait->pengguna ? ($invTerkait->pengguna->nama_pemilik_rekening ?? $invTerkait->pengguna->name) : 'Mitra Investor';
+                $hasDispensasi = !empty($klarifikasiDisetujuiTerbaru) && ($klarifikasiDisetujuiTerbaru->id_investasi === ($invTerkait->id_investasi ?? null));
+            @endphp
+            <div class="rounded-3xl p-6 sm:p-7 border-2 {{ $isDanger ? 'border-rose-600 bg-gradient-to-r from-rose-50 via-red-50 to-orange-50' : 'border-amber-500 bg-gradient-to-r from-amber-50 via-orange-50 to-red-50' }} shadow-xl relative overflow-hidden animate-fade-in mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl {{ $isDanger ? 'bg-rose-600 text-white' : 'bg-amber-500 text-white' }} flex items-center justify-center text-3xl shrink-0 shadow-lg ring-4 ring-white"
+                             style="background-color: {{ $isDanger ? '#E11D48' : '#F59E0B' }} !important; color: #FFFFFF !important;">
+                            ⚠️
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider text-white shadow-sm"
+                                      style="background-color: {{ $isDanger ? '#BE123C' : '#D97706' }} !important; color: #FFFFFF !important;">
+                                    SURAT PERINGATAN RESMI: {{ $tingkatSp }}
+                                </span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-gray-700 border border-gray-200">
+                                    Diterbitkan: {{ $spTerbaru && $spTerbaru->created_at ? $spTerbaru->created_at->translatedFormat('d M Y, H:i') : now()->translatedFormat('d M Y') }} WIB
+                                </span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white text-gray-700 border border-gray-200">
+                                    Investor Terkait: <strong>{{ $namaInvestor }}</strong>
+                                </span>
+                                @if($hasDispensasi)
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                        ✓ Telah Diberikan Toleransi ke Bulan Depan
+                                    </span>
+                                @endif
+                            </div>
+
+                            <h3 class="text-base sm:text-xl font-black text-gray-900 mt-2">
+                                Usaha Anda Telah Menerima {{ $tingkatSp }} Terkait Kepatuhan Dividen Bagi Hasil
+                            </h3>
+
+                            <p class="text-xs sm:text-sm text-gray-700 font-medium mt-1.5 max-w-3xl leading-relaxed">
+                                @if($spTerbaru && !empty($spTerbaru->pesan_teguran))
+                                    <span class="italic">"{{ Str::limit($spTerbaru->pesan_teguran, 160) }}"</span>
+                                @else
+                                    Berdasarkan rekapitulasi data sistem, bagi hasil dividen kemitraan belum disetorkan. Mohon segera selesaikan kewajiban bagi hasil atau ajukan klarifikasi resmi.
+                                @endif
+                            </p>
+
+                            <div class="mt-3 flex flex-wrap items-center gap-3 text-xs">
+                                <div class="inline-flex items-center gap-1.5 font-bold {{ $sisaHari <= 1 ? 'text-rose-700' : 'text-amber-800' }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                    <span>Tenggat Respons: <strong>{{ $tenggatSp->translatedFormat('d F Y') }}</strong></span>
+                                    @if($sisaHari >= 0)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black {{ $sisaHari <= 1 ? 'bg-rose-200 text-rose-900' : 'bg-amber-200 text-amber-900' }}">
+                                            (Tersisa {{ max(1, $sisaHari) }} hari)
+                                        </span>
+                                    @else
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white">
+                                            Melewati Batas Waktu!
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Buka Surat & Solusi (Ditingkatkan dengan Kontras Tinggi & Merah Terang) -->
+                    <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 self-stretch lg:self-center">
+                        <button type="button" 
+                                onclick="openSuratPeringatanModal(
+                                    '{{ $tingkatSp }}',
+                                    '{{ $spTerbaru && $spTerbaru->created_at ? $spTerbaru->created_at->translatedFormat('d F Y, H:i') : now()->translatedFormat('d F Y') }}',
+                                    '{{ $tenggatSp->translatedFormat('d F Y') }}',
+                                    `{{ addslashes($spTerbaru->pesan_teguran ?? 'Berdasarkan rekapitulasi data sistem, bagi hasil dividen kemitraan belum disetorkan.') }}`,
+                                    '{{ addslashes($spTerbaru->admin->name ?? 'Super Administrator') }}',
+                                    '{{ addslashes($namaInvestor) }}',
+                                    '{{ $invTerkait ? $invTerkait->id_investasi : '' }}',
+                                    '{{ addslashes($bankInvestor) }}',
+                                    '{{ $rekInvestor }}',
+                                    '{{ addslashes($namaRekInvestor) }}',
+                                    '{{ $spTerbaru->id_teguran ?? 1 }}'
+                                )"
+                                class="w-full px-6 py-3.5 rounded-2xl font-black text-xs sm:text-sm shadow-xl transition flex items-center justify-center gap-2.5 cursor-pointer hover:brightness-110 active:scale-95"
+                                style="background: linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #991B1B 100%) !important; background-color: #DC2626 !important; color: #FFFFFF !important; border: 2px solid #FFFFFF !important; box-shadow: 0 10px 25px -5px rgba(220, 38, 38, 0.45) !important;">
+                            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: #FFFFFF !important;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            <span class="tracking-wide uppercase font-extrabold" style="color: #FFFFFF !important; text-shadow: 0 1px 2px rgba(0,0,0,0.35);">
+                                Buka Dokumen Surat Peringatan (SP)
+                            </span>
+                        </button>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <a href="#daftar-mitra-investor" class="px-3.5 py-2.5 rounded-xl bg-white hover:bg-gray-100 text-gray-800 text-xs font-bold text-center border border-gray-300 transition shadow-sm">
+                                Setor Dividen ↓
+                            </a>
+                            <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" class="px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold text-center transition shadow-sm">
+                                💬 Ruang Chat
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- ALERT PERINGATAN KEPATUHAN JATUH TEMPO BAGI HASIL DIVIDEN -->
+        @if(!empty($adaDividenTenggangAtauNunggak))
+            <div class="rounded-2xl p-5 border-2 border-amber-400 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center text-2xl shrink-0 shadow">
+                        ⚠️
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-black uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded-full">
+                                Pengingat Kepatuhan Bagi Hasil
+                            </span>
+                        </div>
+                        <h4 class="text-sm sm:text-base font-extrabold text-amber-950 mt-1">
+                            Ada Kewajiban Dividen Memasuki Masa Tenggang / Jatuh Tempo
+                        </h4>
+                        <p class="text-xs text-amber-900/90 mt-0.5 max-w-2xl">
+                            Sesuai SOP platform (jatuh tempo tgl 25), silakan segera setor dividen atau sampaikan formulir <strong>Klarifikasi Penundaan / Kendala Usaha</strong> pada kartu investor di bawah agar tidak dikenakan Surat Peringatan (SP) dan pembekuan akun.
+                        </p>
+                    </div>
+                </div>
+                <a href="#daftar-mitra-investor" class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition shadow-sm shrink-0 whitespace-nowrap">
+                    Lihat Kemitraan ↓
+                </a>
+            </div>
+        @endif
+
 
 
         <!-- FITUR SINERGI 1: BANNER SEWA RUKO DISPONSORI INVESTOR -->
@@ -240,18 +432,21 @@
 
         <!-- FITUR SINERGI 2 (KARTU 2): DAFTAR MITRA INVESTOR AKTIF -->
         @if(isset($investasiAktif) && $investasiAktif->isNotEmpty())
-            <div class="card-soft p-6 sm:p-8">
+            <div id="daftar-mitra-investor" class="card-soft p-6 sm:p-8">
                 <div class="flex items-center justify-between mb-6">
                     <div>
                         <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#555555]">Kemitraan Berjalan</p>
-                        <h2 class="text-lg font-bold text-[#1A202C] tracking-tight mt-0.5">Mitra Investor Aktif</h2>
+                        <h2 class="text-lg font-bold text-[#1A202C] tracking-tight mt-0.5">Mitra Investor Aktif & Kepatuhan Dividen</h2>
                     </div>
                     <span class="text-xs font-semibold text-[#2D6A4F]">{{ $investasiAktif->count() }} kemitraan aktif</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @foreach($investasiAktif as $inv)
-                        <div class="p-5 rounded-2xl bg-[#F8F6F0] flex flex-col justify-between gap-4 hover:shadow-md transition">
+                        @php
+                            $statusBulanIni = $inv->status_dividen_bulan_ini;
+                        @endphp
+                        <div class="p-5 rounded-2xl bg-[#F8F6F0] flex flex-col justify-between gap-4 hover:shadow-md transition border border-[#E8E6DF]">
                             <div>
                                 <div class="flex items-start justify-between gap-2">
                                     <div class="flex items-center gap-3">
@@ -266,6 +461,24 @@
                                     <span class="px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-[0.06em] bg-emerald-100 text-emerald-800">
                                         Aktif
                                     </span>
+                                </div>
+
+                                <!-- INDIKATOR STATUS DIVIDEN BULAN BERJALAN -->
+                                <div class="mt-3.5 p-3 rounded-xl border flex items-center justify-between gap-2 {{ $statusBulanIni['badge_class'] }}">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-base">{{ $statusBulanIni['icon'] }}</span>
+                                        <div>
+                                            <span class="text-[11px] font-extrabold block leading-tight">{{ $statusBulanIni['badge_label'] }}</span>
+                                            <span class="text-[10px] opacity-80">Jatuh tempo: 25 {{ $statusBulanIni['bulan_periode'] }}</span>
+                                        </div>
+                                    </div>
+                                    @if($statusBulanIni['code'] === 'lancar')
+                                        <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-600 text-white">Lunas</span>
+                                    @elseif($statusBulanIni['code'] === 'klarifikasi_disetujui')
+                                        <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-700 text-white shadow-sm">✓ ACC Bulan Depan</span>
+                                    @elseif($statusBulanIni['code'] === 'klarifikasi')
+                                        <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-sky-600 text-white">Ditinjau</span>
+                                    @endif
                                 </div>
 
                                 <div class="mt-4 space-y-1.5 text-xs">
@@ -292,16 +505,66 @@
                                     </div>
                                     <span class="text-[11px] text-[#777] block mt-0.5 truncate">a.n. {{ $inv->pengguna->nama_pemilik_rekening ?? ($inv->pengguna->name ?? '-') }}</span>
                                 </div>
+                                @php
+                                    $spInv = $inv->teguranDividen->first();
+                                    $invHasDispensasi = !empty($statusBulanIni['disetujui_bulan_depan']);
+                                @endphp
+                                @if($spInv)
+                                    <div class="mt-3 p-3 rounded-xl bg-gradient-to-r from-rose-50 to-red-50 border border-rose-300 text-rose-900 flex items-center justify-between gap-2 shadow-sm">
+                                        <div class="flex items-center gap-2 min-w-0">
+                                            <span class="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center text-xs font-black shrink-0"
+                                                  style="background-color: #DC2626 !important; color: #FFFFFF !important;">!</span>
+                                            <div class="min-w-0">
+                                                <div class="flex items-center gap-1.5 flex-wrap">
+                                                    <span class="text-[11px] font-black uppercase text-rose-950 block truncate">Dikenakan {{ $spInv->tingkat_sp }}</span>
+                                                    @if($invHasDispensasi)
+                                                        <span class="px-1.5 py-0.2 rounded text-[9px] font-black bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                                            ✓ Dispensasi
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                                <span class="text-[10px] text-rose-800 font-medium block truncate">Tenggat: {{ $spInv->created_at ? $spInv->created_at->addDays(3)->translatedFormat('d M Y') : '-' }}</span>
+                                            </div>
+                                        </div>
+                                        <button type="button" 
+                                                onclick="openSuratPeringatanModal(
+                                                    '{{ $spInv->tingkat_sp }}',
+                                                    '{{ $spInv->created_at ? $spInv->created_at->translatedFormat('d F Y, H:i') : '' }}',
+                                                    '{{ $spInv->created_at ? $spInv->created_at->addDays(3)->translatedFormat('d F Y') : '' }}',
+                                                    `{{ addslashes($spInv->pesan_teguran) }}`,
+                                                    '{{ addslashes($spInv->admin->name ?? 'Super Administrator') }}',
+                                                    '{{ addslashes($inv->pengguna->name ?? 'Mitra Investor') }}',
+                                                    '{{ $inv->id_investasi }}',
+                                                    '{{ addslashes($inv->pengguna->bank_name ?? 'Bank Belum Diatur') }}',
+                                                    '{{ $inv->pengguna->nomor_rekening ?? '-' }}',
+                                                    '{{ addslashes($inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name) }}',
+                                                    '{{ $spInv->id_teguran }}'
+                                                )"
+                                                class="px-3 py-1.5 rounded-xl font-bold text-[11px] shadow-sm transition shrink-0 whitespace-nowrap cursor-pointer hover:opacity-90"
+                                                style="background-color: #DC2626 !important; color: #FFFFFF !important; border: 1px solid #FFFFFF !important;">
+                                            📄 Baca Surat SP
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
 
-                            <button type="button"
-                                    onclick="openSetorDividenModal('{{ $inv->id_investasi }}', '{{ addslashes($inv->pengguna->name) }}', '{{ addslashes($inv->pengguna->bank_name ?? 'Bank Belum Diatur') }}', '{{ $inv->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name) }}')"
-                                    class="w-full py-2.5 px-3 rounded-xl bg-[#2D6A4F] hover:bg-[#1B4D3E] text-white text-xs font-bold transition flex items-center justify-center gap-1.5">
-                                <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span>Setor Dividen Bagi Hasil</span>
-                            </button>
+                            <!-- TOMBOL AKSI: SETOR DIVIDEN & KLARIFIKASI KENDALA -->
+                            <div class="space-y-2 pt-2">
+                                <button type="button"
+                                        onclick="openSetorDividenModal('{{ $inv->id_investasi }}', '{{ addslashes($inv->pengguna->name) }}', '{{ addslashes($inv->pengguna->bank_name ?? 'Bank Belum Diatur') }}', '{{ $inv->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name) }}')"
+                                        class="w-full py-2.5 px-3 rounded-xl bg-[#2D6A4F] hover:bg-[#1B4D3E] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                                    <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <span>Setor Dividen Bagi Hasil</span>
+                                </button>
+
+                                <button type="button"
+                                        onclick="openKlarifikasiModal('{{ $inv->id_investasi }}', '{{ addslashes($inv->pengguna->name) }}', '{{ $statusBulanIni['bulan_periode'] }}')"
+                                        class="w-full py-2 px-3 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold transition flex items-center justify-center gap-1.5">
+                                    <span>📝 Ajukan Klarifikasi Kendala</span>
+                                </button>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -313,6 +576,92 @@
                 <p class="text-xs text-[#555555] max-w-md mx-auto">
                     Ketika Anda menyetujui komitmen pendanaan dari calon investor pada notifikasi di atas, profil investor dan nomor rekeningnya akan langsung muncul di sini.
                 </p>
+            </div>
+        @endif
+
+        <!-- LOG RIWAYAT SURAT PERINGATAN (SP) KEPATUHAN USAHA -->
+        @if(isset($daftarTeguranSp) && $daftarTeguranSp->isNotEmpty())
+            <div class="card-soft p-6 sm:p-8 border-2 border-rose-200 bg-white">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg font-black">
+                            ⚖️
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-rose-700 block">Kepatuhan Regulasi &amp; Kemitraan</span>
+                            <h3 class="text-base sm:text-lg font-black text-[#1A202C]">
+                                Riwayat Penerbitan Surat Peringatan (Log Kepatuhan Usaha)
+                            </h3>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold px-3 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-200 self-start sm:self-auto">
+                        {{ $daftarTeguranSp->count() }} Surat Tercatat
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead>
+                            <tr class="border-b border-gray-200 text-gray-500 uppercase text-[10px] font-bold tracking-wider">
+                                <th class="pb-3 pr-4">Tanggal Terbit</th>
+                                <th class="pb-3 px-4">Tingkat SP</th>
+                                <th class="pb-3 px-4">Mitra Investor</th>
+                                <th class="pb-3 px-4">Tenggat Respons</th>
+                                <th class="pb-3 px-4">Admin Penerbit</th>
+                                <th class="pb-3 px-4">Isi Teguran</th>
+                                <th class="pb-3 pl-4 text-right">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @foreach($daftarTeguranSp as $teguran)
+                                @php
+                                    $tenggatTeguran = $teguran->created_at ? $teguran->created_at->addDays(3) : null;
+                                @endphp
+                                <tr class="hover:bg-gray-50/70 transition">
+                                    <td class="py-3.5 pr-4 font-medium text-gray-600 whitespace-nowrap">
+                                        {{ $teguran->created_at ? $teguran->created_at->translatedFormat('d M Y, H:i') : '-' }}
+                                    </td>
+                                    <td class="py-3.5 px-4 whitespace-nowrap">
+                                        <span class="px-2.5 py-0.5 rounded-full font-black text-[10px] {{ $teguran->tingkat_sp === 'SP-3' ? 'bg-rose-600 text-white' : ($teguran->tingkat_sp === 'SP-2' ? 'bg-orange-500 text-white' : 'bg-amber-500 text-white') }}">
+                                            {{ $teguran->tingkat_sp }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3.5 px-4 font-bold text-gray-800 whitespace-nowrap">
+                                        {{ $teguran->investasi->pengguna->name ?? 'Investor Mitra' }}
+                                    </td>
+                                    <td class="py-3.5 px-4 font-bold text-rose-600 whitespace-nowrap">
+                                        {{ $tenggatTeguran ? $tenggatTeguran->translatedFormat('d M Y') : '-' }}
+                                    </td>
+                                    <td class="py-3.5 px-4 text-gray-600 whitespace-nowrap">
+                                        {{ $teguran->admin->name ?? 'Tim Compliance' }}
+                                    </td>
+                                    <td class="py-3.5 px-4 text-gray-600 max-w-xs truncate" title="{{ $teguran->pesan_teguran }}">
+                                        {{ Str::limit($teguran->pesan_teguran, 55) }}
+                                    </td>
+                                    <td class="py-3.5 pl-4 text-right whitespace-nowrap">
+                                        <button type="button"
+                                                onclick="openSuratPeringatanModal(
+                                                    '{{ $teguran->tingkat_sp }}',
+                                                    '{{ $teguran->created_at ? $teguran->created_at->translatedFormat('d F Y, H:i') : '' }}',
+                                                    '{{ $tenggatTeguran ? $tenggatTeguran->translatedFormat('d F Y') : '' }}',
+                                                    `{{ addslashes($teguran->pesan_teguran) }}`,
+                                                    '{{ addslashes($teguran->admin->name ?? 'Super Administrator') }}',
+                                                    '{{ addslashes($teguran->investasi->pengguna->name ?? 'Mitra Investor') }}',
+                                                    '{{ $teguran->id_investasi }}',
+                                                    '{{ addslashes($teguran->investasi->pengguna->bank_name ?? 'Bank Belum Diatur') }}',
+                                                    '{{ $teguran->investasi->pengguna->nomor_rekening ?? '-' }}',
+                                                    '{{ addslashes($teguran->investasi->pengguna->nama_pemilik_rekening ?? $teguran->investasi->pengguna->name ?? 'Mitra Investor') }}',
+                                                    '{{ $teguran->id_teguran }}'
+                                                )"
+                                                class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-[11px] font-bold transition shadow-sm">
+                                            Buka Surat
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         @endif
 
@@ -706,10 +1055,10 @@
                         <input type="text" name="pesan" required placeholder="Tulis pesan atau pertanyaan untuk {{ $selectedInvestasi->pengguna->name }}..."
                                class="flex-1 px-4 py-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
                         <button type="submit" class="px-5 py-3 rounded-2xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-black transition shadow-sm flex items-center gap-1.5 shrink-0">
-                            <span>Kirim</span>
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4l19 8-19 8 3-8-3-8zm3 8h10"/>
                             </svg>
+                            <span>Kirim</span>
                         </button>
                     </form>
                 @else
@@ -2273,4 +2622,293 @@
         </form>
     </div>
 </div>
+
+<!-- MODAL KLARIFIKASI PENUNDAAN DIVIDEN / LAPORAN KENDALA USAHA -->
+<div id="modal-klarifikasi-dividen" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-lg font-black shrink-0">
+                    📝
+                </div>
+                <div>
+                    <h3 class="text-lg font-black text-[#1A202C]">Klarifikasi Penundaan Dividen</h3>
+                    <p class="text-xs text-gray-500">Laporkan kendala usaha secara transparan ke investor & admin</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeKlarifikasiModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">✕</button>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs text-blue-900 mb-4 space-y-1">
+            <p class="font-bold">Kemitraan Investor: <span id="klarifikasi-investor-name" class="font-black text-blue-950"></span></p>
+            <p>Periode Kewajiban: <span id="klarifikasi-periode" class="font-bold text-blue-950"></span></p>
+            <p class="text-[11px] text-blue-800">Menyampaikan klarifikasi resmi melindungi status kemitraan Anda dari sanksi wanprestasi atau Surat Peringatan (SP).</p>
+        </div>
+
+        <form action="{{ route('dashboard.umkm.dividen.klarifikasi') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+            @csrf
+            <input type="hidden" name="id_investasi" id="klarifikasi-id-investasi" value="">
+            <input type="hidden" name="bulan_periode" id="klarifikasi-bulan-periode-input" value="">
+
+            <!-- Kategori Kendala -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Faktor / Kategori Kendala *</label>
+                <select name="kategori_kendala" required class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                    <option value="omzet_menurun">Penjualan / Omzet Menurun Bulan Ini</option>
+                    <option value="beban_operasional">Lonjakan Beban Operasional / Bahan Baku</option>
+                    <option value="piutang_tertunda">Pelunasan Piutang Konsumen Tertunda</option>
+                    <option value="force_majeure">Bencana / Kendala Tak Terduga (Force Majeure)</option>
+                    <option value="lainnya">Kendala Operasional Lainnya</option>
+                </select>
+            </div>
+
+            <!-- Penjelasan Detail -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Uraian Penyebab Keterlambatan *</label>
+                <textarea name="alasan" required rows="3" minlength="10"
+                          placeholder="Jelaskan secara jujur kondisi keuangan atau kendala operasional usaha pada bulan ini..."
+                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+            </div>
+
+            <!-- Komitmen Solusi / Rencana Pemulihan -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Rencana Solusi & Komitmen Pemulihan *</label>
+                <textarea name="komitmen_solusi" required rows="3" minlength="10"
+                          placeholder="Contoh: Kami telah menyiapkan promo bundling minggu depan dan menagih piutang jatuh tempo. Estimasi penyetoran dividen tanggal 10 bulan depan..."
+                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+            </div>
+
+            <!-- Lampiran Bukti (Opsional) -->
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Dokumen / Bukti Pendukung (Opsional)</label>
+                <input type="file" name="lampiran_bukti" accept="image/*,.pdf"
+                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1B4D3E] file:text-white cursor-pointer">
+                <span class="text-[10px] text-gray-400 mt-1 block">Contoh: Laporan mutasi kas, nota beban darurat, dsb. Format PDF/Gambar max 5MB.</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+                <button type="button" onclick="closeKlarifikasiModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
+                    Batal
+                </button>
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm">
+                    Kirim Klarifikasi Resmi
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL SURAT PERINGATAN RESMI (KOP SURAT DAYA UMKM & COMPLIANCE PLATFORM) -->
+<div id="modal-surat-peringatan-resmi" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-gray-200 animate-scale-up max-h-[92vh] flex flex-col overflow-hidden">
+        
+        <!-- Header Modal Top Bar -->
+        <div class="px-6 py-4 bg-gradient-to-r from-gray-900 via-rose-950 to-gray-900 text-white flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm font-black shadow">⚠️</span>
+                <div>
+                    <h3 class="text-sm font-black tracking-wide uppercase text-white flex items-center gap-2">
+                        Dokumen Resmi Kepatuhan Platform
+                        <span id="modal-sp-tingkat-badge" class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white">SP-1</span>
+                    </h3>
+                    <p class="text-[11px] text-gray-300">Surat Peringatan Pemenuhan Bagi Hasil Dividen Kemitraan</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeSuratPeringatanModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-sm font-bold transition">✕</button>
+        </div>
+
+        <!-- Body Surat Fisik Resmi (Kop Surat & Dokumen Legal) -->
+        <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-xs sm:text-sm text-gray-800 font-serif leading-relaxed bg-[#FFFDF9]">
+            
+            <!-- KOP SURAT RESMI PLATFORM -->
+            <div class="text-center pb-4 border-b-2 border-black font-sans">
+                <div class="flex items-center justify-center gap-3 mb-1">
+                    <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM" class="h-8 w-auto object-contain">
+                    <div class="h-6 w-px bg-gray-300"></div>
+                    <span class="text-base sm:text-lg font-black tracking-wider text-[#1B4D3E]">DAYA UMKM INDONESIA</span>
+                </div>
+                <h4 class="text-xs font-black tracking-wider uppercase text-gray-900 mt-1">
+                    DIREKTORAT KEPATUHAN &amp; TATA KELOLA KEMITRAAN INVESTASI
+                </h4>
+                <p class="text-[10px] text-gray-500 font-medium mt-0.5 font-sans">
+                    Gedung Sinergi Finansial Lt. 8, Jl. Kemitraan Strategis Kav. 18, Jakarta Selatan &bull; Layanan: compliance@dayaumkm.id
+                </p>
+                <div class="w-full h-0.5 bg-black mt-2"></div>
+                <div class="w-full h-px bg-black mt-0.5"></div>
+            </div>
+
+            <!-- METADATA SURAT -->
+            <div class="font-sans text-xs space-y-1 pt-1">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                    <div><strong>Nomor:</strong> <span id="modal-sp-nomor" class="font-mono font-bold text-gray-900">SP.001/COMP-DU/2026</span></div>
+                    <div><strong>Tanggal Terbit:</strong> <span id="modal-sp-tanggal" class="font-bold text-gray-900">-</span></div>
+                </div>
+                <div><strong>Sifat:</strong> <span class="text-rose-700 font-black uppercase">PENTING &amp; SEGERA (CONFIDENTIAL)</span></div>
+                <div><strong>Lampiran:</strong> <span>1 (Satu) Berkas Lembar Rekapitulasi Kewajiban</span></div>
+                <div><strong>Perihal:</strong> <span class="font-black text-gray-900 underline">SURAT PERINGATAN (<span id="modal-sp-tingkat">SP-1</span>) ATAS KELALAIAN PEMENUHAN BAGI HASIL DIVIDEN USAHA</span></div>
+            </div>
+
+            <!-- TUJUAN SURAT -->
+            <div class="font-sans text-xs pt-1">
+                <p>Kepada Yth.</p>
+                <p class="font-black text-gray-900 text-sm">Pimpinan / Pemilik Usaha: <span class="text-[#1B4D3E]">{{ $user->name }}</span></p>
+                <p class="font-bold text-gray-800">Nama Usaha UMKM: <span>{{ $umkm->nama_usaha }}</span></p>
+                <p class="text-gray-600">Mitra Investor Terkait: <strong id="modal-sp-investor" class="text-gray-900">-</strong></p>
+                <p class="text-gray-500">Di Tempat</p>
+            </div>
+
+            <!-- ISI UTAMA SURAT -->
+            <div class="space-y-3 pt-2 text-justify text-xs sm:text-[13px] leading-relaxed">
+                <p>
+                    Dengan hormat,
+                </p>
+                <p>
+                    Berdasarkan rekapitulasi audit sistem dan pemantauan kepatuhan permodalan kemitraan platform <strong>DAYA UMKM</strong>, bersama surat resmi ini kami memberitahukan bahwa usaha Saudara tercatat <strong>belum menyetorkan bagi hasil dividen berkala</strong> yang telah melewati batas tanggal jatuh tempo (tanggal 25 setiap bulannya) sesuai dengan Akad Perjanjian Kemitraan Investasi yang disepakati bersama Mitra Investor.
+                </p>
+
+                <!-- KOTAK TEGURAN RESMI DARI VERIFIKATOR -->
+                <div class="p-4 rounded-2xl bg-rose-50/90 border-l-4 border-rose-600 font-sans text-xs text-rose-950 space-y-1.5 shadow-sm">
+                    <span class="text-[10px] font-black uppercase tracking-wider text-rose-800 block">
+                        Uraian Teguran Resmi Tim Compliance:
+                    </span>
+                    <p id="modal-sp-isi-pesan" class="italic leading-relaxed font-medium">
+                        "Kewajiban bagi hasil dividen belum disetorkan."
+                    </p>
+                    <div class="pt-1 flex items-center justify-between text-[10px] text-rose-700 border-t border-rose-200/60 mt-2">
+                        <span>Penerbit / Verifikator: <strong id="modal-sp-admin">Super Administrator</strong></span>
+                        <span>Otoritas: Tim Compliance DAYA UMKM</span>
+                    </div>
+                </div>
+
+                <p>
+                    Sehubungan dengan hal tersebut, Manajemen DAYA UMKM memberikan kesempatan tenggat waktu respons penyelesaian paling lambat hingga:
+                </p>
+
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 font-sans text-center">
+                    <span class="text-[10px] font-bold text-amber-900 uppercase tracking-wider block">Batas Akhir Penyelesaian / Tindak Lanjut:</span>
+                    <span id="modal-sp-tenggat" class="text-base font-black text-rose-700 mt-0.5 block">-</span>
+                    <span class="text-[10px] text-amber-800">(Maksimal 3 hari kerja sejak surat ini diterbitkan sistem)</span>
+                </div>
+
+                <p>
+                    Saudara diwajibkan untuk segera mengambil salah satu langkah penyelesaian resmi di bawah ini:
+                </p>
+                <ol class="list-decimal pl-5 space-y-1.5 font-sans text-xs">
+                    <li>
+                        <strong>Menyetorkan Dividen Bagi Hasil:</strong> Melakukan transfer dividen ke rekening mitra investor dan mengunggah bukti transfer yang sah melalui menu kemitraan di dashboard.
+                    </li>
+                    <li>
+                        <strong>Menyampaikan Formulir Klarifikasi Resmi:</strong> Jika usaha sedang mengalami kendala perputaran kas, omzet menurun, atau force majeure, sampaikan dokumen klarifikasi agar mendapatkan restrukturisasi waktu dan perlindungan status akun dari penalti lanjutan.
+                    </li>
+                </ol>
+
+                <div class="p-3 rounded-xl bg-gray-100 font-sans text-[11px] text-gray-700 space-y-1">
+                    <strong class="text-gray-900 block">Pemberitahuan Sanksi Kepatuhan:</strong>
+                    Apabila Saudara mengabaikan peringatan ini hingga tenggat waktu berakhir tanpa konfirmasi resmi, sistem akan otomatis meningkatkan status ke <strong>SP-2 / SP-3</strong>, membekukan sementara fasilitas permodalan, serta meninjau ulang status kemitraan sebagai indikasi wanprestasi.
+                </div>
+
+                <p>
+                    Demikian surat peringatan resmi ini kami sampaikan agar menjadi perhatian penuh dan segera ditindaklanjuti dengan itikad baik.
+                </p>
+            </div>
+
+            <!-- TANDA TANGAN DIGITAL PLATFORM -->
+            <div class="pt-4 border-t border-gray-200 font-sans text-xs flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+                <div>
+                    <span class="text-[10px] text-gray-400 block font-mono">Kode Validasi Dokumen:</span>
+                    <span class="text-[10px] text-gray-500 font-mono font-bold block">SEC-REG-{{ date('Ymd') }}-COMPLIANCE-VERIFIED</span>
+                    <span class="text-[9px] text-gray-400 mt-1 block max-w-xs">Dokumen ini diterbitkan sah secara elektronik oleh Sistem Monitoring Kepatuhan DAYA UMKM dan memiliki kekuatan pembuktian internal platform.</span>
+                </div>
+                <div class="text-left sm:text-right shrink-0">
+                    <p class="text-gray-500 text-[10px]">Jakarta, {{ date('d F Y') }}</p>
+                    <p class="font-bold text-gray-900 mt-0.5">Direktorat Kepatuhan DAYA UMKM</p>
+                    <div class="my-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10px] font-mono font-bold">
+                        <span>✓</span> TERVERIFIKASI SISTEM ELEKTRONIK
+                    </div>
+                    <p class="text-[11px] font-black text-gray-900">TIM MONITORING &amp; AUDIT KEMITRAAN</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tombol Aksi di Bawah Surat -->
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <button type="button" onclick="closeSuratPeringatanModal()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-100 transition">
+                Tutup Dokumen
+            </button>
+
+            <div class="flex flex-wrap items-center gap-2">
+                <a id="modal-sp-btn-chat" href="{{ route('dashboard', ['tab' => 'inbox']) }}" class="px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                    <span>💬 Chat Mitra / Verifikator</span>
+                </a>
+                <button type="button" id="modal-sp-btn-klarifikasi" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                    <span>📝 Ajukan Klarifikasi Kendala</span>
+                </button>
+                <button type="button" id="modal-sp-btn-setor" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                    <span>💸 Setor Dividen Sekarang</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function openKlarifikasiModal(idInvestasi, investorName, bulanPeriode) {
+        document.getElementById('klarifikasi-id-investasi').value = idInvestasi;
+        document.getElementById('klarifikasi-bulan-periode-input').value = bulanPeriode;
+        document.getElementById('klarifikasi-investor-name').innerText = investorName;
+        document.getElementById('klarifikasi-periode').innerText = bulanPeriode;
+        document.getElementById('modal-klarifikasi-dividen').classList.remove('hidden');
+    }
+
+    function closeKlarifikasiModal() {
+        document.getElementById('modal-klarifikasi-dividen').classList.add('hidden');
+    }
+
+    function openSuratPeringatanModal(tingkatSp, tanggal, tenggat, pesan, adminName, investorName, idInvestasi, bankName, noRek, namaRek, idTeguran) {
+        document.getElementById('modal-sp-tingkat').innerText = tingkatSp || 'SP-1';
+        document.getElementById('modal-sp-tingkat-badge').innerText = tingkatSp || 'SP-1';
+        document.getElementById('modal-sp-nomor').innerText = 'SP.' + (idTeguran ? String(idTeguran).padStart(3, '0') : '001') + '/COMP-DU/' + new Date().getFullYear();
+        document.getElementById('modal-sp-tanggal').innerText = tanggal || '-';
+        document.getElementById('modal-sp-tenggat').innerText = tenggat || '-';
+        document.getElementById('modal-sp-isi-pesan').innerText = pesan || 'Berdasarkan data sistem, bagi hasil dividen kemitraan belum disetorkan.';
+        document.getElementById('modal-sp-admin').innerText = adminName || 'Super Administrator';
+        document.getElementById('modal-sp-investor').innerText = investorName || 'Mitra Investor';
+        
+        // Atur tombol setor dividen
+        const btnSetor = document.getElementById('modal-sp-btn-setor');
+        if (btnSetor) {
+            btnSetor.onclick = function() {
+                closeSuratPeringatanModal();
+                if (typeof openSetorDividenModal === 'function') {
+                    openSetorDividenModal(idInvestasi, investorName, bankName, noRek, namaRek);
+                }
+            };
+        }
+
+        // Atur tombol klarifikasi kendala
+        const btnKlarifikasi = document.getElementById('modal-sp-btn-klarifikasi');
+        if (btnKlarifikasi) {
+            btnKlarifikasi.onclick = function() {
+                closeSuratPeringatanModal();
+                if (typeof openKlarifikasiModal === 'function') {
+                    openKlarifikasiModal(idInvestasi, investorName, 'Bulan Berjalan');
+                }
+            };
+        }
+
+        // Atur tombol chat
+        const btnChat = document.getElementById('modal-sp-btn-chat');
+        if (btnChat && idInvestasi) {
+            btnChat.href = "{{ route('dashboard') }}?tab=inbox&investasi_id=" + idInvestasi;
+        }
+
+        document.getElementById('modal-surat-peringatan-resmi').classList.remove('hidden');
+    }
+
+    function closeSuratPeringatanModal() {
+        document.getElementById('modal-surat-peringatan-resmi').classList.add('hidden');
+    }
+</script>
 @endsection

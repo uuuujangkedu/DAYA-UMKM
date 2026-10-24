@@ -115,12 +115,19 @@
                         </svg>
                         <span>BERANDA</span>
                     </div>
-                    @if(isset($unreadInvestasiCount) && $unreadInvestasiCount > 0)
-                        <span class="relative flex h-2.5 w-2.5">
-                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
-                        </span>
-                    @endif
+                    <div class="flex items-center gap-1.5">
+                        @if(!empty($umkm) && ($umkm->jumlah_teguran_sp ?? 0) > 0)
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-rose-600 text-white shadow animate-pulse" title="Terdapat Surat Peringatan Kepatuhan">
+                                SP-{{ $umkm->jumlah_teguran_sp }}
+                            </span>
+                        @endif
+                        @if(isset($unreadInvestasiCount) && $unreadInvestasiCount > 0)
+                            <span class="relative flex h-2.5 w-2.5">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                            </span>
+                        @endif
+                    </div>
                 </a>
 
                 <!-- 2. INBOX PENDANAAN (Komunikasi & Minat Modal Investor) -->
@@ -249,6 +256,11 @@
                         <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM20.5 6.5C19.8 5.8 18.7 5.7 17.9 6.2L13.8 8.7C13.3 9 12.7 9.2 12 9.2C11.3 9.2 10.7 9 10.2 8.7L6.1 6.2C5.3 5.7 4.2 5.8 3.5 6.5C2.7 7.2 2.7 8.3 3.3 9.1L6.5 13.3C6.8 13.7 7 14.3 7 14.8V21C7 21.6 7.4 22 8 22H10C10.6 22 11 21.6 11 21V16H13V21C13 21.6 13.4 22 14 22H16C16.6 22 17 21.6 17 21V14.8C17 14.3 17.2 13.7 17.5 13.3L20.7 9.1C21.3 8.3 21.3 7.2 20.5 6.5Z"/>
                     </svg>
                 </button>
+                @if(!empty($umkm) && ($umkm->jumlah_teguran_sp ?? 0) > 0)
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-600 text-white animate-pulse">
+                        ⚠️ SP-{{ $umkm->jumlah_teguran_sp }}
+                    </span>
+                @endif
                 <div class="text-xs text-teal-200">
                     {{ $user->name }}
                 </div>

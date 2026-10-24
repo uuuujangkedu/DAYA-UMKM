@@ -114,6 +114,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/investor/ulasan/{id_investasi}', [DashboardController::class, 'storeUlasanUmkm'])->name('dashboard.investor.ulasan.store');
     Route::post('/dashboard/umkm/ulasan/{id_ulasan}/balas', [DashboardController::class, 'storeBalasanUlasanUmkm'])->name('dashboard.umkm.ulasan.balas');
 
+    // Klarifikasi Penundaan Dividen UMKM
+    Route::post('/dashboard/umkm/dividen/klarifikasi', [DashboardController::class, 'storeKlarifikasiDividen'])->name('dashboard.umkm.dividen.klarifikasi');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // ==========================================
@@ -135,6 +138,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/ruko/rekomendasi/{id}/approve', [SuperAdminController::class, 'approveRekomendasiRuko'])->name('ruko.rekomendasi.approve');
         Route::post('/ruko/rekomendasi/{id}/reject', [SuperAdminController::class, 'rejectRekomendasiRuko'])->name('ruko.rekomendasi.reject');
         Route::post('/ruko/{id}/update-ketersediaan', [SuperAdminController::class, 'updateRukoKetersediaan'])->name('ruko.update-ketersediaan');
+
+        // Monitoring Kepatuhan Dividen & Penanganan Tunggakan
+        Route::get('/dividen', [SuperAdminController::class, 'dividen'])->name('dividen');
+        Route::post('/dividen/{id}/teguran', [SuperAdminController::class, 'kirimTeguranDividen'])->name('dividen.teguran');
+        Route::post('/dividen/klarifikasi/{id}/verifikasi', [SuperAdminController::class, 'verifikasiKlarifikasiDividen'])->name('dividen.klarifikasi.verifikasi');
+        Route::post('/dividen/umkm/{id}/toggle-bekukan', [SuperAdminController::class, 'toggleFreezeUmkm'])->name('dividen.umkm.toggle-freeze');
     });
 });
 
