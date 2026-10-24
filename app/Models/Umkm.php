@@ -21,6 +21,8 @@ class Umkm extends Model
         'provinsi_kota',
         'kecamatan',
         'kelurahan',
+        'rt',
+        'rw',
         'deskripsi',
         'foto_produk',
         'file_proposal',

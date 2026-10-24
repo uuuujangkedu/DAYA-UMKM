@@ -151,9 +151,9 @@ class DashboardController extends Controller
             if ($notifikasiInvestasi->isNotEmpty()) {
                 $targetId = $selectedInvestasiId ?: $notifikasiInvestasi->first()->id_investasi;
                 $selectedInvestasi = Investasi::with(['pengguna', 'pesanInvestasi.pengirim'])->find($targetId);
-                
+
                 // Jika belum punya pesan, masukkan catatan awal sebagai pesan pertama
-                if ($selectedInvestasi && $selectedInvestasi->pesanInvestasi->isEmpty() && !empty($selectedInvestasi->catatan)) {
+                if ($selectedInvestasi && $selectedInvestasi->pesanInvestasi->isEmpty() && ! empty($selectedInvestasi->catatan)) {
                     PesanInvestasi::create([
                         'id_investasi' => $selectedInvestasi->id_investasi,
                         'id_pengirim' => $selectedInvestasi->id_pengguna,
@@ -163,7 +163,7 @@ class DashboardController extends Controller
                     $selectedInvestasi->load('pesanInvestasi.pengirim');
                 }
 
-                if ($activeTab === 'inbox' && $selectedInvestasi && !$selectedInvestasi->dibaca) {
+                if ($activeTab === 'inbox' && $selectedInvestasi && ! $selectedInvestasi->dibaca) {
                     $selectedInvestasi->update(['dibaca' => true]);
                 }
             }
@@ -311,7 +311,6 @@ class DashboardController extends Controller
                 usort($alokasiSektor, fn ($a, $b) => $b['persentase'] <=> $a['persentase']);
             }
 
-
             // Real Riwayat Bagi Hasil dari Database (Tabel bagi_hasil_log)
             $riwayatBagiHasil = BagiHasilLog::with(['investasi.umkm'])
                 ->whereHas('investasi', function ($q) use ($user) {
@@ -377,8 +376,8 @@ class DashboardController extends Controller
                 ->get();
 
             $unreadInvestorChatCount = PesanInvestasi::whereHas('investasi', function ($q) use ($user) {
-                    $q->where('id_pengguna', $user->id);
-                })
+                $q->where('id_pengguna', $user->id);
+            })
                 ->where('id_pengirim', '!=', $user->id)
                 ->where('dibaca', false)
                 ->count();
@@ -390,7 +389,7 @@ class DashboardController extends Controller
                 $selectedChatInvestasi = Investasi::with(['umkm.user', 'pesanInvestasi.pengirim'])->find($targetId);
 
                 // Pastikan catatan awal investor saat mengajukan investasi muncul sebagai pesan pembuka jika belum ada
-                if ($selectedChatInvestasi && $selectedChatInvestasi->pesanInvestasi->isEmpty() && !empty($selectedChatInvestasi->catatan)) {
+                if ($selectedChatInvestasi && $selectedChatInvestasi->pesanInvestasi->isEmpty() && ! empty($selectedChatInvestasi->catatan)) {
                     PesanInvestasi::create([
                         'id_investasi' => $selectedChatInvestasi->id_investasi,
                         'id_pengirim' => $selectedChatInvestasi->id_pengguna,
@@ -863,6 +862,8 @@ class DashboardController extends Controller
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
         ]);
 
@@ -872,6 +873,8 @@ class DashboardController extends Controller
             'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+            'rt' => $validated['rt'] ?? $user->rt,
+            'rw' => $validated['rw'] ?? $user->rw,
             'kategori_diminati' => $validated['kategori_diminati'] ?? 'Semua',
             'status' => 'menunggu_verifikasi',
         ]);
@@ -895,6 +898,8 @@ class DashboardController extends Controller
                 'provinsi_kota' => $user->provinsi_kota,
                 'kecamatan' => $user->kecamatan,
                 'kelurahan' => $user->kelurahan,
+                'rt' => $user->rt,
+                'rw' => $user->rw,
                 'status_pengajuan' => 'draf',
             ]
         );
@@ -928,6 +933,8 @@ class DashboardController extends Controller
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'modal_dibutuhkan' => ['nullable', 'numeric', 'min:0'],
             'estimasi_bagi_hasil' => ['nullable', 'string', 'max:50'],
             'deskripsi' => ['nullable', 'string'],
@@ -954,6 +961,11 @@ class DashboardController extends Controller
                 'jenis_usaha' => $validated['jenis_usaha'] ?? 'Makanan',
                 'pemilik' => $validated['pemilik'] ?? $user->name,
                 'nomor_whatsapp' => $validated['nomor_whatsapp'] ?? $user->phone_number,
+                'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
+                'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
+                'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+                'rt' => $validated['rt'] ?? $user->rt,
+                'rw' => $validated['rw'] ?? $user->rw,
                 'status_pengajuan' => 'draf',
             ]
         );
@@ -981,6 +993,8 @@ class DashboardController extends Controller
             'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+            'rt' => $validated['rt'] ?? $user->rt,
+            'rw' => $validated['rw'] ?? $user->rw,
         ]);
 
         return redirect()->route('dashboard')->with('success', $message);
@@ -1105,6 +1119,7 @@ class DashboardController extends Controller
     public function showPublicUsulkanRuko()
     {
         $user = Auth::user();
+
         return view('pages.usulkan-ruko', compact('user'));
     }
 

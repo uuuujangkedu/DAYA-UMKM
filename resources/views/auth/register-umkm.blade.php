@@ -101,61 +101,31 @@
                        class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
-            <!-- Nomor WhatsApp & Provinsi/Kota -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                        Nomor WhatsApp <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" 
-                           id="nomor_telepon" 
-                           name="nomor_telepon" 
-                           value="{{ old('nomor_telepon') }}" 
-                           required
-                           placeholder="Contoh: 081234567890" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
-                </div>
-
-                <div>
-                    <label for="provinsi_kota" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                        Provinsi / kota <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" 
-                           id="provinsi_kota" 
-                           name="provinsi_kota" 
-                           value="{{ old('provinsi_kota') }}" 
-                           required
-                           placeholder="Contoh: Jawa Tengah / Kudus" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
-                </div>
+            <!-- Nomor WhatsApp Usaha -->
+            <div>
+                <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
+                    Nomor WhatsApp <span class="text-red-500">*</span>
+                </label>
+                <input type="text" 
+                       id="nomor_telepon" 
+                       name="nomor_telepon" 
+                       value="{{ old('nomor_telepon') }}" 
+                       required
+                       placeholder="Contoh: 081234567890" 
+                       class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
-            <!-- Kelurahan & Kecamatan -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="kelurahan" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                        Kelurahan
-                    </label>
-                    <input type="text" 
-                           id="kelurahan" 
-                           name="kelurahan" 
-                           value="{{ old('kelurahan') }}" 
-                           placeholder="Contoh: Demaan" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
-                </div>
-
-                <div>
-                    <label for="kecamatan" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                        Kecamatan
-                    </label>
-                    <input type="text" 
-                           id="kecamatan" 
-                           name="kecamatan" 
-                           value="{{ old('kecamatan') }}" 
-                           placeholder="Contoh: Kota Kudus" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
-                </div>
-            </div>
+            <!-- Wilayah Domisili Usaha -->
+            <x-wilayah-domisili 
+                label="Wilayah domisili usaha"
+                :provinsi-kota="old('provinsi_kota')"
+                :kecamatan="old('kecamatan')"
+                :kelurahan="old('kelurahan')"
+                :rt="old('rt')"
+                :rw="old('rw')"
+                :required="true"
+                id-prefix="reg_umkm_domisili"
+            />
 
             <!-- Kredensial Akun -->
             <div class="pt-4 border-t border-[#e2e1d8] space-y-4">

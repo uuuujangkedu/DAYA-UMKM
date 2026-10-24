@@ -150,30 +150,15 @@
             </div>
 
             <!-- Wilayah Usaha -->
-            <div>
-                <label class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                    Wilayah domisili usaha
-                </label>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input type="text" 
-                           name="provinsi_kota" 
-                           value="{{ old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota) }}" 
-                           placeholder="Provinsi / Kota" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                    
-                    <input type="text" 
-                           name="kecamatan" 
-                           value="{{ old('kecamatan', $umkm->kecamatan ?? $user->kecamatan) }}" 
-                           placeholder="Kecamatan" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                    
-                    <input type="text" 
-                           name="kelurahan" 
-                           value="{{ old('kelurahan', $umkm->kelurahan ?? $user->kelurahan) }}" 
-                           placeholder="Kelurahan" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                </div>
-            </div>
+            <x-wilayah-domisili 
+                label="Wilayah domisili usaha"
+                :provinsi-kota="old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota)"
+                :kecamatan="old('kecamatan', $umkm->kecamatan ?? $user->kecamatan)"
+                :kelurahan="old('kelurahan', $umkm->kelurahan ?? $user->kelurahan)"
+                :rt="old('rt', $umkm->rt ?? $user->rt)"
+                :rw="old('rw', $umkm->rw ?? $user->rw)"
+                id-prefix="umkm_domisili"
+            />
         </div>
 
         <!-- CARD 3: BAGIAN 2 - INFORMASI USAHA & PRODUK -->

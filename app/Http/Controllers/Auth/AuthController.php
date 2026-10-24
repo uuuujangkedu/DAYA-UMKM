@@ -105,6 +105,8 @@ class AuthController extends Controller
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
         ];
 
@@ -133,6 +135,8 @@ class AuthController extends Controller
             'provinsi_kota' => $validated['provinsi_kota'] ?? null,
             'kecamatan' => $validated['kecamatan'] ?? null,
             'kelurahan' => $validated['kelurahan'] ?? null,
+            'rt' => $validated['rt'] ?? null,
+            'rw' => $validated['rw'] ?? null,
             'kategori_diminati' => $validated['kategori_diminati'] ?? null,
             'role' => $role,
             'password' => $validated['password'],
@@ -151,6 +155,8 @@ class AuthController extends Controller
                     'provinsi_kota' => $validated['provinsi_kota'] ?? null,
                     'kecamatan' => $validated['kecamatan'] ?? null,
                     'kelurahan' => $validated['kelurahan'] ?? null,
+                    'rt' => $validated['rt'] ?? null,
+                    'rw' => $validated['rw'] ?? null,
                     'status_pengajuan' => 'draf',
                 ]
             );
@@ -297,10 +303,15 @@ class AuthController extends Controller
      */
     public function verifyOtp(Request $request)
     {
+        // Pastikan hanya karakter angka numerik
+        $cleanOtp = preg_replace('/\D/', '', (string) $request->input('otp'));
+        $request->merge(['otp' => $cleanOtp]);
+
         $request->validate([
-            'otp' => ['required', 'string', 'size:6'],
+            'otp' => ['required', 'digits:6'],
         ], [
             'otp.required' => 'Kode OTP 6-digit wajib diisi.',
+            'otp.digits' => 'Kode OTP harus berupa 6 digit angka.',
             'otp.size' => 'Kode OTP harus berupa 6 digit angka.',
         ]);
 

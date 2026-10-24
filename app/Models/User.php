@@ -28,6 +28,8 @@ class User extends Authenticatable implements FilamentUser
         'provinsi_kota',
         'kecamatan',
         'kelurahan',
+        'rt',
+        'rw',
         'kategori_diminati',
         'password',
         'role',

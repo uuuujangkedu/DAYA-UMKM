@@ -44,7 +44,7 @@
                            name="otp" 
                            id="otp" 
                            maxlength="6" 
-                           pattern="\d*" 
+                           pattern="[0-9]{6}" 
                            inputmode="numeric" 
                            required 
                            autofocus
@@ -53,7 +53,7 @@
                            class="w-48 text-center tracking-[10px] text-[24px] font-bold py-2.5 bg-white border @error('otp') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[#2D6B22] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
                 </div>
                 @error('otp')
-                    <p class="mt-2 text-center text-[12px] text-red-600">{{ $message }}</p>
+                    <p class="mt-2 text-center text-[12px] text-red-600 font-medium">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -90,6 +90,38 @@
 </div>
 
 <script>
+    // Validasi ketat input OTP: hanya angka dan maksimal 6 digit
+    const otpInput = document.getElementById('otp');
+    if (otpInput) {
+        otpInput.addEventListener('keydown', function(e) {
+            // Izinkan: backspace, delete, tab, escape, enter, panah kiri/kanan
+            const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+            if (allowedKeys.includes(e.key) || (e.ctrlKey || e.metaKey)) {
+                return;
+            }
+            // Cegah jika bukan angka 0-9
+            if (!/^[0-9]$/.test(e.key)) {
+                e.preventDefault();
+            }
+            // Cegah jika panjang sudah 6 dan teks tidak diblok/seleksi
+            if (this.value.length >= 6 && this.selectionStart === this.selectionEnd) {
+                e.preventDefault();
+            }
+        });
+
+        otpInput.addEventListener('input', function() {
+            // Hapus semua karakter non-angka dan potong max 6 digit
+            this.value = this.value.replace(/\D/g, '').slice(0, 6);
+        });
+
+        otpInput.addEventListener('paste', function(e) {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData).getData('text') || '';
+            const numbersOnly = text.replace(/\D/g, '').slice(0, 6);
+            this.value = numbersOnly;
+        });
+    }
+
     // Countdown timer 5 menit
     let timeLeft = 300;
     const countdownEl = document.getElementById('countdown');
