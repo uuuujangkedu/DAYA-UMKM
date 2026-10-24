@@ -208,12 +208,19 @@
                     <label for="modal_dibutuhkan" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Kebutuhan permodalan (Rp)
                     </label>
-                    <input type="number" 
-                           id="modal_dibutuhkan" 
+                    <input type="text" 
+                           inputmode="numeric"
+                           id="modal_dibutuhkan_display" 
+                           data-format-rupiah="true"
+                           data-target-hidden="modal_dibutuhkan"
+                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? number_format((float) preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)), 0, ',', '.') : '' }}" 
+                           placeholder="Contoh: 25.000.000" 
+                           class="format-rupiah w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none"
+                           autocomplete="off">
+                    <input type="hidden" 
                            name="modal_dibutuhkan" 
-                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) }}" 
-                           placeholder="Contoh: 25000000" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
+                           id="modal_dibutuhkan" 
+                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)) : '' }}">
                 </div>
 
                 <div>

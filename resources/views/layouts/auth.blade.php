@@ -939,6 +939,75 @@
                 `;
             }
         }
+
+        // Global Auto-formatter untuk input angka / nominal dengan pemisah ribuan titik (contoh: 4.444.444)
+        function initRupiahFormatters() {
+            document.querySelectorAll('input.format-rupiah, input[data-format-rupiah]').forEach(input => {
+                if (input.dataset.formatBound) return;
+                input.dataset.formatBound = 'true';
+
+                const targetHiddenId = input.dataset.targetHidden;
+                const hiddenInput = targetHiddenId ? document.getElementById(targetHiddenId) : null;
+
+                const formatRupiahWithDots = (val) => {
+                    if (!val) return '';
+                    const clean = val.toString().replace(/\D/g, '');
+                    if (!clean) return '';
+                    return clean.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                };
+
+                const formatFn = () => {
+                    const originalVal = input.value;
+                    const cursorPosition = input.selectionStart;
+                    const digitsBeforeCursor = originalVal.slice(0, cursorPosition).replace(/\D/g, '').length;
+                    const rawDigits = originalVal.replace(/\D/g, '');
+
+                    if (hiddenInput) {
+                        hiddenInput.value = rawDigits;
+                    }
+
+                    const formatted = formatRupiahWithDots(rawDigits);
+                    input.value = formatted;
+
+                    if (cursorPosition !== null && document.activeElement === input) {
+                        let newCursorPos = 0;
+                        let digitCount = 0;
+                        for (let i = 0; i < formatted.length; i++) {
+                            if (/\d/.test(formatted[i])) {
+                                digitCount++;
+                            }
+                            if (digitCount === digitsBeforeCursor) {
+                                newCursorPos = i + 1;
+                                break;
+                            }
+                        }
+                        if (digitCount < digitsBeforeCursor) {
+                            newCursorPos = formatted.length;
+                        }
+                        input.setSelectionRange(newCursorPos, newCursorPos);
+                    }
+                };
+
+                input.addEventListener('input', formatFn);
+
+                if (input.value) {
+                    formatFn();
+                }
+
+                const form = input.closest('form');
+                if (form) {
+                    form.addEventListener('submit', () => {
+                        if (hiddenInput) {
+                            hiddenInput.value = input.value.replace(/\D/g, '');
+                        } else {
+                            input.value = input.value.replace(/\D/g, '');
+                        }
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initRupiahFormatters);
     </script>
 
     <!-- Komponen Aksesibilitas Disabilitas -->

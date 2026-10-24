@@ -955,6 +955,13 @@ class DashboardController extends Controller
             'id_ruko_diminati' => ['nullable', 'exists:ruko,id_ruko'],
         ];
 
+        if ($request->has('modal_dibutuhkan') && $request->input('modal_dibutuhkan') !== null) {
+            $rawModal = preg_replace('/\D/', '', (string) $request->input('modal_dibutuhkan'));
+            $request->merge([
+                'modal_dibutuhkan' => $rawModal !== '' ? (int) $rawModal : null,
+            ]);
+        }
+
         $validated = $request->validate($rules, [
             'nama_usaha.required' => 'Nama usaha wajib diisi sebelum mengirimkan pengajuan.',
             'jenis_usaha.required' => 'Kategori usaha wajib dipilih.',
@@ -1055,6 +1062,13 @@ class DashboardController extends Controller
             abort(403);
         }
 
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
+        }
+
         $validated = $request->validate([
             'nama_ruko' => 'required|string|max:100',
             'lokasi' => 'required|string|max:500',
@@ -1099,6 +1113,13 @@ class DashboardController extends Controller
         $user = Auth::user();
         if ($user->role !== 'umkm') {
             abort(403);
+        }
+
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
         }
 
         $validated = $request->validate([
@@ -1152,6 +1173,13 @@ class DashboardController extends Controller
     public function storePublicUsulkanRuko(Request $request)
     {
         $user = Auth::user();
+
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
+        }
 
         $validated = $request->validate([
             'nama_pengusul' => 'required|string|max:100',

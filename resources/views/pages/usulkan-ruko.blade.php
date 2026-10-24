@@ -241,13 +241,23 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div class="md:col-span-2">
-                            <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
+                            <label for="harga_sewa_per_bulan_display" class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                                 Perkiraan Harga Sewa per Bulan (Rp) <span class="text-rose-500">*</span>
                             </label>
-                            <input type="number" name="harga_sewa_per_bulan" required min="100000" step="100000"
-                                   value="{{ old('harga_sewa_per_bulan') }}"
-                                   placeholder="Contoh: 4500000"
-                                   class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm font-bold text-[#2D6B22] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
+                            <input type="text" 
+                                   inputmode="numeric" 
+                                   id="harga_sewa_per_bulan_display" 
+                                   data-format-rupiah="true"
+                                   data-target-hidden="harga_sewa_per_bulan"
+                                   required
+                                   value="{{ old('harga_sewa_per_bulan') ? number_format((float) preg_replace('/\D/', '', old('harga_sewa_per_bulan')), 0, ',', '.') : '' }}"
+                                   placeholder="Contoh: 4.500.000"
+                                   class="format-rupiah w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm font-bold text-[#2D6B22] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition"
+                                   autocomplete="off">
+                            <input type="hidden" 
+                                   name="harga_sewa_per_bulan" 
+                                   id="harga_sewa_per_bulan" 
+                                   value="{{ old('harga_sewa_per_bulan') ? preg_replace('/\D/', '', old('harga_sewa_per_bulan')) : '' }}">
                             <span class="text-[11px] text-[#4b5551] mt-1 block">Jika sewa tahunan, bagi 12 bulan (misal Rp 60 jt/thn = Rp 5.000.000/bln).</span>
                             @error('harga_sewa_per_bulan')
                                 <span class="text-xs text-rose-600 mt-1 block">{{ $message }}</span>
@@ -310,4 +320,64 @@
 
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const displayInput = document.getElementById('harga_sewa_per_bulan_display');
+    const hiddenInput = document.getElementById('harga_sewa_per_bulan');
+
+    function formatNumberWithDots(val) {
+        if (!val) return '';
+        const clean = val.toString().replace(/\D/g, '');
+        if (!clean) return '';
+        return clean.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    if (displayInput && hiddenInput) {
+        displayInput.addEventListener('input', function () {
+            const cursorPosition = this.selectionStart;
+            const originalVal = this.value;
+            const digitsBeforeCursor = originalVal.slice(0, cursorPosition).replace(/\D/g, '').length;
+            const rawDigits = originalVal.replace(/\D/g, '');
+
+            hiddenInput.value = rawDigits;
+            const formatted = formatNumberWithDots(rawDigits);
+            this.value = formatted;
+
+            if (cursorPosition !== null && document.activeElement === this) {
+                let newCursorPos = 0;
+                let digitCount = 0;
+                for (let i = 0; i < formatted.length; i++) {
+                    if (/\d/.test(formatted[i])) {
+                        digitCount++;
+                    }
+                    if (digitCount === digitsBeforeCursor) {
+                        newCursorPos = i + 1;
+                        break;
+                    }
+                }
+                if (digitCount < digitsBeforeCursor) {
+                    newCursorPos = formatted.length;
+                }
+                this.setSelectionRange(newCursorPos, newCursorPos);
+            }
+        });
+
+        // Format saat load awal jika sudah ada nilai
+        if (displayInput.value) {
+            const raw = displayInput.value.replace(/\D/g, '');
+            hiddenInput.value = raw;
+            displayInput.value = formatNumberWithDots(raw);
+        }
+
+        // Pastikan nilai hidden terisi saat form submit
+        const form = displayInput.closest('form');
+        if (form) {
+            form.addEventListener('submit', function () {
+                hiddenInput.value = displayInput.value.replace(/\D/g, '');
+            });
+        }
+    }
+});
+</script>
 @endsection
