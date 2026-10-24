@@ -288,78 +288,36 @@
              ======================================================== -->
         <section id="lokasi" class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-[24px] border border-white/95 p-8 sm:p-10 shadow-[0_8px_30px_rgba(45,107,34,0.06)] hover:shadow-[0_16px_40px_rgba(74,154,46,0.1)] transition-all duration-300 relative text-left mt-8 sm:mt-10 scroll-mt-[100px]" data-reveal data-reveal-group>
             
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                <div>
-                    <!-- Icon Badge -->
-                    <div class="w-11 h-11 rounded-xl bg-[#E8F7EC] border border-[#6FC142]/20 flex items-center justify-center mb-3" data-reveal-item>
-                        <svg class="w-5 h-5 text-[#2D6B22]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </div>
-
-                    <h2 class="text-[22px] sm:text-[24px] font-bold text-[#15241C] leading-tight" data-reveal-item>
-                        Lokasi Sekretariat & Pusat Operasional
-                    </h2>
-                    <p class="text-[#3E5445] text-[14px] sm:text-[15px] mt-1.5" data-reveal-item>
-                        Universitas Darma Persada (UNSADA) — Kampus Pusat Kolaborasi Inovasi & Ekosistem UMKM
-                    </p>
+            <div class="mb-6">
+                <!-- Icon Badge -->
+                <div class="w-11 h-11 rounded-xl bg-[#E8F7EC] border border-[#6FC142]/20 flex items-center justify-center mb-4" data-reveal-item>
+                    <svg class="w-5 h-5 text-[#2D6B22]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
                 </div>
 
-                <div data-reveal-item class="shrink-0">
-                    <a href="https://maps.google.com/?q=Universitas+Darma+Persada+Jakarta" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       class="inline-flex items-center gap-2 border border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white font-semibold text-[13px] px-5 py-2.5 rounded-full transition-all duration-200 bg-white/70 shadow-sm cursor-pointer">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                        </svg>
-                        <span>Buka di Google Maps</span>
-                    </a>
+                <h2 class="text-[22px] sm:text-[24px] font-bold text-[#15241C] leading-tight" data-reveal-item>
+                    Lokasi Sekretariat & Pusat Operasional
+                </h2>
+                
+                <!-- Foto 3 menggantikan Foto 2: Nama & Alamat Lengkap Kampus -->
+                <div class="text-[#3E5445] text-[14px] sm:text-[15px] mt-2 leading-relaxed" data-reveal-item>
+                    <span class="font-bold text-[#15241C] block text-[16px]">Universitas Darma Persada</span>
+                    <span>Jl. Radin Inten II No.2, RT.8/RW.6, Duren Sawit, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13440</span>
                 </div>
             </div>
 
-            <!-- Detail Alamat & Peta Interaktif -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch" data-reveal-item>
-                
-                <!-- Info Alamat Fisik -->
-                <div class="lg:col-span-4 bg-[#F2F8ED] rounded-2xl p-5 sm:p-6 border border-[#C8BFB0]/70 flex flex-col justify-between space-y-4">
-                    <div class="space-y-3">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2D6B22]/10 text-[#2D6B22] border border-[#2D6B22]/20">
-                            Kampus Utama
-                        </span>
-                        <h3 class="text-base font-bold text-[#15241C] leading-snug">
-                            Universitas Darma Persada
-                        </h3>
-                        <p class="text-[13px] text-[#3E5445] leading-relaxed">
-                            Jl. Radin Inten II No.2, RT.8/RW.6, Duren Sawit, Kec. Duren Sawit, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13440
-                        </p>
-                    </div>
-
-                    <div class="border-t border-[#C8BFB0]/60 pt-4 space-y-2.5 text-xs text-[#3E5445]">
-                        <div class="flex items-start gap-2">
-                            <span class="text-[#2D6B22] font-bold">📍</span>
-                            <span>Akses strategis via Jl. Raya Kalimalang & stasiun KRL Buaran / Klender.</span>
-                        </div>
-                        <div class="flex items-start gap-2">
-                            <span class="text-[#2D6B22] font-bold">🏛️</span>
-                            <span>Pusat inkubasi bisnis, fasilitasi legalitas, dan pendampingan UMKM mitra.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Google Maps Embed Container -->
-                <div class="lg:col-span-8 rounded-2xl overflow-hidden border border-[#C8BFB0]/80 shadow-sm relative min-h-[320px] sm:min-h-[380px] bg-gray-100">
-                    <iframe 
-                        src="https://maps.google.com/maps?q=Universitas+Darma+Persada+Jakarta&t=&z=16&ie=UTF8&iwloc=&output=embed" 
-                        class="w-full h-full min-h-[320px] sm:min-h-[380px] border-0" 
-                        allowfullscreen="" 
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Peta Lokasi Universitas Darma Persada di Google Maps">
-                    </iframe>
-                </div>
-
+            <!-- Google Maps Embed Container (Full Width) -->
+            <div class="rounded-2xl overflow-hidden border border-[#C8BFB0]/80 shadow-sm relative min-h-[360px] sm:min-h-[420px] bg-gray-100" data-reveal-item>
+                <iframe 
+                    src="https://maps.google.com/maps?q=Universitas+Darma+Persada+Jakarta&t=&z=16&ie=UTF8&iwloc=&output=embed" 
+                    class="w-full h-full min-h-[360px] sm:min-h-[420px] border-0" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Peta Lokasi Universitas Darma Persada di Google Maps">
+                </iframe>
             </div>
 
         </section>
