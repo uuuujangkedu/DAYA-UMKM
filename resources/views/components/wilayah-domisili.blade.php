@@ -37,18 +37,15 @@
 
 <div class="space-y-3 wilayah-component" id="{{ $idPrefix }}_container">
     <div>
-        <label class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
+        <label class="block text-[14px] font-semibold text-[#161d1a] mb-2">
             {{ $label }} @if($required)<span class="text-red-500">*</span>@endif
         </label>
-        <p class="text-[12px] text-[#6b7280] mb-2.5">
-            Klik dan pilih wilayah domisili sesuai urutan: <strong>1. Provinsi</strong> &rarr; <strong>2. Kota / Kab</strong> &rarr; <strong>3. Kecamatan</strong> &rarr; <strong>4. Kelurahan</strong>.
-        </p>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <!-- 1. Provinsi -->
+            <!-- Provinsi -->
             <div>
                 <label for="{{ $idPrefix }}_provinsi" class="block text-[12px] font-medium text-[#4b5551] mb-1">
-                    1. Provinsi @if($required)<span class="text-red-500">*</span>@endif
+                    Provinsi @if($required)<span class="text-red-500">*</span>@endif
                 </label>
                 <select id="{{ $idPrefix }}_provinsi" 
                         name="provinsi"
@@ -57,10 +54,10 @@
                 </select>
             </div>
 
-            <!-- 2. Kota / Kabupaten -->
+            <!-- Kota / Kabupaten -->
             <div>
                 <label for="{{ $idPrefix }}_kota" class="block text-[12px] font-medium text-[#4b5551] mb-1">
-                    2. Kota / Kabupaten @if($required)<span class="text-red-500">*</span>@endif
+                    Kota / Kabupaten @if($required)<span class="text-red-500">*</span>@endif
                 </label>
                 <select id="{{ $idPrefix }}_kota" 
                         name="kota"
@@ -69,10 +66,10 @@
                 </select>
             </div>
 
-            <!-- 3. Kecamatan -->
+            <!-- Kecamatan -->
             <div>
                 <label for="{{ $idPrefix }}_kecamatan" class="block text-[12px] font-medium text-[#4b5551] mb-1">
-                    3. Kecamatan
+                    Kecamatan
                 </label>
                 <select id="{{ $idPrefix }}_kecamatan" 
                         name="kecamatan"
@@ -81,10 +78,10 @@
                 </select>
             </div>
 
-            <!-- 4. Kelurahan / Desa -->
+            <!-- Kelurahan / Desa -->
             <div>
                 <label for="{{ $idPrefix }}_kelurahan" class="block text-[12px] font-medium text-[#4b5551] mb-1">
-                    4. Kelurahan / Desa
+                    Kelurahan / Desa
                 </label>
                 <select id="{{ $idPrefix }}_kelurahan" 
                         name="kelurahan"
