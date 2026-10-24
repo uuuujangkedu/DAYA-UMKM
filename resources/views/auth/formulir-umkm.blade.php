@@ -150,30 +150,17 @@
             </div>
 
             <!-- Wilayah Usaha -->
-            <div>
-                <label class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
-                    Wilayah domisili usaha
-                </label>
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <input type="text" 
-                           name="provinsi_kota" 
-                           value="{{ old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota) }}" 
-                           placeholder="Provinsi / Kota" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                    
-                    <input type="text" 
-                           name="kecamatan" 
-                           value="{{ old('kecamatan', $umkm->kecamatan ?? $user->kecamatan) }}" 
-                           placeholder="Kecamatan" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                    
-                    <input type="text" 
-                           name="kelurahan" 
-                           value="{{ old('kelurahan', $umkm->kelurahan ?? $user->kelurahan) }}" 
-                           placeholder="Kelurahan" 
-                           class="px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
-                </div>
-            </div>
+            <x-wilayah-domisili 
+                label="Wilayah domisili usaha"
+                :provinsi="old('provinsi', $umkm->provinsi ?? $user->provinsi)"
+                :kota="old('kota', $umkm->kota ?? $user->kota)"
+                :provinsi-kota="old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota)"
+                :kecamatan="old('kecamatan', $umkm->kecamatan ?? $user->kecamatan)"
+                :kelurahan="old('kelurahan', $umkm->kelurahan ?? $user->kelurahan)"
+                :rt="old('rt', $umkm->rt ?? $user->rt)"
+                :rw="old('rw', $umkm->rw ?? $user->rw)"
+                id-prefix="umkm_domisili"
+            />
         </div>
 
         <!-- CARD 3: BAGIAN 2 - INFORMASI USAHA & PRODUK -->
@@ -221,12 +208,19 @@
                     <label for="modal_dibutuhkan" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Kebutuhan permodalan (Rp)
                     </label>
-                    <input type="number" 
-                           id="modal_dibutuhkan" 
+                    <input type="text" 
+                           inputmode="numeric"
+                           id="modal_dibutuhkan_display" 
+                           data-format-rupiah="true"
+                           data-target-hidden="modal_dibutuhkan"
+                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? number_format((float) preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)), 0, ',', '.') : '' }}" 
+                           placeholder="Contoh: 25.000.000" 
+                           class="format-rupiah w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none"
+                           autocomplete="off">
+                    <input type="hidden" 
                            name="modal_dibutuhkan" 
-                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) }}" 
-                           placeholder="Contoh: 25000000" 
-                           class="w-full px-3.5 py-2.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none">
+                           id="modal_dibutuhkan" 
+                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)) : '' }}">
                 </div>
 
                 <div>

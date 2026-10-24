@@ -102,9 +102,13 @@ class AuthController extends Controller
                 'confirmed',
                 Password::min(8)->mixedCase()->numbers()->symbols(),
             ],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
         ];
 
@@ -124,15 +128,22 @@ class AuthController extends Controller
         ]);
 
         $role = $validated['role'];
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: null)));
 
         // Simpan data akun pengguna baru
         $user = User::create([
             'name' => $validated['nama'],
             'email' => $validated['email'],
             'phone_number' => $validated['nomor_telepon'],
-            'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+            'provinsi' => $provinsi,
+            'kota' => $kota,
+            'provinsi_kota' => $provinsiKota,
             'kecamatan' => $validated['kecamatan'] ?? null,
             'kelurahan' => $validated['kelurahan'] ?? null,
+            'rt' => $validated['rt'] ?? null,
+            'rw' => $validated['rw'] ?? null,
             'kategori_diminati' => $validated['kategori_diminati'] ?? null,
             'role' => $role,
             'password' => $validated['password'],
@@ -148,9 +159,13 @@ class AuthController extends Controller
                     'jenis_usaha' => 'Makanan',
                     'pemilik' => $validated['nama'],
                     'nomor_whatsapp' => $validated['nomor_telepon'],
-                    'provinsi_kota' => $validated['provinsi_kota'] ?? null,
+                    'provinsi' => $provinsi,
+                    'kota' => $kota,
+                    'provinsi_kota' => $provinsiKota,
                     'kecamatan' => $validated['kecamatan'] ?? null,
                     'kelurahan' => $validated['kelurahan'] ?? null,
+                    'rt' => $validated['rt'] ?? null,
+                    'rw' => $validated['rw'] ?? null,
                     'status_pengajuan' => 'draf',
                 ]
             );
@@ -297,10 +312,15 @@ class AuthController extends Controller
      */
     public function verifyOtp(Request $request)
     {
+        // Pastikan hanya karakter angka numerik
+        $cleanOtp = preg_replace('/\D/', '', (string) $request->input('otp'));
+        $request->merge(['otp' => $cleanOtp]);
+
         $request->validate([
-            'otp' => ['required', 'string', 'size:6'],
+            'otp' => ['required', 'digits:6'],
         ], [
             'otp.required' => 'Kode OTP 6-digit wajib diisi.',
+            'otp.digits' => 'Kode OTP harus berupa 6 digit angka.',
             'otp.size' => 'Kode OTP harus berupa 6 digit angka.',
         ]);
 

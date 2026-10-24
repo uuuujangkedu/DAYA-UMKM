@@ -159,9 +159,9 @@ class DashboardController extends Controller
             if ($notifikasiInvestasi->isNotEmpty()) {
                 $targetId = $selectedInvestasiId ?: $notifikasiInvestasi->first()->id_investasi;
                 $selectedInvestasi = Investasi::with(['pengguna', 'pesanInvestasi.pengirim'])->find($targetId);
-                
+
                 // Jika belum punya pesan, masukkan catatan awal sebagai pesan pertama
-                if ($selectedInvestasi && $selectedInvestasi->pesanInvestasi->isEmpty() && !empty($selectedInvestasi->catatan)) {
+                if ($selectedInvestasi && $selectedInvestasi->pesanInvestasi->isEmpty() && ! empty($selectedInvestasi->catatan)) {
                     PesanInvestasi::create([
                         'id_investasi' => $selectedInvestasi->id_investasi,
                         'id_pengirim' => $selectedInvestasi->id_pengguna,
@@ -171,7 +171,7 @@ class DashboardController extends Controller
                     $selectedInvestasi->load('pesanInvestasi.pengirim');
                 }
 
-                if ($activeTab === 'inbox' && $selectedInvestasi && !$selectedInvestasi->dibaca) {
+                if ($activeTab === 'inbox' && $selectedInvestasi && ! $selectedInvestasi->dibaca) {
                     $selectedInvestasi->update(['dibaca' => true]);
                 }
             }
@@ -337,7 +337,6 @@ class DashboardController extends Controller
                 usort($alokasiSektor, fn ($a, $b) => $b['persentase'] <=> $a['persentase']);
             }
 
-
             // Real Riwayat Bagi Hasil dari Database (Tabel bagi_hasil_log)
             $riwayatBagiHasil = BagiHasilLog::with(['investasi.umkm'])
                 ->whereHas('investasi', function ($q) use ($user) {
@@ -403,8 +402,8 @@ class DashboardController extends Controller
                 ->get();
 
             $unreadInvestorChatCount = PesanInvestasi::whereHas('investasi', function ($q) use ($user) {
-                    $q->where('id_pengguna', $user->id);
-                })
+                $q->where('id_pengguna', $user->id);
+            })
                 ->where('id_pengirim', '!=', $user->id)
                 ->where('dibaca', false)
                 ->count();
@@ -416,7 +415,7 @@ class DashboardController extends Controller
                 $selectedChatInvestasi = Investasi::with(['umkm.user', 'pesanInvestasi.pengirim'])->find($targetId);
 
                 // Pastikan catatan awal investor saat mengajukan investasi muncul sebagai pesan pembuka jika belum ada
-                if ($selectedChatInvestasi && $selectedChatInvestasi->pesanInvestasi->isEmpty() && !empty($selectedChatInvestasi->catatan)) {
+                if ($selectedChatInvestasi && $selectedChatInvestasi->pesanInvestasi->isEmpty() && ! empty($selectedChatInvestasi->catatan)) {
                     PesanInvestasi::create([
                         'id_investasi' => $selectedChatInvestasi->id_investasi,
                         'id_pengirim' => $selectedChatInvestasi->id_pengguna,
@@ -886,18 +885,30 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:100'],
             'nomor_telepon' => ['required', 'string', 'max:25'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
         ]);
+
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: $user->provinsi_kota)));
 
         $user->update([
             'name' => $validated['nama'],
             'phone_number' => $validated['nomor_telepon'],
-            'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
+            'provinsi' => $provinsi ?? $user->provinsi,
+            'kota' => $kota ?? $user->kota,
+            'provinsi_kota' => $provinsiKota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+            'rt' => $validated['rt'] ?? $user->rt,
+            'rw' => $validated['rw'] ?? $user->rw,
             'kategori_diminati' => $validated['kategori_diminati'] ?? 'Semua',
             'status' => 'menunggu_verifikasi',
         ]);
@@ -918,9 +929,13 @@ class DashboardController extends Controller
                 'jenis_usaha' => 'Makanan',
                 'pemilik' => $user->name,
                 'nomor_whatsapp' => $user->phone_number,
+                'provinsi' => $user->provinsi,
+                'kota' => $user->kota,
                 'provinsi_kota' => $user->provinsi_kota,
                 'kecamatan' => $user->kecamatan,
                 'kelurahan' => $user->kelurahan,
+                'rt' => $user->rt,
+                'rw' => $user->rw,
                 'status_pengajuan' => 'draf',
             ]
         );
@@ -951,9 +966,13 @@ class DashboardController extends Controller
             'pemilik' => ['required', 'string', 'max:100'],
             'nik_penanggung_jawab' => ['nullable', 'string', 'max:30'],
             'nomor_whatsapp' => ['required', 'string', 'max:25'],
+            'provinsi' => ['nullable', 'string', 'max:100'],
+            'kota' => ['nullable', 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
             'kecamatan' => ['nullable', 'string', 'max:100'],
             'kelurahan' => ['nullable', 'string', 'max:100'],
+            'rt' => ['nullable', 'string', 'max:10'],
+            'rw' => ['nullable', 'string', 'max:10'],
             'modal_dibutuhkan' => ['nullable', 'numeric', 'min:0'],
             'estimasi_bagi_hasil' => ['nullable', 'string', 'max:50'],
             'deskripsi' => ['nullable', 'string'],
@@ -961,6 +980,13 @@ class DashboardController extends Controller
             'file_proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:10240'],
             'id_ruko_diminati' => ['nullable', 'exists:ruko,id_ruko'],
         ];
+
+        if ($request->has('modal_dibutuhkan') && $request->input('modal_dibutuhkan') !== null) {
+            $rawModal = preg_replace('/\D/', '', (string) $request->input('modal_dibutuhkan'));
+            $request->merge([
+                'modal_dibutuhkan' => $rawModal !== '' ? (int) $rawModal : null,
+            ]);
+        }
 
         $validated = $request->validate($rules, [
             'nama_usaha.required' => 'Nama usaha wajib diisi sebelum mengirimkan pengajuan.',
@@ -973,6 +999,13 @@ class DashboardController extends Controller
             'file_proposal.max' => 'Ukuran file proposal maksimal 10MB.',
         ]);
 
+        $provinsi = $validated['provinsi'] ?? null;
+        $kota = $validated['kota'] ?? null;
+        $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: $user->provinsi_kota)));
+        $validated['provinsi'] = $provinsi ?? $user->provinsi;
+        $validated['kota'] = $kota ?? $user->kota;
+        $validated['provinsi_kota'] = $provinsiKota;
+
         $umkm = Umkm::firstOrCreate(
             ['user_id' => $user->id],
             [
@@ -980,6 +1013,13 @@ class DashboardController extends Controller
                 'jenis_usaha' => $validated['jenis_usaha'] ?? 'Makanan',
                 'pemilik' => $validated['pemilik'] ?? $user->name,
                 'nomor_whatsapp' => $validated['nomor_whatsapp'] ?? $user->phone_number,
+                'provinsi' => $validated['provinsi'],
+                'kota' => $validated['kota'],
+                'provinsi_kota' => $validated['provinsi_kota'],
+                'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
+                'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+                'rt' => $validated['rt'] ?? $user->rt,
+                'rw' => $validated['rw'] ?? $user->rw,
                 'status_pengajuan' => 'draf',
             ]
         );
@@ -1004,9 +1044,13 @@ class DashboardController extends Controller
 
         $user->update([
             'phone_number' => $validated['nomor_whatsapp'],
+            'provinsi' => $validated['provinsi'] ?? $user->provinsi,
+            'kota' => $validated['kota'] ?? $user->kota,
             'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
+            'rt' => $validated['rt'] ?? $user->rt,
+            'rw' => $validated['rw'] ?? $user->rw,
         ]);
 
         return redirect()->route('dashboard')->with('success', $message);
@@ -1042,6 +1086,13 @@ class DashboardController extends Controller
         $user = Auth::user();
         if ($user->role !== 'investor') {
             abort(403);
+        }
+
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
         }
 
         $validated = $request->validate([
@@ -1090,6 +1141,13 @@ class DashboardController extends Controller
             abort(403);
         }
 
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
+        }
+
         $validated = $request->validate([
             'nama_ruko' => 'required|string|max:100',
             'lokasi' => 'required|string|max:500',
@@ -1131,6 +1189,7 @@ class DashboardController extends Controller
     public function showPublicUsulkanRuko()
     {
         $user = Auth::user();
+
         return view('pages.usulkan-ruko', compact('user'));
     }
 
@@ -1140,6 +1199,13 @@ class DashboardController extends Controller
     public function storePublicUsulkanRuko(Request $request)
     {
         $user = Auth::user();
+
+        if ($request->has('harga_sewa_per_bulan')) {
+            $rawHarga = preg_replace('/\D/', '', (string) $request->input('harga_sewa_per_bulan'));
+            $request->merge([
+                'harga_sewa_per_bulan' => $rawHarga !== '' ? (int) $rawHarga : null,
+            ]);
+        }
 
         $validated = $request->validate([
             'nama_pengusul' => 'required|string|max:100',
