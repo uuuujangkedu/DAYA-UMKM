@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\PenyediaRuko;
+use App\Models\Ruko;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,6 +78,47 @@ class AuthTest extends TestCase
             'verification_type' => 'otp_email',
             'is_used' => false,
         ]);
+    }
+
+    public function test_registration_saves_selected_available_ruko_to_umkm_profile(): void
+    {
+        Mail::fake();
+        $provider = PenyediaRuko::create(['nama_perusahaan' => 'Pemilik Ruko', 'kontak' => '081234567890', 'alamat' => 'Jakarta']);
+        $ruko = Ruko::create(['id_penyedia' => $provider->id_penyedia, 'nama_ruko' => 'Ruko Uji', 'lokasi' => 'Jakarta', 'harga_sewa_per_bulan' => 3500000, 'status_ketersediaan' => 'tersedia']);
+
+        $this->post('/register', [
+            'nama' => 'Rina Usaha',
+            'email' => 'rina@example.com',
+            'nomor_telepon' => '081234567890',
+            'role' => 'umkm',
+            'id_ruko' => $ruko->id_ruko,
+            'password' => 'Rahasia123!',
+            'password_confirmation' => 'Rahasia123!',
+        ])->assertRedirect('/verify-otp');
+
+        $this->assertDatabaseHas('umkm', [
+            'pemilik' => 'Rina Usaha',
+            'id_ruko_diminati' => $ruko->id_ruko,
+        ]);
+    }
+
+    public function test_registration_rejects_unavailable_ruko(): void
+    {
+        Mail::fake();
+        $provider = PenyediaRuko::create(['nama_perusahaan' => 'Pemilik Ruko', 'kontak' => '081234567890', 'alamat' => 'Jakarta']);
+        $ruko = Ruko::create(['id_penyedia' => $provider->id_penyedia, 'nama_ruko' => 'Ruko Uji', 'lokasi' => 'Jakarta', 'harga_sewa_per_bulan' => 3500000, 'status_ketersediaan' => 'disewa']);
+
+        $this->from('/register')->post('/register', [
+            'nama' => 'Rina Usaha',
+            'email' => 'rina@example.com',
+            'nomor_telepon' => '081234567890',
+            'role' => 'umkm',
+            'id_ruko' => $ruko->id_ruko,
+            'password' => 'Rahasia123!',
+            'password_confirmation' => 'Rahasia123!',
+        ])->assertRedirect('/register')->assertSessionHasErrors('id_ruko');
+
+        $this->assertDatabaseMissing('users', ['email' => 'rina@example.com']);
     }
 
     public function test_registration_saves_umkm_role_selected_by_user(): void

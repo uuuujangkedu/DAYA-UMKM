@@ -111,6 +111,7 @@ class AuthController extends Controller
             'rt' => ['nullable', 'string', 'max:10'],
             'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
+            'id_ruko' => ['nullable', 'integer', 'exists:ruko,id_ruko,status_ketersediaan,tersedia'],
         ];
 
         $validated = $request->validate($rules, [
@@ -168,6 +169,7 @@ class AuthController extends Controller
                     'rt' => $validated['rt'] ?? null,
                     'rw' => $validated['rw'] ?? null,
                     'status_pengajuan' => 'draf',
+                    'id_ruko_diminati' => $validated['id_ruko'] ?? null,
                 ]
             );
         }
