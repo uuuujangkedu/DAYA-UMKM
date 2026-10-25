@@ -574,7 +574,7 @@
                                 <span class="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-600 text-white">Lunas</span>
                             @elseif($statusBulanIni['code'] === 'klarifikasi' && $klarifikasiAktif)
                                 <button type="button"
-                                        onclick="openLihatKlarifikasiModal('{{ addslashes($inv->umkm->nama_usaha ?? 'UMKM') }}', '{{ $klarifikasiAktif->bulan_periode }}', '{{ addslashes($klarifikasiAktif->kategori_label) }}', `{{ addslashes($klarifikasiAktif->alasan) }}`, `{{ addslashes($klarifikasiAktif->komitmen_solusi) }}`, '{{ $klarifikasiAktif->lampiran_bukti ? asset('storage/' . $klarifikasiAktif->lampiran_bukti) : '' }}', '{{ $klarifikasiAktif->status }}', `{{ addslashes($klarifikasiAktif->catatan_admin ?? '') }}`)"
+                                        onclick="openLihatKlarifikasiModal('{{ addslashes($inv->umkm->nama_usaha ?? 'UMKM') }}', '{{ $klarifikasiAktif->bulan_periode }}', '{{ addslashes($klarifikasiAktif->kategori_label) }}', `{{ addslashes($klarifikasiAktif->alasan) }}`, `{{ addslashes($klarifikasiAktif->komitmen_solusi) }}`, '{{ $klarifikasiAktif->lampiran_bukti ? asset(ltrim($klarifikasiAktif->lampiran_bukti, '/')) : '' }}', '{{ $klarifikasiAktif->status }}', `{{ addslashes($klarifikasiAktif->catatan_admin ?? '') }}`)"
                                         class="px-2.5 py-1 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-[10px] font-black transition shadow-sm shrink-0 flex items-center gap-1">
                                     <span>Lihat Kendala</span>
                                     <span>↗</span>
@@ -1476,7 +1476,7 @@
                                 </td>
                                 <td class="py-3.5 px-3">
                                     @if(!empty($log->bukti_transfer))
-                                        <button onclick="previewStruk('{{ asset('storage/' . $log->bukti_transfer) }}', '{{ $log->investasi->umkm->nama_usaha ?? 'UMKM' }}', '{{ number_format($log->nominal_diterima, 0, ',', '.') }}')"
+                                        <button onclick="previewStruk('{{ asset(ltrim($log->bukti_transfer, '/')) }}', '{{ $log->investasi->umkm->nama_usaha ?? 'UMKM' }}', '{{ number_format($log->nominal_diterima, 0, ',', '.') }}')"
                                                 class="px-2.5 py-1 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 text-[10px] font-black transition inline-flex items-center gap-1.5">
                                             <svg class="w-3 h-3 text-teal-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

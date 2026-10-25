@@ -660,6 +660,8 @@
                 card.style.display = 'none';
             }
         });
+    }
+
     function previewImage(input, previewId, placeholderId) {
         if (input.files && input.files[0]) {
             const reader = new FileReader();
