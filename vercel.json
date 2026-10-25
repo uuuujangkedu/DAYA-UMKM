@@ -32,6 +32,8 @@
     "VIEW_COMPILED_PATH": "/tmp/views",
     "CACHE_STORE": "array",
     "SESSION_DRIVER": "cookie",
+    "DB_CONNECTION": "sqlite",
+    "DB_DATABASE": "/tmp/database.sqlite",
     "LOG_CHANNEL": "stderr",
     "CHATBOT_PROVIDER": "openai",
     "CHATBOT_API_KEY": "thk_live_kLImwVGKh9mp8o_S9fR7QY2W3ULStIknfJ18p6UffYtpGCmEku0btCXilSMGv0vs",
