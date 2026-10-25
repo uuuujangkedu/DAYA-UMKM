@@ -133,7 +133,7 @@
                                 </div>
                                 @if($klr->lampiran_bukti)
                                     <div class="pt-1">
-                                        <a href="{{ asset('storage/' . $klr->lampiran_bukti) }}" target="_blank"
+                                        <a href="{{ asset(ltrim($klr->lampiran_bukti, '/')) }}" target="_blank"
                                            class="inline-flex items-center gap-1.5 text-[11px] font-bold text-purple-700 hover:text-purple-900 underline">
                                             📎 Lihat Dokumen Lampiran Bukti
                                         </a>
