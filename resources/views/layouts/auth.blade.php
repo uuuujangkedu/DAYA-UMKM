@@ -279,8 +279,8 @@
                 <span class="text-[#EDD9A3]/80" data-i18n="footer.copyright">&copy; {{ date('Y') }}. Hak cipta dilindungi.</span>
             </div>
             <div class="flex flex-wrap items-center gap-6 text-[#EDD9A3]">
-                <a href="#" class="hover:text-white transition-colors" data-i18n="footer.privacy">Kebijakan privasi</a>
-                <a href="#" class="hover:text-white transition-colors" data-i18n="footer.terms">Syarat dan ketentuan</a>
+                <a href="{{ route('privacy') }}" class="hover:text-white transition-colors" data-i18n="footer.privacy">Kebijakan privasi</a>
+                <a href="{{ route('terms') }}" class="hover:text-white transition-colors" data-i18n="footer.terms">Syarat dan ketentuan</a>
                 <a href="{{ url('/#bantuan') }}" class="hover:text-white transition-colors" data-i18n="footer.help">Hubungi bantuan</a>
             </div>
         </div>
