@@ -1,6 +1,6 @@
 @extends('layouts.super-admin')
 
-@section('title', 'Kurasi & Katalog Ruko Komersial - DAYA UMKM')
+@section('title', 'Kurasi & Katalog Ruko Komersial - Titik UMKM')
 
 @section('content')
 <div class="space-y-8">
@@ -193,7 +193,7 @@
                                         <button type="button"
                                                 onclick="openAppConfirmModal({
                                                     title: 'ACC & Terbitkan Ruko',
-                                                    message: 'Apakah Anda yakin ruko <strong>{{ addslashes($item->nama_ruko) }}</strong> LAYAK dan ingin menerbitkannya ke Katalog Ruko Resmi DAYA UMKM?',
+                                                    message: 'Apakah Anda yakin ruko <strong>{{ addslashes($item->nama_ruko) }}</strong> LAYAK dan ingin menerbitkannya ke Katalog Ruko Resmi Titik UMKM?',
                                                     badge: 'Rp {{ number_format($item->harga_sewa_per_bulan, 0, ',', '.') }}/bln &bull; {{ addslashes($item->nama_ruko) }}',
                                                     confirmText: '✓ Ya, ACC & Terbitkan',
                                                     confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
@@ -415,10 +415,10 @@
         const modal = document.getElementById('modal-reject-ruko');
         const form = document.getElementById('form-reject-ruko-submit');
         const subtitle = document.getElementById('reject-ruko-subtitle');
-        
+
         form.action = '/super-admin/ruko/rekomendasi/' + id + '/reject';
         subtitle.innerText = 'Ruko: ' + nama;
-        
+
         modal.classList.remove('hidden');
         modal.classList.add('flex');
     }

@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Formulir Pendaftaran Investor - Daya UMKM')
+@section('title', 'Formulir Pendaftaran Investor - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -9,11 +9,11 @@
     <div class="flex items-center justify-between flex-wrap gap-4 bg-white p-3 rounded-[12px] border border-[#e2e1d8]">
         <span class="text-[13px] font-semibold text-[#4b5551] px-2">Pilih jenis pendaftaran:</span>
         <div class="flex items-center gap-2">
-            <a href="{{ route('register.umkm') }}" 
+            <a href="{{ route('register.umkm') }}"
                class="px-4 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:text-[#0b5a4a] hover:bg-[#d8ebe5] transition border border-[#e2e1d8] flex items-center gap-2">
                 <span>Pelaku UMKM</span>
             </a>
-            <a href="{{ route('register.investor') }}" 
+            <a href="{{ route('register.investor') }}"
                class="px-4 py-2 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white flex items-center gap-2 transition">
                 <span>Investor</span>
             </a>
@@ -92,12 +92,12 @@
                 <label for="nama" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nama lengkap investor <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nama" 
-                       name="nama" 
-                       value="{{ old('nama') }}" 
+                <input type="text"
+                       id="nama"
+                       name="nama"
+                       value="{{ old('nama') }}"
                        required
-                       placeholder="Contoh: Raka Wibian" 
+                       placeholder="Contoh: Raka Wibian"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
@@ -106,17 +106,17 @@
                 <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nomor WhatsApp <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nomor_telepon" 
-                       name="nomor_telepon" 
-                       value="{{ old('nomor_telepon') }}" 
+                <input type="text"
+                       id="nomor_telepon"
+                       name="nomor_telepon"
+                       value="{{ old('nomor_telepon') }}"
                        required
-                       placeholder="Contoh: 081234567890" 
+                       placeholder="Contoh: 081234567890"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Wilayah Domisili / Kantor -->
-            <x-wilayah-domisili 
+            <x-wilayah-domisili
                 label="Wilayah domisili / kantor"
                 :provinsi="old('provinsi')"
                 :kota="old('kota')"
@@ -135,12 +135,12 @@
                     <label for="email" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Alamat email akun <span class="text-red-500">*</span>
                     </label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           value="{{ old('email') }}" 
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           value="{{ old('email') }}"
                            required
-                           placeholder="investor@email.com (Untuk masuk akun dan menerima kode OTP)" 
+                           placeholder="investor@email.com (Untuk masuk akun dan menerima kode OTP)"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
@@ -149,11 +149,11 @@
                         <label for="password" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Kata sandi akun <span class="text-red-500">*</span>
                         </label>
-                        <input type="password" 
-                               id="password" 
-                               name="password" 
+                        <input type="password"
+                               id="password"
+                               name="password"
                                required
-                               placeholder="Minimal 8 karakter" 
+                               placeholder="Minimal 8 karakter"
                                class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
 
@@ -161,11 +161,11 @@
                         <label for="password_confirmation" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Konfirmasi kata sandi <span class="text-red-500">*</span>
                         </label>
-                        <input type="password" 
-                               id="password_confirmation" 
-                               name="password_confirmation" 
+                        <input type="password"
+                               id="password_confirmation"
+                               name="password_confirmation"
                                required
-                               placeholder="Ulangi kata sandi Anda" 
+                               placeholder="Ulangi kata sandi Anda"
                                class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
                 </div>
@@ -185,27 +185,27 @@
             <!-- Kategori Filter Tabs -->
             <input type="hidden" name="kategori_diminati" id="kategori_diminati" value="{{ old('kategori_diminati', 'Semua') }}">
             <div class="flex items-center gap-2 flex-wrap">
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Semua', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white transition">
                     Semua
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Makanan', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Makanan & minuman
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Jasa', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Jasa layanan
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Fashion', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Fashion
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Agribisnis', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Agribisnis
@@ -217,10 +217,10 @@
                 <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" 
-                       id="umkm-search" 
-                       onkeyup="filterUmkmCards()" 
-                       placeholder="Telusuri UMKM berdasarkan nama atau bidang..." 
+                <input type="text"
+                       id="umkm-search"
+                       onkeyup="filterUmkmCards()"
+                       placeholder="Telusuri UMKM berdasarkan nama atau bidang..."
                        class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
@@ -263,7 +263,7 @@
             </button>
 
             <div class="text-center text-[14px] text-[#4b5551]">
-                Sudah memiliki akun Daya UMKM? 
+                Sudah memiliki akun Titik UMKM?
                 <a href="{{ route('login') }}" class="font-semibold text-[#0b5a4a] hover:underline ml-1">Masuk di sini</a>
             </div>
         </div>
@@ -297,7 +297,7 @@
         cards.forEach(card => {
             const title = card.querySelector('.umkm-title').innerText.toLowerCase();
             const cat = card.getAttribute('data-category');
-            
+
             const matchesQuery = title.includes(query);
             const matchesCat = (currentSelectedCategory === 'Semua' || cat.toLowerCase() === currentSelectedCategory.toLowerCase());
 

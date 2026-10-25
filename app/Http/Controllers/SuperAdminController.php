@@ -716,7 +716,7 @@ class SuperAdminController extends Controller
         PesanInvestasi::create([
             'id_investasi' => $investasi->id_investasi,
             'id_pengirim' => Auth::id(),
-            'pesan' => "⚠️ [SURAT PERINGATAN RESMI TIM COMPLIANCE DAYA UMKM - {$validated['tingkat_sp']}]\n\n".
+            'pesan' => "⚠️ [SURAT PERINGATAN RESMI TIM COMPLIANCE Titik UMKM - {$validated['tingkat_sp']}]\n\n".
                        "Kepada Yth. Mitra {$umkm->nama_usaha},\n\n".
                        "{$validated['pesan_teguran']}\n\n".
                        'Tenggat batas penyelesaian: '.$tenggat->translatedFormat('d F Y').".\n".
@@ -743,7 +743,7 @@ class SuperAdminController extends Controller
             if (str_starts_with($cleanPhone, '0')) {
                 $cleanPhone = '62'.substr($cleanPhone, 1);
             }
-            $waMsg = urlencode("Halo {$umkm->nama_usaha}, ini Tim Kepatuhan DAYA UMKM. Kami telah menerbitkan surat peringatan resmi ({$validated['tingkat_sp']}) terkait keterlambatan penyetoran dividen bagi hasil. Mohon segera cek dashboard kemitraan Anda. Terima kasih.");
+            $waMsg = urlencode("Halo {$umkm->nama_usaha}, ini Tim Kepatuhan Titik UMKM. Kami telah menerbitkan surat peringatan resmi ({$validated['tingkat_sp']}) terkait keterlambatan penyetoran dividen bagi hasil. Mohon segera cek dashboard kemitraan Anda. Terima kasih.");
             $waUrl = "https://wa.me/{$cleanPhone}?text={$waMsg}";
         }
 
@@ -780,12 +780,12 @@ class SuperAdminController extends Controller
               "Klarifikasi laporan kendala usaha Anda untuk periode {$klarifikasi->bulan_periode} telah DISETUJUI & DIVERIFIKASI oleh Tim Compliance Platform.\n\n".
               "STATUS DISPENSASI: Anda resmi diberikan toleransi untuk menyelesaikan kewajiban bagi hasil dividen pada periode BULAN DEPAN tanpa sanksi Surat Peringatan (SP).\n\n".
               "Catatan Verifikator Admin: {$validated['catatan_admin']}\n\n".
-              "Terima kasih atas transparansi dan itikad baik Anda dalam menjaga kemitraan sehat bersama mitra investor."
+              'Terima kasih atas transparansi dan itikad baik Anda dalam menjaga kemitraan sehat bersama mitra investor.'
             : "❌ [KLARIFIKASI DIVIDEN TIDAK DAPAT DISETUJUI]\n\n".
               "Kepada Yth. {$namaUsaha},\n\n".
               "Laporan klarifikasi penundaan dividen periode {$klarifikasi->bulan_periode} TIDAK DAPAT DISETUJUI oleh Tim Compliance Platform.\n\n".
               "Alasan / Catatan Admin: {$validated['catatan_admin']}\n\n".
-              "Mohon segera lakukan penyetoran dividen bagi hasil untuk menghindari penerbitan Surat Peringatan (SP).";
+              'Mohon segera lakukan penyetoran dividen bagi hasil untuk menghindari penerbitan Surat Peringatan (SP).';
 
         PesanInvestasi::create([
             'id_investasi' => $klarifikasi->id_investasi,

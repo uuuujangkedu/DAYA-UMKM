@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Formulir Pendaftaran Pelaku UMKM - Daya UMKM')
+@section('title', 'Formulir Pendaftaran Pelaku UMKM - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -49,7 +49,7 @@
                 Formulir pendaftaran pelaku UMKM
             </h1>
             <p class="text-[14px] text-[#4b5551] mt-1">
-                Lengkapi data diri, profil usaha, dan preferensi lokasi ruko untuk diverifikasi oleh tim Daya UMKM.
+                Lengkapi data diri, profil usaha, dan preferensi lokasi ruko untuk diverifikasi oleh tim Titik UMKM.
             </p>
         </div>
 
@@ -109,12 +109,12 @@
                 <label for="pemilik" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nama lengkap pemilik / pengelola usaha <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="pemilik" 
-                       name="pemilik" 
-                       value="{{ old('pemilik', $umkm->pemilik ?? $user->name) }}" 
+                <input type="text"
+                       id="pemilik"
+                       name="pemilik"
+                       value="{{ old('pemilik', $umkm->pemilik ?? $user->name) }}"
                        required
-                       placeholder="Contoh: Raka Wibian" 
+                       placeholder="Contoh: Raka Wibian"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
@@ -124,11 +124,11 @@
                     <label for="nik_penanggung_jawab" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         NIK KTP penanggung jawab
                     </label>
-                    <input type="text" 
-                           id="nik_penanggung_jawab" 
-                           name="nik_penanggung_jawab" 
-                           value="{{ old('nik_penanggung_jawab', $umkm->nik_penanggung_jawab) }}" 
-                           placeholder="16 digit NIK KTP" 
+                    <input type="text"
+                           id="nik_penanggung_jawab"
+                           name="nik_penanggung_jawab"
+                           value="{{ old('nik_penanggung_jawab', $umkm->nik_penanggung_jawab) }}"
+                           placeholder="16 digit NIK KTP"
                            maxlength="20"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
@@ -137,18 +137,18 @@
                     <label for="nomor_whatsapp" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Nomor WhatsApp usaha aktif <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" 
-                           id="nomor_whatsapp" 
-                           name="nomor_whatsapp" 
-                           value="{{ old('nomor_whatsapp', $umkm->nomor_whatsapp ?? $user->phone_number) }}" 
+                    <input type="text"
+                           id="nomor_whatsapp"
+                           name="nomor_whatsapp"
+                           value="{{ old('nomor_whatsapp', $umkm->nomor_whatsapp ?? $user->phone_number) }}"
                            required
-                           placeholder="Contoh: 081234567890" 
+                           placeholder="Contoh: 081234567890"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
             </div>
 
             <!-- Wilayah Usaha -->
-            <x-wilayah-domisili 
+            <x-wilayah-domisili
                 label="Wilayah domisili usaha"
                 :provinsi="old('provinsi', $umkm->provinsi ?? $user->provinsi)"
                 :kota="old('kota', $umkm->kota ?? $user->kota)"
@@ -174,11 +174,11 @@
                     <label for="nama_usaha" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Nama usaha / merk dagang <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" 
-                           id="nama_usaha" 
-                           name="nama_usaha" 
-                           value="{{ old('nama_usaha', $umkm->nama_usaha) }}" 
-                           placeholder="Contoh: Kopi Muria Sejahtera" 
+                    <input type="text"
+                           id="nama_usaha"
+                           name="nama_usaha"
+                           value="{{ old('nama_usaha', $umkm->nama_usaha) }}"
+                           placeholder="Contoh: Kopi Muria Sejahtera"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
@@ -187,8 +187,8 @@
                         Kategori sektor usaha <span class="text-red-500">*</span>
                     </label>
                     @php $kategoriCurrent = old('jenis_usaha', $umkm->jenis_usaha ?? 'Makanan'); @endphp
-                    <select id="jenis_usaha" 
-                            name="jenis_usaha" 
+                    <select id="jenis_usaha"
+                            name="jenis_usaha"
                             class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none cursor-pointer">
                         <option value="Makanan" {{ $kategoriCurrent === 'Makanan' ? 'selected' : '' }}>Makanan & minuman</option>
                         <option value="Jasa" {{ $kategoriCurrent === 'Jasa' ? 'selected' : '' }}>Jasa & layanan</option>
@@ -206,18 +206,18 @@
                     <label for="modal_dibutuhkan_display" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Kebutuhan permodalan (Rp)
                     </label>
-                    <input type="text" 
-                           inputmode="numeric" 
-                           id="modal_dibutuhkan_display" 
-                           data-format-rupiah="true" 
-                           data-target-hidden="modal_dibutuhkan" 
-                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? number_format((float) preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)), 0, ',', '.') : '' }}" 
-                           placeholder="Contoh: 25.000.000" 
-                           class="format-rupiah w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition" 
+                    <input type="text"
+                           inputmode="numeric"
+                           id="modal_dibutuhkan_display"
+                           data-format-rupiah="true"
+                           data-target-hidden="modal_dibutuhkan"
+                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? number_format((float) preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)), 0, ',', '.') : '' }}"
+                           placeholder="Contoh: 25.000.000"
+                           class="format-rupiah w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition"
                            autocomplete="off">
-                    <input type="hidden" 
-                           name="modal_dibutuhkan" 
-                           id="modal_dibutuhkan" 
+                    <input type="hidden"
+                           name="modal_dibutuhkan"
+                           id="modal_dibutuhkan"
                            value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)) : '' }}">
                 </div>
 
@@ -225,11 +225,11 @@
                     <label for="estimasi_bagi_hasil" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Estimasi bagi hasil bulanan
                     </label>
-                    <input type="text" 
-                           id="estimasi_bagi_hasil" 
-                           name="estimasi_bagi_hasil" 
-                           value="{{ old('estimasi_bagi_hasil', $umkm->estimasi_bagi_hasil ?? '15% per bulan') }}" 
-                           placeholder="Contoh: 15% dari laba bersih per bulan" 
+                    <input type="text"
+                           id="estimasi_bagi_hasil"
+                           name="estimasi_bagi_hasil"
+                           value="{{ old('estimasi_bagi_hasil', $umkm->estimasi_bagi_hasil ?? '15% per bulan') }}"
+                           placeholder="Contoh: 15% dari laba bersih per bulan"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
                 </div>
             </div>
@@ -246,14 +246,14 @@
                             <span class="text-[12px] text-[#084539] font-medium truncate">Foto saat ini terpasang</span>
                         </div>
                     @endif
-                    <input type="file" 
-                           id="foto_produk" 
-                           name="foto_produk" 
-                           accept="image/*" 
-                           class="hidden" 
+                    <input type="file"
+                           id="foto_produk"
+                           name="foto_produk"
+                           accept="image/*"
+                           class="hidden"
                            onchange="updateFileName(this, 'foto_produk_label')">
-                    <label for="foto_produk" 
-                           id="foto_produk_label" 
+                    <label for="foto_produk"
+                           id="foto_produk_label"
                            class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                         <span>{{ $umkm->foto_produk ? 'Ganti file foto produk' : 'Pilih file foto produk' }}</span>
                     </label>
@@ -270,14 +270,14 @@
                             <a href="{{ asset('storage/' . $umkm->file_proposal) }}" target="_blank" class="text-[#0b5a4a] font-semibold hover:underline">Unduh</a>
                         </div>
                     @endif
-                    <input type="file" 
-                           id="file_proposal" 
-                           name="file_proposal" 
-                           accept=".pdf,.doc,.docx,.zip" 
-                           class="hidden" 
+                    <input type="file"
+                           id="file_proposal"
+                           name="file_proposal"
+                           accept=".pdf,.doc,.docx,.zip"
+                           class="hidden"
                            onchange="updateFileName(this, 'file_proposal_label')">
-                    <label for="file_proposal" 
-                           id="file_proposal_label" 
+                    <label for="file_proposal"
+                           id="file_proposal_label"
                            class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                         <span>{{ $umkm->file_proposal ? 'Ganti file proposal' : 'Pilih file proposal' }}</span>
                     </label>
@@ -290,10 +290,10 @@
                 <label for="deskripsi" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Deskripsi singkat usaha
                 </label>
-                <textarea id="deskripsi" 
-                          name="deskripsi" 
-                          rows="3" 
-                          placeholder="Jelaskan jenis produk, keunikan usaha, dan target pasar Anda..." 
+                <textarea id="deskripsi"
+                          name="deskripsi"
+                          rows="3"
+                          placeholder="Jelaskan jenis produk, keunikan usaha, dan target pasar Anda..."
                           class="w-full px-3.5 py-3 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition min-h-[96px] resize-y">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
             </div>
         </div>
@@ -315,10 +315,10 @@
                 <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" 
-                       id="ruko-search" 
-                       onkeyup="filterRukoCards()" 
-                       placeholder="Telusuri ruko berdasarkan nama atau lokasi..." 
+                <input type="text"
+                       id="ruko-search"
+                       onkeyup="filterRukoCards()"
+                       placeholder="Telusuri ruko berdasarkan nama atau lokasi..."
                        class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
@@ -330,16 +330,16 @@
 
                 @forelse ($rukos as $index => $ruko)
                     <label class="ruko-card block rounded-[10px] border {{ $selectedRukoId == $ruko->id_ruko ? 'border-[#0b5a4a] ring-2 ring-[#0b5a4a]' : 'border-[#e2e1d8] hover:border-[#0b5a4a]' }} p-3 cursor-pointer transition bg-white relative group shadow-2xs hover:shadow-sm">
-                        <input type="radio" 
-                               name="id_ruko_diminati" 
-                               value="{{ $ruko->id_ruko }}" 
-                               {{ $selectedRukoId == $ruko->id_ruko ? 'checked' : '' }} 
+                        <input type="radio"
+                               name="id_ruko_diminati"
+                               value="{{ $ruko->id_ruko }}"
+                               {{ $selectedRukoId == $ruko->id_ruko ? 'checked' : '' }}
                                class="absolute top-3 right-3 text-[#0b5a4a] focus:ring-[#0b5a4a]">
-                        
+
                         <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
-                            <img src="{{ $ruko->foto_url }}" 
-                                 alt="{{ $ruko->nama_ruko }}" 
-                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
+                            <img src="{{ $ruko->foto_url }}"
+                                 alt="{{ $ruko->nama_ruko }}"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                  loading="lazy">
                             <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
                                 Daya Ruko
@@ -373,16 +373,16 @@
             </div>
 
             <div class="flex items-center gap-3 w-full sm:w-auto">
-                <button type="submit" 
-                        name="aksi" 
-                        value="simpan_draf" 
+                <button type="submit"
+                        name="aksi"
+                        value="simpan_draf"
                         class="btn-secondary w-full sm:w-auto h-11 px-5 text-[14px] font-semibold flex items-center justify-center">
                     Simpan draf
                 </button>
 
-                <button type="submit" 
-                        name="aksi" 
-                        value="kirim_pengajuan" 
+                <button type="submit"
+                        name="aksi"
+                        value="kirim_pengajuan"
                         class="btn-primary w-full sm:w-auto h-11 px-6 text-[14px] font-semibold flex items-center justify-center shadow-xs">
                     Kirim pengajuan ke admin
                 </button>

@@ -1037,7 +1037,7 @@ class DashboardController extends Controller
 
         if ($aksi === 'kirim_pengajuan') {
             $validated['status_pengajuan'] = 'menunggu_verifikasi';
-            $message = 'Pengajuan usaha Anda berhasil dikirimkan! Tim Admin DAYA UMKM akan meninjau berkas Anda dalam 1x24 jam.';
+            $message = 'Pengajuan usaha Anda berhasil dikirimkan! Tim Admin Titik UMKM akan meninjau berkas Anda dalam 1x24 jam.';
         } else {
             $validated['status_pengajuan'] = 'draf';
             $message = 'Draf formulir usaha Anda berhasil disimpan. Anda dapat melanjutkannya kapan saja.';

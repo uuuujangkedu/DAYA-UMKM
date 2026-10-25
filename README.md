@@ -1,58 +1,60 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Titik UMKM
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Titik UMKM adalah aplikasi Laravel untuk menghubungkan pelaku UMKM, investor, dan pengelolaan ruko. Aplikasi menyediakan pendaftaran dan verifikasi akun, formulir pengajuan, dashboard mitra, pengelolaan investasi dan sewa, serta panel administrasi.
 
-## About Laravel
+## Teknologi
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.3+
+- Laravel 13
+- Filament
+- Database ditentukan lewat konfigurasi Laravel (`.env`)
+- Vite, Tailwind CSS 4, JavaScript
+- PHPUnit untuk tes; Playwright tersedia untuk tes browser
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Persiapan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Prasyarat: PHP 8.3+, Composer, Node.js dan npm. Siapkan juga ekstensi PHP yang dibutuhkan Laravel serta database yang dipilih.
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+copy .env.example .env
+php artisan key:generate
+npm install
+php artisan migrate
+npm run build
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Di PowerShell, `copy` memakai perintah bawaan; pada shell Unix gunakan `cp .env.example .env`. Periksa `.env` sebelum menjalankan migrasi. Pastikan konfigurasi database, mail, Google OAuth, chatbot, dan penyimpanan sesuai lingkungan Anda. Jangan commit `.env` atau kredensial.
 
-## Contributing
+## Menjalankan aplikasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan serve
+```
 
-## Code of Conduct
+Untuk pengembangan aset, jalankan di terminal lain:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm run dev
+```
 
-## Security Vulnerabilities
+## Tes dan pemeriksaan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan test
+npm run build
+```
 
-## License
+Tes browser tersedia melalui Playwright; periksa konfigurasi `playwright.config.ts` sebelum menjalankannya.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Akun administrasi
+
+`database/seeders/AdminUserSeeder.php` menyiapkan akun superadmin `admin@dayaumkm.id` dan akun staf. Alamat superadmin dipertahankan untuk login sesuai konfigurasi proyek. Seeder memakai kata sandi awal yang hanya untuk pengembangan. Sebelum menggunakan seeder, tetapkan `SUPERADMIN_PASSWORD` di lingkungan lokal yang terlindungi, jalankan seeder hanya pada database yang Anda maksud, lalu ganti kredensial awal. Jangan gunakan kredensial contoh di layanan publik.
+
+## Dokumen legal
+
+Halaman Syarat dan Ketentuan serta Kebijakan Privasi di aplikasi masih berstatus draf. Isinya untuk demonstrasi perlombaan, bukan nasihat atau pengesahan hukum. Jangan anggap berlaku bagi pengguna sebelum data operasional dilengkapi dan dokumen ditinjau oleh penasihat hukum.
+
+## Catatan proyek
+
+Rute aplikasi berada di `routes/web.php`, logika di `app/`, tampilan Blade di `resources/views/`, migrasi dan seeder di `database/`, serta tes di `tests/`. Sesuaikan panduan ini bila perintah setup atau alur aplikasi berubah.

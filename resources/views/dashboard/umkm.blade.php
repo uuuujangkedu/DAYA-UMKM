@@ -1,6 +1,6 @@
 @extends('layouts.umkm')
 
-@section('title', 'Dashboard Pelaku UMKM - DAYA UMKM')
+@section('title', 'Dashboard Pelaku UMKM - Titik UMKM')
 
 @section('content')
 <div class="space-y-8">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
 
-                    <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                    <a href="{{ route('dashboard', ['tab' => 'inbox']) }}"
                        class="px-4 py-2 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5 shrink-0 self-start sm:self-center">
                         <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -97,7 +97,7 @@
                                     <!-- Aksi Terima Investasi -->
                                     <form id="form-terima-beranda-{{ $notif->id_investasi }}" action="{{ route('dashboard.umkm.investasi.terima', $notif->id_investasi) }}" method="POST">
                                         @csrf
-                                        <button type="button" 
+                                        <button type="button"
                                                 onclick="openAppConfirmModal({
                                                     title: 'Terima Komitmen Investasi',
                                                     message: 'Apakah Anda yakin ingin menerima komitmen investasi ini dari <strong>{{ addslashes($notif->pengguna->name ?? 'Investor') }}</strong>? Status kemitraan akan resmi berstatus <strong>AKTIF</strong> dan tercatat dalam permodalan usaha.',
@@ -134,7 +134,7 @@
                                     </form>
                                 @elseif($notif->status === 'aktif')
                                     <!-- Tombol Setor Dividen Cepat -->
-                                    <button type="button" 
+                                    <button type="button"
                                             onclick="openSetorDividenModal('{{ $notif->id_investasi }}', '{{ addslashes($notif->pengguna->name) }}', '{{ addslashes($notif->pengguna->bank_name ?? 'Belum Diatur') }}', '{{ $notif->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($notif->pengguna->nama_pemilik_rekening ?? $notif->pengguna->name) }}')"
                                             class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +145,7 @@
                                 @endif
 
                                 @if(!empty($notif->pengguna->phone_number))
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $notif->pengguna->phone_number) }}?text=Halo%20{{ urlencode($notif->pengguna->name) }},%20terima%20kasih%20atas%20minat%20investasi%20Anda%20di%20usaha%20{{ urlencode($umkm->nama_usaha) }}%20melalui%20DAYA%20UMKM." 
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $notif->pengguna->phone_number) }}?text=Halo%20{{ urlencode($notif->pengguna->name) }},%20terima%20kasih%20atas%20minat%20investasi%20Anda%20di%20usaha%20{{ urlencode($umkm->nama_usaha) }}%20melalui%20DAYA%20UMKM."
                                        target="_blank"
                                        class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
                                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@
                     </div>
 
                     <div class="shrink-0 self-stretch lg:self-center flex flex-col gap-2">
-                        <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                        <a href="{{ route('dashboard', ['tab' => 'inbox']) }}"
                            class="px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm text-white shadow-md hover:shadow-lg transition flex items-center justify-center gap-2"
                            style="background-color: #065F46 !important; color: #FFFFFF !important;">
                             <span>💬 Buka Pesan Persetujuan</span>
@@ -306,7 +306,7 @@
 
                     <!-- Tombol Aksi Buka Surat & Solusi (Ditingkatkan dengan Kontras Tinggi & Merah Terang) -->
                     <div class="flex flex-col sm:flex-row lg:flex-col gap-2.5 shrink-0 self-stretch lg:self-center">
-                        <button type="button" 
+                        <button type="button"
                                 onclick="openSuratPeringatanModal(
                                     '{{ $tingkatSp }}',
                                     '{{ $spTerbaru && $spTerbaru->created_at ? $spTerbaru->created_at->translatedFormat('d F Y, H:i') : now()->translatedFormat('d F Y') }}',
@@ -526,7 +526,7 @@
                                                 <span class="text-[10px] text-rose-800 font-medium block truncate">Tenggat: {{ $spInv->created_at ? $spInv->created_at->addDays(3)->translatedFormat('d M Y') : '-' }}</span>
                                             </div>
                                         </div>
-                                        <button type="button" 
+                                        <button type="button"
                                                 onclick="openSuratPeringatanModal(
                                                     '{{ $spInv->tingkat_sp }}',
                                                     '{{ $spInv->created_at ? $spInv->created_at->translatedFormat('d F Y, H:i') : '' }}',
@@ -751,7 +751,7 @@
                             <!-- Tombol Balas jika belum dibalas -->
                             @if(empty($u->balasan_umkm))
                                 <div class="pt-2 border-t border-gray-200/60">
-                                    <button type="button" 
+                                    <button type="button"
                                             onclick="openBalasUlasanModal('{{ $u->id_ulasan }}', '{{ addslashes($u->nama_investor_tersensor) }}', `{{ addslashes($u->ulasan) }}`)"
                                             class="w-full py-2 px-3 rounded-xl bg-white hover:bg-gray-100 text-[#1B4D3E] border border-[#1B4D3E]/30 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <span>💬 Berikan Tanggapan Resmi</span>
@@ -789,7 +789,7 @@
                         <div class="opacity-0 group-hover:opacity-100 transition-opacity bg-[#1B4D3E] text-white text-[10px] font-bold px-2 py-0.5 rounded-md mb-2 pointer-events-none shadow">
                             {{ $height }}%
                         </div>
-                        
+
                         <!-- Batang Gradient Teal (#1B4D3E -> #7BAE91) -->
                         <div class="w-full max-w-[42px] bg-gradient-to-t from-[#1B4D3E] via-[#2D6A4F] to-[#7BAE91] hover:opacity-90 transition-all rounded-t-lg rounded-b-[4px] shadow-sm"
                              style="height: {{ $height }}%;">
@@ -837,7 +837,7 @@
 
         <!-- MAIN TWO-COLUMN INBOX LAYOUT (GRID 12) -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            
+
             <!-- KOLOM KIRI (5 COLS): DAFTAR PENGAJUAN MASUK & UTAS OBROLAN -->
             <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E8E6DF] shadow-sm space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100">
@@ -995,7 +995,7 @@
                                         </form>
                                     </div>
                                 @elseif($selectedInvestasi->status === 'aktif')
-                                    <button type="button" 
+                                    <button type="button"
                                             onclick="openSetorDividenModal('{{ $selectedInvestasi->id_investasi }}', '{{ addslashes($selectedInvestasi->pengguna->name) }}', '{{ addslashes($selectedInvestasi->pengguna->bank_name ?? 'Belum Diatur') }}', '{{ $selectedInvestasi->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($selectedInvestasi->pengguna->nama_pemilik_rekening ?? $selectedInvestasi->pengguna->name) }}')"
                                             class="px-3.5 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
                                         <span>💸 Setor Dividen</span>
@@ -1183,7 +1183,7 @@
                         <form id="form-gabung-keuangan-top" action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST">
                             @csrf
                             <input type="hidden" name="bulan_tahun" value="{{ $bulanAktif }}">
-                            <button type="button" 
+                            <button type="button"
                                     onclick="openAppConfirmModal({
                                         title: 'Satukan Catatan Keuangan',
                                         message: 'Satukan seluruh <strong>{{ $jumlahCatatanBulanAktif }} transaksi</strong> pada periode <strong>{{ $bulanAktif }}</strong> menjadi 1 catatan kumulatif konsolidasi?',
@@ -1443,7 +1443,7 @@
                                 <td class="py-3.5 px-5">
                                     @if(!empty($ck->foto_bukti))
                                         @if($isExcel)
-                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" download target="_blank" 
+                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" download target="_blank"
                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-[11px] font-extrabold border border-emerald-300 transition shadow-sm">
                                                 <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 14h-8v-2h8v2zm0-4h-8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
@@ -1451,7 +1451,7 @@
                                                 <span>Unduh Excel (.{{ strtoupper($ext) }})</span>
                                             </a>
                                         @elseif($isPdf)
-                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" target="_blank" 
+                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" target="_blank"
                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-800 text-[11px] font-extrabold border border-rose-300 transition shadow-sm">
                                                 <svg class="w-3.5 h-3.5 text-rose-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9.5 8.5h-2v3H6V7.5h3.5c1.1 0 2 .9 2 2s-.9 2-2 2zm8 0h-2v3h-1.5V7.5H16c1.1 0 2 .9 2 2s-.9 2-2 2zm-4-2H12v6h-1.5V7.5h3c.83 0 1.5.67 1.5 1.5v1c0 .83-.67 1.5-1.5 1.5z"/>
@@ -1459,7 +1459,7 @@
                                                 <span>Buka PDF</span>
                                             </a>
                                         @elseif($isWord)
-                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" download target="_blank" 
+                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" download target="_blank"
                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 text-[11px] font-extrabold border border-blue-300 transition shadow-sm">
                                                 <svg class="w-3.5 h-3.5 text-blue-600 shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 14h-8v-2h8v2zm0-4h-8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
@@ -1467,7 +1467,7 @@
                                                 <span>Unduh Word (.{{ strtoupper($ext) }})</span>
                                             </a>
                                         @else
-                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" target="_blank" 
+                                            <a href="{{ asset('storage/' . $ck->foto_bukti) }}" target="_blank"
                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-[11px] font-extrabold border border-teal-200 transition shadow-sm">
                                                 <svg class="w-3.5 h-3.5 text-teal-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -1481,9 +1481,9 @@
                                 </td>
                                 <td class="py-3.5 px-5 text-right">
                                     <div class="flex items-center justify-end gap-1.5">
-                                        <button type="button" 
-                                                onclick="editKeuangan('{{ $ck->id_keuangan }}', '{{ $ck->bulan_tahun }}', '{{ $ck->pendapatan }}', '{{ $ck->hpp }}', '{{ $ck->beban_operasional }}', '{{ $ck->beban_lain }}', '{{ addslashes($ck->catatan ?? '') }}')" 
-                                                class="p-1.5 rounded-lg text-emerald-700 hover:bg-emerald-50 transition" 
+                                        <button type="button"
+                                                onclick="editKeuangan('{{ $ck->id_keuangan }}', '{{ $ck->bulan_tahun }}', '{{ $ck->pendapatan }}', '{{ $ck->hpp }}', '{{ $ck->beban_operasional }}', '{{ $ck->beban_lain }}', '{{ addslashes($ck->catatan ?? '') }}')"
+                                                class="p-1.5 rounded-lg text-emerald-700 hover:bg-emerald-50 transition"
                                                 title="Edit Catatan Ini">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
@@ -1491,7 +1491,7 @@
                                         </button>
                                         <form id="form-delete-keuangan-{{ $ck->id_keuangan }}" action="{{ route('dashboard.umkm.keuangan.delete', $ck->id_keuangan) }}" method="POST">
                                             @csrf
-                                            <button type="button" 
+                                            <button type="button"
                                                     onclick="openAppConfirmModal({
                                                         title: 'Hapus Catatan Keuangan',
                                                         message: 'Apakah Anda yakin ingin menghapus catatan keuangan periode <strong>{{ $ck->bulan_tahun }}</strong>?',
@@ -1545,7 +1545,7 @@
                                     <form id="form-gabung-keuangan-table" action="{{ route('dashboard.umkm.keuangan.gabung') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="bulan_tahun" value="{{ $bulanAktif }}">
-                                        <button type="button" 
+                                        <button type="button"
                                                 onclick="openAppConfirmModal({
                                                     title: 'Satukan Catatan Keuangan',
                                                     message: 'Satukan seluruh transaksi di periode <strong>{{ $bulanAktif }}</strong>?',
@@ -1921,7 +1921,7 @@
 
                 icon.textContent = '🔍';
                 hint.innerHTML = '<span class="text-emerald-700 animate-pulse font-bold">🔄 Sedang mengoptimalkan & membaca teks dari foto nota (OCR)... <span id="ocr-progress">0%</span></span>';
-                
+
                 if (submitBtn) {
                     submitBtn.disabled = true;
                     submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
@@ -2189,11 +2189,11 @@
         <div class="bg-white rounded-2xl p-8 border border-[#E8E6DF] shadow-sm max-w-2xl">
             <h3 class="text-lg font-black text-[#1A202C] mb-2">Butuh Bantuan Operasional atau Sewa Ruko?</h3>
             <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-                Tim kurator dan pendamping usaha DAYA UMKM siap membantu proses verifikasi proposal, konsultasi tata kelola keuangan, dan pemilihan ruko strategis.
+                Tim kurator dan pendamping usaha Titik UMKM siap membantu proses verifikasi proposal, konsultasi tata kelola keuangan, dan pemilihan ruko strategis.
             </p>
             <a href="https://wa.me/6281234567890?text=Halo%20Tim%20DAYA%20UMKM,%20saya%20butuh%20bantuan%20terkait%20dashboard%20usaha." target="_blank"
                class="px-6 py-3 rounded-2xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
-                <span>Hubungi CS WhatsApp DAYA UMKM</span> &rarr;
+                <span>Hubungi CS WhatsApp Titik UMKM</span> &rarr;
             </a>
         </div>
 
@@ -2382,7 +2382,7 @@
 
         <form action="{{ route('dashboard.umkm.dividen.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
-            
+
             <!-- Pilih Mitra Investor -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Mitra Investor Penerima *</label>
@@ -2698,10 +2698,10 @@
     </div>
 </div>
 
-<!-- MODAL SURAT PERINGATAN RESMI (KOP SURAT DAYA UMKM & COMPLIANCE PLATFORM) -->
+<!-- MODAL SURAT PERINGATAN RESMI (KOP SURAT Titik UMKM & COMPLIANCE PLATFORM) -->
 <div id="modal-surat-peringatan-resmi" class="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
     <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-gray-200 animate-scale-up max-h-[92vh] flex flex-col overflow-hidden">
-        
+
         <!-- Header Modal Top Bar -->
         <div class="px-6 py-4 bg-gradient-to-r from-gray-900 via-rose-950 to-gray-900 text-white flex items-center justify-between shrink-0">
             <div class="flex items-center gap-2.5">
@@ -2719,13 +2719,13 @@
 
         <!-- Body Surat Fisik Resmi (Kop Surat & Dokumen Legal) -->
         <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-xs sm:text-sm text-gray-800 font-serif leading-relaxed bg-[#FFFDF9]">
-            
+
             <!-- KOP SURAT RESMI PLATFORM -->
             <div class="text-center pb-4 border-b-2 border-black font-sans">
                 <div class="flex items-center justify-center gap-3 mb-1">
                     <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM" class="h-8 w-auto object-contain">
                     <div class="h-6 w-px bg-gray-300"></div>
-                    <span class="text-base sm:text-lg font-black tracking-wider text-[#1B4D3E]">DAYA UMKM INDONESIA</span>
+                    <span class="text-base sm:text-lg font-black tracking-wider text-[#1B4D3E]">Titik UMKM INDONESIA</span>
                 </div>
                 <h4 class="text-xs font-black tracking-wider uppercase text-gray-900 mt-1">
                     DIREKTORAT KEPATUHAN &amp; TATA KELOLA KEMITRAAN INVESTASI
@@ -2763,7 +2763,7 @@
                     Dengan hormat,
                 </p>
                 <p>
-                    Berdasarkan rekapitulasi audit sistem dan pemantauan kepatuhan permodalan kemitraan platform <strong>DAYA UMKM</strong>, bersama surat resmi ini kami memberitahukan bahwa usaha Saudara tercatat <strong>belum menyetorkan bagi hasil dividen berkala</strong> yang telah melewati batas tanggal jatuh tempo (tanggal 25 setiap bulannya) sesuai dengan Akad Perjanjian Kemitraan Investasi yang disepakati bersama Mitra Investor.
+                    Berdasarkan rekapitulasi audit sistem dan pemantauan kepatuhan permodalan kemitraan platform <strong>Titik UMKM</strong>, bersama surat resmi ini kami memberitahukan bahwa usaha Saudara tercatat <strong>belum menyetorkan bagi hasil dividen berkala</strong> yang telah melewati batas tanggal jatuh tempo (tanggal 25 setiap bulannya) sesuai dengan Akad Perjanjian Kemitraan Investasi yang disepakati bersama Mitra Investor.
                 </p>
 
                 <!-- KOTAK TEGURAN RESMI DARI VERIFIKATOR -->
@@ -2776,12 +2776,12 @@
                     </p>
                     <div class="pt-1 flex items-center justify-between text-[10px] text-rose-700 border-t border-rose-200/60 mt-2">
                         <span>Penerbit / Verifikator: <strong id="modal-sp-admin">Super Administrator</strong></span>
-                        <span>Otoritas: Tim Compliance DAYA UMKM</span>
+                        <span>Otoritas: Tim Compliance Titik UMKM</span>
                     </div>
                 </div>
 
                 <p>
-                    Sehubungan dengan hal tersebut, Manajemen DAYA UMKM memberikan kesempatan tenggat waktu respons penyelesaian paling lambat hingga:
+                    Sehubungan dengan hal tersebut, Manajemen Titik UMKM memberikan kesempatan tenggat waktu respons penyelesaian paling lambat hingga:
                 </p>
 
                 <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 font-sans text-center">
@@ -2817,11 +2817,11 @@
                 <div>
                     <span class="text-[10px] text-gray-400 block font-mono">Kode Validasi Dokumen:</span>
                     <span class="text-[10px] text-gray-500 font-mono font-bold block">SEC-REG-{{ date('Ymd') }}-COMPLIANCE-VERIFIED</span>
-                    <span class="text-[9px] text-gray-400 mt-1 block max-w-xs">Dokumen ini diterbitkan sah secara elektronik oleh Sistem Monitoring Kepatuhan DAYA UMKM dan memiliki kekuatan pembuktian internal platform.</span>
+                    <span class="text-[9px] text-gray-400 mt-1 block max-w-xs">Dokumen ini diterbitkan sah secara elektronik oleh Sistem Monitoring Kepatuhan Titik UMKM dan memiliki kekuatan pembuktian internal platform.</span>
                 </div>
                 <div class="text-left sm:text-right shrink-0">
                     <p class="text-gray-500 text-[10px]">Jakarta, {{ date('d F Y') }}</p>
-                    <p class="font-bold text-gray-900 mt-0.5">Direktorat Kepatuhan DAYA UMKM</p>
+                    <p class="font-bold text-gray-900 mt-0.5">Direktorat Kepatuhan Titik UMKM</p>
                     <div class="my-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-300 text-[10px] font-mono font-bold">
                         <span>✓</span> TERVERIFIKASI SISTEM ELEKTRONIK
                     </div>
@@ -2875,7 +2875,7 @@
         document.getElementById('modal-sp-isi-pesan').innerText = pesan || 'Berdasarkan data sistem, bagi hasil dividen kemitraan belum disetorkan.';
         document.getElementById('modal-sp-admin').innerText = adminName || 'Super Administrator';
         document.getElementById('modal-sp-investor').innerText = investorName || 'Mitra Investor';
-        
+
         // Atur tombol setor dividen
         const btnSetor = document.getElementById('modal-sp-btn-setor');
         if (btnSetor) {

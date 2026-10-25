@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Dashboard Pelaku UMKM') - DAYA UMKM</title>
+    <title>@yield('title', 'Dashboard Pelaku UMKM') - Titik UMKM</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -71,7 +71,7 @@
     <!-- SIDEBAR UMKM (Sesuai Gambar 2: Mockup Dashboard UMKM) -->
     <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#1B4D3E] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
            style="background-color: #1B4D3E !important; height: 100vh; min-height: 100vh;">
-        
+
         <div>
             <!-- Brand Logo TIKUM -->
             <div class="px-5 pt-5 pb-1">
@@ -107,7 +107,7 @@
             <!-- Navigation Links UMKM Sesuai Mockup Gambar 2 -->
             <nav class="mt-5 px-3 space-y-1">
                 <!-- 1. BERANDA -->
-                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? 'beranda') === 'beranda' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,7 +131,7 @@
                 </a>
 
                 <!-- 2. INBOX PENDANAAN (Komunikasi & Minat Modal Investor) -->
-                <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'inbox']) }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'inbox' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@
                 </a>
 
                 <!-- 3. ANALISIS KEUANGAN -->
-                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'keuangan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@
                 </a>
 
                 <!-- 4. BANTUAN -->
-                <a href="{{ route('dashboard', ['tab' => 'bantuan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'bantuan']) }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'bantuan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'bantuan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@
                 </a>
 
                 <!-- 5. INFORMASI RUKO -->
-                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'ruko' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +180,7 @@
                 </a>
 
                 <!-- 6. PROFIL & FORMULIR PENGAJUAN -->
-                <a href="{{ route('formulir.umkm') }}" 
+                <a href="{{ route('formulir.umkm') }}"
                    class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link text-teal-100/70 hover:bg-white/[0.06] hover:text-white">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 text-teal-400/70 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -196,7 +196,7 @@
         <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0"
              style="background-color: #1B4D3E !important;">
             <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
-            <button type="button" 
+            <button type="button"
                     class="a11y-trigger w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-teal-200/90 hover:bg-white/[0.08] hover:text-white sidebar-link transition cursor-pointer group text-left"
                     aria-label="Aksesibilitas & Disabilitas"
                     title="Buka menu aksesibilitas disabilitas">
@@ -230,7 +230,7 @@
 
     <!-- MAIN CONTENT AREA -->
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        
+
         <!-- Mobile Header Top Bar -->
         <header class="md:hidden bg-[#1B4D3E] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
             <div class="flex items-center gap-3">
@@ -248,7 +248,7 @@
                 @include('components.language-switcher', ['id' => 'umkm-mobile-lang'])
 
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
-                <button type="button" 
+                <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
                         aria-label="Aksesibilitas & Disabilitas"
                         title="Buka menu aksesibilitas disabilitas">
@@ -269,7 +269,7 @@
 
         <!-- Main Body -->
         <main class="flex-1 px-8 py-8 lg:px-10 lg:py-10 max-w-[1280px] w-full mx-auto">
-            
+
             <!-- Alert Flash Notifications -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
@@ -328,13 +328,13 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" 
-                        onclick="closeAppConfirmModal()" 
+                <button type="button"
+                        onclick="closeAppConfirmModal()"
                         class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
                     Batal
                 </button>
-                <button type="button" 
-                        id="app-confirm-submit-btn" 
+                <button type="button"
+                        id="app-confirm-submit-btn"
                         class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white">
                     Ya, Lanjutkan
                 </button>
@@ -359,10 +359,10 @@
         function openAppConfirmModal(config) {
             const modal = document.getElementById('app-custom-confirm-modal');
             if (!modal) return;
-            
+
             document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
             document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
-            
+
             const badgeEl = document.getElementById('app-confirm-badge');
             const badgeText = document.getElementById('app-confirm-badge-text');
             if (config.badge) {
@@ -371,7 +371,7 @@
             } else {
                 badgeEl.classList.add('hidden');
             }
-            
+
             const iconContainer = document.getElementById('app-confirm-icon-box');
             const iconType = config.icon || 'check';
             if (iconType === 'check' || iconType === 'success') {
@@ -384,12 +384,12 @@
                 iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#1B4D3E] shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             }
-            
+
             const submitBtn = document.getElementById('app-confirm-submit-btn');
             submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
-            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' +
                 (config.confirmClass || 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white');
-            
+
             submitBtn.onclick = function() {
                 closeAppConfirmModal();
                 if (config.form) {
@@ -398,7 +398,7 @@
                     config.onConfirm();
                 }
             };
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }

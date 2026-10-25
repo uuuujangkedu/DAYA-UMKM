@@ -1,6 +1,6 @@
 @extends('layouts.investor')
 
-@section('title', 'Dashboard Mitra Investor - DAYA UMKM')
+@section('title', 'Dashboard Mitra Investor - Titik UMKM')
 
 @section('content')
 <div class="space-y-8">
@@ -18,9 +18,9 @@
                     Halo, <span class="font-bold text-[#0F433C]">{{ $user->name }}</span> 👋. Pusat kendali eksekutif portofolio pendanaan & dividen UMKM Anda.
                 </p>
             </div>
-            
+
             <div class="flex items-center gap-2.5 self-start sm:self-auto">
-                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}"
                    class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -33,7 +33,7 @@
                     @endif
                 </a>
 
-                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}"
                    class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-[#0F433C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
@@ -41,7 +41,7 @@
                     <span>Portofolio Saya</span>
                 </a>
 
-                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                    class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
@@ -53,7 +53,7 @@
 
         <!-- 4 KARTU METRIK KPI UTAMA INVESTOR -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
-            
+
             <!-- KARTU 1: Total Modal Disalurkan -->
             <div class="bg-white rounded-3xl p-6 border border-[#E8E6DF] shadow-sm hover:shadow-md transition">
                 <div class="w-12 h-12 rounded-2xl bg-[#E0F7F6] text-[#00A389] flex items-center justify-center mb-4">
@@ -130,7 +130,7 @@
 
         <!-- ROW UTAMA: GRAFIK TREN BAGI HASIL BULANAN & JADWAL DIVIDEN TERDEKAT -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
+
             <!-- KOLOM KIRI (2/3): GRAFIK TREN BAGI HASIL BULANAN (MURNI DATA RIIL) -->
             <div class="lg:col-span-2 bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm flex flex-col justify-between">
                 <div>
@@ -169,7 +169,7 @@
                             </p>
                             @if(!$hasRealInvestments)
                                 <div class="mt-4">
-                                    <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                                    <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                                        class="px-5 py-2.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                                         <span>Jelajahi Proposal & Mulai Investasi</span> &rarr;
                                     </a>
@@ -250,8 +250,8 @@
                 <!-- Visual Segmented Bar Riil -->
                 <div class="w-full h-3.5 rounded-full bg-gray-100 flex overflow-hidden my-4 shadow-inner">
                     @foreach($alokasiSektor as $sek)
-                        <div class="h-full transition-all duration-300" 
-                             style="width: {{ $sek['persentase'] }}%; background-color: {{ $sek['color'] }};" 
+                        <div class="h-full transition-all duration-300"
+                             style="width: {{ $sek['persentase'] }}%; background-color: {{ $sek['color'] }};"
                              title="{{ $sek['nama'] }}: {{ $sek['persentase'] }}% (Rp {{ number_format($sek['nominal'], 0, ',', '.') }})"></div>
                     @endforeach
                 </div>
@@ -288,7 +288,7 @@
             @endif
 
             <div class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-end">
-                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}"
                    class="py-2.5 px-4 rounded-xl bg-[#F9F8F3] hover:bg-gray-100 text-[#0F433C] text-xs font-bold transition border border-[#E8E6DF]">
                     Kelola Detail Investasi di Portofolio Saya &rarr;
                 </a>
@@ -434,8 +434,8 @@
                     Pantau kinerja bisnis, status komitmen dana, dan realisasi bagi hasil seluruh UMKM yang Anda modali.
                 </p>
             </div>
-            
-            <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+
+            <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
                 <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -477,19 +477,19 @@
 
         <!-- FILTER STATUS INVESTASI -->
         <div class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'semua']) }}" 
+            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'semua']) }}"
                class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($statusFilter ?? 'semua') === 'semua' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 Semua Portofolio ({{ $semuaInvestasiSaya->count() }})
             </a>
-            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'aktif']) }}" 
+            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'aktif']) }}"
                class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($statusFilter ?? '') === 'aktif' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 Aktif Berjalan ({{ $semuaInvestasiSaya->whereIn('status', ['aktif', 'disetujui'])->count() }})
             </a>
-            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'pending']) }}" 
+            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'pending']) }}"
                class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($statusFilter ?? '') === 'pending' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 Menunggu Konfirmasi ({{ $semuaInvestasiSaya->where('status', 'pending')->count() }})
             </a>
-            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'selesai']) }}" 
+            <a href="{{ route('dashboard', ['tab' => 'portofolio', 'status' => 'selesai']) }}"
                class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($statusFilter ?? '') === 'selesai' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 Kontrak Selesai ({{ $semuaInvestasiSaya->where('status', 'selesai')->count() }})
             </a>
@@ -604,7 +604,7 @@
                         <!-- Tombol Beri / Edit Ulasan Kredibilitas Mitra UMKM -->
                         @if($inv->status === 'aktif' || $inv->status === 'disetujui' || $inv->status === 'selesai')
                             @if($inv->ulasan)
-                                <button type="button" 
+                                <button type="button"
                                     onclick="openModalReview('{{ $inv->id_investasi }}', '{{ addslashes($inv->umkm->nama_usaha ?? 'Mitra UMKM') }}', '{{ $inv->ulasan->rating }}', '{{ $inv->ulasan->rating_transparansi ?? 5 }}', '{{ $inv->ulasan->rating_dividen ?? 5 }}', `{{ addslashes($inv->ulasan->ulasan) }}`)"
                                     class="py-2.5 px-3 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-300 text-amber-900 text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm">
                                     <span class="text-amber-500 font-black">★</span>
@@ -612,7 +612,7 @@
                                     <span class="text-[10px] text-amber-700 underline font-normal">(Edit)</span>
                                 </button>
                             @else
-                                <button type="button" 
+                                <button type="button"
                                     onclick="openModalReview('{{ $inv->id_investasi }}', '{{ addslashes($inv->umkm->nama_usaha ?? 'Mitra UMKM') }}', 5, 5, 5, '')"
                                     class="py-2.5 px-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm">
                                     <span class="text-amber-200">★</span>
@@ -622,7 +622,7 @@
                         @endif
 
                         @if(!empty($inv->umkm->nomor_whatsapp))
-                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $inv->umkm->nomor_whatsapp) }}?text=Halo%20{{ urlencode($inv->umkm->pemilik) }},%20saya%20investor%20dari%20platform%20DAYA%20UMKM." 
+                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $inv->umkm->nomor_whatsapp) }}?text=Halo%20{{ urlencode($inv->umkm->pemilik) }},%20saya%20investor%20dari%20platform%20DAYA%20UMKM."
                                target="_blank"
                                class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold text-center transition flex items-center justify-center gap-1.5 shadow-sm">
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
@@ -632,7 +632,7 @@
                             </a>
                         @endif
 
-                        <a href="{{ route('dashboard', ['tab' => 'proposal', 'q' => $inv->umkm->nama_usaha ?? '']) }}" 
+                        <a href="{{ route('dashboard', ['tab' => 'proposal', 'q' => $inv->umkm->nama_usaha ?? '']) }}"
                            class="py-2.5 px-3 rounded-xl border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold text-center transition">
                             Detail
                         </a>
@@ -650,7 +650,7 @@
                         Anda belum memiliki portofolio investasi pada filter ini. Jelajahi katalog proposal UMKM dan mulailah mendanai usaha potensial.
                     </p>
                     <div class="mt-5">
-                        <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                        <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                            class="px-6 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                             <span>Jelajahi Proposal UMKM</span> &rarr;
                         </a>
@@ -751,7 +751,7 @@
             </div>
 
             <div class="flex items-center gap-2.5 self-start sm:self-auto">
-                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                    class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -777,7 +777,7 @@
                     Anda belum mengajukan minat pendanaan ke UMKM mana pun. Setelah Anda mengajukan penawaran modal dari <strong>Proposal List</strong>, ruang obrolan langsung dan lembar negosiasi kemitraan akan otomatis aktif di sini.
                 </p>
                 <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-                    <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                    <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                        class="px-6 py-3 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-md inline-flex items-center gap-2">
                         <span>Jelajahi Proposal UMKM Terverifikasi</span> &rarr;
                     </a>
@@ -786,7 +786,7 @@
         @else
             <!-- GRID 2 KOLOM: DAFTAR UMKM (KIRI) & RUANG CHAT (KANAN) -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
+
                 <!-- KOLOM KIRI (5 COLS): DAFTAR MITRA UMKM YG DIDANAI -->
                 <div class="lg:col-span-5 bg-white rounded-3xl p-5 sm:p-6 border border-[#E8E6DF] shadow-sm">
                     <div class="flex items-center justify-between pb-4 border-b border-gray-100">
@@ -907,7 +907,7 @@
                                         </a>
                                     @endif
 
-                                    <a href="{{ route('dashboard', ['tab' => 'proposal', 'q' => $selectedChatInvestasi->umkm->nama_usaha ?? '']) }}" 
+                                    <a href="{{ route('dashboard', ['tab' => 'proposal', 'q' => $selectedChatInvestasi->umkm->nama_usaha ?? '']) }}"
                                        class="px-3 py-2 rounded-xl border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition">
                                         Profil UMKM
                                     </a>
@@ -980,18 +980,18 @@
                             <!-- Quick Chips Pilihan Pertanyaan -->
                             <div class="mt-3 flex flex-wrap items-center gap-1.5 text-[11px]">
                                 <span class="text-gray-400 text-[10px] font-bold">Cepat:</span>
-                                <button type="button" 
-                                        onclick="document.getElementById('input-pesan-investor').value = 'Halo, bagaimana perkembangan penjualan dan stok usaha minggu ini?';" 
+                                <button type="button"
+                                        onclick="document.getElementById('input-pesan-investor').value = 'Halo, bagaimana perkembangan penjualan dan stok usaha minggu ini?';"
                                         class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-teal-50 text-gray-600 hover:text-[#0F433C] transition">
                                     💡 Tanya progres penjualan
                                 </button>
-                                <button type="button" 
-                                        onclick="document.getElementById('input-pesan-investor').value = 'Apakah laporan keuangan dan pembagian dividen periode ini sudah siap dibagikan?';" 
+                                <button type="button"
+                                        onclick="document.getElementById('input-pesan-investor').value = 'Apakah laporan keuangan dan pembagian dividen periode ini sudah siap dibagikan?';"
                                         class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-teal-50 text-gray-600 hover:text-[#0F433C] transition">
                                     💰 Jadwal dividen
                                 </button>
-                                <button type="button" 
-                                        onclick="document.getElementById('input-pesan-investor').value = 'Saya siap menambah dukungan permodalan atau sewa ruko jika usaha Anda membutuhkan ekspansi.';" 
+                                <button type="button"
+                                        onclick="document.getElementById('input-pesan-investor').value = 'Saya siap menambah dukungan permodalan atau sewa ruko jika usaha Anda membutuhkan ekspansi.';"
                                         class="px-2.5 py-1 rounded-lg bg-gray-100 hover:bg-teal-50 text-gray-600 hover:text-[#0F433C] transition">
                                     🏢 Penawaran ekspansi
                                 </button>
@@ -999,13 +999,13 @@
 
                             <form action="{{ route('dashboard.investasi.pesan', $selectedChatInvestasi->id_investasi) }}" method="POST" class="mt-3 pt-3 border-t border-gray-100 flex items-center gap-2">
                                 @csrf
-                                <input type="text" 
+                                <input type="text"
                                        id="input-pesan-investor"
-                                       name="pesan" 
+                                       name="pesan"
                                        required
-                                       placeholder="Tulis pesan atau pertanyaan resmi untuk pengelola UMKM..." 
+                                       placeholder="Tulis pesan atau pertanyaan resmi untuk pengelola UMKM..."
                                        class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-xs focus:ring-2 focus:ring-[#0F433C] focus:border-transparent outline-none">
-                                <button type="submit" 
+                                <button type="submit"
                                         class="px-5 py-2.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5 shrink-0">
                                     <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4l19 8-19 8 3-8-3-8zm3 8h10"/>
@@ -1047,19 +1047,19 @@
                 </div>
 
                 <!-- Kategori Buttons -->
-                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'semua']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'semua']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ (request('kategori') === 'semua' || !request('kategori')) ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Semua
                 </a>
-                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Makanan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Makanan']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ request('kategori') === 'Makanan' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Kuliner & Makanan
                 </a>
-                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Fashion']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Fashion']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ request('kategori') === 'Fashion' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Fashion & Busana
                 </a>
-                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Jasa']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal', 'kategori' => 'Jasa']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ request('kategori') === 'Jasa' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Jasa
                 </a>
@@ -1116,7 +1116,7 @@
                                         <span class="text-amber-500">★</span>
                                         <span>{{ number_format($umkm->rating_rata_rata, 1) }}</span>
                                     </span>
-                                    <button type="button" 
+                                    <button type="button"
                                             onclick="openReviewsModal('{{ $umkm->id_umkm }}', '{{ addslashes($umkm->nama_usaha) }}', '{{ number_format($umkm->rating_rata_rata, 1) }}', '{{ $umkm->total_ulasan }}')"
                                             class="text-[11px] font-bold text-[#0F433C] hover:underline flex items-center gap-1">
                                         <span>{{ $umkm->total_ulasan }} Ulasan Investor</span> &rarr;
@@ -1214,7 +1214,7 @@
                                 $propPath = $umkm->dokumen_proposal ?? $umkm->file_proposal;
                             @endphp
                             <div class="mt-3">
-                                <a href="{{ asset('storage/' . $propPath) }}" target="_blank" 
+                                <a href="{{ asset('storage/' . $propPath) }}" target="_blank"
                                    class="flex items-center gap-2 p-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200 text-xs font-bold transition">
                                     <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -1268,7 +1268,7 @@
                     👥
                 </div>
                 <div>
-                    <h3 class="text-base font-black text-[#1A202C]">Forum Investor Daya UMKM</h3>
+                    <h3 class="text-base font-black text-[#1A202C]">Forum Investor Titik UMKM</h3>
                     <p class="text-xs text-gray-500">Beranggotakan 240+ mitra investor dan kurator bisnis.</p>
                 </div>
             </div>
@@ -1296,7 +1296,7 @@
             </div>
 
             <div class="flex items-center gap-2.5 self-start sm:self-auto">
-                <button onclick="window.print()" 
+                <button onclick="window.print()"
                         class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
@@ -1304,7 +1304,7 @@
                     <span>Cetak Rekap</span>
                 </button>
 
-                <button onclick="openBankModal()" 
+                <button onclick="openBankModal()"
                         class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
@@ -1422,7 +1422,7 @@
                 </div>
 
                 <div class="self-start md:self-center shrink-0">
-                    <button onclick="openBankModal()" 
+                    <button onclick="openBankModal()"
                             class="px-5 py-3 rounded-2xl text-xs font-black shadow-md transition flex items-center gap-2 hover:opacity-90"
                             style="background-color: #ffffff !important; color: #0F433C !important;">
                         <svg class="w-4 h-4" fill="none" stroke="#0F433C" viewBox="0 0 24 24">
@@ -1514,7 +1514,7 @@
                                     </p>
                                     @if(isset($realInvestasiCount) && $realInvestasiCount === 0)
                                         <div class="mt-4">
-                                            <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                                            <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                                                class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0F433C] text-white text-xs font-bold hover:bg-[#19584F] transition shadow-sm">
                                                 <span>Mulai Danai UMKM Pertama</span> &rarr;
                                             </a>
@@ -1542,7 +1542,7 @@
                 </p>
             </div>
 
-            <button onclick="openRekomendasiRukoModal()" 
+            <button onclick="openRekomendasiRukoModal()"
                     class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
                 <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
@@ -1585,15 +1585,15 @@
                 </div>
 
                 <!-- Filter Status -->
-                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'semua']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'semua']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($rukoFilter ?? 'semua') === 'semua' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Semua
                 </a>
-                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'tersedia']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'tersedia']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($rukoFilter ?? '') === 'tersedia' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Tersedia
                 </a>
-                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'tersewa']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'tersewa']) }}"
                    class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($rukoFilter ?? '') === 'tersewa' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                     Tersewa
                 </a>
@@ -1727,7 +1727,7 @@
             <div class="flex items-center justify-between pb-3 border-b border-gray-100">
                 <div>
                     <h2 class="text-base font-black text-[#1A202C]">Rekomendasi Ruko yang Pernah Saya Ajukan</h2>
-                    <p class="text-xs text-gray-500 font-medium">Usulan ruko strategis yang Anda kirimkan untuk dikurasi tim DAYA UMKM.</p>
+                    <p class="text-xs text-gray-500 font-medium">Usulan ruko strategis yang Anda kirimkan untuk dikurasi tim Titik UMKM.</p>
                 </div>
                 <button onclick="openRekomendasiRukoModal()" class="text-xs font-bold text-[#0F433C] hover:underline">
                     + Ajukan Lokasi Baru
@@ -1836,7 +1836,7 @@
                 </p>
             </div>
 
-            <button onclick="window.print()" 
+            <button onclick="window.print()"
                     class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
                 <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
@@ -1846,10 +1846,10 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             <!-- PANEL KIRI: PARAMETER INPUT SIMULASI & SKENARIO (7 COLS) -->
             <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm space-y-6">
-                
+
                 <!-- FITUR TAMBAHAN 1: PILIHAN SKENARIO KINERJA BISNIS -->
                 <div class="p-4 rounded-2xl bg-teal-50/70 border border-teal-200/80 space-y-2.5">
                     <div class="flex items-center justify-between">
@@ -1892,7 +1892,7 @@
                     <input type="range" id="input-range-nominal" min="1000000" max="100000000" step="500000" value="10000000"
                            class="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#0F433C]"
                            oninput="onCalcChange()">
-                    
+
                     <div class="flex flex-wrap gap-2 mt-3">
                         <button type="button" onclick="setNominalPreset(5000000)" class="px-3 py-1 rounded-xl text-xs font-bold border border-gray-200 hover:bg-gray-100 text-gray-700 transition">Rp 5 Jt</button>
                         <button type="button" onclick="setNominalPreset(10000000)" class="px-3 py-1 rounded-xl text-xs font-bold border border-[#0F433C] bg-teal-50 text-[#0F433C] transition">Rp 10 Jt</button>
@@ -1911,7 +1911,7 @@
                     <input type="range" id="input-range-persen" min="5" max="35" step="0.5" value="15"
                            class="w-full h-2.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                            oninput="onCalcChange()">
-                    
+
                     <div class="flex flex-wrap gap-2 mt-3">
                         <button type="button" onclick="setPersenPreset(12)" class="px-3 py-1 rounded-xl text-xs font-bold border border-gray-200 hover:bg-gray-100 text-gray-700 transition">12%</button>
                         <button type="button" onclick="setPersenPreset(15)" class="px-3 py-1 rounded-xl text-xs font-bold border border-emerald-600 bg-emerald-50 text-emerald-800 transition">15%</button>
@@ -2000,7 +2000,7 @@
 
                     <!-- Tombol Aksi Langsung -->
                     <div class="mt-6 space-y-2.5">
-                        <a href="#seksi-smart-match" 
+                        <a href="#seksi-smart-match"
                            class="w-full py-3.5 px-4 rounded-2xl font-black text-xs text-center transition shadow-lg flex items-center justify-center gap-2"
                            style="background-color: #F1C40F !important; color: #0F433C !important;">
                             <span>Lihat Proposal Sesuai Simulasi Ini</span>
@@ -2025,10 +2025,10 @@
                         <span>Perbandingan Potensi Imbal Hasil</span>
                     </h4>
 
-                    <!-- DAYA UMKM -->
+                    <!-- Titik UMKM -->
                     <div>
                         <div class="flex justify-between font-bold mb-1">
-                            <span class="text-[#0F433C]">DAYA UMKM (Bagi Hasil Sektor Riil)</span>
+                            <span class="text-[#0F433C]">Titik UMKM (Bagi Hasil Sektor Riil)</span>
                             <span class="text-emerald-700 font-black">15% - 20% p.a.</span>
                         </div>
                         <div class="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
@@ -2059,7 +2059,7 @@
                     </div>
 
                     <p class="text-[10px] text-gray-400 italic pt-2">
-                        *Catatan: Imbal hasil DAYA UMKM berbasis bagi hasil kinerja produktif riil dan bukan bunga perbankan.
+                        *Catatan: Imbal hasil Titik UMKM berbasis bagi hasil kinerja produktif riil dan bukan bunga perbankan.
                     </p>
                 </div>
             </div>
@@ -2317,7 +2317,7 @@
             </div>
             <div>
                 <h3 class="text-lg font-black text-[#1A202C]">Ajukan Rekomendasi Ruko Baru</h3>
-                <p class="text-xs text-gray-500">Usulkan lokasi ruko potensial di kota Anda ke tim DAYA UMKM</p>
+                <p class="text-xs text-gray-500">Usulkan lokasi ruko potensial di kota Anda ke tim Titik UMKM</p>
             </div>
         </div>
 
@@ -2503,18 +2503,18 @@
 
         <form id="form-review-investor" action="" method="POST" class="space-y-4">
             @csrf
-            
+
             <!-- Overall Star Rating (1 - 5) -->
             <div class="p-4 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-center space-y-2">
                 <label class="block text-xs font-black text-gray-800 uppercase tracking-wider">
                     Rating Keseluruhan Kemitraan *
                 </label>
                 <input type="hidden" id="input-review-rating" name="rating" value="5" required>
-                
+
                 <div class="flex justify-center items-center gap-2 py-1">
                     @for($s = 1; $s <= 5; $s++)
-                        <button type="button" 
-                                onclick="setStarRating({{ $s }})" 
+                        <button type="button"
+                                onclick="setStarRating({{ $s }})"
                                 id="star-btn-{{ $s }}"
                                 class="text-3xl text-amber-400 hover:scale-125 transition-transform focus:outline-none">
                             ★
@@ -2667,7 +2667,7 @@
         document.getElementById('reviews-list-modal-nama-usaha').innerText = 'Ulasan ' + namaUsaha;
         document.getElementById('reviews-list-modal-score').innerText = '★ ' + avgRating + ' / 5.0';
         document.getElementById('reviews-list-modal-count').innerText = totalReviews + ' Ulasan Investor Terverifikasi';
-        
+
         const tmpl = document.getElementById('reviews-tmpl-' + idUmkm);
         const container = document.getElementById('reviews-modal-body');
         if (tmpl && container) {
@@ -2845,7 +2845,7 @@
             if (cfBadge) {
                 cfBadge.innerText = totalPeriods + ' Periode (' + tenor + ' Bulan)';
             }
-            
+
             const monthsPerPeriod = Math.max(1, Math.round(12 / freqPerYear));
             let runningTotal = 0;
             const singleDividen = totalBagiHasil / totalPeriods;
@@ -2859,7 +2859,7 @@
 
                 const tr = document.createElement('tr');
                 tr.className = isFinal ? 'bg-emerald-50/70 font-bold border-t-2 border-emerald-300' : 'hover:bg-gray-50/70 transition';
-                
+
                 tr.innerHTML = `
                     <td class="py-2.5 px-3 flex items-center gap-1.5">
                         <span class="w-5 h-5 rounded-full ${isFinal ? 'bg-emerald-700 text-white' : 'bg-gray-100 text-gray-700'} text-[10px] flex items-center justify-center font-bold">${p}</span>

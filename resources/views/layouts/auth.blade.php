@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Daya UMKM') - Solusi Permodalan dan Sewa Ruko</title>
+    <title>@yield('title', 'Titik UMKM') - Solusi Permodalan dan Sewa Ruko</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -111,7 +111,7 @@
     <!-- Header Publik (Tinggi 72px, fixed, transparan di hero, solid di konten) -->
     <header id="site-header" class="header-public fixed top-0 left-0 w-full z-50 h-[72px] sm:h-[76px] flex items-center transition-all duration-300 ease-in-out {{ $isFullBleed ? 'header-transparent' : 'header-scrolled' }}">
         <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 flex items-center justify-between">
-            
+
             <!-- 1. Logo Brand TIKUM -->
             <a href="{{ url('/') }}" class="flex items-center group rounded-[8px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#2D6B22]" aria-label="TIKUM - Titik UMKM">
                 <img src="{{ asset('images/TIKUM-Logo.png') }}" alt="TIKUM - Titik UMKM" class="h-10 sm:h-11 md:h-12 w-auto object-contain drop-shadow-sm transition-transform duration-200 group-hover:scale-[1.03]">
@@ -121,10 +121,10 @@
             <nav class="hidden lg:flex items-center gap-7 text-[14px] font-medium" aria-label="Utama">
                 <a href="{{ url('/') }}" id="nav-link-beranda" class="nav-item transition-all py-1 {{ request()->is('/') ? 'active text-[#2D6B22] font-semibold border-b-2 border-[#2D6B22]' : 'text-[#15241C] hover:text-[#2D6B22]' }}" {{ request()->is('/') ? 'aria-current="page"' : '' }} data-i18n="nav.beranda">Beranda</a>
                 <a href="{{ url('/#tentang-kami') }}" id="nav-link-tentang-kami" class="nav-item transition-all py-1 text-[#15241C] hover:text-[#2D6B22]" data-i18n="nav.tentang">Tentang kami</a>
-                
+
                 <!-- Dropdown Gabung -->
                 <div class="relative group" id="gabung-dropdown-wrapper">
-                    <button type="button" 
+                    <button type="button"
                             id="gabung-dropdown-btn"
                             class="nav-item inline-flex items-center gap-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#2D6B22] cursor-pointer py-1 text-[#15241C] hover:text-[#2D6B22] {{ request()->is('gabung*') ? 'active text-[#2D6B22] font-semibold border-b-2 border-[#2D6B22]' : '' }}">
                         <span data-i18n="nav.gabung">Gabung</span>
@@ -132,11 +132,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
-                    
+
                     <!-- Dropdown Box -->
                     <div class="absolute left-0 top-full pt-3 w-64 hidden group-hover:block hover:block z-50">
                         <div class="bg-[#ffffff] rounded-[12px] border border-[#C8BFB0]/50 p-2 text-left space-y-1 shadow-lg">
-                            <a href="{{ route('gabung.investor') }}" 
+                            <a href="{{ route('gabung.investor') }}"
                                class="block p-3 rounded-[8px] hover:bg-[#F7E8C8]/40 transition group/item">
                                 <span class="font-semibold text-[14px] text-[#2D6B22] block" data-i18n="nav.gabung_investor_title">
                                     Daftar mitra investor
@@ -148,7 +148,7 @@
 
                             <div class="h-px bg-[#C8BFB0]/40 my-1"></div>
 
-                            <a href="{{ route('gabung.umkm') }}" 
+                            <a href="{{ route('gabung.umkm') }}"
                                class="block p-3 rounded-[8px] hover:bg-[#F7E8C8]/40 transition group/item">
                                 <span class="font-semibold text-[14px] text-[#2D6B22] block" data-i18n="nav.gabung_umkm_title">
                                     Daftar pelaku UMKM
@@ -159,7 +159,7 @@
                             </a>
                             <div class="h-px bg-[#C8BFB0]/40 my-1"></div>
 
-                            <a href="{{ route('ruko.usulkan.public') }}" 
+                            <a href="{{ route('ruko.usulkan.public') }}"
                                class="block p-3 rounded-[8px] hover:bg-teal-50 transition group/item">
                                 <span class="font-semibold text-[14px] text-[#0F433C] block" data-i18n="nav.usulkan_ruko">
                                     Ajukan Lokasi Ruko
@@ -202,8 +202,8 @@
                 @endauth
 
                 <!-- Tombol Menu Mobile -->
-                <button type="button" 
-                        id="mobile-menu-btn" 
+                <button type="button"
+                        id="mobile-menu-btn"
                         class="lg:hidden p-2 rounded-[8px] text-[#15241C] hover:bg-[#4A9A2E]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#2D6B22]"
                         aria-label="Menu navigasi">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true">
@@ -217,7 +217,7 @@
         <div id="mobile-menu" class="hidden lg:hidden absolute top-[80px] left-0 w-full bg-[#ffffff] border-b border-[#C8BFB0]/50 px-5 py-4 space-y-3 text-[15px] font-medium text-[#15241C] shadow-sm">
             <a href="{{ url('/') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.beranda">Beranda</a>
             <a href="{{ url('/#tentang-kami') }}" class="block py-1.5 hover:text-[#2D6B22]" data-i18n="nav.tentang">Tentang kami</a>
-            
+
             <div class="pt-2 pb-2 border-t border-[#C8BFB0]/40">
                 <span class="text-[13px] font-semibold text-[#3E5445] block mb-1" data-i18n="nav.gabung_label">Gabung:</span>
                 <div class="pl-2 space-y-1">
@@ -246,10 +246,10 @@
         @if ($isAuthPage)
             <!-- Background Visual Miniatur 3D (Blur 20%) untuk Halaman Masuk & Daftar -->
             <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden select-none">
-                <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}" 
-                     alt="Latar Belakang Daya UMKM" 
+                <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}"
+                     alt="Latar Belakang Titik UMKM"
                      class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-                
+
                 <!-- Soft Tint Overlay agar kontras kartu selalu tajam -->
                 <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
@@ -289,7 +289,7 @@
     <script>
         (function() {
             const header = document.getElementById('site-header');
-            
+
             // 1. Scroll header state (transparan di posisi teratas, frosted glass saat scroll)
             const onHeaderScroll = () => {
                 if (!header) return;
@@ -465,7 +465,7 @@
                     'hero.btn_investor': 'Daftar jadi Investor',
                     'hero.btn_umkm': 'Daftar jadi UMKM',
                     'about.title': 'Tentang kami',
-                    'about.p1': 'Daya UMKM hadir untuk menjembatani kesenjangan akses permodalan bagi pemilik usaha kecil dan menengah di Indonesia. Melalui sistem verifikasi berlapis dan audit aktivitas yang terpercaya, kami memastikan setiap dana investasi tersalurkan secara optimal dan memberi manfaat timbal balik yang sehat bagi investor maupun pengusaha.',
+                    'about.p1': 'Titik UMKM hadir untuk menjembatani kesenjangan akses permodalan bagi pemilik usaha kecil dan menengah di Indonesia. Melalui sistem verifikasi berlapis dan audit aktivitas yang terpercaya, kami memastikan setiap dana investasi tersalurkan secara optimal dan memberi manfaat timbal balik yang sehat bagi investor maupun pengusaha.',
                     'about.p2': 'Keamanan data dan transaksi diprioritaskan lewat mekanisme autentikasi terverifikasi dan pembagian hasil usaha yang tercatat rapi di sistem.',
                     'about.btn_tutorial': 'Pelajari Alur Kerja',
                     'about.btn_help': 'Pusat Bantuan',
@@ -484,13 +484,13 @@
                     'help.desc': 'Butuh panduan mengenai tata cara pendaftaran, syarat pengajuan sewa ruko, atau mekanisme bagi hasil? Tim dukungan kami siap melayani Anda.',
                     'help.btn': 'Kirim pesan ke tim bantuan',
                     'contact.title': 'Kontak resmi',
-                    'contact.desc': 'Hubungi sekretariat operasional Daya UMKM untuk keperluan kemitraan ruko, konsultasi kelembagaan, dan verifikasi profil usaha.',
+                    'contact.desc': 'Hubungi sekretariat operasional Titik UMKM untuk keperluan kemitraan ruko, konsultasi kelembagaan, dan verifikasi profil usaha.',
                     'contact.hours_label': 'Jam operasional:',
                     'contact.hours_val': 'Senin – Jumat, 08:00 – 17.00 WIB',
 
                     // Auth - Login
                     'auth.login_title': 'Masuk ke akun',
-                    'auth.login_subtitle': 'Gunakan kredensial akun Daya UMKM Anda untuk melanjutkan.',
+                    'auth.login_subtitle': 'Gunakan kredensial akun Titik UMKM Anda untuk melanjutkan.',
                     'auth.google_login': 'Masuk dengan Google',
                     'auth.or_email': 'atau masuk dengan email',
                     'auth.email_label': 'Alamat email',
@@ -507,7 +507,7 @@
                     'auth.register_title': 'Daftar akun baru',
                     'auth.register_title_investor': 'Daftar sebagai mitra investor',
                     'auth.register_title_umkm': 'Daftar sebagai pelaku UMKM',
-                    'auth.register_subtitle': 'Pilih peran dan lengkapi data untuk mulai bergabung di Daya UMKM.',
+                    'auth.register_subtitle': 'Pilih peran dan lengkapi data untuk mulai bergabung di Titik UMKM.',
                     'auth.register_subtitle_investor': 'Salurkan permodalan produktif dan pantau bagi hasil secara berkala.',
                     'auth.register_subtitle_umkm': 'Dapatkan akses modal usaha dan direktori sewa ruko strategis.',
                     'auth.google_register': 'Daftar dengan Google',
@@ -528,7 +528,7 @@
                     'auth.pwd_req_num': 'Mengandung angka (0-9)',
                     'auth.pwd_req_spec': 'Karakter khusus (!@#$%)',
                     'auth.otp_info_card': 'Kode verifikasi OTP 6-digit akan dikirimkan ke alamat email terdaftar untuk aktivasi akun resmi Anda.',
-                    'auth.terms_agreement': 'Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi platform Daya UMKM.',
+                    'auth.terms_agreement': 'Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi platform Titik UMKM.',
                     'auth.register_btn': 'Daftar dan kirim kode OTP',
                     'auth.have_account': 'Sudah memiliki akun?',
                     'auth.login_now': 'Masuk sekarang',
@@ -566,11 +566,11 @@
                     // Gabung - Shared & Investor
                     'gabung.badge_investor': 'Ekosistem Mitra Investor',
                     'gabung.inv_hero_title': 'Kemitraan permodalan bagi investor produktif',
-                    'gabung.inv_hero_desc': 'Salurkan permodalan langsung kepada pelaku UMKM terverifikasi di ekosistem Daya UMKM dengan imbal hasil terukur, berkala, dan transparan.',
+                    'gabung.inv_hero_desc': 'Salurkan permodalan langsung kepada pelaku UMKM terverifikasi di ekosistem Titik UMKM dengan imbal hasil terukur, berkala, dan transparan.',
                     'gabung.inv_btn_register': 'Daftar sebagai investor',
                     'gabung.inv_btn_learn': 'Pelajari manfaat',
                     'gabung.inv_panel_title': 'Karakteristik portofolio kemitraan',
-                    'gabung.inv_panel_sub': 'Standar tata kelola investasi di Daya UMKM',
+                    'gabung.inv_panel_sub': 'Standar tata kelola investasi di Titik UMKM',
                     'gabung.inv_metric1_label': 'Estimasi bagi hasil',
                     'gabung.inv_metric1_sub': 'Per tahun (proyeksian)',
                     'gabung.inv_metric2_label': 'Periode bagi hasil',
@@ -602,7 +602,7 @@
                     'gabung.inv_step4_title': 'Terima bagi hasil',
                     'gabung.inv_step4_desc': 'Pantau kinerja usaha dari dashboard dan terima pembagian hasil berkala sesuai perjanjian.',
                     'gabung.inv_cta_title': 'Mulai kemitraan investasi Anda sekarang',
-                    'gabung.inv_cta_desc': 'Dukung pertumbuhan pelaku usaha lokal dan nikmati bagi hasil terukur bersama ekosistem terpercaya Daya UMKM.',
+                    'gabung.inv_cta_desc': 'Dukung pertumbuhan pelaku usaha lokal dan nikmati bagi hasil terukur bersama ekosistem terpercaya Titik UMKM.',
 
                     // Gabung - UMKM
                     'gabung.badge_umkm': 'Ekosistem Pelaku UMKM',
@@ -619,7 +619,7 @@
                     'gabung.umkm_metric2_val': 'Strategis',
                     'gabung.umkm_metric2_sub': 'Pusat keramaian',
                     'gabung.umkm_panel_footer': 'Tumbuh bersama jejaring investor terpercaya dan fasilitas sewa komersial dengan tata kelola jelas.',
-                    'gabung.umkm_advantages_title': 'Keunggulan bergabung di Daya UMKM',
+                    'gabung.umkm_advantages_title': 'Keunggulan bergabung di Titik UMKM',
                     'gabung.umkm_advantages_desc': 'Dukungan fasilitas menyeluruh dari permodalan usaha hingga kemudahan sewa tempat berdagang.',
                     'gabung.umkm_card1_title': 'Akses modal produktif',
                     'gabung.umkm_card1_desc': 'Pendanaan dari investor terverifikasi dengan mekanisme bagi hasil murni yang ramah bagi arus kas usaha.',
@@ -669,7 +669,7 @@
                     'hero.btn_investor': 'Join as Investor',
                     'hero.btn_umkm': 'Join as MSME',
                     'about.title': 'About Us',
-                    'about.p1': 'Daya UMKM bridges the capital access gap for small and medium-sized business owners across Indonesia. Through multi-layered verification and trusted activity audits, we ensure every investment fund is channeled optimally, providing healthy mutual benefits for both investors and entrepreneurs.',
+                    'about.p1': 'Titik UMKM bridges the capital access gap for small and medium-sized business owners across Indonesia. Through multi-layered verification and trusted activity audits, we ensure every investment fund is channeled optimally, providing healthy mutual benefits for both investors and entrepreneurs.',
                     'about.p2': 'Data and transaction security is prioritized through verified authentication mechanisms and transparent profit-sharing recorded neatly in the system.',
                     'about.btn_tutorial': 'How It Works',
                     'about.btn_help': 'Support Center',
@@ -688,13 +688,13 @@
                     'help.desc': 'Need guidance on registration procedures, shop rental requirements, or profit-sharing mechanisms? Our dedicated support team is ready to assist you.',
                     'help.btn': 'Send message to support team',
                     'contact.title': 'Official Contact',
-                    'contact.desc': 'Contact the Daya UMKM operational secretariat for shophouse partnerships, institutional consultations, and business profile verifications.',
+                    'contact.desc': 'Contact the Titik UMKM operational secretariat for shophouse partnerships, institutional consultations, and business profile verifications.',
                     'contact.hours_label': 'Business hours:',
                     'contact.hours_val': 'Monday – Friday, 08:00 – 17:00 WIB',
 
                     // Auth - Login
                     'auth.login_title': 'Sign in to account',
-                    'auth.login_subtitle': 'Use your Daya UMKM account credentials to continue.',
+                    'auth.login_subtitle': 'Use your Titik UMKM account credentials to continue.',
                     'auth.google_login': 'Sign in with Google',
                     'auth.or_email': 'or sign in with email',
                     'auth.email_label': 'Email address',
@@ -711,7 +711,7 @@
                     'auth.register_title': 'Register new account',
                     'auth.register_title_investor': 'Register as investor partner',
                     'auth.register_title_umkm': 'Register as MSME entrepreneur',
-                    'auth.register_subtitle': 'Choose your role and complete your details to join Daya UMKM.',
+                    'auth.register_subtitle': 'Choose your role and complete your details to join Titik UMKM.',
                     'auth.register_subtitle_investor': 'Channel capital directly and monitor returns periodically.',
                     'auth.register_subtitle_umkm': 'Access business capital and strategic shophouse rental listings.',
                     'auth.google_register': 'Sign up with Google',
@@ -732,7 +732,7 @@
                     'auth.pwd_req_num': 'Contains numbers (0-9)',
                     'auth.pwd_req_spec': 'Special characters (!@#$%)',
                     'auth.otp_info_card': 'A 6-digit OTP verification code will be sent to your registered email for account activation.',
-                    'auth.terms_agreement': 'I agree to the Terms & Conditions and Privacy Policy of the Daya UMKM platform.',
+                    'auth.terms_agreement': 'I agree to the Terms & Conditions and Privacy Policy of the Titik UMKM platform.',
                     'auth.register_btn': 'Register and send OTP code',
                     'auth.have_account': 'Already have an account?',
                     'auth.login_now': 'Sign in here',
@@ -770,11 +770,11 @@
                     // Gabung - Shared & Investor
                     'gabung.badge_investor': 'Investor Partner Ecosystem',
                     'gabung.inv_hero_title': 'Productive capital partnerships for investors',
-                    'gabung.inv_hero_desc': 'Channel capital directly to verified MSMEs in the Daya UMKM ecosystem with measurable, periodic, and transparent returns.',
+                    'gabung.inv_hero_desc': 'Channel capital directly to verified MSMEs in the Titik UMKM ecosystem with measurable, periodic, and transparent returns.',
                     'gabung.inv_btn_register': 'Register as an investor',
                     'gabung.inv_btn_learn': 'Learn benefits',
                     'gabung.inv_panel_title': 'Partnership portfolio characteristics',
-                    'gabung.inv_panel_sub': 'Investment governance standards at Daya UMKM',
+                    'gabung.inv_panel_sub': 'Investment governance standards at Titik UMKM',
                     'gabung.inv_metric1_label': 'Estimated returns',
                     'gabung.inv_metric1_sub': 'Per annum (projected)',
                     'gabung.inv_metric2_label': 'Return frequency',
@@ -806,7 +806,7 @@
                     'gabung.inv_step4_title': 'Receive profit shares',
                     'gabung.inv_step4_desc': 'Monitor business performance on the dashboard and receive periodic profit shares per agreement.',
                     'gabung.inv_cta_title': 'Start your investment partnership now',
-                    'gabung.inv_cta_desc': "Support the growth of local entrepreneurs and enjoy measurable returns with Daya UMKM's trusted ecosystem.",
+                    'gabung.inv_cta_desc': "Support the growth of local entrepreneurs and enjoy measurable returns with Titik UMKM's trusted ecosystem.",
 
                     // Gabung - UMKM
                     'gabung.badge_umkm': 'MSME Entrepreneur Ecosystem',
@@ -823,7 +823,7 @@
                     'gabung.umkm_metric2_val': 'Strategic',
                     'gabung.umkm_metric2_sub': 'High-traffic hubs',
                     'gabung.umkm_panel_footer': 'Grow alongside a trusted investor network and commercial rental facilities with clear governance.',
-                    'gabung.umkm_advantages_title': 'Advantages of joining Daya UMKM',
+                    'gabung.umkm_advantages_title': 'Advantages of joining Titik UMKM',
                     'gabung.umkm_advantages_desc': 'Full support from business capital access to convenient commercial trading spaces.',
                     'gabung.umkm_card1_title': 'Productive capital access',
                     'gabung.umkm_card1_desc': 'Funding from verified investors with pure profit-sharing models friendly to business cash flow.',

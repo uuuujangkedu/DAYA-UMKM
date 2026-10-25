@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Formulir Pendaftaran UMKM - Daya UMKM')
+@section('title', 'Formulir Pendaftaran UMKM - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -9,11 +9,11 @@
     <div class="flex items-center justify-between flex-wrap gap-4 bg-white p-3 rounded-[12px] border border-[#e2e1d8]">
         <span class="text-[13px] font-semibold text-[#4b5551] px-2">Pilih jenis pendaftaran:</span>
         <div class="flex items-center gap-2">
-            <a href="{{ route('register.umkm') }}" 
+            <a href="{{ route('register.umkm') }}"
                class="px-4 py-2 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white flex items-center gap-2 transition">
                 <span>Pelaku UMKM</span>
             </a>
-            <a href="{{ route('register.investor') }}" 
+            <a href="{{ route('register.investor') }}"
                class="px-4 py-2 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:text-[#0b5a4a] hover:bg-[#d8ebe5] transition border border-[#e2e1d8] flex items-center gap-2">
                 <span>Investor</span>
             </a>
@@ -27,7 +27,7 @@
                 Formulir pendaftaran UMKM
             </h1>
             <p class="text-[14px] text-[#4b5551] mt-1">
-                Lengkapi data diri, profil usaha, dan preferensi lokasi ruko untuk diverifikasi oleh tim Daya UMKM.
+                Lengkapi data diri, profil usaha, dan preferensi lokasi ruko untuk diverifikasi oleh tim Titik UMKM.
             </p>
         </div>
 
@@ -92,12 +92,12 @@
                 <label for="nama" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nama lengkap pemilik / pengelola usaha <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nama" 
-                       name="nama" 
-                       value="{{ old('nama') }}" 
+                <input type="text"
+                       id="nama"
+                       name="nama"
+                       value="{{ old('nama') }}"
                        required
-                       placeholder="Contoh: Raka Wibian" 
+                       placeholder="Contoh: Raka Wibian"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
@@ -106,17 +106,17 @@
                 <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nomor WhatsApp <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nomor_telepon" 
-                       name="nomor_telepon" 
-                       value="{{ old('nomor_telepon') }}" 
+                <input type="text"
+                       id="nomor_telepon"
+                       name="nomor_telepon"
+                       value="{{ old('nomor_telepon') }}"
                        required
-                       placeholder="Contoh: 081234567890" 
+                       placeholder="Contoh: 081234567890"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
             <!-- Wilayah Domisili Usaha -->
-            <x-wilayah-domisili 
+            <x-wilayah-domisili
                 label="Wilayah domisili usaha"
                 :provinsi="old('provinsi')"
                 :kota="old('kota')"
@@ -135,12 +135,12 @@
                     <label for="email" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Alamat email akun <span class="text-red-500">*</span>
                     </label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           value="{{ old('email') }}" 
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           value="{{ old('email') }}"
                            required
-                           placeholder="usaha@email.com (Digunakan untuk masuk dan menerima OTP)" 
+                           placeholder="usaha@email.com (Digunakan untuk masuk dan menerima OTP)"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
@@ -149,11 +149,11 @@
                         <label for="password" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Kata sandi akun <span class="text-red-500">*</span>
                         </label>
-                        <input type="password" 
-                               id="password" 
-                               name="password" 
+                        <input type="password"
+                               id="password"
+                               name="password"
                                required
-                               placeholder="Minimal 8 karakter" 
+                               placeholder="Minimal 8 karakter"
                                class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
 
@@ -161,11 +161,11 @@
                         <label for="password_confirmation" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                             Konfirmasi kata sandi <span class="text-red-500">*</span>
                         </label>
-                        <input type="password" 
-                               id="password_confirmation" 
-                               name="password_confirmation" 
+                        <input type="password"
+                               id="password_confirmation"
+                               name="password_confirmation"
                                required
-                               placeholder="Ulangi kata sandi Anda" 
+                               placeholder="Ulangi kata sandi Anda"
                                class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                     </div>
                 </div>
@@ -184,12 +184,12 @@
                 <label for="nama_usaha" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nama usaha <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nama_usaha" 
-                       name="nama_usaha" 
-                       value="{{ old('nama_usaha') }}" 
+                <input type="text"
+                       id="nama_usaha"
+                       name="nama_usaha"
+                       value="{{ old('nama_usaha') }}"
                        required
-                       placeholder="Contoh: Kopi Muria Sejahtera" 
+                       placeholder="Contoh: Kopi Muria Sejahtera"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
@@ -199,8 +199,8 @@
                     <label for="kategori_usaha" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Kategori usaha <span class="text-red-500">*</span>
                     </label>
-                    <select id="kategori_usaha" 
-                            name="kategori_usaha" 
+                    <select id="kategori_usaha"
+                            name="kategori_usaha"
                             required
                             class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none cursor-pointer">
                         <option value="">Pilih kategori usaha</option>
@@ -218,13 +218,13 @@
                         Foto produk / banner usaha
                     </label>
                     <div class="relative flex items-center">
-                        <input type="file" 
-                               id="foto_produk" 
-                               name="foto_produk" 
+                        <input type="file"
+                               id="foto_produk"
+                               name="foto_produk"
                                accept="image/*"
-                               class="hidden" 
+                               class="hidden"
                                onchange="updateFileName(this, 'foto_produk_label')">
-                        <label for="foto_produk" 
+                        <label for="foto_produk"
                                id="foto_produk_label"
                                class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                             <span>Pilih file foto</span>
@@ -240,9 +240,9 @@
                     <label for="deskripsi" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Deskripsi singkat usaha
                     </label>
-                    <textarea id="deskripsi" 
-                              name="deskripsi" 
-                              rows="3" 
+                    <textarea id="deskripsi"
+                              name="deskripsi"
+                              rows="3"
                               placeholder="Jelaskan jenis produk, keunikan usaha, dan target pasar Anda..."
                               class="w-full px-3.5 py-3 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none min-h-[96px] resize-y">{{ old('deskripsi') }}</textarea>
                 </div>
@@ -257,13 +257,13 @@
                         </a>
                     </div>
                     <div class="relative flex items-center">
-                        <input type="file" 
-                               id="file_proposal" 
-                               name="file_proposal" 
+                        <input type="file"
+                               id="file_proposal"
+                               name="file_proposal"
                                accept=".pdf,.doc,.docx,.zip"
-                               class="hidden" 
+                               class="hidden"
                                onchange="updateFileName(this, 'file_proposal_label')">
-                        <label for="file_proposal" 
+                        <label for="file_proposal"
                                id="file_proposal_label"
                                class="w-full h-11 px-3.5 bg-[#f7f6f1] hover:bg-[#d8ebe5] text-[#0b5a4a] border border-dashed border-[#0b5a4a] rounded-[6px] text-[13px] font-medium text-center cursor-pointer transition flex items-center justify-center gap-2">
                             <span>Pilih file dokumen</span>
@@ -289,10 +289,10 @@
                 <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" 
-                       id="ruko-search" 
-                       onkeyup="filterRukoCards()" 
-                       placeholder="Telusuri ruko berdasarkan nama atau lokasi..." 
+                <input type="text"
+                       id="ruko-search"
+                       onkeyup="filterRukoCards()"
+                       placeholder="Telusuri ruko berdasarkan nama atau lokasi..."
                        class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
@@ -300,16 +300,16 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1" id="ruko-grid">
                 @forelse ($rukos as $index => $ruko)
                     <label class="ruko-card cursor-pointer block group">
-                        <input type="radio" 
-                               name="id_ruko" 
-                               value="{{ $ruko->id_ruko }}" 
+                        <input type="radio"
+                               name="id_ruko"
+                               value="{{ $ruko->id_ruko }}"
                                class="hidden peer"
                                {{ old('id_ruko') == $ruko->id_ruko ? 'checked' : '' }}>
-                        
+
                         <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] bg-white p-3 transition flex flex-col h-full shadow-2xs hover:border-[#0b5a4a] hover:shadow-sm">
                             <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
-                                <img src="{{ $ruko->foto_url }}" 
-                                     alt="{{ $ruko->nama_ruko }}" 
+                                <img src="{{ $ruko->foto_url }}"
+                                     alt="{{ $ruko->nama_ruko }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                      loading="lazy">
                                 <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
@@ -342,7 +342,7 @@
             </button>
 
             <div class="text-center text-[14px] text-[#4b5551]">
-                Sudah memiliki akun Daya UMKM? 
+                Sudah memiliki akun Titik UMKM?
                 <a href="{{ route('login') }}" class="font-semibold text-[#0b5a4a] hover:underline ml-1">Masuk di sini</a>
             </div>
         </div>

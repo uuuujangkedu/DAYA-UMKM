@@ -1,11 +1,11 @@
 @extends('layouts.auth')
 
-@section('title', 'Dashboard - Daya UMKM')
+@section('title', 'Dashboard - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 my-8">
     <div class="bg-white rounded-[12px] border border-[#e2e1d8] p-6 sm:p-8 space-y-6">
-        
+
         <!-- Welcome Banner -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-[#e2e1d8] gap-4">
             <div class="flex items-center gap-4">
@@ -70,7 +70,7 @@
 
         <!-- Banner Info Ekosistem -->
         <div class="p-4 bg-[#d8ebe5]/60 border border-[#b2d5cc] rounded-[6px] text-[13px] text-[#084539] leading-relaxed">
-            <h3 class="font-bold text-[14px] mb-0.5 text-[#084539]">Akun Anda telah aktif di ekosistem Daya UMKM</h3>
+            <h3 class="font-bold text-[14px] mb-0.5 text-[#084539]">Akun Anda telah aktif di ekosistem Titik UMKM</h3>
             <p>Anda dapat mulai menjelajahi penawaran UMKM produktif untuk didanai atau mendaftarkan ruko usaha Anda.</p>
         </div>
 

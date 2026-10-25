@@ -27,7 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('DAYA UMKM Admin')
+            ->brandName('Titik UMKM Admin')
             ->colors([
                 'primary' => '#075B50',
             ])

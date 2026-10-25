@@ -17,7 +17,7 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@dayaumkm.id'],
             [
                 'name' => 'Super Administrator',
-                'password' => Hash::make('Admin123!'),
+                'password' => Hash::make(env('SUPERADMIN_PASSWORD', 'Admin123!')),
                 'role' => 'super_admin',
                 'status' => 'aktif',
                 'email_verified_at' => now(),
@@ -25,7 +25,7 @@ class AdminUserSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'staf.admin@dayaumkm.id'],
+            ['email' => 'staf.admin@titik-umkm.id'],
             [
                 'name' => 'Staf Admin Operasional',
                 'phone_number' => '081234567891',

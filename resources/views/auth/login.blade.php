@@ -5,14 +5,14 @@
 @section('content')
 <div class="w-full max-w-md mx-auto my-6 px-4">
     <div class="bg-white/92 backdrop-blur-md rounded-3xl border border-[#C8BFB0]/70 p-7 sm:p-9 text-left space-y-6 shadow-[0_16px_40px_rgba(45,107,34,0.12)]">
-        
+
         <!-- Header -->
         <div class="space-y-1">
             <h1 class="text-[24px] font-bold text-[#15241C] leading-tight" data-i18n="auth.login_title">
                 Masuk ke akun
             </h1>
             <p class="text-[14px] text-[#3E5445]" data-i18n="auth.login_subtitle">
-                Gunakan kredensial akun Daya UMKM Anda untuk melanjutkan.
+                Gunakan kredensial akun Titik UMKM Anda untuk melanjutkan.
             </p>
         </div>
 
@@ -30,7 +30,7 @@
         @endif
 
         <!-- 1. Tombol Sign In With Google -->
-        <a href="{{ route('google.redirect') }}" 
+        <a href="{{ route('google.redirect') }}"
            class="w-full flex items-center justify-center gap-3 px-4 py-3 border border-[#C8BFB0]/80 hover:border-[#2D6B22] rounded-xl text-[14px] font-medium text-[#15241C] bg-white/90 hover:bg-white transition duration-150 shadow-sm">
             <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -60,11 +60,11 @@
                 <label for="email" class="block text-[14px] font-semibold text-[#15241C] mb-1.5" data-i18n="auth.email_label">
                     Alamat email
                 </label>
-                <input type="email" 
-                       name="email" 
-                       id="email" 
-                       value="{{ old('email') }}" 
-                       required 
+                <input type="email"
+                       name="email"
+                       id="email"
+                       value="{{ old('email') }}"
+                       required
                        placeholder="nama@email.com"
                        data-i18n-placeholder="auth.email_placeholder"
                        class="w-full px-3.5 py-2.5 bg-white border @error('email') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
@@ -84,15 +84,15 @@
                     </a>
                 </div>
                 <div class="relative">
-                    <input type="password" 
-                           name="password" 
-                           id="password" 
-                           required 
+                    <input type="password"
+                           name="password"
+                           id="password"
+                           required
                            placeholder="••••••••"
                            data-i18n-placeholder="auth.password_placeholder"
                            class="w-full px-3.5 pr-10 py-2.5 bg-white border @error('password') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
-                    <button type="button" 
-                            onclick="togglePasswordVisibility('password', 'eye-icon-login')" 
+                    <button type="button"
+                            onclick="togglePasswordVisibility('password', 'eye-icon-login')"
                             class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#3E5445] hover:text-[#2D6B22] transition"
                             aria-label="Lihat kata sandi">
                         <svg id="eye-icon-login" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
@@ -108,9 +108,9 @@
 
             <!-- Remember Me -->
             <div class="flex items-center">
-                <input id="remember" 
-                       name="remember" 
-                       type="checkbox" 
+                <input id="remember"
+                       name="remember"
+                       type="checkbox"
                        class="w-4 h-4 text-[#2D6B22] border-[#C8BFB0] rounded focus:ring-[#2D6B22]">
                 <label for="remember" class="ml-2 block text-[13px] text-[#3E5445]" data-i18n="auth.remember_me">
                     Ingat sesi saya

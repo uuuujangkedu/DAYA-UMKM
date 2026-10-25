@@ -205,7 +205,7 @@ class AuthController extends Controller
         }
 
         if ($user->status === 'ditangguhkan') {
-            return back()->with('error', 'Akun Anda sedang ditangguhkan. Hubungi admin DAYA UMKM.');
+            return back()->with('error', 'Akun Anda sedang ditangguhkan. Hubungi admin Titik UMKM.');
         }
 
         // Jika akun masih berstatus menunggu verifikasi awal, arahkan ke OTP pendaftaran

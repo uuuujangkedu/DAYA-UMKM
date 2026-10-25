@@ -5,10 +5,10 @@
 @section('content')
 <div class="w-full max-w-lg mx-auto my-6 px-4">
     <div class="bg-white/92 backdrop-blur-md rounded-3xl border border-[#C8BFB0]/70 p-7 sm:p-9 text-left space-y-6 shadow-[0_16px_40px_rgba(45,107,34,0.12)]">
-        
+
         <!-- Header -->
         <div class="space-y-1">
-            <h1 class="text-[24px] font-bold text-[#15241C] leading-tight" 
+            <h1 class="text-[24px] font-bold text-[#15241C] leading-tight"
                 @if (request('role') === 'investor')
                     data-i18n="auth.register_title_investor"
                 @elseif (request('role') === 'umkm')
@@ -37,7 +37,7 @@
                 @elseif (request('role') === 'umkm')
                     Dapatkan akses modal usaha dan direktori sewa ruko strategis.
                 @else
-                    Pilih peran dan lengkapi data untuk mulai bergabung di Daya UMKM.
+                    Pilih peran dan lengkapi data untuk mulai bergabung di Titik UMKM.
                 @endif
             </p>
         </div>
@@ -113,11 +113,11 @@
                 <label for="nama" class="block text-[14px] font-semibold text-[#15241C] mb-1.5" data-i18n="auth.name_label">
                     Nama lengkap
                 </label>
-                <input type="text" 
-                       name="nama" 
-                       id="nama" 
-                       value="{{ old('nama') }}" 
-                       required 
+                <input type="text"
+                       name="nama"
+                       id="nama"
+                       value="{{ old('nama') }}"
+                       required
                        placeholder="Nama lengkap Anda"
                        data-i18n-placeholder="auth.name_placeholder"
                        class="w-full px-3.5 py-2.5 bg-white border @error('nama') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
@@ -132,11 +132,11 @@
                     <label for="email" class="block text-[14px] font-semibold text-[#15241C] mb-1.5" data-i18n="auth.email_label">
                         Alamat email
                     </label>
-                    <input type="email" 
-                           name="email" 
-                           id="email" 
-                           value="{{ old('email') }}" 
-                           required 
+                    <input type="email"
+                           name="email"
+                           id="email"
+                           value="{{ old('email') }}"
+                           required
                            placeholder="nama@email.com"
                            data-i18n-placeholder="auth.email_placeholder"
                            class="w-full px-3.5 py-2.5 bg-white border @error('email') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
@@ -149,10 +149,10 @@
                     <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#15241C] mb-1.5" data-i18n="auth.phone_label">
                         Nomor WhatsApp / HP
                     </label>
-                    <input type="text" 
-                           name="nomor_telepon" 
-                           id="nomor_telepon" 
-                           value="{{ old('nomor_telepon') }}" 
+                    <input type="text"
+                           name="nomor_telepon"
+                           id="nomor_telepon"
+                           value="{{ old('nomor_telepon') }}"
                            placeholder="0812xxxxxxxx"
                            data-i18n-placeholder="auth.phone_placeholder"
                            class="w-full px-3.5 py-2.5 bg-white border @error('nomor_telepon') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
@@ -169,16 +169,16 @@
                         Kata sandi
                     </label>
                     <div class="relative">
-                        <input type="password" 
-                               name="password" 
-                               id="reg-password" 
-                               required 
+                        <input type="password"
+                               name="password"
+                               id="reg-password"
+                               required
                                placeholder="••••••••"
                                data-i18n-placeholder="auth.password_placeholder"
                                oninput="checkPasswordRequirements(this.value)"
                                class="w-full px-3.5 pr-10 py-2.5 bg-white border @error('password') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
-                        <button type="button" 
-                                onclick="togglePasswordVisibility('reg-password', 'eye-icon-reg-pwd')" 
+                        <button type="button"
+                                onclick="togglePasswordVisibility('reg-password', 'eye-icon-reg-pwd')"
                                 class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#3E5445] hover:text-[#2D6B22] transition"
                                 aria-label="Lihat kata sandi">
                             <svg id="eye-icon-reg-pwd" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">
@@ -197,15 +197,15 @@
                         Konfirmasi kata sandi
                     </label>
                     <div class="relative">
-                        <input type="password" 
-                               name="password_confirmation" 
-                               id="reg-confirm-password" 
-                               required 
+                        <input type="password"
+                               name="password_confirmation"
+                               id="reg-confirm-password"
+                               required
                                placeholder="••••••••"
                                data-i18n-placeholder="auth.password_placeholder"
                                class="w-full px-3.5 pr-10 py-2.5 bg-white border border-[#C8BFB0] rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
-                        <button type="button" 
-                                onclick="togglePasswordVisibility('reg-confirm-password', 'eye-icon-reg-confirm')" 
+                        <button type="button"
+                                onclick="togglePasswordVisibility('reg-confirm-password', 'eye-icon-reg-confirm')"
                                 class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#3E5445] hover:text-[#2D6B22] transition"
                                 aria-label="Lihat kata sandi konfirmasi">
                             <svg id="eye-icon-reg-confirm" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" aria-hidden="true">

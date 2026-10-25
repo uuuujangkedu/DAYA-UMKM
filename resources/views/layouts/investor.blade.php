@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Dashboard Mitra Investor') - DAYA UMKM</title>
+    <title>@yield('title', 'Dashboard Mitra Investor') - Titik UMKM</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -55,7 +55,7 @@
     <!-- SIDEBAR INVESTOR (Sesuai Gambar 3: Mockup Dashboard Investor) -->
     <aside id="sidebar-investor" class="fixed inset-y-0 left-0 z-40 w-72 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
            style="background-color: #0F433C !important; height: 100vh; min-height: 100vh;">
-        
+
         <div>
             <!-- Brand Logo TIKUM -->
             <div class="px-6 pt-6 pb-2">
@@ -91,7 +91,7 @@
             <!-- Navigation Links Investor (BERANDA, PORTOFOLIO SAYA, PROPOSAL LIST, LAPORAN KEUANGAN, KOMUNITAS) -->
             <nav class="mt-8 px-4 space-y-2.5">
                 <!-- 1. BERANDA -->
-                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? 'beranda') === 'beranda' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,7 +102,7 @@
                 </a>
 
                 <!-- 2. PORTOFOLIO SAYA (Fitur Baru Menu Portofolio) -->
-                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'portofolio' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'portofolio' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@
                 </a>
 
                 <!-- 2.5 OBROLAN KEMITRAAN (Tempat Chat & Diskusi Langsung Investor dengan UMKM) -->
-                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ in_array(($activeTab ?? ''), ['pesan', 'inbox']) ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ in_array(($activeTab ?? ''), ['pesan', 'inbox']) ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -134,7 +134,7 @@
                 </a>
 
                 <!-- 3. PROPOSAL LIST (Fitur Inti) -->
-                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'proposal' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'proposal' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,7 +150,7 @@
                 </a>
 
                 <!-- 4. KATALOG RUKO (Pilar Sewa Komersial UMKM) -->
-                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'ruko' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@
                 </a>
 
                 <!-- 5. LAPORAN KEUANGAN & DIVIDEN -->
-                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'keuangan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -172,7 +172,7 @@
                 </a>
 
                 <!-- 6. KALKULATOR SIMULASI INVESTASI -->
-                <a href="{{ route('dashboard', ['tab' => 'kalkulator']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'kalkulator']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'kalkulator' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'kalkulator' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,7 +183,7 @@
                 </a>
 
                 <!-- 7. KOMUNITAS -->
-                <a href="{{ route('dashboard', ['tab' => 'komunitas']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'komunitas']) }}"
                    class="group flex items-center justify-between px-4 py-3.5 rounded-2xl text-xs font-black tracking-wider uppercase transition-all duration-200 {{ ($activeTab ?? '') === 'komunitas' ? 'bg-[#20675D] text-white shadow-md' : 'text-teal-100/80 hover:bg-white/10 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'komunitas' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@
         <!-- Bagian Bawah: Tautan Web & Keluar -->
         <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0 bg-[#0F433C]">
             <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
-            <button type="button" 
+            <button type="button"
                     class="a11y-trigger w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold text-teal-200/90 hover:bg-white/10 hover:text-white transition cursor-pointer group text-left"
                     aria-label="Aksesibilitas & Disabilitas"
                     title="Buka menu aksesibilitas disabilitas">
@@ -232,7 +232,7 @@
 
     <!-- MAIN CONTENT AREA -->
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        
+
         <!-- Desktop Header Top Bar -->
         <header class="hidden md:flex bg-white border-b border-[#E8E6DF] px-8 py-4 items-center justify-between sticky top-0 z-20 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
             <div class="flex items-center gap-3">
@@ -264,7 +264,7 @@
                 </span>
 
                 <!-- Quick Action CTA -->
-                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
+                <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                    class="px-4 py-2 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5">
                     <svg class="w-3.5 h-3.5 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
@@ -292,7 +292,7 @@
                 @include('components.language-switcher', ['id' => 'mobile-lang'])
 
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
-                <button type="button" 
+                <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
                         aria-label="Aksesibilitas & Disabilitas"
                         title="Buka menu aksesibilitas disabilitas">
@@ -308,7 +308,7 @@
 
         <!-- Main Body -->
         <main class="flex-1 p-5 sm:p-8 md:p-10 max-w-7xl w-full mx-auto">
-            
+
             <!-- Alert Flash Notifications -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
@@ -367,13 +367,13 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" 
-                        onclick="closeAppConfirmModal()" 
+                <button type="button"
+                        onclick="closeAppConfirmModal()"
                         class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
                     Batal
                 </button>
-                <button type="button" 
-                        id="app-confirm-submit-btn" 
+                <button type="button"
+                        id="app-confirm-submit-btn"
                         class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
                     Ya, Lanjutkan
                 </button>
@@ -398,10 +398,10 @@
         function openAppConfirmModal(config) {
             const modal = document.getElementById('app-custom-confirm-modal');
             if (!modal) return;
-            
+
             document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
             document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
-            
+
             const badgeEl = document.getElementById('app-confirm-badge');
             const badgeText = document.getElementById('app-confirm-badge-text');
             if (config.badge) {
@@ -410,7 +410,7 @@
             } else {
                 badgeEl.classList.add('hidden');
             }
-            
+
             const iconContainer = document.getElementById('app-confirm-icon-box');
             const iconType = config.icon || 'check';
             if (iconType === 'check' || iconType === 'success') {
@@ -423,12 +423,12 @@
                 iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             }
-            
+
             const submitBtn = document.getElementById('app-confirm-submit-btn');
             submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
-            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' +
                 (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
-            
+
             submitBtn.onclick = function() {
                 closeAppConfirmModal();
                 if (config.form) {
@@ -437,7 +437,7 @@
                     config.onConfirm();
                 }
             };
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }

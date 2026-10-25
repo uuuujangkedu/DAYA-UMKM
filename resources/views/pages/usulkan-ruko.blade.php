@@ -11,10 +11,10 @@
 <section class="relative w-full overflow-hidden flex items-center justify-center select-none pt-24 sm:pt-28 pb-16 sm:pb-20" data-reveal data-hero aria-label="Hero Usulkan Ruko">
     <!-- Gambar Visual Utama Miniatur Ruko 3D sebagai Background Blur 20% -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}" 
-             alt="Visual Miniatur Ruko Daya UMKM" 
+        <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}"
+             alt="Visual Miniatur Ruko Titik UMKM"
              class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-        
+
         <!-- Soft Tint Overlay agar kontras teks selalu tajam -->
         <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
@@ -33,7 +33,7 @@
     <!-- Konten Hero Usulkan Ruko -->
     <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 relative z-10">
         <div class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_12px_36px_rgba(45,107,34,0.08)] text-center max-w-4xl mx-auto" data-reveal-group>
-            
+
             <div class="space-y-4">
                 <h1 class="text-[#15241C] font-bold text-[32px] sm:text-[42px] lg:text-[48px] leading-[1.14] tracking-[-0.025em]" data-reveal-item>
                     Punya Info Ruko Kosong? <br class="hidden sm:inline">
@@ -90,10 +90,10 @@
 <section class="relative w-full overflow-hidden py-12 sm:py-16 select-none" data-reveal aria-label="Formulir Usulan Ruko">
     <!-- Visual Warung UMKM / Rolling Hills 3D sebagai Canvas Background -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        <img src="{{ asset('images/background-2.jpg') }}" 
-             alt="Visual Warung UMKM Daya UMKM" 
+        <img src="{{ asset('images/background-2.jpg') }}"
+             alt="Visual Warung UMKM Titik UMKM"
              class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-        
+
         <!-- Soft Tint Overlay -->
         <div class="absolute inset-0 bg-white/25 pointer-events-none"></div>
 
@@ -156,7 +156,7 @@
                             <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                                 Nama Lengkap Pengusul <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" name="nama_pengusul" required 
+                            <input type="text" name="nama_pengusul" required
                                    value="{{ old('nama_pengusul', Auth::user()->name ?? '') }}"
                                    placeholder="Contoh: Bpk. Bambang Sutrisno"
                                    class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
@@ -169,7 +169,7 @@
                             <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                                 Nomor WhatsApp / Telepon <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" name="kontak_pengusul" required 
+                            <input type="text" name="kontak_pengusul" required
                                    value="{{ old('kontak_pengusul', Auth::user()->phone_number ?? '') }}"
                                    placeholder="Contoh: 081234567890"
                                    class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
@@ -194,7 +194,7 @@
                         <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                             Nama Ruko / Kompleks Komersial <span class="text-rose-500">*</span>
                         </label>
-                        <input type="text" name="nama_ruko" required 
+                        <input type="text" name="nama_ruko" required
                                value="{{ old('nama_ruko') }}"
                                placeholder="Contoh: Ruko Boulevard Gading Serpong Blok AA No. 12"
                                class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
@@ -221,7 +221,7 @@
                                     <span class="text-[11px] text-[#3E5445] block">Nyalakan GPS untuk mengisi nama jalan, kelurahan, dan kota ruko secara otomatis</span>
                                 </div>
                             </div>
-                            <button type="button" 
+                            <button type="button"
                                     id="btn_detect_ruko_location"
                                     class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#2D6B22] hover:bg-[#1E4A1A] text-white text-[12px] font-bold shadow-sm hover:shadow transition shrink-0 cursor-pointer w-full sm:w-auto">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
@@ -232,7 +232,7 @@
                             </button>
                         </div>
                         <div id="ruko_location_msg" class="hidden text-xs py-2 px-3 rounded-xl mb-3 font-medium"></div>
-                        <textarea name="lokasi" id="lokasi_ruko" required rows="3" 
+                        <textarea name="lokasi" id="lokasi_ruko" required rows="3"
                                   placeholder="Contoh: Jl. Boulevard Raya Barat No. 12, Kelapa Dua, Tangerang, Banten (Dekat Kampus UMN, Seberang SPBU Pertamina)"
                                   class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('lokasi') }}</textarea>
                         @error('lokasi')
@@ -269,9 +269,9 @@
                             <label for="harga_sewa_per_bulan_display" class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                                 Perkiraan Harga Sewa per Bulan (Rp) <span class="text-rose-500">*</span>
                             </label>
-                            <input type="text" 
-                                   inputmode="numeric" 
-                                   id="harga_sewa_per_bulan_display" 
+                            <input type="text"
+                                   inputmode="numeric"
+                                   id="harga_sewa_per_bulan_display"
                                    data-format-rupiah="true"
                                    data-target-hidden="harga_sewa_per_bulan"
                                    required
@@ -279,9 +279,9 @@
                                    placeholder="Contoh: 4.500.000"
                                    class="format-rupiah w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm font-bold text-[#2D6B22] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition"
                                    autocomplete="off">
-                            <input type="hidden" 
-                                   name="harga_sewa_per_bulan" 
-                                   id="harga_sewa_per_bulan" 
+                            <input type="hidden"
+                                   name="harga_sewa_per_bulan"
+                                   id="harga_sewa_per_bulan"
                                    value="{{ old('harga_sewa_per_bulan') ? preg_replace('/\D/', '', old('harga_sewa_per_bulan')) : '' }}">
                             <span class="text-[11px] text-[#4b5551] mt-1 block">Jika sewa tahunan, bagi 12 bulan (misal Rp 60 jt/thn = Rp 5.000.000/bln).</span>
                             @error('harga_sewa_per_bulan')
@@ -308,7 +308,7 @@
                         <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                             Kontak Pemilik Ruko / Agen Pemasar
                         </label>
-                        <input type="text" name="kontak_pemilik" 
+                        <input type="text" name="kontak_pemilik"
                                value="{{ old('kontak_pemilik') }}"
                                placeholder="Contoh: 081987654321 (Pak Haji Ahmad)"
                                class="w-full px-4 py-3 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">
@@ -319,7 +319,7 @@
                         <label class="block text-xs font-bold text-[#15241C] uppercase tracking-wider mb-2">
                             Potensi Usaha & Mengapa Tempat Ini Cocok untuk UMKM
                         </label>
-                        <textarea name="potensi_usaha" rows="3" 
+                        <textarea name="potensi_usaha" rows="3"
                                   placeholder="Contoh: Kawasan sangat ramai lalu-lintas pekerja dan mahasiswa. Dekat perkantoran, parkiran luas, cocok untuk gerai kuliner, kopi kekinian, laundry, atau apotek."
                                   class="w-full p-4 rounded-xl border border-[#C8BFB0]/80 bg-white text-sm text-[#15241C] placeholder:text-gray-400 focus:ring-2 focus:ring-[#2D6B22] focus:border-[#2D6B22] outline-none transition">{{ old('potensi_usaha') }}</textarea>
                     </div>
@@ -331,7 +331,7 @@
                         Dengan menekan tombol di samping, Anda mengonfirmasi bahwa data lokasi yang diusulkan adalah akurat untuk ditinjau oleh kurator TIKUM.
                     </p>
 
-                    <button type="submit" 
+                    <button type="submit"
                             class="w-full sm:w-auto inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-8 py-4 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 cursor-pointer gap-2 shrink-0">
                         <span>Kirim Rekomendasi Ruko</span>
                         <svg class="w-4 h-4 text-[#F4B838]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -415,8 +415,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function showRukoLocationMsg(text, isError = false) {
         if (!rukoLocationMsg) return;
         rukoLocationMsg.className = 'text-xs py-1.5 px-3 rounded-xl mb-2 font-medium ' +
-            (isError 
-                ? 'bg-amber-50 text-amber-900 border border-amber-200' 
+            (isError
+                ? 'bg-amber-50 text-amber-900 border border-amber-200'
                 : 'bg-[#F2F8ED] text-[#2D6B22] border border-[#C8BFB0]/70');
         rukoLocationMsg.textContent = text;
         rukoLocationMsg.classList.remove('hidden');
