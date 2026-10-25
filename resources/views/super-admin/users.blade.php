@@ -10,7 +10,7 @@
         <div>
             <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">MANAJEMEN AKUN</h1>
             <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
-                Daftar lengkap pengguna yang mendaftar di platform DAYA UMKM.
+                Daftar lengkap pengguna yang mendaftar di platform Titik UMKM.
             </p>
         </div>
 
@@ -73,23 +73,23 @@
 
     <!-- TABS FILTER PERAN -->
     <div class="flex flex-wrap items-center gap-2 border-b border-gray-200 pb-3">
-        <a href="{{ route('superadmin.users', ['role' => 'semua', 'q' => request('q')]) }}" 
+        <a href="{{ route('superadmin.users', ['role' => 'semua', 'q' => request('q')]) }}"
            class="px-4 py-2 rounded-2xl text-xs font-extrabold transition {{ $roleFilter === 'semua' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
             Semua Peran ({{ $totalAll }})
         </a>
-        <a href="{{ route('superadmin.users', ['role' => 'investor', 'q' => request('q')]) }}" 
+        <a href="{{ route('superadmin.users', ['role' => 'investor', 'q' => request('q')]) }}"
            class="px-4 py-2 rounded-2xl text-xs font-extrabold transition {{ $roleFilter === 'investor' ? 'bg-blue-600 text-white shadow-sm' : 'bg-white border border-blue-200 text-blue-800 hover:bg-blue-50' }}">
             Investor ({{ $totalInvestors }})
         </a>
-        <a href="{{ route('superadmin.users', ['role' => 'umkm', 'q' => request('q')]) }}" 
+        <a href="{{ route('superadmin.users', ['role' => 'umkm', 'q' => request('q')]) }}"
            class="px-4 py-2 rounded-2xl text-xs font-extrabold transition {{ $roleFilter === 'umkm' ? 'bg-teal-600 text-white shadow-sm' : 'bg-white border border-teal-200 text-teal-800 hover:bg-teal-50' }}">
             Pelaku UMKM ({{ $totalUmkm }})
         </a>
-        <a href="{{ route('superadmin.users', ['role' => 'admin', 'q' => request('q')]) }}" 
+        <a href="{{ route('superadmin.users', ['role' => 'admin', 'q' => request('q')]) }}"
            class="px-4 py-2 rounded-2xl text-xs font-extrabold transition {{ $roleFilter === 'admin' ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-800 hover:bg-sky-50' }}">
             Admin Staf ({{ $totalStaffAdmin }})
         </a>
-        <a href="{{ route('superadmin.users', ['role' => 'super_admin', 'q' => request('q')]) }}" 
+        <a href="{{ route('superadmin.users', ['role' => 'super_admin', 'q' => request('q')]) }}"
            class="px-4 py-2 rounded-2xl text-xs font-extrabold transition {{ $roleFilter === 'super_admin' ? 'bg-purple-600 text-white shadow-sm' : 'bg-white border border-purple-200 text-purple-800 hover:bg-purple-50' }}">
             Super Admin ({{ $totalSuperAdmin }})
         </a>
@@ -212,8 +212,8 @@
                                         <!-- 2. Aksi Khusus Super Admin: Ganti Role & Tangguhkan Akun -->
                                         @if(auth()->user()->role === 'super_admin')
                                             <!-- Tombol Ganti Role -->
-                                            <button type="button" 
-                                                    onclick="openRoleModal('{{ $u->id }}', '{{ addslashes($u->name) }}', '{{ $u->role }}')" 
+                                            <button type="button"
+                                                    onclick="openRoleModal('{{ $u->id }}', '{{ addslashes($u->name) }}', '{{ $u->role }}')"
                                                     class="px-2.5 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-700 text-xs font-bold transition flex items-center gap-1">
                                                 <svg class="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>

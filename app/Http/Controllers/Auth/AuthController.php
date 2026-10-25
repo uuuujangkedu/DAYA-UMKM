@@ -111,6 +111,7 @@ class AuthController extends Controller
             'rt' => ['nullable', 'string', 'max:10'],
             'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
+            'id_ruko' => ['nullable', 'integer', 'exists:ruko,id_ruko,status_ketersediaan,tersedia'],
             'foto_profil' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         ];
 
@@ -177,6 +178,7 @@ class AuthController extends Controller
                     'rt' => $validated['rt'] ?? null,
                     'rw' => $validated['rw'] ?? null,
                     'status_pengajuan' => 'draf',
+                    'id_ruko_diminati' => $validated['id_ruko'] ?? null,
                 ]
             );
         }
@@ -214,7 +216,7 @@ class AuthController extends Controller
         }
 
         if ($user->status === 'ditangguhkan') {
-            return back()->with('error', 'Akun Anda sedang ditangguhkan. Hubungi admin DAYA UMKM.');
+            return back()->with('error', 'Akun Anda sedang ditangguhkan. Hubungi admin Titik UMKM.');
         }
 
         // Jika akun masih berstatus menunggu verifikasi awal, arahkan ke OTP pendaftaran

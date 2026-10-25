@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kode OTP Verifikasi - DAYA UMKM</title>
+    <title>Kode OTP Verifikasi - Titik UMKM</title>
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
     <style>
@@ -93,23 +93,23 @@
         </div>
         <div class="body-content">
             <div class="greeting">Halo, {{ $userName }}!</div>
-            <p>Gunakan kode OTP berikut untuk <strong>{{ $action }}</strong> di DAYA UMKM:</p>
-            
+            <p>Gunakan kode OTP berikut untuk <strong>{{ $action }}</strong> di Titik UMKM:</p>
+
             <div class="otp-box">
                 <div class="otp-code">{{ $otp }}</div>
                 <div style="font-size: 12px; color: #706F6C; margin-top: 8px;">Berlaku selama 5 menit</div>
             </div>
 
             <div class="warning">
-                <strong>Perhatian:</strong> Jangan berikan kode OTP ini kepada siapa pun termasuk pihak yang mengatasnamakan DAYA UMKM.
+                <strong>Perhatian:</strong> Jangan berikan kode OTP ini kepada siapa pun termasuk pihak yang mengatasnamakan Titik UMKM.
             </div>
-            
+
             <p style="font-size: 13px; color: #706F6C; margin-top: 24px;">
                 Jika Anda tidak merasa melakukan permintaan ini, silakan abaikan email ini.
             </p>
         </div>
         <div class="footer">
-            &copy; {{ date('Y') }} DAYA UMKM. Hak cipta dilindungi.
+            &copy; {{ date('Y') }} Titik UMKM. Hak cipta dilindungi.
         </div>
     </div>
 </body>

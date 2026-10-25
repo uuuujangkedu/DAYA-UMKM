@@ -110,9 +110,12 @@
                 </label>
                 <select id="{{ $idPrefix }}_provinsi" 
                         name="provinsi"
+                        @if($required) required @endif
+                        aria-describedby="{{ $idPrefix }}_provinsi_error"
                         class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Provinsi --</option>
                 </select>
+                <span id="{{ $idPrefix }}_provinsi_error" data-validation-error class="hidden mt-1.5 text-[13px] text-red-700 flex items-center gap-1.5" role="alert"><svg class="w-4 h-4 text-red-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg><span>Provinsi wajib diisi</span></span>
             </div>
 
             <!-- Kota / Kabupaten -->
@@ -122,9 +125,12 @@
                 </label>
                 <select id="{{ $idPrefix }}_kota" 
                         name="kota"
+                        @if($required) required @endif
+                        aria-describedby="{{ $idPrefix }}_kota_error"
                         class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition cursor-pointer">
                     <option value="">-- Pilih Kota / Kab --</option>
                 </select>
+                <span id="{{ $idPrefix }}_kota_error" data-validation-error class="hidden mt-1.5 text-[13px] text-red-700 flex items-center gap-1.5" role="alert"><svg class="w-4 h-4 text-red-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg><span>Kota / Kabupaten wajib diisi</span></span>
             </div>
 
             <!-- Kecamatan -->

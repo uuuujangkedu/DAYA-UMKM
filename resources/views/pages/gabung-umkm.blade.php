@@ -11,10 +11,10 @@
 <section class="relative w-full overflow-hidden flex items-center justify-center select-none pt-24 sm:pt-28 pb-16 sm:pb-20" data-reveal data-hero aria-label="Hero Gabung UMKM">
     <!-- Gambar Visual Utama Miniatur Ruko 3D sebagai Background Blur 20% -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}" 
-             alt="Visual Miniatur Ruko Daya UMKM" 
+        <img src="{{ asset('images/Sunny Miniature House on Rolling Hills.png') }}"
+             alt="Visual Miniatur Ruko Titik UMKM"
              class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-        
+
         <!-- Soft Tint Overlay agar kontras teks selalu tajam -->
         <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
@@ -34,7 +34,7 @@
     <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 relative z-10">
         <div class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_12px_36px_rgba(45,107,34,0.08)]" data-reveal-group>
             <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
-                
+
                 <div class="space-y-6 text-left">
                     <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-[#2D6B22]/10 text-[#2D6B22] border border-[#2D6B22]/20" data-reveal-item>
                         <span class="w-2 h-2 rounded-full bg-[#2D6B22]"></span>
@@ -50,11 +50,11 @@
                     </p>
 
                     <div class="flex flex-wrap items-center gap-4 pt-2" data-reveal-item>
-                        <a href="{{ route('register.umkm') }}" 
+                        <a href="{{ route('register.umkm') }}"
                            class="inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" data-i18n="gabung.umkm_btn_register">
                             Daftar sebagai pelaku UMKM
                         </a>
-                        <a href="#manfaat-umkm" 
+                        <a href="#manfaat-umkm"
                            class="inline-flex items-center justify-center border-2 border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white/90 backdrop-blur-sm font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" data-i18n="gabung.umkm_btn_learn">
                             Pelajari fasilitas
                         </a>
@@ -105,10 +105,10 @@
 <section id="manfaat-umkm" class="relative w-full overflow-hidden flex items-center justify-center select-none py-16 sm:py-24 scroll-mt-[70px]" data-reveal aria-label="Keunggulan Bergabung UMKM">
     <!-- Gambar Visual Warung UMKM 3D sebagai Background Blur 20% -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        <img src="{{ asset('images/background-2.jpg') }}" 
-             alt="Visual Warung UMKM Daya UMKM" 
+        <img src="{{ asset('images/background-2.jpg') }}"
+             alt="Visual Warung UMKM Titik UMKM"
              class="w-full h-full object-cover object-bottom filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-        
+
         <!-- Soft Tint Overlay -->
         <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
@@ -129,7 +129,7 @@
         <div class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_12px_36px_rgba(45,107,34,0.08)] space-y-8" data-reveal-group>
             <div class="text-left space-y-2" data-reveal-item>
                 <h2 class="text-[28px] sm:text-[34px] font-bold text-[#15241C] leading-tight" data-i18n="gabung.umkm_advantages_title">
-                    Keunggulan bergabung di Daya UMKM
+                    Keunggulan bergabung di Titik UMKM
                 </h2>
                 <p class="text-[#3E5445] text-[16px] max-w-2xl leading-[1.6]" data-i18n="gabung.umkm_advantages_desc">
                     Dukungan fasilitas menyeluruh dari permodalan usaha hingga kemudahan sewa tempat berdagang.
@@ -197,23 +197,23 @@
 <div class="relative w-full overflow-hidden select-none py-16 sm:py-24">
     <!-- Gambar Visual Pemukiman 3D sebagai Background Blur 20% -->
     <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden select-none">
-        <img src="{{ asset('images/background-5.jpg') }}" 
-             alt="Visual Alur Daya UMKM" 
+        <img src="{{ asset('images/background-5.jpg') }}"
+             alt="Visual Alur Titik UMKM"
              class="w-full h-full object-cover object-center filter blur-[20px] scale-[1.08] select-none pointer-events-none">
-        
+
         <!-- Soft Tint Overlay -->
         <div class="absolute inset-0 bg-white/20 pointer-events-none"></div>
 
         <!-- Gradasi Biru Langit (#b8defb) di Area Paling Atas Menyambung dari Wave Keunggulan -->
         <div class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#b8defb] via-[#b8defb]/40 to-transparent"></div>
-        
+
         <!-- Lapisan Soft Ambient Glow Hijau di Dasar Konten Menuju Footer -->
         <div class="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#1E4A1A]/85 via-[#2D6B22]/30 to-transparent"></div>
     </div>
 
     <!-- Konten Tahapan & Bottom Action Card -->
     <div class="max-w-[1200px] w-full mx-auto px-5 sm:px-8 relative z-10 space-y-12">
-        
+
         <!-- 3. CARA MEMULAI PERJALANAN USAHA -->
         <section class="bg-white/85 sm:bg-white/90 backdrop-blur-md rounded-3xl p-7 sm:p-10 lg:p-12 border border-[#C8BFB0]/70 shadow-[0_12px_36px_rgba(45,107,34,0.08)] space-y-8 scroll-mt-[100px]" data-reveal>
             <div class="text-left space-y-2" data-reveal-item>
@@ -271,7 +271,7 @@
                 </p>
             </div>
             <div data-reveal-item>
-                <a href="{{ route('register.umkm') }}" 
+                <a href="{{ route('register.umkm') }}"
                    class="inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-7 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" data-i18n="gabung.umkm_btn_register">
                     Daftar sebagai pelaku UMKM
                 </a>

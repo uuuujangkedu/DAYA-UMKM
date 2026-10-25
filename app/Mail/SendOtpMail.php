@@ -21,7 +21,7 @@ class SendOtpMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Kode OTP {$this->otp} - DAYA UMKM",
+            subject: "Kode OTP {$this->otp} - Titik UMKM",
         );
     }
 

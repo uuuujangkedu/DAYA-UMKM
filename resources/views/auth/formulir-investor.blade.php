@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Formulir Pendaftaran Investor - Daya UMKM')
+@section('title', 'Formulir Pendaftaran Investor - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
@@ -135,12 +135,12 @@
                 <label for="nama" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                     Nama lengkap investor <span class="text-red-500">*</span>
                 </label>
-                <input type="text" 
-                       id="nama" 
-                       name="nama" 
-                       value="{{ old('nama', $user->name) }}" 
+                <input type="text"
+                       id="nama"
+                       name="nama"
+                       value="{{ old('nama', $user->name) }}"
                        required
-                       placeholder="Contoh: Raka Wibian" 
+                       placeholder="Contoh: Raka Wibian"
                        class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
             </div>
 
@@ -150,12 +150,12 @@
                     <label for="nomor_telepon" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Nomor WhatsApp aktif <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" 
-                           id="nomor_telepon" 
-                           name="nomor_telepon" 
-                           value="{{ old('nomor_telepon', $user->phone_number) }}" 
+                    <input type="text"
+                           id="nomor_telepon"
+                           name="nomor_telepon"
+                           value="{{ old('nomor_telepon', $user->phone_number) }}"
                            required
-                           placeholder="Contoh: 081234567890" 
+                           placeholder="Contoh: 081234567890"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
                 </div>
 
@@ -163,8 +163,8 @@
                     <label class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
                         Alamat email akun
                     </label>
-                    <input type="email" 
-                           value="{{ $user->email }}" 
+                    <input type="email"
+                           value="{{ $user->email }}"
                            disabled
                            class="w-full h-11 px-3.5 bg-[#f7f6f1] border border-[#e2e1d8] rounded-[6px] text-[14px] text-[#4b5551] outline-none cursor-not-allowed">
                     <span class="text-[12px] text-[#0b5a4a] font-medium mt-1.5 block">Email telah terverifikasi</span>
@@ -172,7 +172,7 @@
             </div>
 
             <!-- Wilayah Domisili -->
-            <x-wilayah-domisili 
+            <x-wilayah-domisili
                 label="Wilayah domisili / kantor"
                 :provinsi="old('provinsi', $user->provinsi)"
                 :kota="old('kota', $user->kota)"
@@ -200,27 +200,27 @@
             <!-- Kategori Filter Tabs -->
             <input type="hidden" name="kategori_diminati" id="kategori_diminati" value="{{ old('kategori_diminati', $user->kategori_diminati ?? 'Semua') }}">
             <div class="flex items-center gap-2 flex-wrap">
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Semua', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-semibold bg-[#0b5a4a] text-white transition">
                     Semua
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Makanan', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Makanan & minuman
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Jasa', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Jasa layanan
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Fashion', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Fashion
                 </button>
-                <button type="button" 
+                <button type="button"
                         onclick="selectCategory('Agribisnis', this)"
                         class="cat-filter-btn h-10 px-4 rounded-[6px] text-[13px] font-medium bg-[#f7f6f1] text-[#4b5551] hover:bg-[#d8ebe5] hover:text-[#0b5a4a] border border-[#e2e1d8] transition">
                     Agribisnis
@@ -232,10 +232,10 @@
                 <svg class="w-4 h-4 text-[#4b5551] absolute left-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" 
-                       id="umkm-search" 
-                       onkeyup="filterUmkmCards()" 
-                       placeholder="Telusuri UMKM berdasarkan nama atau bidang..." 
+                <input type="text"
+                       id="umkm-search"
+                       onkeyup="filterUmkmCards()"
+                       placeholder="Telusuri UMKM berdasarkan nama atau bidang..."
                        class="w-full h-11 pl-10 pr-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
             </div>
 
@@ -243,14 +243,14 @@
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-1" id="umkm-grid">
                 @forelse ($umkms as $index => $umkm)
                     <label class="umkm-card cursor-pointer block group select-none relative" data-category="{{ $umkm->jenis_usaha }}">
-                        <input type="checkbox" 
-                               name="umkm_diminati[]" 
-                               value="{{ $umkm->id_umkm }}" 
-                               class="hidden peer" 
+                        <input type="checkbox"
+                               name="umkm_diminati[]"
+                               value="{{ $umkm->id_umkm }}"
+                               class="hidden peer"
                                onchange="updateSelectedUmkmCount()">
 
                         <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] peer-checked:bg-[#f2f8ed]/40 bg-white p-3 transition flex flex-col h-full shadow-2xs hover:border-[#0b5a4a] hover:shadow-sm relative">
-                            
+
                             <!-- Indikator Checkmark Terpilih di Pojok Kanan Atas -->
                             <div class="absolute top-2.5 right-2.5 z-10">
                                 <span class="w-6 h-6 rounded-full bg-white/90 border border-gray-300 peer-checked:bg-[#0b5a4a] peer-checked:border-[#0b5a4a] flex items-center justify-center transition shadow-2xs">
@@ -262,9 +262,9 @@
 
                             <!-- Foto Asli Produk / Usaha UMKM -->
                             <div class="w-full aspect-[4/3] rounded-[8px] overflow-hidden mb-2.5 bg-[#d8ebe5] relative border border-[#e2e1d8]">
-                                <img src="{{ $umkm->foto_url }}" 
-                                     alt="{{ $umkm->nama_usaha }}" 
-                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
+                                <img src="{{ $umkm->foto_url }}"
+                                     alt="{{ $umkm->nama_usaha }}"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                      loading="lazy">
                                 <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-xs text-white text-[10px] font-bold">
                                     {{ $umkm->jenis_usaha }}
@@ -328,7 +328,7 @@
         cards.forEach(card => {
             const title = card.querySelector('.umkm-title').innerText.toLowerCase();
             const cat = card.getAttribute('data-category');
-            
+
             const matchesQuery = title.includes(query);
             const matchesCat = (currentSelectedCategory === 'Semua' || cat.toLowerCase() === currentSelectedCategory.toLowerCase());
 

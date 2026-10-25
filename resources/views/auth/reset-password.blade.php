@@ -1,11 +1,11 @@
 @extends('layouts.auth')
 
-@section('title', 'Atur Kata Sandi Baru - Daya UMKM')
+@section('title', 'Atur Kata Sandi Baru - Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-md mx-auto my-6 px-4">
     <div class="bg-white/92 backdrop-blur-md rounded-3xl border border-[#C8BFB0]/70 p-7 sm:p-9 text-left space-y-6 shadow-[0_16px_40px_rgba(45,107,34,0.12)]">
-        
+
         <div class="space-y-1">
             <h1 class="text-[24px] font-bold text-[#15241C] leading-tight" data-i18n="auth.reset_title">
                 Atur kata sandi baru
@@ -29,16 +29,16 @@
                     Kata sandi baru
                 </label>
                 <div class="relative">
-                    <input type="password" 
-                           name="password" 
-                           id="reset-password" 
-                           required 
+                    <input type="password"
+                           name="password"
+                           id="reset-password"
+                           required
                            placeholder="Minimal 8 karakter"
                            data-i18n-placeholder="auth.reset_pwd_placeholder"
                            oninput="checkResetRequirements(this.value)"
                            class="w-full px-3.5 pr-10 py-2.5 bg-white border @error('password') border-red-500 @else border-[#C8BFB0] @enderror rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
-                    <button type="button" 
-                            onclick="togglePasswordVisibility('reset-password', 'eye-icon-reset')" 
+                    <button type="button"
+                            onclick="togglePasswordVisibility('reset-password', 'eye-icon-reset')"
                             class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#3E5445] hover:text-[#2D6B22] transition"
                             aria-label="Lihat kata sandi">
                         <svg id="eye-icon-reset" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
@@ -57,15 +57,15 @@
                     Konfirmasi kata sandi baru
                 </label>
                 <div class="relative">
-                    <input type="password" 
-                           name="password_confirmation" 
-                           id="reset-confirm" 
-                           required 
+                    <input type="password"
+                           name="password_confirmation"
+                           id="reset-confirm"
+                           required
                            placeholder="Ulangi kata sandi baru"
                            data-i18n-placeholder="auth.reset_confirm_placeholder"
                            class="w-full px-3.5 pr-10 py-2.5 bg-white border border-[#C8BFB0] rounded-xl text-[14px] text-[#15241C] focus:outline-none focus:border-[#2D6B22] focus:ring-1 focus:ring-[#2D6B22] transition">
-                    <button type="button" 
-                            onclick="togglePasswordVisibility('reset-confirm', 'eye-icon-confirm-reset')" 
+                    <button type="button"
+                            onclick="togglePasswordVisibility('reset-confirm', 'eye-icon-confirm-reset')"
                             class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#3E5445] hover:text-[#2D6B22] transition"
                             aria-label="Lihat kata sandi konfirmasi">
                         <svg id="eye-icon-confirm-reset" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">

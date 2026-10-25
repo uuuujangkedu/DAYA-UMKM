@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Menunggu Persetujuan Admin - Mitra Investor DAYA UMKM')
+@section('title', 'Menunggu Persetujuan Admin - Mitra Investor Titik UMKM')
 
 @section('content')
 <div class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-8">
@@ -97,7 +97,7 @@
                     Akun Mitra Investor Anda Sedang Menunggu Verifikasi & Persetujuan (ACC) Admin
                 </h3>
                 <p class="text-xs sm:text-sm text-amber-900/80 mt-1.5 leading-relaxed">
-                    Terima kasih telah melengkapi data pendaftaran investor Anda. Demi menjaga keamanan ekosistem pendanaan dan kepatuhan transaksi, tim kurator DAYA UMKM sedang meninjau profil Anda.
+                    Terima kasih telah melengkapi data pendaftaran investor Anda. Demi menjaga keamanan ekosistem pendanaan dan kepatuhan transaksi, tim kurator Titik UMKM sedang meninjau profil Anda.
                 </p>
                 <p class="text-xs text-amber-800 mt-2 font-semibold">
                     Setelah akun disetujui oleh Super Admin, Anda akan langsung mendapatkan akses penuh ke menu <strong>PROPOSAL LIST</strong> untuk melihat peluang bisnis dan melakukan investasi.
@@ -107,8 +107,8 @@
 
         <div class="pt-4 border-t border-amber-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
             <span class="text-amber-800 font-medium">Estimasi waktu proses: <strong>1x24 jam kerja</strong></span>
-            
-            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20DAYA%20UMKM,%20saya%20telah%20mendaftar%20sebagai%20Investor%20dengan%20nama%20{{ urlencode($user->name) }}%20dan%20sedang%20menunggu%20verifikasi%20akun." 
+
+            <a href="https://wa.me/6281234567890?text=Halo%20Admin%20DAYA%20UMKM,%20saya%20telah%20mendaftar%20sebagai%20Investor%20dengan%20nama%20{{ urlencode($user->name) }}%20dan%20sedang%20menunggu%20verifikasi%20akun."
                target="_blank"
                class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold transition shadow-sm inline-flex items-center gap-1.5 self-start sm:self-auto">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

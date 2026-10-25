@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>@yield('title', 'Dashboard Pelaku UMKM') - DAYA UMKM</title>
+    <title>@yield('title', 'Dashboard Pelaku UMKM') - Titik UMKM</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -70,9 +70,8 @@
 <body class="bg-[#F5F0E8] min-h-screen text-[#1A202C] flex">
 
     <!-- SIDEBAR UMKM (Sesuai Gambar 2: Mockup Dashboard UMKM) -->
-    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
-           style="background-color: #0F433C !important; height: 100vh; min-height: 100vh;">
-        
+    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#1B4D3E] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
+           style="background-color: #1B4D3E !important; height: 100vh; min-height: 100vh;">
         <div>
             <!-- Brand Logo TIKUM -->
             <div class="px-5 pt-5 pb-1">
@@ -115,8 +114,8 @@
             <!-- Navigation Links UMKM Sesuai Mockup Gambar 2 -->
             <nav class="mt-5 px-3 space-y-1">
                 <!-- 1. BERANDA -->
-                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'beranda']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? 'beranda') === 'beranda' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -139,8 +138,8 @@
                 </a>
 
                 <!-- 2. INBOX PENDANAAN (Komunikasi & Minat Modal Investor) -->
-                <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'inbox']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'inbox' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -155,8 +154,8 @@
                 </a>
 
                 <!-- 3. ANALISIS KEUANGAN -->
-                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'keuangan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -166,8 +165,8 @@
                 </a>
 
                 <!-- 4. BANTUAN -->
-                <a href="{{ route('dashboard', ['tab' => 'bantuan']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'bantuan' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'bantuan']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'bantuan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'bantuan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636l-3.536 3.536m-2.036-5.036l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -177,8 +176,8 @@
                 </a>
 
                 <!-- 5. INFORMASI RUKO -->
-                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'ruko']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'ruko' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -188,8 +187,8 @@
                 </a>
 
                 <!-- 6. PROFIL & FORMULIR PENGAJUAN -->
-                <a href="{{ route('dashboard', ['tab' => 'profil']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'profil' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                <a href="{{ route('dashboard', ['tab' => 'profil']) }}"
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'profil' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'profil' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
@@ -204,7 +203,7 @@
         <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0 bg-[#0F433C]"
              style="background-color: #0F433C !important;">
             <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
-            <button type="button" 
+            <button type="button"
                     class="a11y-trigger w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-teal-200/90 hover:bg-white/[0.08] hover:text-white sidebar-link transition cursor-pointer group text-left"
                     aria-label="Aksesibilitas & Disabilitas"
                     title="Buka menu aksesibilitas disabilitas">
@@ -238,7 +237,7 @@
 
     <!-- MAIN CONTENT AREA -->
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        
+
         <!-- Mobile Header Top Bar -->
         <header class="md:hidden bg-[#0F433C] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
             <div class="flex items-center gap-3">
@@ -253,7 +252,7 @@
             </div>
             <div class="flex items-center gap-2.5">
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
-                <button type="button" 
+                <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
                         aria-label="Aksesibilitas & Disabilitas"
                         title="Buka menu aksesibilitas disabilitas">
@@ -274,7 +273,7 @@
 
         <!-- Main Body -->
         <main class="flex-1 px-8 py-8 lg:px-10 lg:py-10 max-w-[1280px] w-full mx-auto">
-            
+
             <!-- Alert Flash Notifications -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm">
@@ -333,14 +332,14 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" 
-                        onclick="closeAppConfirmModal()" 
+                <button type="button"
+                        onclick="closeAppConfirmModal()"
                         class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
                     Batal
                 </button>
-                <button type="button" 
-                        id="app-confirm-submit-btn" 
-                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
+                <button type="button"
+                        id="app-confirm-submit-btn"
+                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white">
                     Ya, Lanjutkan
                 </button>
             </div>
@@ -364,10 +363,10 @@
         function openAppConfirmModal(config) {
             const modal = document.getElementById('app-custom-confirm-modal');
             if (!modal) return;
-            
+
             document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
             document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
-            
+
             const badgeEl = document.getElementById('app-confirm-badge');
             const badgeText = document.getElementById('app-confirm-badge-text');
             if (config.badge) {
@@ -376,7 +375,7 @@
             } else {
                 badgeEl.classList.add('hidden');
             }
-            
+
             const iconContainer = document.getElementById('app-confirm-icon-box');
             const iconType = config.icon || 'check';
             if (iconType === 'check' || iconType === 'success') {
@@ -389,12 +388,11 @@
                 iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             }
-            
+
             const submitBtn = document.getElementById('app-confirm-submit-btn');
             submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
-            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
-                (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
-            
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' +
+                (config.confirmClass || 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white');
             submitBtn.onclick = function() {
                 closeAppConfirmModal();
                 if (config.form) {
@@ -403,7 +401,7 @@
                     config.onConfirm();
                 }
             };
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }

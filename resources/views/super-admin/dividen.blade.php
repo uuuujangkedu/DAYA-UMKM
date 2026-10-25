@@ -35,7 +35,7 @@
                     </p>
                 </div>
             </div>
-            <a href="{{ session('wa_url') }}" target="_blank" rel="noopener noreferrer" 
+            <a href="{{ session('wa_url') }}" target="_blank" rel="noopener noreferrer"
                class="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black uppercase tracking-wider shadow-md hover:shadow-lg transition flex items-center gap-2 shrink-0">
                 <span>Buka WhatsApp Sekarang</span>
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
@@ -118,7 +118,7 @@
 
                             <h4 class="font-black text-base text-[#1A202C]">{{ $klr->investasi->umkm->nama_usaha ?? 'UMKM' }}</h4>
                             <p class="text-xs text-gray-500 mb-3">
-                                Investor: <strong>{{ $klr->investasi->pengguna->name ?? 'Investor' }}</strong> • 
+                                Investor: <strong>{{ $klr->investasi->pengguna->name ?? 'Investor' }}</strong> •
                                 Diajukan: {{ $klr->created_at->translatedFormat('d M Y, H:i') }}
                             </p>
 
@@ -133,7 +133,7 @@
                                 </div>
                                 @if($klr->lampiran_bukti)
                                     <div class="pt-1">
-                                        <a href="{{ asset('storage/' . $klr->lampiran_bukti) }}" target="_blank" 
+                                        <a href="{{ asset('storage/' . $klr->lampiran_bukti) }}" target="_blank"
                                            class="inline-flex items-center gap-1.5 text-[11px] font-bold text-purple-700 hover:text-purple-900 underline">
                                             📎 Lihat Dokumen Lampiran Bukti
                                         </a>
@@ -161,7 +161,7 @@
 
     <!-- SEKSI 2: DAFTAR KEMITRAAN & FILTER STATUS KEPATUHAN -->
     <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm space-y-6">
-        
+
         <!-- Header & Filter Tabs -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5">
             <div>
@@ -171,27 +171,27 @@
 
             <!-- Tabs Filter -->
             <div class="flex flex-wrap items-center gap-1.5">
-                <a href="{{ route('superadmin.dividen', ['status' => 'semua']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'semua']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'semua' ? 'bg-[#0F433C] text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200' }}">
                     Semua ({{ $stats['total_kemitraan'] }})
                 </a>
-                <a href="{{ route('superadmin.dividen', ['status' => 'lancar']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'lancar']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'lancar' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' }}">
                     Lancar ({{ $stats['lancar'] }})
                 </a>
-                <a href="{{ route('superadmin.dividen', ['status' => 'menjelang_jatuh_tempo']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'menjelang_jatuh_tempo']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'menjelang_jatuh_tempo' ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-800 hover:bg-blue-100' }}">
                     Menjelang JT ({{ $stats['menjelang_jatuh_tempo'] }})
                 </a>
-                <a href="{{ route('superadmin.dividen', ['status' => 'masa_tenggang']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'masa_tenggang']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'masa_tenggang' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100' }}">
                     Masa Tenggang ({{ $stats['masa_tenggang'] }})
                 </a>
-                <a href="{{ route('superadmin.dividen', ['status' => 'menunggak']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'menunggak']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'menunggak' ? 'bg-rose-600 text-white' : 'bg-rose-50 text-rose-800 hover:bg-rose-100' }}">
                     Menunggak ({{ $stats['menunggak'] }})
                 </a>
-                <a href="{{ route('superadmin.dividen', ['status' => 'klarifikasi']) }}" 
+                <a href="{{ route('superadmin.dividen', ['status' => 'klarifikasi']) }}"
                    class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition {{ $filter === 'klarifikasi' ? 'bg-purple-600 text-white' : 'bg-purple-50 text-purple-800 hover:bg-purple-100' }}">
                     Klarifikasi ({{ $stats['klarifikasi'] }})
                 </a>
@@ -290,7 +290,7 @@
                             <td class="py-4 px-4 text-center">
                                 <div class="flex items-center justify-center gap-1.5">
                                     <!-- Terbitkan SP -->
-                                    <button type="button" 
+                                    <button type="button"
                                             onclick="openSpModal({{ $inv->id_investasi }}, '{{ addslashes($umkm->nama_usaha ?? 'UMKM') }}', '{{ $phoneUmkm }}', {{ $umkm->jumlah_teguran_sp ?? 0 }})"
                                             class="px-2.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-extrabold transition shadow-sm flex items-center gap-1"
                                             title="Terbitkan Surat Peringatan (SP-1, SP-2, SP-3)">
@@ -301,7 +301,7 @@
                                     <form id="form-freeze-{{ $inv->id_investasi }}" action="{{ route('superadmin.dividen.umkm.toggle-freeze', $umkm->id_umkm ?? 0) }}" method="POST">
                                         @csrf
                                         @if(($umkm->status_kepatuhan_dividen ?? 'lancar') === 'dibekukan')
-                                            <button type="button" 
+                                            <button type="button"
                                                     onclick="openAppConfirmModal({
                                                         title: 'Pulihkan Hak Pendanaan UMKM',
                                                         message: 'Apakah Anda yakin ingin <strong>mencabut status pembekuan</strong> mitra <strong>{{ addslashes($umkm->nama_usaha ?? 'UMKM') }}</strong>? Mitra dapat kembali mengajukan permodalan dan terdaftar di platform secara normal.',
@@ -315,7 +315,7 @@
                                                 ✓ Pulihkan
                                             </button>
                                         @else
-                                            <button type="button" 
+                                            <button type="button"
                                                     onclick="openAppConfirmModal({
                                                         title: 'Bekukan Hak Pendanaan UMKM',
                                                         message: 'Apakah Anda yakin ingin <strong>membekukan sementara hak pendanaan</strong> mitra <strong>{{ addslashes($umkm->nama_usaha ?? 'UMKM') }}</strong>? Pengajuan modal baru dan promosi kemitraan akan dinonaktifkan sementara hingga kewajiban dividen diselesaikan.',
@@ -371,7 +371,7 @@
                             <tr class="hover:bg-gray-50">
                                 <td class="py-2.5 px-3 text-gray-500 font-mono">{{ $teguran->created_at->translatedFormat('d M Y, H:i') }}</td>
                                 <td class="py-2.5 px-3">
-                                    <span class="px-2 py-0.5 rounded font-black text-[10px] 
+                                    <span class="px-2 py-0.5 rounded font-black text-[10px]
                                         {{ $teguran->tingkat_sp === 'SP-3' ? 'bg-red-700 text-white' : ($teguran->tingkat_sp === 'SP-2' ? 'bg-orange-600 text-white' : 'bg-amber-500 text-white') }}">
                                         {{ $teguran->tingkat_sp }}
                                     </span>
@@ -394,7 +394,7 @@
 <!-- MODAL TERBITKAN SURAT PERINGATAN (SP) -->
 <div id="modal-sp" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-gray-100 animate-in fade-in duration-200">
-        
+
         <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
             <div>
                 <h3 class="text-xl font-black text-[#1A202C]">Penerbitan Surat Peringatan (SP)</h3>
@@ -407,7 +407,7 @@
 
         <form id="form-sp" action="" method="POST" class="space-y-4">
             @csrf
-            
+
             <!-- Tingkat SP Selector -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Tingkat Surat Peringatan</label>
@@ -439,7 +439,7 @@
             <!-- Tenggat Waktu Penyelesaian -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Tenggat Waktu Respons / Penyetoran</label>
-                <input type="date" name="tenggat_penyelesaian" id="sp-tenggat" 
+                <input type="date" name="tenggat_penyelesaian" id="sp-tenggat"
                        value="{{ \Carbon\Carbon::now()->addDays(3)->format('Y-m-d') }}"
                        class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 <p class="text-[10px] text-gray-400 mt-1">Default 3 hari kalender sejak penerbitan teguran.</p>
@@ -472,7 +472,7 @@
 <!-- MODAL VERIFIKASI KLARIFIKASI KENDALA -->
 <div id="modal-verifikasi" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative border border-gray-100">
-        
+
         <div class="flex items-center justify-between border-b border-gray-100 pb-4 mb-4">
             <h3 class="text-lg font-black text-[#1A202C]">Verifikasi Laporan Kendala</h3>
             <button type="button" onclick="closeVerifikasiModal()" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 hover:text-gray-800 flex items-center justify-center text-sm font-bold">
@@ -513,20 +513,20 @@
         const modal = document.getElementById('modal-sp');
         const form = document.getElementById('form-sp');
         const subtitle = document.getElementById('sp-umkm-subtitle');
-        
+
         form.action = `/super-admin/dividen/${investasiId}/teguran`;
         subtitle.innerHTML = `Mitra: <strong>${umkmName}</strong> (Telah menerima ${currentSpCount}x SP sebelumnya)`;
-        
+
         // Auto select recommended SP level
         let nextSp = 'SP-1';
         if (currentSpCount === 1) nextSp = 'SP-2';
         else if (currentSpCount >= 2) nextSp = 'SP-3';
-        
+
         const radio = form.querySelector(`input[name="tingkat_sp"][value="${nextSp}"]`);
         if (radio) {
             radio.checked = true;
         }
-        
+
         updateSpTemplate(nextSp, umkmName);
         modal.classList.remove('hidden');
     }
@@ -540,7 +540,7 @@
         if (level === 'SP-1') {
             pesanField.value = `Berdasarkan rekapitulasi data sistem, bagi hasil dividen kemitraan periode berjalan belum tercatat disetorkan dan telah melewati masa tenggang. Mohon segera melakukan penyetoran dividen atau menyampaikan klarifikasi kendala usaha secara resmi melalui dashboard Anda selambat-lambatnya sebelum tenggat waktu yang ditentukan.`;
         } else if (level === 'SP-2') {
-            pesanField.value = `Ini merupakan Peringatan Lanjutan (SP-2) terkait kewajiban bagi hasil kemitraan yang belum dipenuhi. Keterlambatan tanpa laporan klarifikasi yang sah dapat berdampak pada peninjauan status kepatuhan dan reputasi mitra usaha Anda di platform DAYA UMKM. Harap segera diselesaikan.`;
+            pesanField.value = `Ini merupakan Peringatan Lanjutan (SP-2) terkait kewajiban bagi hasil kemitraan yang belum dipenuhi. Keterlambatan tanpa laporan klarifikasi yang sah dapat berdampak pada peninjauan status kepatuhan dan reputasi mitra usaha Anda di platform Titik UMKM. Harap segera diselesaikan.`;
         } else if (level === 'SP-3') {
             pesanField.value = `PERINGATAN FINAL (SP-3): Usaha Anda tercatat menunggak dividen bagi hasil dan telah mengabaikan peringatan sebelumnya. Jika dalam tenggat waktu berikut tidak ada penyetoran atau kesepakatan resolusi, sistem akan membekukan fasilitas pendanaan dan memfasilitasi mediasi wanprestasi dengan investor.`;
         }

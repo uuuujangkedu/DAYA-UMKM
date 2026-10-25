@@ -27,6 +27,12 @@ return new class extends Migration
             if (! Schema::hasColumn('umkm', 'kota')) {
                 $table->string('kota', 100)->nullable()->after('provinsi');
             }
+            if (! Schema::hasColumn('umkm', 'rt')) {
+                $table->string('rt', 10)->nullable()->after('kelurahan');
+            }
+            if (! Schema::hasColumn('umkm', 'rw')) {
+                $table->string('rw', 10)->nullable()->after('rt');
+            }
         });
     }
 

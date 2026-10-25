@@ -1,4 +1,4 @@
-# MOTION.md — Daya UMKM
+# MOTION.md — Titik UMKM
 
 Dokumen ini khusus mengatur animasi dan smooth scroll. Dokumen ini **tidak** menggantikan `DESIGN.md`. Untuk warna, tipografi, layout, dan komponen, tetap ikuti `DESIGN.md`. Jika ada konflik visual, `DESIGN.md` yang diutamakan.
 

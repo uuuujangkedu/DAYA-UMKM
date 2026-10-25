@@ -940,13 +940,6 @@ class DashboardController extends Controller
                 'jenis_usaha' => 'Makanan',
                 'pemilik' => $user->name,
                 'nomor_whatsapp' => $user->phone_number,
-                'provinsi' => $user->provinsi,
-                'kota' => $user->kota,
-                'provinsi_kota' => $user->provinsi_kota,
-                'kecamatan' => $user->kecamatan,
-                'kelurahan' => $user->kelurahan,
-                'rt' => $user->rt,
-                'rw' => $user->rw,
                 'status_pengajuan' => 'draf',
             ]
         );
@@ -970,25 +963,28 @@ class DashboardController extends Controller
         }
 
         $aksi = $request->input('aksi', 'simpan_draf');
+        $existingUmkm = Umkm::where('user_id', $user->id)->first();
+        $umkm = $existingUmkm ?? new Umkm;
+        $requiredForSubmit = $aksi === 'kirim_pengajuan' ? 'required' : 'nullable';
 
         $rules = [
             'nama_usaha' => [$aksi === 'kirim_pengajuan' ? 'required' : 'nullable', 'string', 'max:150'],
             'jenis_usaha' => [$aksi === 'kirim_pengajuan' ? 'required' : 'nullable', 'string', 'max:100'],
-            'pemilik' => ['required', 'string', 'max:100'],
+            'pemilik' => [$aksi === 'kirim_pengajuan' ? 'required' : 'nullable', 'string', 'max:100'],
             'nik_penanggung_jawab' => ['nullable', 'string', 'max:30'],
-            'nomor_whatsapp' => ['required', 'string', 'max:25'],
-            'provinsi' => ['nullable', 'string', 'max:100'],
-            'kota' => ['nullable', 'string', 'max:100'],
+            'nomor_whatsapp' => [$aksi === 'kirim_pengajuan' ? 'required' : 'nullable', 'string', 'max:25'],
+            'provinsi' => [$requiredForSubmit, 'string', 'max:100'],
+            'kota' => [$requiredForSubmit, 'string', 'max:100'],
             'provinsi_kota' => ['nullable', 'string', 'max:100'],
-            'kecamatan' => ['nullable', 'string', 'max:100'],
-            'kelurahan' => ['nullable', 'string', 'max:100'],
+            'kecamatan' => [$requiredForSubmit, 'string', 'max:100'],
+            'kelurahan' => [$requiredForSubmit, 'string', 'max:100'],
             'rt' => ['nullable', 'string', 'max:10'],
             'rw' => ['nullable', 'string', 'max:10'],
             'modal_dibutuhkan' => ['nullable', 'numeric', 'min:0'],
             'estimasi_bagi_hasil' => ['nullable', 'string', 'max:50'],
-            'deskripsi' => ['nullable', 'string'],
-            'foto_produk' => ['nullable', 'file', 'image', 'max:5120'],
-            'file_proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:10240'],
+            'deskripsi' => [$aksi === 'kirim_pengajuan' ? 'required' : 'nullable', 'string'],
+            'foto_produk' => [$aksi === 'kirim_pengajuan' && ! $existingUmkm?->foto_produk ? 'required' : 'nullable', 'file', 'image', 'max:5120'],
+            'file_proposal' => [$aksi === 'kirim_pengajuan' && ! $existingUmkm?->file_proposal ? 'required' : 'nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:10240'],
             'foto_profil' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
             'id_ruko_diminati' => ['nullable', 'exists:ruko,id_ruko'],
         ];
@@ -1024,24 +1020,16 @@ class DashboardController extends Controller
         $validated['provinsi'] = $provinsi ?? $user->provinsi;
         $validated['kota'] = $kota ?? $user->kota;
         $validated['provinsi_kota'] = $provinsiKota;
-
-        $umkm = Umkm::firstOrCreate(
-            ['user_id' => $user->id],
-            [
+        if (! $umkm->exists) {
+            $umkm->fill([
+                'user_id' => $user->id,
                 'nama_usaha' => $validated['nama_usaha'] ?? ('Usaha '.$user->name),
                 'jenis_usaha' => $validated['jenis_usaha'] ?? 'Makanan',
                 'pemilik' => $validated['pemilik'] ?? $user->name,
                 'nomor_whatsapp' => $validated['nomor_whatsapp'] ?? $user->phone_number,
-                'provinsi' => $validated['provinsi'],
-                'kota' => $validated['kota'],
-                'provinsi_kota' => $validated['provinsi_kota'],
-                'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
-                'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
-                'rt' => $validated['rt'] ?? $user->rt,
-                'rw' => $validated['rw'] ?? $user->rw,
                 'status_pengajuan' => 'draf',
-            ]
-        );
+            ])->save();
+        }
 
         if ($request->hasFile('foto_produk')) {
             $validated['foto_produk'] = $request->file('foto_produk')->store('umkm/produk', 'public');
@@ -1053,7 +1041,7 @@ class DashboardController extends Controller
 
         if ($aksi === 'kirim_pengajuan') {
             $validated['status_pengajuan'] = 'menunggu_verifikasi';
-            $message = 'Pengajuan usaha Anda berhasil dikirimkan! Tim Admin DAYA UMKM akan meninjau berkas Anda dalam 1x24 jam.';
+            $message = 'Pengajuan usaha Anda berhasil dikirimkan! Tim Admin Titik UMKM akan meninjau berkas Anda dalam 1x24 jam.';
         } else {
             $validated['status_pengajuan'] = 'draf';
             $message = 'Draf formulir usaha Anda berhasil disimpan. Anda dapat melanjutkannya kapan saja.';
@@ -1062,9 +1050,7 @@ class DashboardController extends Controller
         $umkm->update($validated);
 
         $user->update([
-            'phone_number' => $validated['nomor_whatsapp'],
-            'provinsi' => $validated['provinsi'] ?? $user->provinsi,
-            'kota' => $validated['kota'] ?? $user->kota,
+            'phone_number' => $validated['nomor_whatsapp'] ?? $user->phone_number,
             'provinsi_kota' => $validated['provinsi_kota'] ?? $user->provinsi_kota,
             'kecamatan' => $validated['kecamatan'] ?? $user->kecamatan,
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,

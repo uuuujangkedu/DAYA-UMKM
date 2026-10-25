@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title>@yield('title', 'Super Admin Dashboard') - DAYA UMKM</title>
+    <title>@yield('title', 'Super Admin Dashboard') - Titik UMKM</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
@@ -79,7 +79,7 @@
                             {{ $user->name ?? 'SUPER ADMIN' }}
                         </h2>
                         <p class="text-[11px] text-teal-200/70 truncate mt-0.5 font-medium">
-                            {{ $user->phone_number ?? $user->email ?? 'superadmin@dayaumkm.id' }}
+                            {{ $user->phone_number ?? $user->email ?? 'admin@dayaumkm.id' }}
                         </p>
                         @if($user->role === 'super_admin')
                             <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-purple-500/20 text-purple-300 border border-purple-400/30">
@@ -97,7 +97,7 @@
             <!-- Navigation Links -->
             <nav class="mt-5 px-3 space-y-1">
                 <!-- 1. BERANDA -->
-                <a href="{{ route('superadmin.dashboard') }}" 
+                <a href="{{ route('superadmin.dashboard') }}"
                    class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.dashboard') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.dashboard') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@
                 </a>
 
                 <!-- 2. PENGAJUAN UMKM (PRODUK / PROPOSAL) -->
-                <a href="{{ route('superadmin.pengajuan') }}" 
+                <a href="{{ route('superadmin.pengajuan') }}"
                    class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.pengajuan*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.pengajuan*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,7 +127,7 @@
                 </a>
 
                 <!-- 3. MANAJEMEN AKUN & VERIFIKASI -->
-                <a href="{{ route('superadmin.users') }}" 
+                <a href="{{ route('superadmin.users') }}"
                    class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.users*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.users*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +145,7 @@
 
                 @if(auth()->user()->role === 'super_admin')
                     <!-- 4. LOG AKTIVITAS (Khusus Super Admin) -->
-                    <a href="{{ route('superadmin.logs') }}" 
+                    <a href="{{ route('superadmin.logs') }}"
                        class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.logs*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                         <div class="flex min-w-0 items-center gap-3">
                             <svg class="w-4 h-4 {{ request()->routeIs('superadmin.logs*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,7 +161,7 @@
                 @endif
 
                 <!-- 5. KURASI & KATALOG RUKO -->
-                <a href="{{ route('superadmin.ruko') }}" 
+                <a href="{{ route('superadmin.ruko') }}"
                    class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.ruko*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.ruko*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,7 +180,7 @@
                 </a>
 
                 <!-- 6. MONITORING DIVIDEN & KEPATUHAN -->
-                <a href="{{ route('superadmin.dividen') }}" 
+                <a href="{{ route('superadmin.dividen') }}"
                    class="group flex items-center justify-between min-h-11 gap-3 rounded-xl px-3.5 py-2.5 text-left text-[11px] font-semibold tracking-[0.08em] uppercase transition-colors duration-150 {{ request()->routeIs('superadmin.dividen*') ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex min-w-0 items-center gap-3">
                         <svg class="w-4 h-4 {{ request()->routeIs('superadmin.dividen*') ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,7 +222,7 @@
 
     <!-- MAIN CONTENT WRAPPER -->
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
-        
+
         <!-- Top bar mobile header -->
         <header class="md:hidden bg-[#0F433C] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
             <div class="flex min-w-0 items-center gap-3">
@@ -238,7 +238,7 @@
             </div>
             <div class="flex items-center gap-2.5">
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
-                <button type="button" 
+                <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
                         aria-label="Aksesibilitas & Disabilitas"
                         title="Buka menu aksesibilitas disabilitas">
@@ -254,7 +254,7 @@
 
         <!-- Main Body -->
         <main class="flex-1 p-5 sm:p-8 md:p-10 max-w-7xl w-full mx-auto">
-            
+
             <!-- Alert Notifikasi Flash -->
             @if(session('success'))
                 <div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-sm animate-fade-in">
@@ -313,13 +313,13 @@
             </div>
 
             <div class="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                <button type="button" 
-                        onclick="closeAppConfirmModal()" 
+                <button type="button"
+                        onclick="closeAppConfirmModal()"
                         class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-600 hover:bg-gray-100 transition">
                     Batal
                 </button>
-                <button type="button" 
-                        id="app-confirm-submit-btn" 
+                <button type="button"
+                        id="app-confirm-submit-btn"
                         class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
                     Ya, Lanjutkan
                 </button>
@@ -344,10 +344,10 @@
         function openAppConfirmModal(config) {
             const modal = document.getElementById('app-custom-confirm-modal');
             if (!modal) return;
-            
+
             document.getElementById('app-confirm-title').innerText = config.title || 'Konfirmasi Tindakan';
             document.getElementById('app-confirm-message').innerHTML = config.message || 'Apakah Anda yakin ingin melanjutkan tindakan ini?';
-            
+
             const badgeEl = document.getElementById('app-confirm-badge');
             const badgeText = document.getElementById('app-confirm-badge-text');
             if (config.badge) {
@@ -356,7 +356,7 @@
             } else {
                 badgeEl.classList.add('hidden');
             }
-            
+
             const iconContainer = document.getElementById('app-confirm-icon-box');
             const iconType = config.icon || 'check';
             if (iconType === 'check' || iconType === 'success') {
@@ -369,12 +369,12 @@
                 iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             }
-            
+
             const submitBtn = document.getElementById('app-confirm-submit-btn');
             submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
-            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
+            submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' +
                 (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
-            
+
             submitBtn.onclick = function() {
                 closeAppConfirmModal();
                 if (config.form) {
@@ -383,7 +383,7 @@
                     config.onConfirm();
                 }
             };
-            
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
