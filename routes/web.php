@@ -18,6 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::view('/kebijakan-privasi', 'pages.kebijakan-privasi')->name('privacy');
+Route::view('/syarat-ketentuan', 'pages.syarat-ketentuan')->name('terms');
+
 // Halaman Onboarding / Edukasi Gabung (PaDi UMKM Style)
 Route::get('/gabung/investor', function () {
     return view('pages.gabung-investor');
@@ -59,8 +62,6 @@ Route::middleware('guest')->group(function () {
 
     // 2. Sign Up (UMKM & Investor)
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::get('/register/investor', [AuthController::class, 'showRegisterInvestor'])->name('register.investor');
-    Route::get('/register/umkm', [AuthController::class, 'showRegisterUmkm'])->name('register.umkm');
     Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 
     // 3. Verifikasi OTP Email
@@ -81,6 +82,8 @@ Route::middleware('guest')->group(function () {
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {
+    Route::get('/register/investor', [AuthController::class, 'showRegisterInvestor'])->name('register.investor');
+    Route::get('/register/umkm', [AuthController::class, 'showRegisterUmkm'])->name('register.umkm');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Formulir Pendaftaran Tahap 2 (Setelah Akun & OTP)

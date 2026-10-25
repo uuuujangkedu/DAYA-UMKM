@@ -241,7 +241,7 @@
 
                 <!-- Tombol Kirim Pesan: Rounded pill outline Sesuai Mockup -->
                 <div data-reveal-item>
-                    <a href="mailto:bantuan@daya-umkm.id" 
+                    <a href="mailto:fauza@titik-umkm.di"
                        class="inline-flex items-center justify-center border border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white font-semibold text-[13px] px-6 py-2.5 rounded-full transition-all duration-200 bg-white/70 shadow-sm" data-i18n="help.btn">
                         Kirim pesan ke tim bantuan
                     </a>
@@ -270,7 +270,7 @@
                         <span class="w-6 h-6 rounded-full bg-[#E8F7EC] text-[#2D6B22] flex items-center justify-center shrink-0 text-xs font-bold">
                             ✉
                         </span>
-                        <span>Email: <a href="mailto:kontak@daya-umkm.id" class="text-[#15241C] font-semibold hover:text-[#2D6B22] transition">kontak@daya-umkm.id</a></span>
+                        <span>Email: <a href="mailto:fauza@titik-umkm.di" class="text-[#15241C] font-semibold hover:text-[#2D6B22] transition">fauza@titik-umkm.id</a></span>
                     </div>
                     <div class="flex items-center gap-2.5">
                         <span class="w-6 h-6 rounded-full bg-[#E8F7EC] text-[#2D6B22] flex items-center justify-center shrink-0 text-xs font-bold">

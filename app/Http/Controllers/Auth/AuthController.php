@@ -9,6 +9,7 @@ use App\Models\Umkm;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,7 +39,7 @@ class AuthController extends Controller
     public function showRegister(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return $this->redirectAuthenticatedApplicant('investor');
         }
 
         return view('auth.register');
@@ -50,7 +51,7 @@ class AuthController extends Controller
     public function showRegisterInvestor(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return $this->redirectAuthenticatedApplicant('investor');
         }
 
         $request->merge(['role' => 'investor']);
@@ -64,7 +65,7 @@ class AuthController extends Controller
     public function showRegisterUmkm(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->route('dashboard');
+            return $this->redirectAuthenticatedApplicant('umkm');
         }
 
         $request->merge(['role' => 'umkm']);
@@ -495,6 +496,51 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login')->with('success', 'Anda telah berhasil keluar.');
+    }
+
+    private function redirectAuthenticatedApplicant(string $requestedRole): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if (! in_array($user->role, ['investor', 'umkm'], true)) {
+            return redirect()->route('dashboard')->with('error', 'Pendaftaran mitra hanya tersedia untuk akun investor atau pelaku UMKM.');
+        }
+
+        if ($user->role !== $requestedRole) {
+            $joinRoute = $user->role === 'umkm' ? 'gabung.umkm' : 'gabung.investor';
+
+            return redirect()->route($joinRoute)->with('error', 'Akun Anda terdaftar sebagai '.($user->role === 'umkm' ? 'pelaku UMKM' : 'investor').'. Gunakan akun yang sesuai untuk mendaftar sebagai '.($requestedRole === 'umkm' ? 'pelaku UMKM' : 'investor').'.');
+        }
+
+        if ($user->role === 'investor') {
+            if (empty($user->kategori_diminati)) {
+                return redirect()->route('formulir.investor')->with('info', 'Lengkapi formulir pendaftaran investor Anda.');
+            }
+
+            if ($user->status === 'menunggu_verifikasi') {
+                return redirect()->route('dashboard')->with('info', 'Formulir investor sudah diajukan dan sedang menunggu verifikasi admin.');
+            }
+
+            return redirect()->route('dashboard')->with('info', 'Akun investor Anda sudah diterima.');
+        }
+
+        if ($user->role === 'umkm') {
+            $umkm = Umkm::where('user_id', $user->id)->first();
+
+            if (! $umkm || $umkm->status_pengajuan === 'draf') {
+                return redirect()->route('formulir.umkm')->with('info', 'Lengkapi dan ajukan formulir pendaftaran UMKM Anda.');
+            }
+
+            if ($umkm->status_pengajuan === 'menunggu_verifikasi') {
+                return redirect()->route('formulir.umkm')->with('info', 'Pengajuan UMKM Anda sedang menunggu verifikasi admin.');
+            }
+
+            if ($umkm->status_pengajuan === 'ditolak') {
+                return redirect()->route('formulir.umkm')->with('info', 'Pengajuan UMKM Anda belum diterima. Perbarui formulir sebelum mengajukan kembali.');
+            }
+        }
+
+        return redirect()->route('dashboard')->with('info', 'Akun Anda sudah terdaftar sebagai '.($requestedRole === 'umkm' ? 'pelaku UMKM' : 'investor').'.');
     }
 
     /**
