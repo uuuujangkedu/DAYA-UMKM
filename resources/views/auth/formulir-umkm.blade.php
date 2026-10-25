@@ -329,13 +329,13 @@
                 @endphp
 
                 @forelse ($rukos as $index => $ruko)
-                    <label class="ruko-card block rounded-[10px] border {{ $selectedRukoId == $ruko->id_ruko ? 'border-[#0b5a4a] ring-2 ring-[#0b5a4a]' : 'border-[#e2e1d8] hover:border-[#0b5a4a]' }} p-3 cursor-pointer transition bg-white relative group shadow-2xs hover:shadow-sm">
+                    <label class="ruko-card block cursor-pointer group">
                         <input type="radio"
                                name="id_ruko_diminati"
                                value="{{ $ruko->id_ruko }}"
                                {{ $selectedRukoId == $ruko->id_ruko ? 'checked' : '' }}
-                               class="absolute top-3 right-3 text-[#0b5a4a] focus:ring-[#0b5a4a]">
-
+                               class="peer sr-only">
+                        <div class="rounded-[10px] border border-[#e2e1d8] peer-checked:border-[#0b5a4a] peer-checked:ring-2 peer-checked:ring-[#0b5a4a] peer-focus-visible:ring-2 peer-focus-visible:ring-[#0b5a4a] p-3 transition bg-white relative shadow-2xs hover:shadow-sm hover:border-[#0b5a4a]">
                         <div class="w-full aspect-[16/10] rounded-[8px] overflow-hidden mb-2.5 bg-[#f2f8ed] relative border border-[#e2e1d8]">
                             <img src="{{ $ruko->foto_url }}"
                                  alt="{{ $ruko->nama_ruko }}"
@@ -356,6 +356,7 @@
                             <div class="pt-1 text-[12px] font-semibold text-[#0b5a4a]">
                                 Rp {{ number_format($ruko->harga_sewa_per_bulan, 0, ',', '.') }} / bln
                             </div>
+                        </div>
                         </div>
                     </label>
                 @empty
@@ -407,7 +408,6 @@
     document.getElementById('clear-ruko-selection').addEventListener('click', () => {
         document.querySelectorAll('input[name="id_ruko_diminati"]').forEach(input => {
             input.checked = false;
-            input.dispatchEvent(new Event('change', { bubbles: true }));
         });
     });
 
