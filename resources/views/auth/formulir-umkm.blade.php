@@ -75,7 +75,7 @@
         </div>
     @endif
 
-    <form action="{{ route('formulir.umkm.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+    <form action="{{ route('formulir.umkm.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="umkm-submission-form" novalidate>
         @csrf        <!-- CARD 1: ALUR VERIFIKASI UMKM -->
         <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] shadow-xs">
             <h2 class="text-[16px] font-bold text-[#161d1a] mb-3">
@@ -98,10 +98,13 @@
         </div>
 
         <!-- CARD 2: BAGIAN 1 - IDENTITAS PENGAJU UMKM -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
-            <div class="border-b border-[#e2e1d8] pb-3.5">
-                <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 1</span>
-                <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pengaju UMKM</h3>
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs" id="section-bagian-1">
+            <div class="border-b border-[#e2e1d8] pb-3.5 flex items-center justify-between flex-wrap gap-2">
+                <div>
+                    <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 1</span>
+                    <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pengaju UMKM</h3>
+                </div>
+                <span id="badge-missing-sec-1" class="hidden text-[12px] font-semibold text-[#b45309] bg-[#fef3c7] border border-[#fde68a] px-2.5 py-1 rounded-full"></span>
             </div>
 
             <!-- Nama Lengkap Pemilik -->
@@ -158,14 +161,18 @@
                 :rt="old('rt', $umkm->rt ?? $user->rt)"
                 :rw="old('rw', $umkm->rw ?? $user->rw)"
                 id-prefix="umkm_domisili"
+                :required="request('aksi') === 'kirim_pengajuan'"
             />
         </div>
 
         <!-- CARD 3: BAGIAN 2 - INFORMASI USAHA & PRODUK -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs">
-            <div class="border-b border-[#e2e1d8] pb-3.5">
-                <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 2</span>
-                <h3 class="text-[18px] font-bold text-[#161d1a]">Informasi usaha & produk</h3>
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] space-y-5 shadow-xs" id="section-bagian-2">
+            <div class="border-b border-[#e2e1d8] pb-3.5 flex items-center justify-between flex-wrap gap-2">
+                <div>
+                    <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 2</span>
+                    <h3 class="text-[18px] font-bold text-[#161d1a]">Informasi usaha & produk</h3>
+                </div>
+                <span id="badge-missing-sec-2" class="hidden text-[12px] font-semibold text-[#b45309] bg-[#fef3c7] border border-[#fde68a] px-2.5 py-1 rounded-full"></span>
             </div>
 
             <!-- Nama Usaha & Jenis Usaha -->
@@ -177,6 +184,7 @@
                     <input type="text"
                            id="nama_usaha"
                            name="nama_usaha"
+                           required
                            value="{{ old('nama_usaha', $umkm->nama_usaha) }}"
                            placeholder="Contoh: Kopi Muria Sejahtera"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none">
@@ -189,6 +197,7 @@
                     @php $kategoriCurrent = old('jenis_usaha', $umkm->jenis_usaha ?? 'Makanan'); @endphp
                     <select id="jenis_usaha"
                             name="jenis_usaha"
+                            required
                             class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] transition outline-none cursor-pointer">
                         <option value="Makanan" {{ $kategoriCurrent === 'Makanan' ? 'selected' : '' }}>Makanan & minuman</option>
                         <option value="Jasa" {{ $kategoriCurrent === 'Jasa' ? 'selected' : '' }}>Jasa & layanan</option>
@@ -228,6 +237,7 @@
                     <input type="text"
                            id="estimasi_bagi_hasil"
                            name="estimasi_bagi_hasil"
+                           required
                            value="{{ old('estimasi_bagi_hasil', $umkm->estimasi_bagi_hasil ?? '15% per bulan') }}"
                            placeholder="Contoh: 15% dari laba bersih per bulan"
                            class="w-full h-11 px-3.5 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition">
@@ -249,6 +259,7 @@
                     <input type="file"
                            id="foto_produk"
                            name="foto_produk"
+                           {{ !$umkm->foto_produk ? 'required' : '' }}
                            accept="image/*"
                            class="hidden"
                            onchange="updateFileName(this, 'foto_produk_label')">
@@ -273,6 +284,7 @@
                     <input type="file"
                            id="file_proposal"
                            name="file_proposal"
+                           {{ !$umkm->file_proposal ? 'required' : '' }}
                            accept=".pdf,.doc,.docx,.zip"
                            class="hidden"
                            onchange="updateFileName(this, 'file_proposal_label')">
@@ -292,6 +304,7 @@
                 </label>
                 <textarea id="deskripsi"
                           name="deskripsi"
+                          required
                           rows="3"
                           placeholder="Jelaskan jenis produk, keunikan usaha, dan target pasar Anda..."
                           class="w-full px-3.5 py-3 bg-white border border-[#e2e1d8] focus:border-[#0b5a4a] focus:ring-1 focus:ring-[#0b5a4a] rounded-[6px] text-[14px] text-[#161d1a] outline-none transition min-h-[96px] resize-y">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
@@ -367,24 +380,55 @@
             </div>
         </div>
 
-        <!-- Tombol Aksi: Simpan Draf & Kirim Pengajuan -->
-        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="text-[13px] text-[#4b5551]">
-                Data tersimpan otomatis dalam akun Anda. Anda dapat kembali melengkapinya kapan saja.
+        <!-- AREA PENGARAHAN KELENGKAPAN PENGAJUAN -->
+        <div id="panduan-kelengkapan" class="hidden rounded-[12px] p-5 sm:p-6 bg-[#fffbeb] border border-[#fcd34d] shadow-xs space-y-3.5 transition-all duration-300">
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-[#fde68a] text-[#b45309] flex items-center justify-center font-bold text-[14px] shrink-0 mt-0.5 shadow-2xs">
+                        <svg class="w-4 h-4 text-[#b45309]" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 class="text-[15px] font-bold text-[#92400e]">Pengarahan Kolom Wajib yang Belum Diisi</h4>
+                        <p class="text-[13px] text-[#78350f] mt-0.5 leading-relaxed">
+                            Terdapat <strong id="panduan-jumlah" class="font-bold text-[#b45309]">0</strong> kolom wajib yang belum lengkap. Klik nama kolom di bawah untuk langsung menuju posisinya:
+                        </p>
+                    </div>
+                </div>
+                <button type="button" onclick="arahkanKeKolomPertama()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-[#f59e0b] hover:bg-[#d97706] text-white text-[12px] font-semibold transition cursor-pointer shadow-2xs">
+                    <span>Arahkan ke kolom pertama</span>
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                </button>
             </div>
 
-            <div class="flex items-center gap-3 w-full sm:w-auto">
+            <!-- List Tombol Arahkan ke Kolom -->
+            <div id="panduan-list" class="flex flex-wrap gap-2 pt-2 border-t border-[#fde68a]">
+                <!-- Item di-generate via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Tombol Aksi: Simpan Draf & Kirim Pengajuan -->
+        <div class="bg-white rounded-[12px] p-6 sm:p-7 border border-[#e2e1d8] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="text-[13px] text-[#4b5551] flex-1 leading-relaxed">
+                Data tersimpan otomatis dalam akun Anda. Anda dapat kembali melengkapinya kapan saja. Pengajuan hanya terkirim setelah semua kolom wajib terisi.
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto shrink-0">
                 <button type="submit"
                         name="aksi"
                         value="simpan_draf"
-                        class="btn-secondary w-full sm:w-auto h-11 px-5 text-[14px] font-semibold flex items-center justify-center">
+                        formnovalidate
+                        class="btn-secondary w-full sm:w-auto min-h-[44px] h-auto py-2.5 px-5 text-[14px] font-semibold flex items-center justify-center text-center whitespace-nowrap shrink-0">
                     Simpan draf
                 </button>
 
                 <button type="submit"
                         name="aksi"
                         value="kirim_pengajuan"
-                        class="btn-primary w-full sm:w-auto h-11 px-6 text-[14px] font-semibold flex items-center justify-center shadow-xs">
+                        class="btn-primary w-full sm:w-auto min-h-[44px] h-auto py-2.5 px-6 text-[14px] font-semibold flex items-center justify-center text-center whitespace-nowrap shrink-0 shadow-xs">
                     Kirim pengajuan ke admin
                 </button>
             </div>
@@ -395,6 +439,173 @@
 </div>
 
 <script>
+    const form = document.getElementById('umkm-submission-form');
+    const panduanKelengkapan = document.getElementById('panduan-kelengkapan');
+    const panduanJumlah = document.getElementById('panduan-jumlah');
+    const panduanList = document.getElementById('panduan-list');
+    const badgeSec1 = document.getElementById('badge-missing-sec-1');
+    const badgeSec2 = document.getElementById('badge-missing-sec-2');
+
+    const fieldMeta = {
+        'pemilik': { label: 'Nama pemilik / pengelola usaha', section: 'Bagian 1' },
+        'nomor_whatsapp': { label: 'Nomor WhatsApp usaha aktif', section: 'Bagian 1' },
+        'umkm_domisili_provinsi': { label: 'Provinsi domisili usaha', section: 'Bagian 1' },
+        'umkm_domisili_kota': { label: 'Kota / Kabupaten domisili usaha', section: 'Bagian 1' },
+        'nama_usaha': { label: 'Nama usaha / merk dagang', section: 'Bagian 2' },
+        'jenis_usaha': { label: 'Kategori sektor usaha', section: 'Bagian 2' },
+        'estimasi_bagi_hasil': { label: 'Estimasi bagi hasil bulanan', section: 'Bagian 2' },
+        'foto_produk': { label: 'Foto produk / usaha', section: 'Bagian 2' },
+        'file_proposal': { label: 'File proposal usaha', section: 'Bagian 2' },
+        'deskripsi': { label: 'Deskripsi singkat usaha', section: 'Bagian 2' },
+    };
+
+    function getMissingRequiredFields() {
+        return [...form.querySelectorAll('[required]')].filter(field => {
+            if (field.disabled) return false;
+            if (field.type === 'file') return field.files.length === 0;
+            return !field.value.trim();
+        });
+    }
+
+    function renderGuidance(missingFields) {
+        if (!panduanKelengkapan) return;
+
+        const count = missingFields.length;
+        if (count === 0) {
+            panduanKelengkapan.classList.add('hidden');
+            if (badgeSec1) badgeSec1.classList.add('hidden');
+            if (badgeSec2) badgeSec2.classList.add('hidden');
+            return;
+        }
+
+        if (panduanJumlah) panduanJumlah.textContent = count;
+        if (panduanList) {
+            panduanList.innerHTML = '';
+            let sec1Count = 0;
+            let sec2Count = 0;
+
+            missingFields.forEach(field => {
+                const meta = fieldMeta[field.id] || {
+                    label: form.querySelector(`label[for="${field.id}"]`)?.textContent.trim().replace('*', '').trim() || field.name,
+                    section: field.closest('#section-bagian-1') ? 'Bagian 1' : 'Bagian 2'
+                };
+
+                if (meta.section === 'Bagian 1' || field.closest('#section-bagian-1')) {
+                    sec1Count++;
+                } else {
+                    sec2Count++;
+                }
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] bg-white border border-[#f59e0b] hover:bg-[#fef3c7] text-[#92400e] text-[12.5px] font-semibold transition cursor-pointer shadow-2xs hover:-translate-y-0.5 active:translate-y-0';
+                btn.innerHTML = `<span class="text-[10.5px] font-bold px-1.5 py-0.5 bg-[#fde68a] text-[#92400e] rounded">${meta.section}</span><span>${meta.label}</span><svg class="w-3.5 h-3.5 text-[#d97706] shrink-0" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>`;
+                btn.addEventListener('click', () => {
+                    arahkanKeKolom(field.id);
+                });
+                panduanList.appendChild(btn);
+            });
+
+            if (badgeSec1) {
+                badgeSec1.textContent = `${sec1Count} wajib belum diisi`;
+                badgeSec1.classList.toggle('hidden', sec1Count === 0);
+            }
+            if (badgeSec2) {
+                badgeSec2.textContent = `${sec2Count} wajib belum diisi`;
+                badgeSec2.classList.toggle('hidden', sec2Count === 0);
+            }
+        }
+
+        panduanKelengkapan.classList.remove('hidden');
+    }
+
+    window.arahkanKeKolom = function(id) {
+        const field = document.getElementById(id);
+        if (!field) return;
+        const target = field.type === 'file' ? (document.getElementById(`${field.id}_label`) || field) : field;
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (field.type !== 'file') {
+            field.focus();
+        }
+        target.classList.add('ring-4', 'ring-[#0b5a4a]/30');
+        setTimeout(() => target.classList.remove('ring-4', 'ring-[#0b5a4a]/30'), 1800);
+    };
+
+    window.arahkanKeKolomPertama = function() {
+        const missing = getMissingRequiredFields();
+        if (missing.length > 0) {
+            arahkanKeKolom(missing[0].id);
+        }
+    };
+
+    form.addEventListener('submit', event => {
+        if (event.submitter?.value !== 'kirim_pengajuan') {
+            return;
+        }
+
+        const requiredFields = [...form.querySelectorAll('[required]')].filter(field => !field.disabled);
+        const missingFields = getMissingRequiredFields();
+
+        requiredFields.forEach(field => {
+            const error = field.parentElement.querySelector('[data-validation-error]');
+            const isInvalid = missingFields.includes(field);
+            const targetContainer = field.type === 'file' ? document.getElementById(`${field.id}_label`) : field;
+            field.setAttribute('aria-invalid', String(isInvalid));
+            targetContainer.classList.toggle('border-red-500', isInvalid);
+            targetContainer.classList.toggle('focus:border-red-500', isInvalid);
+            targetContainer.classList.toggle('border-[#e2e1d8]', !isInvalid);
+            if (error) {
+                error.classList.toggle('hidden', !isInvalid);
+            }
+            const label = form.querySelector(`label[for="${field.id}"]`);
+            label?.classList.toggle('text-red-700', isInvalid);
+            label?.classList.toggle('text-[#161d1a]', !isInvalid);
+        });
+
+        if (missingFields.length) {
+            event.preventDefault();
+            renderGuidance(missingFields);
+            panduanKelengkapan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    });
+
+    document.querySelectorAll('#umkm-submission-form [required]').forEach(field => {
+        if (field.parentElement.querySelector('[data-validation-error]')) {
+            return;
+        }
+        const fieldLabel = form.querySelector(`label[for="${field.id}"]`)?.textContent.trim().replace('*', '').trim() || 'Kolom ini';
+        const error = document.createElement('span');
+        error.dataset.validationError = '';
+        error.className = 'hidden mt-1.5 text-[13px] text-red-700 flex items-center gap-1.5';
+        error.setAttribute('role', 'alert');
+        error.innerHTML = `<svg class="w-4 h-4 text-red-600 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg><span>${fieldLabel} wajib diisi</span>`;
+        field.insertAdjacentElement('afterend', error);
+        if (field.type === 'file') {
+            const uploadLabel = form.querySelector(`label[for="${field.id}"]`);
+            uploadLabel?.parentElement.append(error);
+        }
+
+        const handleInputChanged = () => {
+            const isFilled = field.type === 'file' ? field.files.length > 0 : Boolean(field.value.trim());
+            if (isFilled) {
+                field.setAttribute('aria-invalid', 'false');
+                const targetContainer = field.type === 'file' ? document.getElementById(`${field.id}_label`) : field;
+                targetContainer.classList.remove('border-red-500', 'focus:border-red-500');
+                targetContainer.classList.add('border-[#e2e1d8]');
+                error.classList.add('hidden');
+                const label = form.querySelector(`label[for="${field.id}"]`);
+                label?.classList.remove('text-red-700');
+                label?.classList.add('text-[#161d1a]');
+            }
+            if (panduanKelengkapan && !panduanKelengkapan.classList.contains('hidden')) {
+                renderGuidance(getMissingRequiredFields());
+            }
+        };
+
+        field.addEventListener('input', handleInputChanged);
+        field.addEventListener('change', handleInputChanged);
+    });
+
     function updateFileName(input, labelId) {
         const label = document.getElementById(labelId);
         if (input.files && input.files.length > 0) {

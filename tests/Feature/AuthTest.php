@@ -7,6 +7,7 @@ use App\Models\Ruko;
 use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Laravel\Socialite\Facades\Socialite;
@@ -426,6 +427,36 @@ class AuthTest extends TestCase
         ]);
     }
 
+    public function test_umkm_submission_requires_complete_profile_and_preserves_draft(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'umkm',
+            'status' => 'aktif',
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($user)->post('/formulir/umkm', [
+            'aksi' => 'simpan_draf',
+            'nama_usaha' => 'Kopi Sejahtera',
+            'jenis_usaha' => 'Makanan',
+            'pemilik' => 'Budi Santoso',
+            'nomor_whatsapp' => '081234567890',
+        ])->assertRedirect('/dashboard');
+
+        $this->from('/formulir/umkm')->post('/formulir/umkm', [
+            'aksi' => 'kirim_pengajuan',
+            'nama_usaha' => 'Kopi Sejahtera',
+            'jenis_usaha' => 'Makanan',
+            'pemilik' => 'Budi Santoso',
+            'nomor_whatsapp' => '081234567890',
+        ])->assertRedirect('/formulir/umkm')->assertSessionHasErrors(['provinsi', 'kota', 'kecamatan', 'kelurahan', 'deskripsi', 'foto_produk', 'file_proposal']);
+
+        $this->assertDatabaseHas('umkm', [
+            'user_id' => $user->id,
+            'status_pengajuan' => 'draf',
+        ]);
+    }
+
     public function test_umkm_can_save_draft_and_submit_pengajuan(): void
     {
         $user = User::factory()->create([
@@ -433,6 +464,11 @@ class AuthTest extends TestCase
             'status' => 'aktif',
             'email_verified_at' => now(),
         ]);
+
+        $provider = PenyediaRuko::create(['nama_perusahaan' => 'Pemilik Ruko', 'kontak' => '081234567890', 'alamat' => 'Jakarta']);
+        $ruko = Ruko::create(['id_penyedia' => $provider->id_penyedia, 'nama_ruko' => 'Ruko Uji', 'lokasi' => 'Jakarta', 'harga_sewa_per_bulan' => 3500000, 'status_ketersediaan' => 'tersedia']);
+        $foto = UploadedFile::fake()->image('produk.png');
+        $proposal = UploadedFile::fake()->create('proposal.pdf', 100, 'application/pdf');
 
         // Simpan draf
         $draftResponse = $this->actingAs($user)->post('/formulir/umkm', [
@@ -457,12 +493,21 @@ class AuthTest extends TestCase
             'jenis_usaha' => 'Makanan',
             'pemilik' => 'Budi Santoso',
             'nomor_whatsapp' => '081234567890',
+            'provinsi' => 'DKI Jakarta',
+            'kota' => 'Jakarta Selatan',
+            'kecamatan' => 'Kebayoran Baru',
+            'kelurahan' => 'Melawai',
+            'deskripsi' => 'Kedai kopi dan makanan ringan.',
+            'foto_produk' => $foto,
+            'file_proposal' => $proposal,
+            'id_ruko_diminati' => $ruko->id_ruko,
         ]);
 
         $submitResponse->assertRedirect('/dashboard');
         $this->assertDatabaseHas('umkm', [
             'user_id' => $user->id,
             'nama_usaha' => 'Kopi Sejahtera',
+            'id_ruko_diminati' => $ruko->id_ruko,
             'status_pengajuan' => 'menunggu_verifikasi',
         ]);
     }
