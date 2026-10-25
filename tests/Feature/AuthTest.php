@@ -479,7 +479,7 @@ class AuthTest extends TestCase
             'nomor_whatsapp' => '081234567890',
         ]);
 
-        $draftResponse->assertRedirect('/dashboard');
+        $draftResponse->assertRedirect(route('dashboard', ['tab' => 'profil']));
         $this->assertDatabaseHas('umkm', [
             'user_id' => $user->id,
             'nama_usaha' => 'Kopi Sejahtera',
@@ -503,7 +503,7 @@ class AuthTest extends TestCase
             'id_ruko_diminati' => $ruko->id_ruko,
         ]);
 
-        $submitResponse->assertRedirect('/dashboard');
+        $submitResponse->assertRedirect(route('dashboard', ['tab' => 'profil']));
         $this->assertDatabaseHas('umkm', [
             'user_id' => $user->id,
             'nama_usaha' => 'Kopi Sejahtera',

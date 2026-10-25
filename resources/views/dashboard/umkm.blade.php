@@ -12,31 +12,32 @@
 
         <!-- NOTIFIKASI MINAT INVESTASI MASUK DARI INVESTOR (Fitur Inti Permintaan User) -->
         @if(isset($notifikasiInvestasi) && $notifikasiInvestasi->count() > 0)
-            <div class="bg-gradient-to-r from-amber-50 via-yellow-50 to-emerald-50 rounded-2xl p-5 shadow-sm animate-fade-in">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-amber-400 text-amber-950 flex items-center justify-center text-lg font-bold shrink-0">
+            <div class="bg-gradient-to-r from-amber-50/90 via-yellow-50/80 to-emerald-50/90 rounded-3xl p-6 sm:p-7 shadow-sm border border-amber-200/50 animate-fade-in">
+                <!-- Header Banner Notifikasi Investor -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-amber-200/70">
+                    <div class="flex items-center gap-3.5">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-400 text-amber-950 flex items-center justify-center text-xl font-bold shrink-0 shadow-sm">
                             🎉
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-sm sm:text-base font-bold text-[#1A202C]">
+                            <div class="flex flex-wrap items-center gap-2.5">
+                                <h3 class="text-base sm:text-lg font-extrabold text-[#1A202C]">
                                     Kabar Baik! Ada Investor Tertarik Mendanai Usaha Anda
                                 </h3>
                                 @if(isset($unreadInvestasiCount) && $unreadInvestasiCount > 0)
-                                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white animate-pulse">
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-rose-500 text-white animate-pulse">
                                         {{ $unreadInvestasiCount }} Baru
                                     </span>
                                 @endif
                             </div>
-                            <p class="text-[11px] text-[#555555] mt-0.5 font-medium">
+                            <p class="text-xs text-[#555555] mt-1 font-medium">
                                 Calon investor telah meninjau proposal Anda dan menyatakan komitmen pendanaan
                             </p>
                         </div>
                     </div>
 
                     <a href="{{ route('dashboard', ['tab' => 'inbox']) }}"
-                       class="px-4 py-2 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold shadow-sm transition flex items-center gap-1.5 shrink-0 self-start sm:self-center">
+                       class="px-4 py-2.5 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold shadow-sm transition flex items-center gap-2 shrink-0 self-start sm:self-center">
                         <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
@@ -45,54 +46,54 @@
                     </a>
                 </div>
 
-                <!-- Daftar Notifikasi Investor -->
-                <div class="space-y-2.5 mt-3">
+                <!-- Daftar Notifikasi Investor Berjarak Rapi -->
+                <div class="space-y-4">
                     @foreach($notifikasiInvestasi as $notif)
-                        <div class="bg-white rounded-xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                            <div class="flex items-start gap-3.5">
-                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-black text-sm shrink-0 border border-blue-200">
+                        <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-amber-100 flex flex-col lg:flex-row lg:items-center justify-between gap-5 transition hover:shadow-md">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-900 flex items-center justify-center font-black text-sm shrink-0 border border-blue-200 shadow-sm">
                                     {{ strtoupper(substr($notif->pengguna->name ?? 'I', 0, 2)) }}
                                 </div>
-                                <div class="min-w-0">
-                                    <div class="flex items-center gap-2">
-                                        <h4 class="text-sm font-extrabold text-[#1A202C]">
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex flex-wrap items-center gap-2.5">
+                                        <h4 class="text-base font-extrabold text-[#1A202C]">
                                             {{ $notif->pengguna->name ?? 'Investor' }}
                                         </h4>
                                         @if($notif->status === 'aktif')
-                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-100 text-emerald-800">
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
                                                 🟢 Kemitraan Aktif
                                             </span>
                                         @elseif($notif->status === 'ditolak')
-                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-gray-100 text-gray-600">
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-gray-100 text-gray-600 border border-gray-200">
                                                 Ditolak
                                             </span>
                                         @else
-                                            <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-amber-100 text-amber-800">
+                                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-900 border border-amber-200">
                                                 Menunggu Respon Anda
                                             </span>
                                         @endif
 
                                         @if(!$notif->dibaca)
-                                            <span class="w-2 h-2 rounded-full bg-rose-500" title="Belum dibaca"></span>
+                                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-rose-200" title="Belum dibaca"></span>
                                         @endif
                                     </div>
-                                    <p class="text-xs text-gray-700 mt-1">
-                                        Komitmen Modal: <span class="font-extrabold text-emerald-700 text-sm">Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }}</span>
+                                    <p class="text-xs sm:text-sm text-gray-700 mt-2">
+                                        Komitmen Modal: <span class="font-extrabold text-emerald-700 text-sm sm:text-base">Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }}</span>
                                         &bull; Bagi Hasil: <span class="font-bold text-gray-800">{{ $notif->persentase_bagi_hasil }}% ({{ $notif->periode_pembagian }})</span>
                                     </p>
                                     @if(!empty($notif->catatan))
-                                        <p class="text-xs text-gray-500 italic mt-1 bg-gray-50 p-2 rounded-xl border border-gray-100">
+                                        <p class="text-xs text-gray-600 italic mt-3 bg-gray-50/90 p-3 rounded-xl border border-gray-100">
                                             "{{ $notif->catatan }}"
                                         </p>
                                     @endif
-                                    <span class="text-[10px] text-gray-400 mt-1 block font-medium">
+                                    <span class="text-[11px] text-gray-400 mt-2 block font-medium">
                                         Diajukan {{ $notif->tanggal_investasi ? $notif->tanggal_investasi->diffForHumans() : '-' }}
                                     </span>
                                 </div>
                             </div>
 
                             <!-- Tombol Tindak Lanjut UMKM (Sinergi Dua Arah) -->
-                            <div class="flex flex-wrap items-center gap-2 shrink-0 self-end md:self-center">
+                            <div class="flex flex-wrap items-center gap-2.5 shrink-0 self-start lg:self-center pt-2 lg:pt-0">
                                 @if($notif->status === 'pending')
                                     <!-- Aksi Terima Investasi -->
                                     <form id="form-terima-beranda-{{ $notif->id_investasi }}" action="{{ route('dashboard.umkm.investasi.terima', $notif->id_investasi) }}" method="POST">
@@ -102,16 +103,16 @@
                                                     title: 'Terima Komitmen Investasi',
                                                     message: 'Apakah Anda yakin ingin menerima komitmen investasi ini dari <strong>{{ addslashes($notif->pengguna->name ?? 'Investor') }}</strong>? Status kemitraan akan resmi berstatus <strong>AKTIF</strong> dan tercatat dalam permodalan usaha.',
                                                     badge: 'Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }} &bull; {{ $notif->persentase_bagi_hasil }}% Bagi Hasil',
-                                                    confirmText: '✓ Ya, Terima Investasi',
-                                                    confirmClass: 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white',
+                                                    confirmText: 'Ya, Terima Investasi',
+                                                    confirmClass: 'bg-[#0F433C] hover:bg-[#19584F] text-white',
                                                     icon: 'check',
                                                     form: document.getElementById('form-terima-beranda-{{ $notif->id_investasi }}')
                                                 })"
-                                                class="px-3.5 py-2 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                                            <svg class="w-3.5 h-3.5 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                class="px-4 py-2.5 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                            <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                                             </svg>
-                                            <span>✓ Terima Investasi</span>
+                                            <span>Terima Investasi</span>
                                         </button>
                                     </form>
 
@@ -123,12 +124,12 @@
                                                     title: 'Tolak Minat Investasi',
                                                     message: 'Apakah Anda yakin ingin menolak minat pendanaan dari <strong>{{ addslashes($notif->pengguna->name ?? 'Investor') }}</strong>? Penolakan ini akan mengembalikan status pengajuan.',
                                                     badge: 'Tolak Tawaran Rp {{ number_format($notif->jumlah_modal, 0, ',', '.') }}',
-                                                    confirmText: '✕ Ya, Tolak Investasi',
+                                                    confirmText: 'Ya, Tolak Investasi',
                                                     confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
                                                     icon: 'danger',
                                                     form: document.getElementById('form-tolak-beranda-{{ $notif->id_investasi }}')
                                                 })"
-                                                class="px-3 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">
+                                                class="px-4 py-2.5 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 text-xs font-bold transition">
                                             ✕ Tolak
                                         </button>
                                     </form>
@@ -136,8 +137,8 @@
                                     <!-- Tombol Setor Dividen Cepat -->
                                     <button type="button"
                                             onclick="openSetorDividenModal('{{ $notif->id_investasi }}', '{{ addslashes($notif->pengguna->name) }}', '{{ addslashes($notif->pengguna->bank_name ?? 'Belum Diatur') }}', '{{ $notif->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($notif->pengguna->nama_pemilik_rekening ?? $notif->pengguna->name) }}')"
-                                            class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                         <span>💸 Setor Dividen</span>
@@ -147,8 +148,8 @@
                                 @if(!empty($notif->pengguna->phone_number))
                                     <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $notif->pengguna->phone_number) }}?text=Halo%20{{ urlencode($notif->pengguna->name) }},%20terima%20kasih%20atas%20minat%20investasi%20Anda%20di%20usaha%20{{ urlencode($umkm->nama_usaha) }}%20melalui%20DAYA%20UMKM."
                                        target="_blank"
-                                       class="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
-                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                       class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm flex items-center gap-1.5">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.99.54 2.012.85 2.796.85 3.177 0 5.766-2.587 5.766-5.766 0-3.18-2.586-5.767-5.766-5.767zm7.55 5.766c0 4.164-3.393 7.552-7.55 7.552-1.312 0-2.539-.344-3.61-.951l-4.043 1.059 1.082-3.947c-.707-1.144-1.116-2.483-1.116-3.713 0-4.165 3.39-7.553 7.55-7.553 4.163 0 7.687 3.388 7.687 7.552z"/>
                                         </svg>
                                         <span>WA</span>
@@ -158,7 +159,7 @@
                                 @if(!$notif->dibaca)
                                     <form action="{{ route('dashboard.umkm.notifikasi.read', $notif->id_investasi) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="px-2.5 py-2 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-600 text-xs font-semibold transition" title="Tandai Sudah Dibaca">
+                                        <button type="submit" class="px-3 py-2.5 rounded-xl border border-gray-300 hover:bg-gray-100 text-gray-600 text-xs font-semibold transition" title="Tandai Sudah Dibaca">
                                             ✓
                                         </button>
                                     </form>
@@ -174,7 +175,7 @@
         <div>
             <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A202C]">BERANDA</h1>
             <p class="text-sm sm:text-base text-[#555555] mt-1.5 font-medium">
-                Halo, <span class="font-bold text-[#2D6A4F]">{{ $user->name }}</span>. Ini ringkasan usahamu.
+                Halo, <span class="font-bold text-[#20675D]">{{ $user->name }}</span>. Ini ringkasan usahamu.
             </p>
         </div>
 
@@ -375,7 +376,7 @@
         <!-- FITUR SINERGI 1: BANNER SEWA RUKO DISPONSORI INVESTOR -->
         @if(isset($sewaDisponsori) && $sewaDisponsori->isNotEmpty())
             <div class="rounded-2xl p-6 sm:p-7 shadow-lg"
-                 style="background: linear-gradient(135deg, #1B4D3E 0%, #2D6A4F 100%) !important; color: #ffffff !important;">
+                 style="background: linear-gradient(135deg, #0F433C 0%, #20675D 100%) !important; color: #ffffff !important;">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div class="flex items-start gap-3.5">
                         <div class="w-12 h-12 rounded-2xl bg-white/10 text-amber-300 border border-white/20 flex items-center justify-center text-2xl shrink-0">
@@ -393,7 +394,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <span class="px-3.5 py-2 rounded-xl bg-white text-[#1B4D3E] text-xs font-bold self-start sm:self-auto shadow-sm">
+                    <span class="px-3.5 py-2 rounded-xl bg-white text-[#0F433C] text-xs font-bold self-start sm:self-auto shadow-sm">
                         ✓ Sewa Ditanggung Investor
                     </span>
                 </div>
@@ -404,7 +405,7 @@
         <div class="card-soft p-6 sm:p-8">
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
                 <div class="max-w-xl">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.12em] bg-[#2D6A4F]/10 text-[#2D6A4F] border border-[#7BAE91]/40">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-[0.12em] bg-[#20675D]/10 text-[#20675D] border border-[#7BAE91]/40">
                         <span class="w-1.5 h-1.5 rounded-full bg-[#7BAE91]"></span>
                         Sinergi Finansial Riil
                     </span>
@@ -419,8 +420,8 @@
                 <!-- Ringkasan Akumulasi Modal & Dividen -->
                 <div class="flex items-stretch gap-3 shrink-0">
                     <div class="px-4 py-3 rounded-xl bg-[#EFF5F1]/80 text-left">
-                        <span class="text-[10px] font-semibold text-[#2D6A4F] uppercase tracking-[0.08em] block">Modal Investor Terkumpul</span>
-                        <span class="text-sm font-bold text-[#1B4D3E] mt-0.5 block">Rp {{ number_format($totalModalTerkumpul ?? 0, 0, ',', '.') }}</span>
+                        <span class="text-[10px] font-semibold text-[#20675D] uppercase tracking-[0.08em] block">Modal Investor Terkumpul</span>
+                        <span class="text-sm font-bold text-[#0F433C] mt-0.5 block">Rp {{ number_format($totalModalTerkumpul ?? 0, 0, ',', '.') }}</span>
                     </div>
                     <div class="px-4 py-3 rounded-xl bg-[#FBF6EA]/80 text-left">
                         <span class="text-[10px] font-semibold text-amber-800 uppercase tracking-[0.08em] block">Total Dividen Disetor</span>
@@ -438,7 +439,7 @@
                         <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#555555]">Kemitraan Berjalan</p>
                         <h2 class="text-lg font-bold text-[#1A202C] tracking-tight mt-0.5">Mitra Investor Aktif & Kepatuhan Dividen</h2>
                     </div>
-                    <span class="text-xs font-semibold text-[#2D6A4F]">{{ $investasiAktif->count() }} kemitraan aktif</span>
+                    <span class="text-xs font-semibold text-[#20675D]">{{ $investasiAktif->count() }} kemitraan aktif</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -450,7 +451,7 @@
                             <div>
                                 <div class="flex items-start justify-between gap-2">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                                        <div class="w-10 h-10 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-bold text-sm shrink-0">
                                             {{ strtoupper(substr($inv->pengguna->name ?? 'I', 0, 2)) }}
                                         </div>
                                         <div>
@@ -484,7 +485,7 @@
                                 <div class="mt-4 space-y-1.5 text-xs">
                                     <div class="flex justify-between">
                                         <span class="text-[#777]">Modal Disalurkan:</span>
-                                        <span class="font-bold text-[#1B4D3E]">Rp {{ number_format($inv->jumlah_modal, 0, ',', '.') }}</span>
+                                        <span class="font-bold text-[#0F433C]">Rp {{ number_format($inv->jumlah_modal, 0, ',', '.') }}</span>
                                     </div>
                                     <div class="flex justify-between">
                                         <span class="text-[#777]">Porsi Bagi Hasil:</span>
@@ -500,7 +501,7 @@
                                 <div class="mt-3.5 p-3 rounded-xl bg-white text-xs">
                                     <span class="text-[10px] font-semibold text-[#777] uppercase tracking-[0.08em] block mb-1">Rekening Transfer Investor:</span>
                                     <div class="flex items-center justify-between font-mono">
-                                        <span class="font-bold text-[#1B4D3E]">{{ $inv->pengguna->bank_name ?? 'Bank Belum Diatur' }}</span>
+                                        <span class="font-bold text-[#0F433C]">{{ $inv->pengguna->bank_name ?? 'Bank Belum Diatur' }}</span>
                                         <span class="font-bold text-[#1A202C]">{{ $inv->pengguna->nomor_rekening ?? '-' }}</span>
                                     </div>
                                     <span class="text-[11px] text-[#777] block mt-0.5 truncate">a.n. {{ $inv->pengguna->nama_pemilik_rekening ?? ($inv->pengguna->name ?? '-') }}</span>
@@ -552,7 +553,7 @@
                             <div class="space-y-2 pt-2">
                                 <button type="button"
                                         onclick="openSetorDividenModal('{{ $inv->id_investasi }}', '{{ addslashes($inv->pengguna->name) }}', '{{ addslashes($inv->pengguna->bank_name ?? 'Bank Belum Diatur') }}', '{{ $inv->pengguna->nomor_rekening ?? '-' }}', '{{ addslashes($inv->pengguna->nama_pemilik_rekening ?? $inv->pengguna->name) }}')"
-                                        class="w-full py-2.5 px-3 rounded-xl bg-[#2D6A4F] hover:bg-[#1B4D3E] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                                        class="w-full py-2.5 px-3 rounded-xl bg-[#20675D] hover:bg-[#0F433C] text-white text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
                                     <svg class="w-4 h-4 text-emerald-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                     </svg>
@@ -702,7 +703,7 @@
                             <div>
                                 <div class="flex items-start justify-between gap-2">
                                     <div class="flex items-center gap-2.5">
-                                        <div class="w-9 h-9 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                                        <div class="w-9 h-9 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-bold text-xs shrink-0">
                                             {{ strtoupper(substr($u->investor->name ?? 'I', 0, 1)) }}
                                         </div>
                                         <div>
@@ -753,7 +754,7 @@
                                 <div class="pt-2 border-t border-gray-200/60">
                                     <button type="button"
                                             onclick="openBalasUlasanModal('{{ $u->id_ulasan }}', '{{ addslashes($u->nama_investor_tersensor) }}', `{{ addslashes($u->ulasan) }}`)"
-                                            class="w-full py-2 px-3 rounded-xl bg-white hover:bg-gray-100 text-[#1B4D3E] border border-[#1B4D3E]/30 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+                                            class="w-full py-2 px-3 rounded-xl bg-white hover:bg-gray-100 text-[#0F433C] border border-[#0F433C]/30 text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
                                         <span>💬 Berikan Tanggapan Resmi</span>
                                     </button>
                                 </div>
@@ -786,17 +787,16 @@
                 @foreach($days as $label => $height)
                     <div class="flex-1 flex flex-col items-center h-full justify-end group">
                         <!-- Tooltip -->
-                        <div class="opacity-0 group-hover:opacity-100 transition-opacity bg-[#1B4D3E] text-white text-[10px] font-bold px-2 py-0.5 rounded-md mb-2 pointer-events-none shadow">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity bg-[#0F433C] text-white text-[10px] font-bold px-2 py-0.5 rounded-md mb-2 pointer-events-none shadow">
                             {{ $height }}%
                         </div>
-
                         <!-- Batang Gradient Teal (#1B4D3E -> #7BAE91) -->
                         <div class="w-full max-w-[42px] bg-gradient-to-t from-[#1B4D3E] via-[#2D6A4F] to-[#7BAE91] hover:opacity-90 transition-all rounded-t-lg rounded-b-[4px] shadow-sm"
                              style="height: {{ $height }}%;">
                         </div>
 
                         <!-- Label Hari -->
-                        <span class="text-xs font-semibold text-[#8A887F] mt-3 group-hover:text-[#2D6A4F] transition-colors">
+                        <span class="text-xs font-semibold text-[#8A887F] mt-3 group-hover:text-[#20675D] transition-colors">
                             {{ $label }}
                         </span>
                     </div>
@@ -812,13 +812,7 @@
         <!-- PAGE HEADER INBOX PENDANAAN -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-100 text-teal-800">
-                        Pusat Komunikasi Kemitraan
-                    </span>
-                    <span class="text-xs text-gray-400 font-bold">&bull;</span>
-                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A202C]">INBOX PENDANAAN</h1>
-                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-[#1A202C]">INBOX PENDANAAN</h1>
                 <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
                     Tinjau komitmen modal masuk dari calon investor, lakukan negosiasi langsung di dalam web, dan sepakati kontrak kemitraan.
                 </p>
@@ -842,7 +836,7 @@
             <div class="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E8E6DF] shadow-sm space-y-4">
                 <div class="flex items-center justify-between pb-3 border-b border-gray-100">
                     <span class="text-xs font-black uppercase tracking-wider text-gray-400">Daftar Investor Masuk</span>
-                    <span class="text-xs font-bold text-[#1B4D3E]">{{ $notifikasiInvestasi->count() }} Percakapan</span>
+                    <span class="text-xs font-bold text-[#0F433C]">{{ $notifikasiInvestasi->count() }} Percakapan</span>
                 </div>
 
                 <div class="space-y-2.5 max-h-[620px] overflow-y-auto pr-1">
@@ -851,10 +845,10 @@
                             $isSelected = ($selectedInvestasi && $selectedInvestasi->id_investasi === $invItem->id_investasi);
                         @endphp
                         <a href="{{ route('dashboard', ['tab' => 'inbox', 'investasi_id' => $invItem->id_investasi]) }}"
-                           class="block p-4 rounded-2xl border transition-all {{ $isSelected ? 'border-2 border-[#1B4D3E] bg-teal-50/60 shadow-sm' : 'border-[#E8E6DF] bg-white hover:bg-gray-50/80 hover:border-gray-300' }}">
+                           class="block p-4 rounded-2xl border transition-all {{ $isSelected ? 'border-2 border-[#0F433C] bg-teal-50/60 shadow-sm' : 'border-[#E8E6DF] bg-white hover:bg-gray-50/80 hover:border-gray-300' }}">
                             <div class="flex items-start justify-between gap-2 mb-1.5">
                                 <div class="flex items-center gap-2.5 min-w-0">
-                                    <div class="w-9 h-9 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
+                                    <div class="w-9 h-9 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-black text-xs shrink-0 shadow-sm">
                                         {{ strtoupper(substr($invItem->pengguna->name ?? 'I', 0, 2)) }}
                                     </div>
                                     <div class="min-w-0">
@@ -886,7 +880,7 @@
                             <!-- Detail Nominal -->
                             <div class="mt-2 text-xs flex justify-between items-center bg-white/70 p-2 rounded-xl border border-gray-100">
                                 <span class="text-[11px] text-gray-500">Tawaran Modal:</span>
-                                <span class="font-extrabold text-[#1B4D3E]">Rp {{ number_format($invItem->jumlah_modal, 0, ',', '.') }}</span>
+                                <span class="font-extrabold text-[#0F433C]">Rp {{ number_format($invItem->jumlah_modal, 0, ',', '.') }}</span>
                             </div>
 
                             <!-- Cuplikan Pesan Terakhir -->
@@ -909,7 +903,7 @@
                         <!-- HEADER OBROLAN & PROFIL INVESTOR -->
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-full bg-[#1B4D3E] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
+                                <div class="w-12 h-12 rounded-full bg-[#0F433C] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-sm">
                                     {{ strtoupper(substr($selectedInvestasi->pengguna->name ?? 'I', 0, 2)) }}
                                 </div>
                                 <div>
@@ -956,7 +950,7 @@
                         <!-- KARTU RINGKASAN LEMBAR KOMITMEN MODAL -->
                         <div class="mt-4 p-4 rounded-2xl bg-teal-50/70 border border-teal-200/80 space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-black uppercase tracking-wider text-[#1B4D3E]">Parameter Usulan Investasi:</span>
+                                <span class="text-[10px] font-black uppercase tracking-wider text-[#0F433C]">Parameter Usulan Investasi:</span>
                                 @if($selectedInvestasi->status === 'pending')
                                     <div class="flex items-center gap-2">
                                         <!-- Form Terima -->
@@ -968,11 +962,11 @@
                                                         message: 'Terima komitmen investasi sebesar <strong>Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</strong> dari <strong>{{ addslashes($selectedInvestasi->pengguna->name ?? 'Investor') }}</strong>? Status kemitraan akan resmi berstatus <strong>AKTIF</strong>.',
                                                         badge: 'Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }} &bull; {{ $selectedInvestasi->persentase_bagi_hasil }}% Bagi Hasil',
                                                         confirmText: '✓ Ya, Terima Investasi',
-                                                        confirmClass: 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white',
+                                                        confirmClass: 'bg-[#0F433C] hover:bg-[#20675D] text-white',
                                                         icon: 'check',
                                                         form: document.getElementById('form-terima-inbox-{{ $selectedInvestasi->id_investasi }}')
                                                     })"
-                                                    class="px-3 py-1.5 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm">
+                                                    class="px-3 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-bold transition shadow-sm">
                                                 ✓ Terima Investasi
                                             </button>
                                         </form>
@@ -1006,7 +1000,7 @@
                             <div class="grid grid-cols-3 gap-3 pt-1 text-xs">
                                 <div>
                                     <span class="text-[10px] text-gray-500 block">Komitmen Modal</span>
-                                    <span class="font-extrabold text-[#1B4D3E] text-sm">Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</span>
+                                    <span class="font-extrabold text-[#0F433C] text-sm">Rp {{ number_format($selectedInvestasi->jumlah_modal, 0, ',', '.') }}</span>
                                 </div>
                                 <div>
                                     <span class="text-[10px] text-gray-500 block">Target Bagi Hasil</span>
@@ -1028,9 +1022,9 @@
                                         $isMe = ($msg->id_pengirim === Auth::id());
                                     @endphp
                                     <div class="flex {{ $isMe ? 'justify-end' : 'justify-start' }}">
-                                        <div class="max-w-[80%] rounded-2xl p-3 text-xs shadow-sm {{ $isMe ? 'bg-[#1B4D3E] text-white rounded-br-sm' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-sm' }}">
+                                        <div class="max-w-[80%] rounded-2xl p-3 text-xs shadow-sm {{ $isMe ? 'bg-[#0F433C] text-white rounded-br-sm' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-sm' }}">
                                             <div class="flex items-center justify-between gap-2 mb-1">
-                                                <span class="font-bold text-[10px] {{ $isMe ? 'text-teal-200' : 'text-[#1B4D3E]' }}">
+                                                <span class="font-bold text-[10px] {{ $isMe ? 'text-teal-200' : 'text-[#0F433C]' }}">
                                                     {{ $isMe ? 'Anda (UMKM)' : ($msg->pengirim->name ?? 'Investor') }}
                                                 </span>
                                                 <span class="text-[9px] {{ $isMe ? 'text-teal-300/70' : 'text-gray-400' }}">
@@ -1053,8 +1047,8 @@
                     <form action="{{ route('dashboard.investasi.pesan', $selectedInvestasi->id_investasi) }}" method="POST" class="mt-4 pt-3 border-t border-gray-100 flex items-center gap-2">
                         @csrf
                         <input type="text" name="pesan" required placeholder="Tulis pesan atau pertanyaan untuk {{ $selectedInvestasi->pengguna->name }}..."
-                               class="flex-1 px-4 py-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                        <button type="submit" class="px-5 py-3 rounded-2xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-black transition shadow-sm flex items-center gap-1.5 shrink-0">
+                               class="flex-1 px-4 py-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
+                        <button type="submit" class="px-5 py-3 rounded-2xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-black transition shadow-sm flex items-center gap-1.5 shrink-0">
                             <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4l19 8-19 8 3-8-3-8zm3 8h10"/>
                             </svg>
@@ -1105,7 +1099,7 @@
             </div>
             <div class="bg-white p-6 rounded-2xl border border-[#E8E6DF] shadow-sm">
                 <span class="text-xs font-bold text-gray-500">Kebutuhan Modal Pendanaan</span>
-                <h3 class="text-2xl font-black text-[#1B4D3E] mt-1">
+                <h3 class="text-2xl font-black text-[#0F433C] mt-1">
                     {{ $umkm->modal_dibutuhkan ? 'Rp ' . number_format($umkm->modal_dibutuhkan, 0, ',', '.') : 'Rp 1.000.000' }}
                 </h3>
                 <span class="text-[11px] text-gray-400 font-medium">Target ekspansi bisnis</span>
@@ -1189,11 +1183,11 @@
                                         message: 'Satukan seluruh <strong>{{ $jumlahCatatanBulanAktif }} transaksi</strong> pada periode <strong>{{ $bulanAktif }}</strong> menjadi 1 catatan kumulatif konsolidasi?',
                                         badge: 'Periode {{ $bulanAktif }}',
                                         confirmText: '⚡ Satukan Catatan',
-                                        confirmClass: 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white',
+                                        confirmClass: 'bg-[#0F433C] hover:bg-[#20675D] text-white',
                                         icon: 'check',
                                         form: document.getElementById('form-gabung-keuangan-top')
                                     })"
-                                    class="px-3.5 py-1.5 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-[11px] font-black shadow-sm transition flex items-center gap-1.5">
+                                    class="px-3.5 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-[11px] font-black shadow-sm transition flex items-center gap-1.5">
                                 <span>⚡ Satukan Menjadi 1 Catatan Kumulatif</span>
                             </button>
                         </form>
@@ -1213,24 +1207,32 @@
             </div>
         @endif
 
-        <!-- FORMULIR INPUT PENDAPATAN & BEBAN KEUANGAN BESERTA UPLOAD BUKTI (Sesuai Permintaan User) -->
+        <!-- FORMULIR INPUT PENDAPATAN & BEBAN KEUANGAN BESERTA UPLOAD BUKTI (Redesign Sesuai Permintaan User) -->
         <div class="bg-white rounded-2xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm">
-            <div class="flex items-center justify-between mb-6">
+            <!-- Header Card: Eyebrow Badge, Judul, & Deskripsi (Di Bagian Atas) -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-[#E8E6DF] mb-6">
                 <div>
-                    <h2 class="text-lg font-black text-[#1A202C]">Form Input Analisis Pendapatan & Pengeluaran</h2>
-                    <p class="text-xs text-gray-400 font-medium">
+                    <div class="inline-flex items-center gap-1.5 rounded-md bg-[#EFECE3] border border-[#DFD9C8] px-3 py-1 text-xs font-semibold tracking-wide text-[#785C22] mb-2">
+                        <span>Kalkulator Laba Rugi</span>
+                    </div>
+                    
+                    <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 leading-snug">
+                        Form Input Analisis Pendapatan &amp; Pengeluaran
+                    </h2>
+                    
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
                         Masukkan data omzet dan pengeluaran atau lampirkan foto buku kas / nota untuk dianalisis otomatis.
                     </p>
                 </div>
-                <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
-                    Kalkulator Laba Rugi
-                </span>
-             <form id="form-keuangan" action="{{ route('dashboard.umkm.keuangan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-5">
+            </div>
+
+            <!-- Form Input Lengkap Diletakkan di Bawah Judul -->
+            <form id="form-keuangan" action="{{ route('dashboard.umkm.keuangan.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
                 <input type="hidden" id="form-id-keuangan" name="id_keuangan" value="">
 
                 <!-- BANNER MODE EDIT (MUNCUL JIKA USER KLIK TOMBOL EDIT DI TABEL) -->
-                <div id="edit-mode-banner" class="hidden p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-center justify-between shadow-xs">
+                <div id="edit-mode-banner" class="hidden p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs flex items-center justify-between shadow-xs">
                     <div class="flex items-center gap-2.5">
                         <span class="text-lg">✏️</span>
                         <div>
@@ -1238,86 +1240,191 @@
                             <span class="text-[11px] text-amber-800">Anda sedang mengubah data catatan periode <span id="edit-periode-text" class="font-bold underline"></span>.</span>
                         </div>
                     </div>
-                    <button type="button" onclick="cancelEditKeuangan()" class="px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold text-xs transition">
+                    <button type="button" onclick="cancelEditKeuangan()" class="px-3 py-1.5 rounded-lg bg-amber-200 hover:bg-amber-300 text-amber-900 font-bold text-xs transition">
                         ✕ Batal Edit
                     </button>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Periode Laporan -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Periode Bulan & Tahun *</label>
-                        <input type="text" id="input-bulan-tahun" name="bulan_tahun" required value="{{ date('F Y') }}" placeholder="Contoh: Oktober 2026"
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                    </div>
-
-                    <!-- Omzet Pendapatan -->
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                            <span>Total Pendapatan / Omzet Penjualan (Rp) *</span>
-                            <span class="text-[10px] text-emerald-700 font-bold normal-case bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">⚡ Otomatis terisi jika unggah Excel / Foto Nota</span>
+                <!-- BARIS 1: Periode & Total Pendapatan -->
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-2 items-end">
+                    
+                    <!-- Field 1: Periode Bulan & Tahun -->
+                    <div class="flex flex-col justify-between">
+                        <label for="input-bulan-tahun" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                            Periode Bulan &amp; Tahun <span class="text-red-600">*</span>
                         </label>
-                        <input type="number" id="input-pendapatan" name="pendapatan" min="0" step="any" placeholder="15000000" oninput="calculateLiveProfit()"
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-[#1B4D3E] focus:outline-none focus:ring-2 focus:ring-[#1B4D3E] transition-all">
+                        <input
+                            type="text"
+                            id="input-bulan-tahun"
+                            name="bulan_tahun"
+                            value="{{ date('F Y') }}"
+                            placeholder="Contoh: {{ date('F Y') }}"
+                            required
+                            class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3.5 text-sm font-medium text-slate-900 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                        />
                     </div>
+
+                    <!-- Field 2: Total Pendapatan / Omzet Penjualan -->
+                    <div class="flex flex-col justify-between">
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2">
+                            <label for="input-pendapatan" class="text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Total Pendapatan / Omzet Penjualan (Rp) <span class="text-red-600">*</span>
+                            </label>
+                            <span class="inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[11px] font-medium text-emerald-800">
+                                ⚡ Otomatis terisi jika unggah Excel / Foto Nota
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-semibold text-slate-400">
+                                Rp
+                            </span>
+                            <input
+                                type="number"
+                                id="input-pendapatan"
+                                name="pendapatan"
+                                min="0"
+                                step="any"
+                                placeholder="15000000"
+                                oninput="calculateLiveProfit()"
+                                required
+                                class="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                            />
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- HPP -->
+                <!-- BARIS 2: Komponen Pengeluaran (3 Kolom) -->
+                <div class="grid grid-cols-1 gap-5 md:grid-cols-3 items-start pt-1">
+                    
+                    <!-- Field 3: Harga Pokok (HPP) -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Harga Pokok (HPP / Bahan Baku)</label>
-                        <input type="number" id="input-hpp" name="hpp" min="0" step="any" placeholder="6000000" oninput="calculateLiveProfit()"
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                        <span class="text-[10px] text-gray-400 mt-1 block">Biaya bahan pokok produksi</span>
+                        <label for="input-hpp" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                            Harga Pokok (HPP / Bahan Baku)
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-semibold text-slate-400">
+                                Rp
+                            </span>
+                            <input
+                                type="number"
+                                id="input-hpp"
+                                name="hpp"
+                                min="0"
+                                step="any"
+                                placeholder="6000000"
+                                oninput="calculateLiveProfit()"
+                                class="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                            />
+                        </div>
+                        <p class="mt-1.5 text-xs text-slate-500">Biaya bahan pokok produksi</p>
                     </div>
 
-                    <!-- Beban Operasional -->
+                    <!-- Field 4: Beban Operasional Usaha -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Beban Operasional Usaha</label>
-                        <input type="number" id="input-operasional" name="beban_operasional" min="0" step="any" placeholder="3500000" oninput="calculateLiveProfit()"
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                        <span class="text-[10px] text-gray-400 mt-1 block">Gaji, listrik, sewa, kemasan</span>
+                        <label for="input-operasional" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                            Beban Operasional Usaha
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-semibold text-slate-400">
+                                Rp
+                            </span>
+                            <input
+                                type="number"
+                                id="input-operasional"
+                                name="beban_operasional"
+                                min="0"
+                                step="any"
+                                placeholder="3500000"
+                                oninput="calculateLiveProfit()"
+                                class="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                            />
+                        </div>
+                        <p class="mt-1.5 text-xs text-slate-500">Gaji, listrik, sewa, kemasan</p>
                     </div>
 
-                    <!-- Beban Lain -->
+                    <!-- Field 5: Beban Lain-Lain -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Beban Lain-lain</label>
-                        <input type="number" id="input-lain" name="beban_lain" min="0" step="any" placeholder="500000" oninput="calculateLiveProfit()"
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                        <span class="text-[10px] text-gray-400 mt-1 block">Transportasi, perawatan, tak terduga</span>
+                        <label for="input-lain" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                            Beban Lain-Lain
+                        </label>
+                        <div class="relative">
+                            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-xs font-semibold text-slate-400">
+                                Rp
+                            </span>
+                            <input
+                                type="number"
+                                id="input-lain"
+                                name="beban_lain"
+                                min="0"
+                                step="any"
+                                placeholder="500000"
+                                oninput="calculateLiveProfit()"
+                                class="h-11 w-full rounded-lg border border-slate-300 bg-white pl-9 pr-3.5 text-sm font-medium text-slate-900 placeholder:text-slate-400 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                            />
+                        </div>
+                        <p class="mt-1.5 text-xs text-slate-500">Transportasi, perawatan, tak terduga</p>
                     </div>
+
                 </div>
 
-                <!-- Preview Real-time Laba Rugi -->
-                <div id="live-profit-box" class="p-4 rounded-2xl bg-[#F5F0E8] border border-[#E8E6DF] flex items-center justify-between">
+                <!-- BARIS 3: Banner Simulasi Estimasi Laba Bersih -->
+                <div id="live-profit-box" class="flex items-center justify-between rounded-xl bg-[#F2EFE9] border border-[#E4E0D6] px-5 py-4">
                     <div>
-                        <span class="text-xs text-gray-500 font-medium block">Simulasi Estimasi Laba Bersih:</span>
-                        <h4 id="live-profit-text" class="text-lg font-black text-gray-700 mt-0.5">Rp 0</h4>
+                        <p class="text-xs font-medium text-slate-600">Simulasi Estimasi Laba Bersih:</p>
+                        <p id="live-profit-text" class="mt-0.5 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
+                            Rp 0
+                        </p>
                     </div>
-                    <span id="live-profit-badge" class="px-3 py-1 rounded-full text-xs font-black bg-gray-200 text-gray-700">
+                    <span id="live-profit-badge" class="inline-flex items-center rounded-full bg-[#E2E4E8] px-3.5 py-1 text-xs font-bold text-slate-800">
                         Belum Diisi
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Upload Foto Bukti / File Excel / PDF Laporan -->
+                <!-- BARIS 4: Unggah Berkas & Keterangan Tambahan -->
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 items-start pt-1">
+                    
+                    <!-- Field 6: Lampirkan Berkas Laporan Keuangan / Bukti -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 flex items-center justify-between">
-                            <span>Lampirkan Berkas Laporan Keuangan / Bukti</span>
-                            <span class="text-[10px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                                Auto-Detect: Excel & Foto Nota
+                        <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2 min-h-[24px]">
+                            <label for="input-berkas-keuangan" class="text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Lampirkan Berkas Laporan Keuangan / Bukti
+                            </label>
+                            <span class="inline-flex items-center rounded-md bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800">
+                                Auto-Detect: Excel &amp; Foto Nota
                             </span>
-                        </label>
-                        <input type="file" id="input-berkas-keuangan" name="foto_bukti" accept=".xlsx,.xls,.csv,.pdf,.doc,.docx,image/*" onchange="handleFileSelected(event)"
-                               class="w-full px-3 py-2 rounded-2xl border border-[#E8E6DF] text-xs text-gray-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1B4D3E] file:text-white hover:file:bg-[#2D6A4F]">
-                        <div class="flex flex-wrap items-center gap-1.5 mt-2 text-[10px]">
-                            <span class="text-gray-400 font-medium">Format:</span>
-                            <span class="px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold">📊 Excel (.xlsx, .xls, .csv)</span>
-                            <span class="px-1.5 py-0.5 rounded-md bg-teal-100 text-teal-800 font-bold">🖼️ Foto Nota / Kuitansi (Auto OCR)</span>
-                            <span class="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold">📄 PDF (.pdf)</span>
-                            <span class="px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-800 font-bold">📝 Word (.doc, .docx)</span>
                         </div>
-                        <div id="file-info-badge" class="hidden mt-2 p-2.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs items-center gap-2.5">
+
+                        <div class="flex items-center h-11 w-full rounded-lg border border-slate-300 bg-white px-2 shadow-2xs focus-within:border-[#0F433C] focus-within:ring-2 focus-within:ring-[#0F433C]/15">
+                            <input
+                                type="file"
+                                id="input-berkas-keuangan"
+                                name="foto_bukti"
+                                accept=".xlsx,.xls,.csv,.jpg,.jpeg,.png,.webp,.pdf,.doc,.docx"
+                                onchange="handleFileSelected(event)"
+                                class="w-full text-xs text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-[#0F433C] file:px-3.5 file:py-1.5 file:text-xs file:font-semibold file:text-white hover:file:bg-[#20675D] file:cursor-pointer"
+                            />
+                        </div>
+
+                        <!-- Format Badges -->
+                        <div class="mt-2.5 flex flex-wrap items-center gap-1.5">
+                            <span class="text-xs text-slate-500 mr-1">Format:</span>
+                            <span class="inline-flex items-center gap-1 rounded-md bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 text-[11px] font-medium text-emerald-800">
+                                📊 Excel (.xlsx, .xls, .csv)
+                            </span>
+                            <span class="inline-flex items-center gap-1 rounded-md bg-teal-50 border border-teal-200/80 px-2 py-0.5 text-[11px] font-medium text-teal-800">
+                                🖼️ Foto Nota / Kuitansi (Auto OCR)
+                            </span>
+                            <span class="inline-flex items-center gap-1 rounded-md bg-rose-50 border border-rose-200/80 px-2 py-0.5 text-[11px] font-medium text-rose-800">
+                                📄 PDF (.pdf)
+                            </span>
+                            <span class="inline-flex items-center gap-1 rounded-md bg-blue-50 border border-blue-200/80 px-2 py-0.5 text-[11px] font-medium text-blue-800">
+                                📝 Word (.doc, .docx)
+                            </span>
+                        </div>
+
+                        <!-- Auto-detect badge when file selected -->
+                        <div id="file-info-badge" class="hidden mt-2.5 p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs items-center gap-2.5 shadow-2xs">
                             <span id="file-icon" class="text-xl">📊</span>
                             <div class="min-w-0 flex-1">
                                 <span id="file-name" class="font-bold truncate block"></span>
@@ -1326,59 +1433,120 @@
                         </div>
                     </div>
 
-                    <!-- Catatan Tambahan -->
+                    <!-- Field 7: Keterangan / Catatan Tambahan -->
                     <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Keterangan / Catatan Tambahan</label>
-                        <input type="text" id="input-catatan" name="catatan" placeholder="Contoh: Lampiran Excel rekapitulasi penjualan harian."
-                               class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
-                        <span class="text-[10px] text-gray-400 mt-1 block">Catatan singkat mengenai sumber data laporan keuangan</span>
+                        <div class="flex items-center mb-2 min-h-[24px]">
+                            <label for="input-catatan" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Keterangan / Catatan Tambahan
+                            </label>
+                        </div>
+                        <input
+                            type="text"
+                            id="input-catatan"
+                            name="catatan"
+                            placeholder="Contoh: Lampiran Excel rekapitulasi penjualan harian."
+                            class="h-11 w-full rounded-lg border border-slate-300 bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs transition focus:border-[#0F433C] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C]/15"
+                        />
+                        <p class="mt-1.5 text-xs text-slate-500">
+                            Catatan singkat mengenai sumber data laporan keuangan
+                        </p>
                     </div>
+
                 </div>
 
-                <!-- OPSI PENANGANAN TRANSAKSI PERIODE INI (Menotalkan vs Mengganti) -->
-                <div id="mode-aksi-container" class="p-4 rounded-2xl bg-[#F5F0E8] border border-[#E8E6DF] space-y-2.5">
-                    <div class="flex items-center justify-between">
-                        <span class="block text-[11px] font-black uppercase text-gray-700 tracking-wider">
+                <!-- BARIS 5: Pilihan Penanganan Input -->
+                <div id="mode-aksi-container" class="rounded-xl bg-[#F2EFE9] border border-[#E4E0D6] p-4 sm:p-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3.5">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">
                             Pilihan Penanganan Input:
+                        </h3>
+                        <span class="text-xs text-slate-500">
+                            Tentukan aksi jika periode bulan sudah memiliki catatan
                         </span>
-                        <span class="text-[10px] text-gray-400 font-medium">Tentukan aksi jika periode bulan sudah memiliki catatan</span>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-                        <label class="flex items-start gap-2.5 p-3 rounded-xl border-2 border-emerald-400 bg-emerald-50/80 cursor-pointer hover:bg-emerald-50 transition">
-                            <input type="radio" name="mode_aksi" value="akumulasi" checked class="mt-0.5 text-emerald-700 focus:ring-emerald-600">
-                            <div>
-                                <strong class="text-emerald-950 font-bold block text-xs">➕ Totalkan / Akumulasikan (Default)</strong>
-                                <span class="text-[10px] text-emerald-800 leading-tight block mt-1">Nominal baru otomatis dijumlahkan/ditotalkan dengan catatan bulan ini yang sudah ada.</span>
+
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+                        
+                        <!-- Radio 1: Totalkan / Akumulasikan -->
+                        <label class="relative flex cursor-pointer items-start gap-3 rounded-xl border-2 border-emerald-500 bg-emerald-50/60 p-3.5 transition hover:bg-emerald-50 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/80">
+                            <input
+                                type="radio"
+                                name="mode_aksi"
+                                value="akumulasi"
+                                checked
+                                class="mt-0.5 h-4 w-4 shrink-0 border-slate-300 text-emerald-600 focus:ring-emerald-600"
+                            />
+                            <div class="text-xs leading-relaxed">
+                                <div class="font-bold text-slate-900">
+                                    ➕ Totalkan / Akumulasikan (Default)
+                                </div>
+                                <p class="mt-1 text-emerald-900/80">
+                                    Nominal baru otomatis dijumlahkan/ditotalkan dengan catatan bulan ini yang sudah ada.
+                                </p>
                             </div>
                         </label>
-                        <label class="flex items-start gap-2.5 p-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition">
-                            <input type="radio" name="mode_aksi" value="ganti" class="mt-0.5 text-[#1B4D3E] focus:ring-[#1B4D3E]">
-                            <div>
-                                <strong class="text-gray-900 font-bold block text-xs">🔄 Perbarui / Ganti Total</strong>
-                                <span class="text-[10px] text-gray-500 leading-tight block mt-1">Mengganti total periode bulan ini secara langsung dengan nominal baru.</span>
+
+                        <!-- Radio 2: Perbarui / Ganti Total -->
+                        <label class="relative flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 transition hover:border-slate-300 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/80">
+                            <input
+                                type="radio"
+                                name="mode_aksi"
+                                value="ganti"
+                                class="mt-0.5 h-4 w-4 shrink-0 border-slate-300 text-emerald-600 focus:ring-emerald-600"
+                            />
+                            <div class="text-xs leading-relaxed">
+                                <div class="font-bold text-slate-900">
+                                    🔄 Perbarui / Ganti Total
+                                </div>
+                                <p class="mt-1 text-slate-600">
+                                    Mengganti total periode bulan ini secara langsung dengan nominal baru.
+                                </p>
                             </div>
                         </label>
-                        <label class="flex items-start gap-2.5 p-3 rounded-xl border border-gray-200 bg-white cursor-pointer hover:bg-gray-50 transition">
-                            <input type="radio" name="mode_aksi" value="baru" class="mt-0.5 text-[#1B4D3E] focus:ring-[#1B4D3E]">
-                            <div>
-                                <strong class="text-gray-900 font-bold block text-xs">📑 Catat Sebagai Baris Baru</strong>
-                                <span class="text-[10px] text-gray-500 leading-tight block mt-1">Simpan sebagai transaksi/nota terpisah di tabel riwayat.</span>
+
+                        <!-- Radio 3: Catat Sebagai Baris Baru -->
+                        <label class="relative flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 transition hover:border-slate-300 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50/80">
+                            <input
+                                type="radio"
+                                name="mode_aksi"
+                                value="baru"
+                                class="mt-0.5 h-4 w-4 shrink-0 border-slate-300 text-emerald-600 focus:ring-emerald-600"
+                            />
+                            <div class="text-xs leading-relaxed">
+                                <div class="font-bold text-slate-900">
+                                    📑 Catat Sebagai Baris Baru
+                                </div>
+                                <p class="mt-1 text-slate-600">
+                                    Simpan sebagai transaksi/nota terpisah di tabel riwayat.
+                                </p>
                             </div>
                         </label>
+
                     </div>
                 </div>
 
-                <div class="pt-3 flex justify-end gap-3">
-                    <button type="button" id="btn-cancel-edit" onclick="cancelEditKeuangan()" class="hidden px-5 py-3 rounded-2xl border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs font-bold transition">
-                        Batal Edit
+                <!-- BARIS 6: Tombol Submit -->
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button
+                        type="button"
+                        id="btn-cancel-edit"
+                        onclick="cancelEditKeuangan()"
+                        class="hidden w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-sm font-bold transition shadow-2xs"
+                    >
+                        ✕ Batal Edit
                     </button>
-                    <button type="submit" id="btn-submit-keuangan" class="px-6 py-3 rounded-2xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-black transition shadow-md flex items-center gap-2">
+                    <button
+                        type="submit"
+                        id="btn-submit-keuangan"
+                        class="inline-flex w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-[#0F433C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#20675D] focus:outline-hidden focus:ring-2 focus:ring-[#0F433C] focus:ring-offset-2 active:scale-[0.99]"
+                    >
                         <svg class="w-4 h-4 text-emerald-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                         </svg>
-                        <span id="btn-submit-keuangan-text">Simpan & Hitung Analisis Laba Rugi</span>
+                        <span id="btn-submit-keuangan-text">Simpan &amp; Hitung Analisis Laba Rugi</span>
                     </button>
                 </div>
+
             </form>
         </div>
 
@@ -1521,7 +1689,7 @@
                     @if(isset($jumlahCatatanBulanAktif) && $jumlahCatatanBulanAktif > 1)
                         <tfoot class="bg-[#F5F0E8] border-t-2 border-[#E8E6DF] font-black text-xs">
                             <tr>
-                                <td class="py-3.5 px-5 text-[#1B4D3E]">
+                                <td class="py-3.5 px-5 text-[#0F433C]">
                                     TOTAL AKUMULASI ({{ $bulanAktif }})
                                 </td>
                                 <td class="py-3.5 px-5 text-gray-900">
@@ -1551,11 +1719,11 @@
                                                     message: 'Satukan seluruh transaksi di periode <strong>{{ $bulanAktif }}</strong>?',
                                                     badge: 'Periode {{ $bulanAktif }}',
                                                     confirmText: '⚡ Satukan Jadi 1 Catatan',
-                                                    confirmClass: 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white',
+                                                    confirmClass: 'bg-[#0F433C] hover:bg-[#20675D] text-white',
                                                     icon: 'check',
                                                     form: document.getElementById('form-gabung-keuangan-table')
                                                 })"
-                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-[11px] font-bold shadow-sm transition">
+                                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-[11px] font-bold shadow-sm transition">
                                             ⚡ Satukan Jadi 1 Catatan
                                         </button>
                                     </form>
@@ -2116,27 +2284,27 @@
 
                 if (pendapatan === 0 && totalBeban === 0) {
                     textEl.innerText = 'Rp 0';
-                    textEl.className = 'text-lg font-black text-gray-700 mt-0.5';
+                    textEl.className = 'mt-0.5 text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900';
                     badgeEl.innerText = 'Belum Diisi';
-                    badgeEl.className = 'px-3 py-1 rounded-full text-xs font-black bg-gray-200 text-gray-700';
+                    badgeEl.className = 'inline-flex items-center rounded-full bg-[#E2E4E8] px-3.5 py-1 text-xs font-bold text-slate-800';
                     return;
                 }
 
                 if (laba > 0) {
                     textEl.innerText = '+ Rp ' + laba.toLocaleString('id-ID');
-                    textEl.className = 'text-lg font-black text-emerald-700 mt-0.5';
+                    textEl.className = 'mt-0.5 text-xl sm:text-2xl font-extrabold tracking-tight text-emerald-700';
                     badgeEl.innerText = '🟢 Untung (Laba)';
-                    badgeEl.className = 'px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800';
+                    badgeEl.className = 'inline-flex items-center rounded-full bg-emerald-100 px-3.5 py-1 text-xs font-bold text-emerald-800';
                 } else if (laba < 0) {
                     textEl.innerText = '- Rp ' + Math.abs(laba).toLocaleString('id-ID');
-                    textEl.className = 'text-lg font-black text-rose-600 mt-0.5';
+                    textEl.className = 'mt-0.5 text-xl sm:text-2xl font-extrabold tracking-tight text-rose-600';
                     badgeEl.innerText = '🔴 Rugi (Defisit)';
-                    badgeEl.className = 'px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800';
+                    badgeEl.className = 'inline-flex items-center rounded-full bg-rose-100 px-3.5 py-1 text-xs font-bold text-rose-800';
                 } else {
                     textEl.innerText = 'Rp 0 (Impas)';
-                    textEl.className = 'text-lg font-black text-blue-700 mt-0.5';
+                    textEl.className = 'mt-0.5 text-xl sm:text-2xl font-extrabold tracking-tight text-blue-700';
                     badgeEl.innerText = '⚪ Impas (BEP)';
-                    badgeEl.className = 'px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800';
+                    badgeEl.className = 'inline-flex items-center rounded-full bg-blue-100 px-3.5 py-1 text-xs font-bold text-blue-800';
                 }
             }
 
@@ -2210,27 +2378,27 @@
                 </p>
             </div>
             <button type="button" onclick="openUsulkanRukoUmkmModal()"
-                    class="px-5 py-2.5 rounded-2xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
+                    class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2 self-start sm:self-auto">
                 <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                <span>+ Usulkan Ruko Baru</span>
+                <span>Usulkan Ruko Baru</span>
             </button>
         </div>
 
         <!-- FILTER STATUS KETERSEDIAAN RUKO -->
         <div class="flex flex-wrap items-center gap-2 mb-6">
             <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'semua']) }}"
-               class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($rukoStatusFilter ?? 'semua') === 'semua' ? 'bg-[#1B4D3E] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
+               class="px-4 py-2 rounded-2xl text-xs font-bold transition {{ ($rukoStatusFilter ?? 'semua') === 'semua' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 Semua Ruko
             </a>
             <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'kosong']) }}"
-               class="px-4 py-2 rounded-2xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ ($rukoStatusFilter ?? '') === 'kosong' ? 'bg-[#1B4D3E] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
+               class="px-4 py-2 rounded-2xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ ($rukoStatusFilter ?? '') === 'kosong' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                 <span>🟢 Kosong (Siap Huni)</span>
             </a>
             <a href="{{ route('dashboard', ['tab' => 'ruko', 'ruko_status' => 'terisi']) }}"
-               class="px-4 py-2 rounded-2xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ ($rukoStatusFilter ?? '') === 'terisi' ? 'bg-[#1B4D3E] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
+               class="px-4 py-2 rounded-2xl text-xs font-bold transition inline-flex items-center gap-1.5 {{ ($rukoStatusFilter ?? '') === 'terisi' ? 'bg-[#0F433C] text-white shadow-sm' : 'bg-white border border-[#E8E6DF] text-gray-600 hover:bg-gray-50' }}">
                 <span class="w-2 h-2 rounded-full bg-rose-500"></span>
                 <span>🔴 Sudah Diisi / Penuh</span>
             </a>
@@ -2322,7 +2490,7 @@
                     <div class="mt-4 pt-3.5 border-t border-gray-100 flex items-center justify-between">
                         <div>
                             <span class="text-[10px] uppercase font-bold text-gray-400 block">Sewa Bulanan</span>
-                            <span class="text-sm font-black text-[#1B4D3E]">
+                            <span class="text-sm font-black text-[#0F433C]">
                                 Rp {{ number_format($ruko->harga_sewa_per_bulan, 0, ',', '.') }} / bln
                             </span>
                         </div>
@@ -2360,6 +2528,576 @@
             @endforelse
         </div>
 
+    {{-- ========================================================================= --}}
+    {{-- TAB 6: EDIT PROFIL & PROPOSAL USAHA                                       --}}
+    {{-- ========================================================================= --}}
+    @elseif(($activeTab ?? '') === 'profil')
+
+        <div class="space-y-6">
+            <!-- Header Section -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-[#0F433C]/10 text-[#0F433C] mb-2">
+                        <span class="w-2 h-2 rounded-full bg-[#0F433C] animate-pulse"></span>
+                        Profil & Dokumen Proposal Usaha
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#1A202C]">
+                        Edit Profil & Proposal Usaha
+                    </h1>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1 font-medium">
+                        Perbarui identitas penanggung jawab, profil bisnis, dokumen proposal pendanaan, dan preferensi ruko komersial Anda.
+                    </p>
+                </div>
+
+                <!-- Status Badge Banner -->
+                <div class="shrink-0 self-start sm:self-center">
+                    @if(($umkm->status_pengajuan ?? 'draf') === 'terverifikasi')
+                        <div class="px-4 py-2.5 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center gap-2.5 shadow-sm">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <div>
+                                <span class="text-xs font-black text-emerald-900 block leading-tight">Terverifikasi & Tayang</span>
+                                <span class="text-[11px] text-emerald-700 font-medium">Proposal aktif di katalog investor</span>
+                            </div>
+                        </div>
+                    @elseif(($umkm->status_pengajuan ?? '') === 'menunggu_verifikasi')
+                        <div class="px-4 py-2.5 rounded-2xl bg-amber-50 border border-amber-200 flex items-center gap-2.5 shadow-sm">
+                            <span class="w-3 h-3 rounded-full bg-amber-500 animate-ping"></span>
+                            <div>
+                                <span class="text-xs font-black text-amber-900 block leading-tight">Menunggu Verifikasi Admin</span>
+                                <span class="text-[11px] text-amber-700 font-medium">Antrean kurasi tim Daya UMKM</span>
+                            </div>
+                        </div>
+                    @elseif(($umkm->status_pengajuan ?? '') === 'perlu_perbaikan')
+                        <div class="px-4 py-2.5 rounded-2xl bg-rose-50 border border-rose-200 flex items-center gap-2.5 shadow-sm">
+                            <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+                            <div>
+                                <span class="text-xs font-black text-rose-900 block leading-tight">Perlu Perbaikan / Revisi</span>
+                                <span class="text-[11px] text-rose-700 font-medium">Silakan perbaiki data & ajukan ulang</span>
+                            </div>
+                        </div>
+                    @else
+                        <div class="px-4 py-2.5 rounded-2xl bg-slate-100 border border-slate-200 flex items-center gap-2.5 shadow-sm">
+                            <span class="w-3 h-3 rounded-full bg-slate-400"></span>
+                            <div>
+                                <span class="text-xs font-black text-slate-800 block leading-tight">Status: Draf Formulir</span>
+                                <span class="text-[11px] text-slate-600 font-medium">Belum dikirimkan ke tim kurator</span>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Pesan Notifikasi Sukses / Error -->
+            @if (session('success'))
+                <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm font-semibold flex items-center gap-3 shadow-sm">
+                    <span class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shrink-0">✓</span>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="p-4 sm:p-5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 text-xs sm:text-sm space-y-1.5 shadow-sm">
+                    <div class="font-bold flex items-center gap-2">
+                        <span>⚠️</span>
+                        <span>Mohon periksa kembali formulir profil Anda:</span>
+                    </div>
+                    <ul class="list-disc list-inside text-xs space-y-0.5 text-rose-700 pl-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('dashboard.umkm.pengajuan') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
+                @csrf
+
+                <!-- Grid 2 Kolom Utama di Desktop (lg:grid-cols-12) -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+                    
+                    <!-- KOLOM KIRI (lg:col-span-5): Identitas & Domisili -->
+                    <div class="lg:col-span-5 space-y-6">
+                        
+                        <!-- Card 1: Identitas Penanggung Jawab -->
+                        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm space-y-5">
+                            <div class="border-b border-gray-100 pb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-xl bg-[#0F433C]/10 text-[#0F433C] flex items-center justify-center text-xs font-bold">1</span>
+                                    <h3 class="text-base font-extrabold text-[#1A202C]">Identitas Pemilik Usaha</h3>
+                                </div>
+                                <span class="text-[11px] font-semibold text-gray-400">Data Personal</span>
+                            </div>
+
+                            <!-- Foto Profil Avatar -->
+                            <div>
+                                <label class="block text-xs font-bold text-[#1A202C] mb-2">
+                                    Foto Profil Pemilik Usaha
+                                </label>
+                                <div class="flex items-center gap-4 p-3 rounded-2xl bg-[#F9F8F4] border border-[#E8E6DF]">
+                                    <div class="w-16 h-16 rounded-2xl bg-white border-2 border-dashed border-[#20675D]/40 overflow-hidden flex items-center justify-center shrink-0 shadow-sm relative group">
+                                        @if($user->avatar)
+                                            <img id="preview-tab-foto-umkm" src="{{ $user->avatar }}" alt="Avatar" class="w-full h-full object-cover">
+                                        @else
+                                            <img id="preview-tab-foto-umkm" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                                            <span id="placeholder-tab-foto-umkm" class="text-2xl text-[#20675D]">👤</span>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <input type="file" 
+                                               id="tab_foto_profil" 
+                                               name="foto_profil" 
+                                               accept="image/png,image/jpeg,image/webp,image/jpg" 
+                                               onchange="previewTabImage(this, 'preview-tab-foto-umkm', 'placeholder-tab-foto-umkm')"
+                                               class="w-full text-xs text-gray-500 file:mr-2.5 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-[#0F433C] file:text-white hover:file:bg-[#19584F] cursor-pointer">
+                                        <p class="text-[10px] text-gray-500 mt-1">JPG, PNG, atau WEBP. Maks 3MB.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nama Pemilik -->
+                            <div>
+                                <label for="tab_pemilik" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                    Nama Lengkap Pemilik / Pengelola <span class="text-rose-500">*</span>
+                                </label>
+                                <input type="text" 
+                                       id="tab_pemilik" 
+                                       name="pemilik" 
+                                       value="{{ old('pemilik', $umkm->pemilik ?? $user->name) }}" 
+                                       required
+                                       placeholder="Contoh: Raka Wibian" 
+                                       class="w-full h-11 px-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] transition outline-none shadow-xs font-medium">
+                            </div>
+
+                            <!-- NIK KTP -->
+                            <div>
+                                <label for="tab_nik" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                    NIK KTP Penanggung Jawab
+                                </label>
+                                <input type="text" 
+                                       id="tab_nik" 
+                                       name="nik_penanggung_jawab" 
+                                       value="{{ old('nik_penanggung_jawab', $umkm->nik_penanggung_jawab) }}" 
+                                       placeholder="16 digit NIK KTP (opsional)" 
+                                       maxlength="20"
+                                       class="w-full h-11 px-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] transition outline-none shadow-xs font-medium">
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div>
+                                <label for="tab_nomor_whatsapp" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                    Nomor WhatsApp Usaha Aktif <span class="text-rose-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-3.5 top-3 text-xs font-bold text-gray-400">📱</span>
+                                    <input type="text" 
+                                           id="tab_nomor_whatsapp" 
+                                           name="nomor_whatsapp" 
+                                           value="{{ old('nomor_whatsapp', $umkm->nomor_whatsapp ?? $user->phone_number) }}" 
+                                           required
+                                           placeholder="Contoh: 081234567890" 
+                                           class="w-full h-11 pl-9 pr-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] transition outline-none shadow-xs font-medium">
+                                </div>
+                                <p class="text-[11px] text-gray-400 mt-1 font-medium">Nomor ini digunakan investor untuk berdiskusi langsung via WhatsApp.</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Wilayah Domisili Usaha -->
+                        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm space-y-4">
+                            <div class="border-b border-gray-100 pb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-xl bg-[#0F433C]/10 text-[#0F433C] flex items-center justify-center text-xs font-bold">2</span>
+                                    <h3 class="text-base font-extrabold text-[#1A202C]">Wilayah Domisili Usaha</h3>
+                                </div>
+                                <span class="text-[11px] font-semibold text-gray-400">Lokasi Operasional</span>
+                            </div>
+
+                            <x-wilayah-domisili 
+                                label="Alamat & Domisili Usaha"
+                                :provinsi="old('provinsi', $umkm->provinsi ?? $user->provinsi)"
+                                :kota="old('kota', $umkm->kota ?? $user->kota)"
+                                :provinsi-kota="old('provinsi_kota', $umkm->provinsi_kota ?? $user->provinsi_kota)"
+                                :kecamatan="old('kecamatan', $umkm->kecamatan ?? $user->kecamatan)"
+                                :kelurahan="old('kelurahan', $umkm->kelurahan ?? $user->kelurahan)"
+                                :rt="old('rt', $umkm->rt ?? $user->rt)"
+                                :rw="old('rw', $umkm->rw ?? $user->rw)"
+                                id-prefix="edit_umkm_domisili"
+                            />
+                        </div>
+
+                    </div>
+
+                    <!-- KOLOM KANAN (lg:col-span-7): Profil Bisnis, Modal & Dokumen -->
+                    <div class="lg:col-span-7 space-y-6">
+
+                        <!-- Card 3: Profil Bisnis & Finansial -->
+                        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm space-y-5">
+                            <div class="border-b border-gray-100 pb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-xl bg-[#0F433C]/10 text-[#0F433C] flex items-center justify-center text-xs font-bold">3</span>
+                                    <h3 class="text-base font-extrabold text-[#1A202C]">Profil Usaha & Target Modal</h3>
+                                </div>
+                                <span class="text-[11px] font-semibold text-gray-400">Parameter Kemitraan</span>
+                            </div>
+
+                            <!-- Nama Usaha & Kategori Usaha -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="tab_nama_usaha" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                        Nama Usaha / Merk Dagang <span class="text-rose-500">*</span>
+                                    </label>
+                                    <input type="text" 
+                                           id="tab_nama_usaha" 
+                                           name="nama_usaha" 
+                                           value="{{ old('nama_usaha', $umkm->nama_usaha) }}" 
+                                           placeholder="Contoh: Kopi Muria Sejahtera" 
+                                           class="w-full h-11 px-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] transition outline-none shadow-xs font-medium">
+                                </div>
+
+                                <div>
+                                    <label for="tab_jenis_usaha" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                        Kategori Sektor Usaha <span class="text-rose-500">*</span>
+                                    </label>
+                                    @php $currentKat = old('jenis_usaha', $umkm->jenis_usaha ?? 'Makanan'); @endphp
+                                    <select id="tab_jenis_usaha" 
+                                            name="jenis_usaha" 
+                                            class="w-full h-11 px-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] transition outline-none shadow-xs font-medium cursor-pointer">
+                                        <option value="Makanan" {{ $currentKat === 'Makanan' ? 'selected' : '' }}>Makanan & Minuman (F&B)</option>
+                                        <option value="Jasa" {{ $currentKat === 'Jasa' ? 'selected' : '' }}>Jasa & Layanan</option>
+                                        <option value="Fashion" {{ $currentKat === 'Fashion' ? 'selected' : '' }}>Fashion & Pakaian</option>
+                                        <option value="Agribisnis" {{ $currentKat === 'Agribisnis' ? 'selected' : '' }}>Agribisnis & Pertanian</option>
+                                        <option value="Retail" {{ $currentKat === 'Retail' ? 'selected' : '' }}>Retail & Toko Kelontong</option>
+                                        <option value="Kerajinan" {{ $currentKat === 'Kerajinan' ? 'selected' : '' }}>Kerajinan Tangan / Kriya</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Target Kebutuhan Modal & Estimasi Bagi Hasil -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="tab_modal_display" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                        Kebutuhan Modal Kerja (Rp)
+                                    </label>
+                                    <div class="relative">
+                                        <span class="absolute left-3.5 top-3 text-xs font-black text-gray-400">Rp</span>
+                                        <input type="text" 
+                                               inputmode="numeric" 
+                                               id="tab_modal_display" 
+                                               value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? number_format((float) preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)), 0, ',', '.') : '' }}" 
+                                               placeholder="Contoh: 25.000.000" 
+                                               oninput="formatNominalRupiah(this, 'tab_modal_hidden')"
+                                               class="w-full h-11 pl-9 pr-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] outline-none transition shadow-xs font-bold" 
+                                               autocomplete="off">
+                                    </div>
+                                    <input type="hidden" 
+                                           name="modal_dibutuhkan" 
+                                           id="tab_modal_hidden" 
+                                           value="{{ old('modal_dibutuhkan', $umkm->modal_dibutuhkan) ? preg_replace('/\D/', '', old('modal_dibutuhkan', $umkm->modal_dibutuhkan)) : '' }}">
+                                    <p class="text-[11px] text-gray-400 mt-1 font-medium">Target permodalan dari calon mitra investor.</p>
+                                </div>
+
+                                <div>
+                                    <label for="tab_estimasi_bagi_hasil" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                        Estimasi Bagi Hasil Bulanan
+                                    </label>
+                                    <input type="text" 
+                                           id="tab_estimasi_bagi_hasil" 
+                                           name="estimasi_bagi_hasil" 
+                                           value="{{ old('estimasi_bagi_hasil', $umkm->estimasi_bagi_hasil ?? '15% per bulan') }}" 
+                                           placeholder="Contoh: 15% dari laba bersih per bulan" 
+                                           class="w-full h-11 px-3.5 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] outline-none transition shadow-xs font-medium">
+                                    <p class="text-[11px] text-gray-400 mt-1 font-medium">Skema penawaran bagi hasil untuk investor.</p>
+                                </div>
+                            </div>
+
+                            <!-- Deskripsi Usaha -->
+                            <div>
+                                <label for="tab_deskripsi" class="block text-xs font-bold text-[#1A202C] mb-1.5">
+                                    Deskripsi Singkat Usaha & Rencana Ekspansi
+                                </label>
+                                <textarea id="tab_deskripsi" 
+                                          name="deskripsi" 
+                                          rows="4" 
+                                          placeholder="Jelaskan jenis produk, keunggulan kompetitif, pelanggan potensial, dan rencana alokasi modal..." 
+                                          class="w-full px-3.5 py-3 bg-white border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] outline-none transition shadow-xs min-h-[110px] resize-y font-medium leading-relaxed">{{ old('deskripsi', $umkm->deskripsi) }}</textarea>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Dokumen Proposal & Foto Produk -->
+                        <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm space-y-5">
+                            <div class="border-b border-gray-100 pb-3 flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-7 h-7 rounded-xl bg-[#0F433C]/10 text-[#0F433C] flex items-center justify-center text-xs font-bold">4</span>
+                                    <h3 class="text-base font-extrabold text-[#1A202C]">Berkas Proposal & Foto Produk</h3>
+                                </div>
+                                <span class="text-[11px] font-semibold text-gray-400">Media & Dokumen</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+                                <!-- Upload Foto Produk -->
+                                <div class="space-y-2">
+                                    <label class="block text-xs font-bold text-[#1A202C]">
+                                        Foto Produk / Tempat Usaha
+                                    </label>
+                                    @if ($umkm->foto_produk)
+                                        <div class="p-2.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-center gap-3">
+                                            <img src="{{ asset('storage/' . $umkm->foto_produk) }}" class="w-12 h-12 rounded-xl object-cover shrink-0 border border-emerald-300">
+                                            <div class="min-w-0 flex-1">
+                                                <span class="text-xs font-bold text-emerald-900 block truncate">Foto Produk Terpasang</span>
+                                                <span class="text-[10px] text-emerald-700 font-medium">Klik tombol di bawah jika ingin mengganti</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <input type="file" 
+                                           id="tab_foto_produk" 
+                                           name="foto_produk" 
+                                           accept="image/*" 
+                                           class="hidden" 
+                                           onchange="updateTabFileName(this, 'tab_foto_produk_label')">
+                                    <label for="tab_foto_produk" 
+                                           id="tab_foto_produk_label" 
+                                           class="w-full h-11 px-3.5 bg-[#F9F8F4] hover:bg-emerald-50/80 text-[#0F433C] border border-dashed border-[#0F433C] rounded-xl text-xs font-bold text-center cursor-pointer transition flex items-center justify-center gap-2 shadow-2xs">
+                                        <span>📷 {{ $umkm->foto_produk ? 'Ganti Berkas Foto Produk' : 'Pilih Berkas Foto Produk' }}</span>
+                                    </label>
+                                    <span class="text-[11px] text-gray-400 block font-medium">Format: JPG, PNG, WEBP (Maks 5MB)</span>
+                                </div>
+
+                                <!-- Upload File Proposal -->
+                                <div class="space-y-2">
+                                    <label class="block text-xs font-bold text-[#1A202C]">
+                                        File Dokumen Proposal Usaha
+                                    </label>
+                                    @if ($umkm->file_proposal)
+                                        <div class="p-2.5 rounded-2xl bg-teal-50/80 border border-teal-200 flex items-center justify-between gap-3 text-xs">
+                                            <div class="flex items-center gap-2 min-w-0">
+                                                <span class="text-base">📄</span>
+                                                <span class="font-bold text-[#0F433C] truncate">Proposal Aktif</span>
+                                            </div>
+                                            <a href="{{ asset('storage/' . $umkm->file_proposal) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-[#0F433C] text-white text-[11px] font-bold hover:bg-[#19584F] transition shrink-0">
+                                                Unduh ↗
+                                            </a>
+                                        </div>
+                                    @endif
+                                    <input type="file" 
+                                           id="tab_file_proposal" 
+                                           name="file_proposal" 
+                                           accept=".pdf,.doc,.docx,.zip" 
+                                           class="hidden" 
+                                           onchange="updateTabFileName(this, 'tab_file_proposal_label')">
+                                    <label for="tab_file_proposal" 
+                                           id="tab_file_proposal_label" 
+                                           class="w-full h-11 px-3.5 bg-[#F9F8F4] hover:bg-teal-50/80 text-[#0F433C] border border-dashed border-[#0F433C] rounded-xl text-xs font-bold text-center cursor-pointer transition flex items-center justify-center gap-2 shadow-2xs">
+                                        <span>📁 {{ $umkm->file_proposal ? 'Ganti File Proposal' : 'Pilih File Proposal' }}</span>
+                                    </label>
+                                    <span class="text-[11px] text-gray-400 block font-medium">Format: PDF, DOC, DOCX, ZIP (Maks 10MB)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- BAGIAN BAWAH: Preferensi Unit Ruko Komersial (Lebar Penuh) -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-[#E8E6DF] shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-4">
+                        <div class="flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-xl bg-[#0F433C]/10 text-[#0F433C] flex items-center justify-center text-xs font-black">5</span>
+                            <div>
+                                <h3 class="text-base sm:text-lg font-extrabold text-[#1A202C]">Preferensi Lokasi Ruko Komersial</h3>
+                                <p class="text-xs text-gray-500 font-medium">Pilih unit ruko strategis jika usaha Anda membutuhkan tempat operasional baru.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button type="button" 
+                                    id="btn-clear-ruko-tab" 
+                                    class="px-3.5 py-1.5 rounded-xl border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-100 hover:text-rose-600 transition">
+                                ✕ Hapus Pilihan Ruko
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search Filter Ruko Realtime -->
+                    <div class="relative max-w-md">
+                        <svg class="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5 pointer-events-none" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" 
+                               id="tab-ruko-search" 
+                               onkeyup="filterTabRukoCards()" 
+                               placeholder="Cari ruko berdasarkan nama atau lokasi..." 
+                               class="w-full h-11 pl-10 pr-3.5 bg-[#F9F8F4] border border-[#E8E6DF] focus:border-[#0F433C] focus:ring-1 focus:ring-[#0F433C] rounded-xl text-xs sm:text-sm text-[#1A202C] outline-none transition font-medium">
+                    </div>
+
+                    <!-- Grid Kartu Ruko Responsif (1 col di mobile, 2 di sm, 3 di lg, 4 di xl) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pt-1" id="tab-ruko-grid">
+                        @php
+                            $selectedRukoTabId = old('id_ruko_diminati', $umkm->id_ruko_diminati);
+                        @endphp
+
+                        @forelse ($rukos as $ruko)
+                            <label class="tab-ruko-card block rounded-2xl border-2 {{ $selectedRukoTabId == $ruko->id_ruko ? 'border-[#0F433C] bg-teal-50/20 shadow-md ring-2 ring-[#0F433C]/20' : 'border-[#E8E6DF] hover:border-[#0F433C]/60 bg-white' }} p-3.5 cursor-pointer transition relative group">
+                                <input type="radio" 
+                                       name="id_ruko_diminati" 
+                                       value="{{ $ruko->id_ruko }}" 
+                                       {{ $selectedRukoTabId == $ruko->id_ruko ? 'checked' : '' }} 
+                                       onchange="highlightSelectedRuko(this)"
+                                       class="absolute top-4 right-4 w-4 h-4 text-[#0F433C] focus:ring-[#0F433C]">
+                                
+                                <div class="w-full aspect-[16/10] rounded-xl overflow-hidden mb-3 bg-gray-100 relative border border-gray-100">
+                                    <img src="{{ $ruko->foto_url }}" 
+                                         alt="{{ $ruko->nama_ruko }}" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300" 
+                                         loading="lazy">
+                                    <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-[#0F433C]/80 backdrop-blur-xs text-white text-[10px] font-bold">
+                                        Daya Ruko
+                                    </span>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <h4 class="tab-ruko-title text-xs sm:text-sm font-extrabold text-[#1A202C] truncate">
+                                        {{ $ruko->nama_ruko }}
+                                    </h4>
+                                    <p class="tab-ruko-loc text-[11px] text-gray-500 line-clamp-2 leading-relaxed">
+                                        {{ $ruko->lokasi }}
+                                    </p>
+                                    <div class="pt-2 border-t border-gray-100 mt-2 flex items-center justify-between">
+                                        <div>
+                                            <span class="text-[9px] uppercase font-bold text-gray-400 block">Sewa</span>
+                                            <span class="text-xs font-black text-[#0F433C]">
+                                                Rp {{ number_format($ruko->harga_sewa_per_bulan, 0, ',', '.') }} <span class="text-[10px] font-normal text-gray-500">/bln</span>
+                                            </span>
+                                        </div>
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                            {{ $ruko->total_unit - $ruko->unit_terisi }} Unit Kosong
+                                        </span>
+                                    </div>
+                                </div>
+                            </label>
+                        @empty
+                            <div class="col-span-full p-8 text-center text-xs text-gray-500 bg-[#F9F8F4] rounded-2xl border border-dashed border-[#E8E6DF]">
+                                Belum ada unit ruko yang terdaftar saat ini.
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS: Simpan Draf & Kirim Pengajuan -->
+                <div class="bg-white rounded-3xl p-6 sm:p-7 border border-[#E8E6DF] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 sticky bottom-4 z-20 backdrop-blur-md bg-white/95">
+                    <div class="text-xs text-gray-500 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>Perubahan data tersimpan aman di akun Anda. Anda dapat memperbarui draf ini kapan saja.</span>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button type="submit" 
+                                name="aksi" 
+                                value="simpan_draf" 
+                                class="w-full sm:w-auto px-5 py-3 rounded-2xl border border-[#E8E6DF] bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs cursor-pointer">
+                            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                            </svg>
+                            <span>Simpan Draf Usaha</span>
+                        </button>
+
+                        <button type="submit" 
+                                name="aksi" 
+                                value="kirim_pengajuan" 
+                                class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-extrabold transition shadow-md flex items-center justify-center gap-2 cursor-pointer">
+                            <span>Kirim Pengajuan ke Admin</span>
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <script>
+            function previewTabImage(input, previewId, placeholderId) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById(previewId);
+                        const placeholder = document.getElementById(placeholderId);
+                        if (preview) {
+                            preview.src = e.target.result;
+                            preview.classList.remove('hidden');
+                        }
+                        if (placeholder) {
+                            placeholder.classList.add('hidden');
+                        }
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function updateTabFileName(input, labelId) {
+                const label = document.getElementById(labelId);
+                if (input.files && input.files.length > 0) {
+                    label.innerHTML = `
+                        <span class="truncate max-w-[220px] text-[#0F433C] font-extrabold">✓ ${input.files[0].name}</span>
+                    `;
+                    label.classList.add('bg-teal-50', 'border-[#0F433C]');
+                }
+            }
+
+            function formatNominalRupiah(input, targetHiddenId) {
+                let val = input.value.replace(/\D/g, '');
+                let hidden = document.getElementById(targetHiddenId);
+                if (hidden) {
+                    hidden.value = val;
+                }
+                if (!val) {
+                    input.value = '';
+                    return;
+                }
+                input.value = new Intl.NumberFormat('id-ID').format(val);
+            }
+
+            function filterTabRukoCards() {
+                const query = (document.getElementById('tab-ruko-search').value || '').toLowerCase();
+                const cards = document.querySelectorAll('.tab-ruko-card');
+                cards.forEach(card => {
+                    const title = (card.querySelector('.tab-ruko-title')?.innerText || '').toLowerCase();
+                    const loc = (card.querySelector('.tab-ruko-loc')?.innerText || '').toLowerCase();
+                    if (title.includes(query) || loc.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            function highlightSelectedRuko(radioInput) {
+                document.querySelectorAll('.tab-ruko-card').forEach(card => {
+                    card.classList.remove('border-[#0F433C]', 'bg-teal-50/20', 'shadow-md', 'ring-2', 'ring-[#0F433C]/20');
+                    card.classList.add('border-[#E8E6DF]', 'bg-white');
+                });
+                if (radioInput.checked) {
+                    const parentCard = radioInput.closest('.tab-ruko-card');
+                    if (parentCard) {
+                        parentCard.classList.remove('border-[#E8E6DF]', 'bg-white');
+                        parentCard.classList.add('border-[#0F433C]', 'bg-teal-50/20', 'shadow-md', 'ring-2', 'ring-[#0F433C]/20');
+                    }
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const btnClearRuko = document.getElementById('btn-clear-ruko-tab');
+                if (btnClearRuko) {
+                    btnClearRuko.addEventListener('click', () => {
+                        document.querySelectorAll('input[name="id_ruko_diminati"]').forEach(input => {
+                            input.checked = false;
+                        });
+                        document.querySelectorAll('.tab-ruko-card').forEach(card => {
+                            card.classList.remove('border-[#0F433C]', 'bg-teal-50/20', 'shadow-md', 'ring-2', 'ring-[#0F433C]/20');
+                            card.classList.add('border-[#E8E6DF]', 'bg-white');
+                        });
+                    });
+                }
+            });
+        </script>
+
     @endif
 
 </div>
@@ -2387,7 +3125,7 @@
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Mitra Investor Penerima *</label>
                 <select id="modal-select-investasi" name="id_investasi" required onchange="onModalInvestorChange()"
-                        class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                        class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                     @foreach($investasiAktif as $inv)
                         <option value="{{ $inv->id_investasi }}"
                                 data-investor="{{ $inv->pengguna->name }}"
@@ -2402,10 +3140,10 @@
 
             <!-- KOTAK REKENING BANK INVESTOR (INFO TRANSFER) -->
             <div class="p-4 rounded-2xl bg-teal-50/80 border border-teal-200/90 text-xs space-y-1.5">
-                <span class="text-[10px] font-black uppercase tracking-wider text-[#1B4D3E] block">Rekening Bank Tujuan Transfer:</span>
+                <span class="text-[10px] font-black uppercase tracking-wider text-[#0F433C] block">Rekening Bank Tujuan Transfer:</span>
                 <div class="flex items-center justify-between pt-1">
                     <span class="text-gray-500">Nama Bank:</span>
-                    <span id="modal-dividen-bank" class="font-extrabold text-[#1B4D3E] text-sm">-</span>
+                    <span id="modal-dividen-bank" class="font-extrabold text-[#0F433C] text-sm">-</span>
                 </div>
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500">Nomor Rekening:</span>
@@ -2421,7 +3159,7 @@
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Nominal Dividen Ditransfer (Rp) *</label>
                 <input type="number" name="nominal_diterima" required min="10000" step="1000" placeholder="Contoh: 150000"
-                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-sm font-black text-[#1B4D3E] focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-sm font-black text-[#0F433C] focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 <span class="text-[10px] text-gray-400 mt-1 block">Pastikan nominal sesuai dengan mutasi transfer yang Anda lakukan.</span>
             </div>
 
@@ -2429,14 +3167,14 @@
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Tanggal Transfer *</label>
                 <input type="date" name="tanggal_distribusi" value="{{ date('Y-m-d') }}" required
-                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                       class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
             </div>
 
             <!-- Upload Struk Bukti Transfer -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Foto Struk / Resi Bukti Transfer *</label>
                 <input type="file" name="bukti_transfer" accept="image/*" required
-                       class="w-full text-xs text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1B4D3E] file:text-white hover:file:bg-[#2D6A4F] file:cursor-pointer">
+                       class="w-full text-xs text-gray-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white hover:file:bg-[#20675D] file:cursor-pointer">
                 <span class="text-[10px] text-gray-400 mt-1 block">Format: JPG, PNG, atau WEBP. Maksimal 5MB. Struk ini otomatis dapat diunduh/dilihat oleh investor.</span>
             </div>
 
@@ -2509,7 +3247,7 @@
 <div id="modal-usulkan-ruko-umkm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up">
         <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#1B4D3E] flex items-center justify-center text-xl font-black shrink-0">
+            <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#0F433C] flex items-center justify-center text-xl font-black shrink-0">
                 📍
             </div>
             <div>
@@ -2523,52 +3261,52 @@
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Nama Ruko / Kawasan *</label>
                 <input type="text" name="nama_ruko" required placeholder="Contoh: Ruko Golden City Blok B No. 7"
-                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Alamat Lengkap & Kota *</label>
                 <textarea name="lokasi" required rows="2" placeholder="Contoh: Jl. Kaliurang Km 5 No. 10, Sleman, D.I. Yogyakarta"
-                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
             </div>
 
             <!-- FOTO RUKO -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Foto Ruko / Lokasi</label>
                 <input type="file" name="foto_ruko" accept="image/*"
-                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1B4D3E] file:text-white cursor-pointer">
+                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white cursor-pointer">
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div class="sm:col-span-2">
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Perkiraan Sewa / Bulan *</label>
                     <input type="number" name="harga_sewa_per_bulan" required min="100000" step="100000" placeholder="3500000"
-                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Jumlah Unit *</label>
                     <input type="number" name="total_unit" value="1" required min="1" max="50"
-                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                           class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                 </div>
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kontak Pemilik / Pengelola (HP/WA)</label>
                 <input type="text" name="kontak_pemilik" placeholder="081234567890"
-                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                       class="w-full px-4 py-2.5 rounded-2xl border border-[#E8E6DF] text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Potensi Pasar & Target Konsumen</label>
                 <textarea name="potensi_usaha" rows="2" placeholder="Contoh: Dekat pemukiman padat dan kampus, ramai dilewati kendaraan, cocok untuk cabang gerai baru."
-                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+                          class="w-full p-3 rounded-2xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-2">
                 <button type="button" onclick="closeUsulkanRukoUmkmModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
                     Batal
                 </button>
-                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm">
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-bold transition shadow-sm">
                     Kirim Usulan
                 </button>
             </div>
@@ -2581,7 +3319,7 @@
     <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-gray-100 animate-scale-up">
         <div class="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#1B4D3E] flex items-center justify-center text-xl font-black shrink-0">
+                <div class="w-12 h-12 rounded-2xl bg-teal-100 text-[#0F433C] flex items-center justify-center text-xl font-black shrink-0">
                     💬
                 </div>
                 <div>
@@ -2607,7 +3345,7 @@
                 </label>
                 <textarea name="balasan_umkm" rows="4" required minlength="3" maxlength="1000"
                           placeholder="Contoh: Terima kasih banyak atas kepercayaan dan dukungan modal Bapak/Ibu. Kami berkomitmen untuk terus menjaga transparansi dan ketepatan bagi hasil usaha..."
-                          class="w-full p-3.5 rounded-2xl border border-[#EDEAE2] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+                          class="w-full p-3.5 rounded-2xl border border-[#EDEAE2] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
                 <span class="text-[10px] text-gray-400 mt-1 block">Tanggapan ini akan tampil secara publik di bawah ulasan investor terkait di katalog proposal.</span>
             </div>
 
@@ -2615,7 +3353,7 @@
                 <button type="button" onclick="closeBalasUlasanModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
                     Batal
                 </button>
-                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm">
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-bold transition shadow-sm">
                     Kirim Tanggapan
                 </button>
             </div>
@@ -2653,7 +3391,7 @@
             <!-- Kategori Kendala -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Faktor / Kategori Kendala *</label>
-                <select name="kategori_kendala" required class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]">
+                <select name="kategori_kendala" required class="w-full px-4 py-2.5 rounded-xl border border-[#E8E6DF] text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#0F433C]">
                     <option value="omzet_menurun">Penjualan / Omzet Menurun Bulan Ini</option>
                     <option value="beban_operasional">Lonjakan Beban Operasional / Bahan Baku</option>
                     <option value="piutang_tertunda">Pelunasan Piutang Konsumen Tertunda</option>
@@ -2667,7 +3405,7 @@
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Uraian Penyebab Keterlambatan *</label>
                 <textarea name="alasan" required rows="3" minlength="10"
                           placeholder="Jelaskan secara jujur kondisi keuangan atau kendala operasional usaha pada bulan ini..."
-                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
             </div>
 
             <!-- Komitmen Solusi / Rencana Pemulihan -->
@@ -2675,14 +3413,14 @@
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Rencana Solusi & Komitmen Pemulihan *</label>
                 <textarea name="komitmen_solusi" required rows="3" minlength="10"
                           placeholder="Contoh: Kami telah menyiapkan promo bundling minggu depan dan menagih piutang jatuh tempo. Estimasi penyetoran dividen tanggal 10 bulan depan..."
-                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#1B4D3E]"></textarea>
+                          class="w-full p-3 rounded-xl border border-[#E8E6DF] text-xs font-medium focus:outline-none focus:ring-2 focus:ring-[#0F433C]"></textarea>
             </div>
 
             <!-- Lampiran Bukti (Opsional) -->
             <div>
                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Dokumen / Bukti Pendukung (Opsional)</label>
                 <input type="file" name="lampiran_bukti" accept="image/*,.pdf"
-                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#1B4D3E] file:text-white cursor-pointer">
+                       class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#0F433C] file:text-white cursor-pointer">
                 <span class="text-[10px] text-gray-400 mt-1 block">Contoh: Laporan mutasi kas, nota beban darurat, dsb. Format PDF/Gambar max 5MB.</span>
             </div>
 
@@ -2690,7 +3428,7 @@
                 <button type="button" onclick="closeKlarifikasiModal()" class="py-2.5 px-4 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50 transition">
                     Batal
                 </button>
-                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white text-xs font-bold transition shadow-sm">
+                <button type="submit" class="py-2.5 px-4 rounded-xl bg-[#0F433C] hover:bg-[#20675D] text-white text-xs font-bold transition shadow-sm">
                     Kirim Klarifikasi Resmi
                 </button>
             </div>
@@ -2751,7 +3489,7 @@
             <!-- TUJUAN SURAT -->
             <div class="font-sans text-xs pt-1">
                 <p>Kepada Yth.</p>
-                <p class="font-black text-gray-900 text-sm">Pimpinan / Pemilik Usaha: <span class="text-[#1B4D3E]">{{ $user->name }}</span></p>
+                <p class="font-black text-gray-900 text-sm">Pimpinan / Pemilik Usaha: <span class="text-[#0F433C]">{{ $user->name }}</span></p>
                 <p class="font-bold text-gray-800">Nama Usaha UMKM: <span>{{ $umkm->nama_usaha }}</span></p>
                 <p class="text-gray-600">Mitra Investor Terkait: <strong id="modal-sp-investor" class="text-gray-900">-</strong></p>
                 <p class="text-gray-500">Di Tempat</p>

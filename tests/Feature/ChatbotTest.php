@@ -21,6 +21,7 @@ class ChatbotTest extends TestCase
     {
         Config::set('chatbot.provider', 'openai');
         Config::set('chatbot.api_key', 'test-key');
+        Config::set('chatbot.api_url', 'https://api.openai.com/v1/chat/completions');
 
         Http::fake([
             'https://api.openai.com/v1/chat/completions' => Http::response([
@@ -94,8 +95,32 @@ class ChatbotTest extends TestCase
         $this->assertNull(session('chatbot_history'));
     }
 
+    public function test_successful_chat_with_fastapi_gateway(): void
+    {
+        Config::set('chatbot.provider', 'fastapi');
+        Config::set('chatbot.fastapi_url', 'https://expected-memorabilia-lodging-did.trycloudflare.com/chat');
+        Config::set('chatbot.fastapi_secret_token', 'tikum_secret_token_2026');
+
+        Http::fake([
+            'https://expected-memorabilia-lodging-did.trycloudflare.com/chat' => Http::response([
+                'reply' => 'Halo! Titik UMKM (TIKUM) adalah platform kolaborasi terpadu.',
+            ], 200),
+        ]);
+
+        $response = $this->postJson(route('chatbot.message'), [
+            'message' => 'Apa itu TIKUM?',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'reply' => 'Halo! Titik UMKM (TIKUM) adalah platform kolaborasi terpadu.',
+            ]);
+    }
+
     public function test_fallback_knowledge_base_response_when_api_key_empty(): void
     {
+        Config::set('chatbot.provider', 'openai');
         Config::set('chatbot.api_key', '');
 
         $response = $this->postJson(route('chatbot.message'), [
@@ -111,6 +136,7 @@ class ChatbotTest extends TestCase
 
     public function test_rejects_off_topic_questions_politely(): void
     {
+        Config::set('chatbot.provider', 'openai');
         Config::set('chatbot.api_key', '');
 
         $response = $this->postJson(route('chatbot.message'), [
@@ -121,6 +147,36 @@ class ChatbotTest extends TestCase
             ->assertJson([
                 'status' => 'success',
                 'reply' => 'Wah, kalau itu di luar topik pembahasan kita nih! Ada hal seputar website UMKM ini, cara bergabung, atau kerja sama yang ingin kamu tanyakan?',
+            ]);
+    }
+
+    public function test_successful_chat_with_tokenharbor_direct_api(): void
+    {
+        Config::set('chatbot.provider', 'openai');
+        Config::set('chatbot.api_key', 'thk_live_test_key');
+        Config::set('chatbot.api_url', 'https://tokenharbor.ai/v1/chat/completions');
+        Config::set('chatbot.model', 'deepseek-v4.1-flash:free');
+
+        Http::fake([
+            'https://tokenharbor.ai/v1/chat/completions' => Http::response([
+                'choices' => [
+                    [
+                        'message' => [
+                            'content' => 'Halo! Titik UMKM adalah platform terpadu untuk pelaku usaha.',
+                        ],
+                    ],
+                ],
+            ], 200),
+        ]);
+
+        $response = $this->postJson(route('chatbot.message'), [
+            'message' => 'Apa itu Titik UMKM?',
+        ]);
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => 'success',
+                'reply' => 'Halo! Titik UMKM adalah platform terpadu untuk pelaku usaha.',
             ]);
     }
 }

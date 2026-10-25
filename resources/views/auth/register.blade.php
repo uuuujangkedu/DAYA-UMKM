@@ -71,8 +71,7 @@
             </div>
         </div>
 
-        <!-- 2. Form Register Manual -->
-        <form action="{{ route('register.post') }}" method="POST" class="space-y-4">
+        <form action="{{ route('register.post') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
             @csrf
 
             <!-- Pilihan Role (Investor vs Pelaku UMKM) -->
@@ -106,6 +105,28 @@
                 @error('role')
                     <p class="mt-1 text-[12px] text-red-600">{{ $message }}</p>
                 @enderror
+            </div>
+
+            <!-- Foto Profil (Opsional) -->
+            <div>
+                <label for="foto_profil" class="block text-[14px] font-semibold text-[#15241C] mb-1.5">
+                    Foto Profil (Opsional)
+                </label>
+                <div class="flex items-center gap-3.5">
+                    <div class="w-14 h-14 rounded-full bg-[#f7f6f1] border-2 border-dashed border-[#b2d5cc] overflow-hidden flex items-center justify-center shrink-0">
+                        <img id="preview-foto-reg" src="" alt="Preview" class="w-full h-full object-cover hidden">
+                        <span id="placeholder-foto-reg" class="text-xl text-[#0b5a4a]">📷</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" 
+                               id="foto_profil" 
+                               name="foto_profil" 
+                               accept="image/png,image/jpeg,image/webp,image/jpg" 
+                               onchange="previewImage(this, 'preview-foto-reg', 'placeholder-foto-reg')"
+                               class="w-full text-xs text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#d8ebe5] file:text-[#0b5a4a] hover:file:bg-[#b2d5cc] cursor-pointer">
+                        <p class="text-[11px] text-gray-500 mt-0.5">Format JPG, PNG, atau WEBP. Maks 3MB.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Nama Lengkap -->
@@ -291,6 +312,22 @@
                     icon.textContent = '•';
                 }
             }
+        }
+    function previewImage(input, previewId, placeholderId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
         }
     }
 </script>

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>@yield('title', 'Dashboard Mitra Investor') - Titik UMKM</title>
 
     <!-- Favicon -->
@@ -28,6 +29,82 @@
             color: var(--text-dark);
             margin: 0;
             padding: 0;
+        }
+
+        .print-only {
+            display: none !important;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 12mm 15mm 12mm 15mm;
+            }
+
+            html, body {
+                background: #ffffff !important;
+                background-color: #ffffff !important;
+                color: #111827 !important;
+                font-size: 10pt !important;
+                line-height: 1.4 !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                display: block !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            #sidebar-investor,
+            #sidebar-overlay-investor,
+            header,
+            footer,
+            .a11y-trigger,
+            #a11y-widget,
+            #a11y-modal,
+            #app-custom-confirm-modal,
+            #modal-edit-foto-profil,
+            #modal-tambah-bank,
+            #modal-sponsor-ruko,
+            #modal-detail-ulasan,
+            #modal-lihat-struk,
+            .no-print,
+            .print\:hidden {
+                display: none !important;
+            }
+
+            .min-h-screen,
+            .flex-1 {
+                min-height: auto !important;
+                flex: none !important;
+                display: block !important;
+                width: 100% !important;
+            }
+
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+
+            * {
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+
+            .print-only {
+                display: block !important;
+            }
+
+            .screen-only {
+                display: none !important;
+            }
+
+            .page-break-avoid {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
         }
     </style>
 
@@ -67,18 +144,25 @@
             <!-- Profil Investor Top Left -->
             <div class="p-6 sm:p-7 border-b border-white/10">
                 <div class="flex items-center gap-3.5">
-                    <div class="w-12 h-12 rounded-full bg-[#D1D5DB] text-[#0F433C] font-black text-lg flex items-center justify-center shrink-0 shadow-inner border-2 border-white/20">
-                        @if(!empty($user->avatar))
-                            <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
-                        @else
-                            {{ strtoupper(substr($user->name ?? 'I', 0, 2)) }}
-                        @endif
+                    <div class="relative group cursor-pointer" onclick="openModalEditFotoProfil()" title="Klik untuk ubah foto profil">
+                        <div class="user-avatar-target w-12 h-12 rounded-full bg-[#D1D5DB] text-[#0F433C] font-black text-lg flex items-center justify-center shrink-0 shadow-inner border-2 border-white/20 overflow-hidden">
+                            @if(!empty($user->avatar))
+                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                            @else
+                                {{ strtoupper(substr($user->name ?? 'I', 0, 2)) }}
+                            @endif
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#0F433C] text-white border border-white flex items-center justify-center text-[10px] shadow group-hover:bg-[#20675D] transition" title="Ubah Foto Profil">
+                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </div>
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 class="text-sm font-extrabold tracking-wide uppercase text-white truncate leading-tight">
                             {{ $user->name ?? 'MITRA INVESTOR' }}
                         </h2>
-                        <p class="text-[11px] text-teal-200/70 truncate mt-0.5 font-medium">
+                        <p class="text-[11px] text-teal-200/70 truncate font-medium">
                             {{ $user->phone_number ?? $user->email }}
                         </p>
                         <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">
@@ -246,9 +330,6 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <!-- Language Switcher -->
-                @include('components.language-switcher', ['id' => 'desktop-lang'])
-
                 <!-- Badge Total Modal -->
                 <div class="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-[#F9F8F3] border border-[#E8E6DF] text-xs">
                     <span class="text-gray-400 font-bold" data-i18n="dashboard.total_portfolio">Total Portofolio:</span>
@@ -262,7 +343,6 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                     <span data-i18n="dashboard.kyc_verified">KYC Terverifikasi</span>
                 </span>
-
                 <!-- Quick Action CTA -->
                 <a href="{{ route('dashboard', ['tab' => 'proposal']) }}"
                    class="px-4 py-2 rounded-xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5">
@@ -288,9 +368,6 @@
                 <span class="font-extrabold text-xs tracking-wider uppercase text-teal-200">INVESTOR</span>
             </div>
             <div class="flex items-center gap-2.5">
-                <!-- Language Switcher Mobile -->
-                @include('components.language-switcher', ['id' => 'mobile-lang'])
-
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
@@ -453,6 +530,9 @@
 
     <!-- Multi-Language (i18n) Engine -->
     <script src="{{ asset('js/i18n.js') }}"></script>
+
+    <!-- Komponen Modal Ubah Foto Profil -->
+    @include('components.modal-edit-foto-profil')
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget', ['isDashboardLayout' => true])

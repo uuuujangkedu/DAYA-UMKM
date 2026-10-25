@@ -147,9 +147,9 @@
                     </div>
 
                     <!-- Dokumen Proposal File -->
-                    @if(!empty($umkm->dokumen_proposal))
+                    @if(!empty($umkm->file_proposal))
                         <div class="mb-5">
-                            <a href="{{ asset('storage/' . $umkm->dokumen_proposal) }}" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200 text-xs font-bold transition">
+                            <a href="{{ route('proposal.download', $umkm->id_umkm) }}" target="_blank" class="flex items-center gap-2 p-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200 text-xs font-bold transition">
                                 <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>

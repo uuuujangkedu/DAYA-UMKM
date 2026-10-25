@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>@yield('title', 'Super Admin Dashboard') - Titik UMKM</title>
 
     <!-- Favicon -->
@@ -236,7 +237,6 @@
                 <span class="font-extrabold text-xs tracking-wider uppercase text-teal-200">ADMIN</span>
             </div>
             <div class="flex items-center gap-2.5">
-                @include('components.language-switcher', ['id' => 'admin-mobile-lang'])
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button"
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"

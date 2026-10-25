@@ -55,7 +55,7 @@
         </div>
     @endif
 
-    <form action="{{ route('register.post') }}" method="POST" class="space-y-6">
+    <form action="{{ route('register.post') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
         @csrf
         <input type="hidden" name="role" value="investor">
 
@@ -85,6 +85,28 @@
             <div class="border-b border-[#e2e1d8] pb-3.5">
                 <span class="text-[12px] font-semibold text-[#0b5a4a]">Bagian 1</span>
                 <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pendaftar investor</h3>
+            </div>
+
+            <!-- Foto Profil Investor -->
+            <div>
+                <label for="foto_profil" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
+                    Foto Profil Investor (Opsional)
+                </label>
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-[#f7f6f1] border-2 border-dashed border-[#b2d5cc] overflow-hidden flex items-center justify-center shrink-0">
+                        <img id="preview-foto-reg-investor" src="" alt="Preview" class="w-full h-full object-cover hidden">
+                        <span id="placeholder-foto-reg-investor" class="text-2xl text-[#0b5a4a]">📷</span>
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" 
+                               id="foto_profil" 
+                               name="foto_profil" 
+                               accept="image/png,image/jpeg,image/webp,image/jpg" 
+                               onchange="previewImage(this, 'preview-foto-reg-investor', 'placeholder-foto-reg-investor')"
+                               class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#d8ebe5] file:text-[#0b5a4a] hover:file:bg-[#b2d5cc] cursor-pointer">
+                        <p class="text-[11px] text-gray-500 mt-1">Format JPG, PNG, atau WEBP. Maksimal 3MB.</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Nama Lengkap Investor -->
@@ -306,7 +328,22 @@
             } else {
                 card.style.display = 'none';
             }
-        });
+    function previewImage(input, previewId, placeholderId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
 @endsection

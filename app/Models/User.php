@@ -94,6 +94,33 @@ class User extends Authenticatable implements FilamentUser
         return $this->status === 'aktif';
     }
 
+    public function getAvatarAttribute(): ?string
+    {
+        if (empty($this->avatar_url)) {
+            return null;
+        }
+
+        $url = trim($this->avatar_url);
+
+        if (str_starts_with($url, 'http://') || str_starts_with($url, 'https://') || str_starts_with($url, '//') || str_starts_with($url, 'data:image')) {
+            return $url;
+        }
+
+        if (str_starts_with($url, 'storage/')) {
+            return asset($url);
+        }
+
+        if (str_starts_with($url, 'images/') || str_starts_with($url, 'img/')) {
+            return asset($url);
+        }
+
+        if (file_exists(public_path($url))) {
+            return asset($url);
+        }
+
+        return asset('storage/'.ltrim($url, '/'));
+    }
+
     public function umkm(): HasOne
     {
         return $this->hasOne(Umkm::class, 'user_id');

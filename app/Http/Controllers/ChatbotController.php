@@ -38,11 +38,13 @@ class ChatbotController extends Controller
         }
 
         try {
-            if (empty($apiKey)) {
+            $isFastApi = in_array(strtolower($provider), ['fastapi', 'vps'], true);
+            if (! $isFastApi && empty($apiKey)) {
                 $cleanReply = $this->getFallbackKnowledgeBaseResponse($userMessage);
             } else {
                 try {
                     $reply = match (strtolower($provider)) {
+                        'fastapi', 'vps' => $this->callFastApiGateway($userMessage),
                         'gemini' => $this->callGeminiApi($userMessage, $history, $apiKey, $systemPrompt),
                         default => $this->callOpenAiCompatibleApi($userMessage, $history, $apiKey, $systemPrompt),
                     };
@@ -244,6 +246,38 @@ class ChatbotController extends Controller
         }
 
         return $text;
+    }
+
+    /**
+     * Call self-hosted FastAPI AI Gateway (on laptop/VPS via Cloudflare Tunnel).
+     */
+    protected function callFastApiGateway(string $message): string
+    {
+        $url = (string) config('chatbot.fastapi_url', env('FASTAPI_URL', 'https://expected-memorabilia-lodging-did.trycloudflare.com/chat'));
+        $secretToken = (string) config('chatbot.fastapi_secret_token', env('FASTAPI_SECRET_TOKEN', 'tikum_secret_token_2026'));
+
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'X-Api-Key' => $secretToken,
+        ])
+            ->timeout(35)
+            ->post($url, [
+                'message' => $message,
+            ]);
+
+        if (! $response->successful()) {
+            throw new \RuntimeException('FastAPI Gateway Error ('.$response->status().'): '.$response->body());
+        }
+
+        $data = $response->json();
+        $reply = $data['reply'] ?? null;
+
+        if (! is_string($reply) || trim($reply) === '') {
+            throw new \RuntimeException('Respon dari FastAPI Gateway kosong.');
+        }
+
+        return $reply;
     }
 
     /**
