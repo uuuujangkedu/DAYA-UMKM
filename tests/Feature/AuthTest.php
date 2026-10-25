@@ -16,6 +16,25 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_footer_legal_links_open_public_draft_pages(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee(route('privacy'), false)
+            ->assertSee(route('terms'), false);
+
+        $this->get(route('privacy'))
+            ->assertOk()
+            ->assertSee('Kebijakan Privasi')
+            ->assertSee('Status: draf. Kebijakan ini perlu ditinjau dan disahkan pemilik layanan sebelum diberlakukan.');
+
+        $this->get(route('terms'))
+            ->assertOk()
+            ->assertSee('Syarat dan Ketentuan')
+            ->assertSee('Status: draf. Syarat ini perlu ditinjau dan disahkan pemilik layanan sebelum diberlakukan.')
+            ->assertSee('Pendanaan usaha memiliki risiko');
+    }
+
     public function test_login_page_renders_successfully(): void
     {
         $response = $this->get('/login');

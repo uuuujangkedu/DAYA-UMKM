@@ -3,6 +3,13 @@
 @section('title', 'Gabung Jadi Investor')
 
 @section('content')
+@if(session('info') || session('error'))
+    <div role="alert" class="mx-auto mt-24 max-w-[1200px] px-5 sm:px-8">
+        <div class="rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950">
+            {{ session('info') ?? session('error') }}
+        </div>
+    </div>
+@endif
 <!-- ========================================================
      1. HERO SECTION INVESTOR
      Background: Sunny Miniature House on Rolling Hills (Blur 20%)
