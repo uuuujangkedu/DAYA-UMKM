@@ -163,9 +163,9 @@
                         class="p-2.5 rounded-xl bg-[#1E5B38] hover:bg-[#164E2F] disabled:opacity-50 text-white transition cursor-pointer flex items-center justify-center shrink-0 shadow-sm hover:scale-105 active:scale-95"
                         title="Kirim Pesan"
                         aria-label="Kirim Pesan">
-                    <!-- Paper Plane Icon -->
-                    <svg class="w-4 h-4 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                    <!-- Icon Kirim / Paper Plane Menghadap Lurus ke Kanan -->
+                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                     </svg>
                 </button>
             </form>
@@ -192,6 +192,10 @@
     const typingIndicator = document.getElementById('chatbot-typing-indicator');
     const chipsContainer = document.getElementById('chatbot-chips-container');
 
+    if (!triggerBtn || !panel) {
+        return;
+    }
+
     let isOpen = false;
     let isSending = false;
 
@@ -204,16 +208,16 @@
                 panel.classList.remove('opacity-0', 'translate-y-4');
                 panel.classList.add('opacity-100', 'translate-y-0');
             }, 10);
-            iconOpen.classList.add('hidden');
-            iconClose.classList.remove('hidden');
+            if (iconOpen) iconOpen.classList.add('hidden');
+            if (iconClose) iconClose.classList.remove('hidden');
             triggerBtn.setAttribute('aria-expanded', 'true');
             scrollToBottom();
-            setTimeout(() => input.focus(), 150);
+            setTimeout(() => { if (input) input.focus(); }, 150);
         } else {
             panel.classList.remove('opacity-100', 'translate-y-0');
             panel.classList.add('opacity-0', 'translate-y-4');
-            iconOpen.classList.remove('hidden');
-            iconClose.classList.add('hidden');
+            if (iconOpen) iconOpen.classList.remove('hidden');
+            if (iconClose) iconClose.classList.add('hidden');
             triggerBtn.setAttribute('aria-expanded', 'false');
             setTimeout(() => {
                 panel.classList.add('hidden');
@@ -221,8 +225,17 @@
         }
     }
 
-    triggerBtn.addEventListener('click', () => toggleChatbot());
-    closeBtn.addEventListener('click', () => toggleChatbot(false));
+    triggerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleChatbot();
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleChatbot(false);
+        });
+    }
 
     // Keyboard ESC to close
     document.addEventListener('keydown', (e) => {
@@ -338,56 +351,53 @@
     });
 
     // Reset Chat Button
-    resetBtn.addEventListener('click', async () => {
-        const executeReset = async () => {
-            const csrfTokenMeta = document.querySelector('meta[name=\"csrf-token\"]');
-            const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '{{ csrf_token() }}';
+    if (resetBtn) {
+        resetBtn.addEventListener('click', async () => {
+            const executeReset = async () => {
+                const csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+                const csrfToken = csrfTokenMeta ? csrfTokenMeta.getAttribute('content') : '{{ csrf_token() }}';
 
-            try {
-                await fetch("{{ route('chatbot.reset') }}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken,
-                    },
+                try {
+                    await fetch("{{ route('chatbot.reset') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken,
+                        },
+                    });
+                } catch (e) {
+                    // silent fail
+                }
+
+                // Clear UI messages except initial greeting & chips
+                if (messagesContainer) {
+                    const allBubbles = messagesContainer.querySelectorAll('.flex-col:not(#chatbot-typing-indicator)');
+                    allBubbles.forEach((el, index) => {
+                        if (index > 0) el.remove(); // keep only the first greeting
+                    });
+                }
+
+                if (chipsContainer) {
+                    chipsContainer.classList.remove('hidden');
+                }
+
+                scrollToBottom();
+            };
+
+            if (typeof openAppConfirmModal === 'function') {
+                openAppConfirmModal({
+                    title: 'Bersihkan Obrolan AI',
+                    message: 'Apakah Anda ingin membersihkan seluruh percakapan dan memulai obrolan baru dengan AI Assistant?',
+                    confirmText: 'Bersihkan',
+                    confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
+                    icon: 'danger',
+                    onConfirm: executeReset
                 });
-            } catch (e) {
-                // silent fail
+            } else {
+                executeReset();
             }
-
-            // Clear UI messages except initial greeting & chips
-            const allBubbles = messagesContainer.querySelectorAll('.flex-col:not(#chatbot-typing-indicator)');
-            allBubbles.forEach((el, index) => {
-                if (index > 0) el.remove(); // keep only the first greeting
-            });
-        };
-
-        if (typeof openAppConfirmModal === 'function') {
-            openAppConfirmModal({
-                title: 'Bersihkan Obrolan AI',
-                message: 'Apakah Anda ingin membersihkan seluruh percakapan dan memulai obrolan baru dengan AI Assistant?',
-                confirmText: 'Bersihkan',
-                confirmClass: 'bg-rose-600 hover:bg-rose-700 text-white',
-                icon: 'danger',
-                onConfirm: executeReset
-            });
-        } else {
-            executeReset();
-        }
-    });
-
-        // Clear UI messages except initial greeting & chips
-        const allBubbles = messagesContainer.querySelectorAll('.flex-col:not(#chatbot-typing-indicator)');
-        allBubbles.forEach((el, index) => {
-            if (index > 0) el.remove(); // keep only the first greeting
         });
-
-        if (chipsContainer) {
-            chipsContainer.classList.remove('hidden');
-        }
-
-        scrollToBottom();
-    });
+    }
 })();
 </script>

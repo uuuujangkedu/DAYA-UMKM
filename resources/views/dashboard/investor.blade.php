@@ -20,33 +20,12 @@
             </div>
             
             <div class="flex items-center gap-2.5 self-start sm:self-auto">
-                <a href="{{ route('dashboard', ['tab' => 'pesan']) }}" 
-                   class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                    </svg>
-                    <span>Obrolan Kemitraan</span>
-                    @if(isset($unreadInvestorChatCount) && $unreadInvestorChatCount > 0)
-                        <span class="px-1.5 py-0.5 rounded-full text-[9px] font-black bg-amber-400 text-amber-950">
-                            {{ $unreadInvestorChatCount }}
-                        </span>
-                    @endif
-                </a>
-
-                <a href="{{ route('dashboard', ['tab' => 'portofolio']) }}" 
-                   class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
-                    <svg class="w-4 h-4 text-[#0F433C]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                    </svg>
-                    <span>Portofolio Saya</span>
-                </a>
-
                 <a href="{{ route('dashboard', ['tab' => 'proposal']) }}" 
                    class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
                     <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                     </svg>
-                    <span>+ Danai UMKM Baru</span>
+                    <span>Danai UMKM Baru</span>
                 </a>
             </div>
         </div>
@@ -440,7 +419,7 @@
                 <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
-                <span>+ Tambah Portofolio Baru</span>
+                <span>Tambah Portofolio Baru</span>
             </a>
         </div>
 
@@ -738,13 +717,7 @@
         <!-- PAGE HEADER OBROLAN -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-100 text-[#0F433C]">
-                        Ruang Diskusi Langsung
-                    </span>
-                    <span class="text-xs text-gray-400 font-bold">&bull; 2-Way Official In-App Chat</span>
-                </div>
-                <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C] mt-1">OBROLAN KEMITRAAN</h1>
+                <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">OBROLAN KEMITRAAN</h1>
                 <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
                     Ruang diskusi resmi dan komunikasi dua arah langsung dengan seluruh mitra pengelola UMKM yang Anda danai.
                 </p>
@@ -756,7 +729,7 @@
                     <svg class="w-4 h-4 text-amber-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
-                    <span>+ Danai UMKM Baru</span>
+                    <span>Danai UMKM Baru</span>
                 </a>
             </div>
         </div>
@@ -1209,12 +1182,9 @@
                         </div>
 
                         <!-- Tautan Dokumen Proposal PDF -->
-                        @if(!empty($umkm->dokumen_proposal) || !empty($umkm->file_proposal))
-                            @php
-                                $propPath = $umkm->dokumen_proposal ?? $umkm->file_proposal;
-                            @endphp
+                        @if(!empty($umkm->file_proposal))
                             <div class="mt-3">
-                                <a href="{{ asset('storage/' . $propPath) }}" target="_blank" 
+                                <a href="{{ route('proposal.download', $umkm->id_umkm) }}" target="_blank" 
                                    class="flex items-center gap-2 p-2.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-900 border border-teal-200 text-xs font-bold transition">
                                     <svg class="w-4 h-4 text-teal-700 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -1286,6 +1256,7 @@
     {{-- ========================================================================= --}}
     @elseif(($activeTab ?? '') === 'keuangan')
 
+        <div class="screen-only space-y-6">
         <!-- PAGE HEADER KEUANGAN -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -1295,18 +1266,18 @@
                 </p>
             </div>
 
-            <div class="flex items-center gap-2.5 self-start sm:self-auto">
+            <div class="flex items-center gap-3 self-start sm:self-auto shrink-0 flex-wrap sm:flex-nowrap">
                 <button onclick="window.print()" 
-                        class="px-4 py-2.5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
-                    <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="h-11 px-5 rounded-2xl bg-white border border-[#E8E6DF] hover:bg-gray-50 text-gray-700 text-xs font-bold transition shadow-sm inline-flex items-center justify-center gap-2.5 whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-gray-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                     </svg>
                     <span>Cetak Rekap</span>
                 </button>
 
                 <button onclick="openBankModal()" 
-                        class="px-5 py-2.5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center gap-2">
-                    <svg class="w-4 h-4 text-teal-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="h-11 px-5 rounded-2xl bg-[#0F433C] hover:bg-[#19584F] text-white text-xs font-bold transition shadow-sm inline-flex items-center justify-center gap-2.5 whitespace-nowrap shrink-0">
+                    <svg class="w-4 h-4 text-teal-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
                     </svg>
                     <span>Atur Rekening Bank</span>
@@ -1527,6 +1498,209 @@
                 </table>
             </div>
         </div>
+        </div>
+
+        <!-- CETAK REKAP LAPORAN KEUANGAN & DIVIDEN (LAYOUT INVOICE BERSIH KHUSUS CETAK) -->
+        <div class="print-only font-sans text-gray-900 bg-white">
+            <!-- HEADER / KOP INVOICE -->
+            <div class="border-b-2 border-gray-900 pb-4 mb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl font-black tracking-tight text-gray-900 uppercase">TIKUM &bull; DAYA UMKM</span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Platform Ekosistem Akselerasi Modal & Kemitraan Sektor Riil UMKM</p>
+                        <p class="text-[11px] text-gray-500">Universitas Maria Kudus &bull; Gondangmanis, Bae, Kudus, Jawa Tengah</p>
+                        <p class="text-[11px] text-gray-500">Email: halo@dayaumkm.id | Website: dayaumkm.id</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block px-3 py-1 bg-gray-100 border border-gray-300 text-gray-800 text-[11px] font-black uppercase tracking-wider rounded mb-1.5">
+                            Faktur Rekapitulasi Dividen
+                        </span>
+                        <div class="text-xs text-gray-600 mt-1">
+                            <span class="font-bold">No. Dokumen:</span> <span class="font-mono">INV-DIV/{{ date('Ymd') }}/{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</span>
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            <span class="font-bold">Tanggal Cetak:</span> {{ now()->translatedFormat('d F Y, H:i') }} WIB
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            <span class="font-bold">Status Dokumen:</span> <span class="font-bold text-gray-900">Resmi Terverifikasi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAIL INVESTOR & REKENING PENCAIRAN (2 KOLOM BERSIH) -->
+            <div class="grid grid-cols-2 gap-6 mb-6 text-xs">
+                <div class="border border-gray-300 rounded p-4 bg-gray-50/50">
+                    <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2 border-b border-gray-200 pb-1">
+                        Informasi Mitra Investor
+                    </span>
+                    <table class="w-full">
+                        <tr class="py-1">
+                            <td class="text-gray-600 w-28 py-0.5 font-medium">Nama Investor</td>
+                            <td class="font-bold text-gray-900 py-0.5">: {{ $user->name }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">ID Pengguna</td>
+                            <td class="font-mono py-0.5">: USR-{{ str_pad($user->id, 4, '0', STR_PAD_LEFT) }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">Email / Telepon</td>
+                            <td class="py-0.5">: {{ $user->email }} / {{ $user->phone_number ?? '-' }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">Domisili</td>
+                            <td class="py-0.5">: {{ $user->provinsi_kota ?? ($user->kota ?? 'Indonesia') }}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="border border-gray-300 rounded p-4 bg-gray-50/50">
+                    <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2 border-b border-gray-200 pb-1">
+                        Rekening Bank Penerima Dividen
+                    </span>
+                    <table class="w-full">
+                        <tr class="py-1">
+                            <td class="text-gray-600 w-28 py-0.5 font-medium">Nama Bank</td>
+                            <td class="font-bold text-gray-900 py-0.5">: {{ $user->bank_name ?? 'Belum Diatur' }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">Nomor Rekening</td>
+                            <td class="font-mono font-bold text-gray-900 py-0.5">: {{ $user->nomor_rekening ?? '-' }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">Atas Nama</td>
+                            <td class="py-0.5">: {{ $user->nama_pemilik_rekening ?? ($user->name ?? '-') }}</td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-0.5 font-medium">Status Rekening</td>
+                            <td class="py-0.5">: {{ !empty($user->nomor_rekening) ? 'Aktif & Terverifikasi' : 'Perlu Dilengkapi' }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- RINGKASAN POSISI KEUANGAN (TABEL KOTAK MINIMALIS INVOICE) -->
+            <div class="mb-6">
+                <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">
+                    Ringkasan Posisi Finansial Portofolio
+                </span>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 uppercase text-[10px] tracking-wider border-b border-gray-300">
+                            <th class="border border-gray-300 py-2 px-3 text-left">Total Modal Berjalan</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Total Dividen Diterima</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Proyeksi Dividen Bulan Ini</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Rata-Rata Bagi Hasil</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Pengembalian Pokok</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-gray-300 py-2.5 px-3 font-bold text-gray-900">
+                                Rp {{ number_format($totalModalDiinvestasikan, 0, ',', '.') }}
+                            </td>
+                            <td class="border border-gray-300 py-2.5 px-3 font-bold text-gray-900">
+                                Rp {{ number_format($totalDividenDiterima, 0, ',', '.') }}
+                            </td>
+                            <td class="border border-gray-300 py-2.5 px-3 font-medium text-gray-800">
+                                Rp {{ number_format($proyeksiDividenBulanIni, 0, ',', '.') }}
+                            </td>
+                            <td class="border border-gray-300 py-2.5 px-3 font-medium text-gray-800">
+                                {{ $rataRataBagiHasil }}% p.a.
+                            </td>
+                            <td class="border border-gray-300 py-2.5 px-3 font-bold text-gray-900">
+                                {{ $persentasePengembalianModal }}%
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- TABEL RINCIAN MUTASI PENYALURAN DIVIDEN -->
+            <div class="mb-6 page-break-avoid">
+                <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2">
+                    Rincian Riwayat Penyaluran Dividen & Bagi Hasil Riil
+                </span>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 uppercase text-[10px] tracking-wider border-b border-gray-300">
+                            <th class="border border-gray-300 py-2 px-2.5 text-center w-10">No</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Tanggal Distribusi</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Mitra Usaha UMKM</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">No. Referensi Bagi Hasil</th>
+                            <th class="border border-gray-300 py-2 px-3 text-center">Status</th>
+                            <th class="border border-gray-300 py-2 px-3 text-right">Nominal Dividen</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse($riwayatBagiHasil as $idx => $log)
+                            <tr>
+                                <td class="border border-gray-300 py-2 px-2.5 text-center text-gray-600">{{ $idx + 1 }}</td>
+                                <td class="border border-gray-300 py-2 px-3 text-gray-700">
+                                    {{ $log->tanggal_distribusi ? \Carbon\Carbon::parse($log->tanggal_distribusi)->translatedFormat('d F Y') : '-' }}
+                                </td>
+                                <td class="border border-gray-300 py-2 px-3 font-semibold text-gray-900">
+                                    {{ $log->umkm->nama_usaha ?? ($log->investasi->umkm->nama_usaha ?? 'Mitra Usaha UMKM') }}
+                                </td>
+                                <td class="border border-gray-300 py-2 px-3 font-mono text-[11px] text-gray-600">
+                                    DIV-REF-{{ str_pad($log->id, 5, '0', STR_PAD_LEFT) }}
+                                </td>
+                                <td class="border border-gray-300 py-2 px-3 text-center text-gray-700">
+                                    {{ ucfirst($log->status ?? 'Berhasil') }}
+                                </td>
+                                <td class="border border-gray-300 py-2 px-3 text-right font-bold text-gray-900 font-mono">
+                                    Rp {{ number_format($log->nominal_diterima, 0, ',', '.') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="6" class="border border-gray-300 py-4 px-3 text-center text-gray-500 italic">
+                                    Belum ada transaksi bagi hasil dividen yang tercatat.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                    <tfoot>
+                        <tr class="bg-gray-50 border-t-2 border-gray-400 font-bold">
+                            <td colspan="5" class="border border-gray-300 py-2.5 px-3 text-right uppercase tracking-wider text-gray-700">
+                                Total Akumulasi Dividen Diterima:
+                            </td>
+                            <td class="border border-gray-300 py-2.5 px-3 text-right font-black font-mono text-gray-900 text-sm">
+                                Rp {{ number_format($totalDividenDiterima, 0, ',', '.') }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- FOOTER, CATATAN & TANDA TANGAN ELEKTRONIK -->
+            <div class="grid grid-cols-12 gap-6 pt-4 border-t border-gray-300 page-break-avoid text-xs">
+                <div class="col-span-8 text-gray-600 space-y-1">
+                    <span class="font-bold text-gray-800 block text-[11px] uppercase tracking-wider">Ketentuan & Catatan Resmi:</span>
+                    <p class="text-[10px] leading-relaxed">
+                        1. Faktur rekapitulasi ini merupakan catatan resmi mutasi bagi hasil dan pengembalian modal pada platform kemitraan TIKUM DAYA UMKM.
+                    </p>
+                    <p class="text-[10px] leading-relaxed">
+                        2. Dividen telah diproses dan disalurkan langsung ke nomor rekening terdaftar mitra investor tanpa potongan biaya platform.
+                    </p>
+                    <p class="text-[10px] leading-relaxed">
+                        3. Dokumen ini diterbitkan secara elektronik dan sah tanpa memerlukan stempel fisik atau tanda tangan basah.
+                    </p>
+                </div>
+                <div class="col-span-4 text-center">
+                    <p class="text-[11px] text-gray-600">Kudus, {{ now()->translatedFormat('d F Y') }}</p>
+                    <p class="text-xs font-bold text-gray-900 mt-0.5">Sistem Finansial TIKUM</p>
+                    <div class="my-3 py-2 border border-dashed border-gray-400 rounded inline-block px-4">
+                        <span class="text-[10px] font-mono uppercase tracking-widest text-gray-500 block">TIKUM VERIFIED</span>
+                        <span class="text-[9px] text-gray-400 block font-mono">{{ md5('TIKUM-DIV-'.$user->id) }}</span>
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-700">Divisi Audit Finansial & Kemitraan</p>
+                    <p class="text-[9px] text-gray-400">Universitas Maria Kudus</p>
+                </div>
+            </div>
+        </div>
 
     {{-- ========================================================================= --}}
     {{-- TAB 5: KATALOG RUKO STRATEGIS (Fitur 2: Pilar Sewa Komersial UMKM)         --}}
@@ -1547,7 +1721,7 @@
                 <svg class="w-4 h-4 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
                 </svg>
-                <span>+ Rekomendasikan Ruko Baru</span>
+                <span>Rekomendasikan Ruko Baru</span>
             </button>
         </div>
 
@@ -1821,16 +1995,11 @@
     {{-- ========================================================================= --}}
     @elseif(($activeTab ?? '') === 'kalkulator')
 
+        <div class="screen-only space-y-8">
         <!-- PAGE HEADER KALKULATOR -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-                <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-teal-100 text-teal-800">
-                        Alat Analisis Finansial Cerdas
-                    </span>
-                    <span class="text-xs text-gray-400 font-bold">&bull;</span>
-                    <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">KALKULATOR SIMULASI INVESTASI</h1>
-                </div>
+                <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-[#1A202C]">KALKULATOR SIMULASI INVESTASI</h1>
                 <p class="text-sm sm:text-base text-gray-500 mt-1 font-medium">
                     Bukan sekadar hitungan angka — uji skenario bisnis, pantau jadwal arus kas bulanan, dan temukan proposal UMKM yang langsung cocok dengan simulasi Anda.
                 </p>
@@ -2172,6 +2341,150 @@
                         Belum ada proposal UMKM terdaftar yang siap menerima pendanaan saat ini.
                     </div>
                 @endforelse
+            </div>
+        </div>
+        </div>
+
+        <!-- CETAK LEMBAR SIMULASI & PROYEKSI INVESTASI (LAYOUT INVOICE BERSIH KHUSUS CETAK) -->
+        <div class="print-only font-sans text-gray-900 bg-white">
+            <!-- HEADER / KOP LEMBAR SIMULASI -->
+            <div class="border-b-2 border-gray-900 pb-4 mb-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl font-black tracking-tight text-gray-900 uppercase">TIKUM &bull; DAYA UMKM</span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">Simulasi Proyeksi Portofolio & Arus Kas Kemitraan Sektor Riil UMKM</p>
+                        <p class="text-[11px] text-gray-500">Universitas Maria Kudus &bull; Gondangmanis, Bae, Kudus, Jawa Tengah</p>
+                        <p class="text-[11px] text-gray-500">Email: halo@dayaumkm.id | Website: dayaumkm.id</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="inline-block px-3 py-1 bg-gray-100 border border-gray-300 text-gray-800 text-[11px] font-black uppercase tracking-wider rounded mb-1.5">
+                            Lembar Proyeksi Investasi
+                        </span>
+                        <div class="text-xs text-gray-600 mt-1">
+                            <span class="font-bold">No. Simulasi:</span> <span class="font-mono">SIM-PROJ/{{ date('Ymd') }}/{{ str_pad($user->id, 5, '0', STR_PAD_LEFT) }}</span>
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            <span class="font-bold">Tanggal Cetak:</span> {{ now()->translatedFormat('d F Y, H:i') }} WIB
+                        </div>
+                        <div class="text-xs text-gray-600">
+                            <span class="font-bold">Pemohon Simulasi:</span> <span class="font-bold text-gray-900">{{ $user->name }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAIL PARAMETER INPUT SIMULASI & HASIL (2 BOX / 2 KOLOM BERSIH) -->
+            <div class="grid grid-cols-2 gap-6 mb-6 text-xs">
+                <!-- PARAMETER INPUT -->
+                <div class="border border-gray-300 rounded p-4 bg-gray-50/50">
+                    <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2 border-b border-gray-200 pb-1">
+                        Parameter Input Simulasi
+                    </span>
+                    <table class="w-full">
+                        <tr class="py-1">
+                            <td class="text-gray-600 w-36 py-1 font-medium">Skenario Performa</td>
+                            <td class="font-bold text-gray-900 py-1">: <span id="print-calc-scenario">Realistis (Normal)</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Nominal Modal Investasi</td>
+                            <td class="font-bold text-gray-900 py-1 font-mono">: <span id="print-calc-nominal">Rp 10.000.000</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Target Bagi Hasil (ROI p.a.)</td>
+                            <td class="font-bold text-gray-900 py-1">: <span id="print-calc-roi">15.0% per tahun</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Tenor / Durasi Kemitraan</td>
+                            <td class="py-1">: <span id="print-calc-tenor">12 Bulan (1.0 Tahun)</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Frekuensi Distribusi</td>
+                            <td class="py-1">: <span id="print-calc-freq">Bulanan (12x per tahun)</span></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- ESTIMASI HASIL IMBAL HASIL -->
+                <div class="border border-gray-300 rounded p-4 bg-gray-50/50">
+                    <span class="block text-[10px] font-black uppercase tracking-wider text-gray-500 mb-2 border-b border-gray-200 pb-1">
+                        Estimasi Ringkasan Proyeksi
+                    </span>
+                    <table class="w-full">
+                        <tr class="py-1">
+                            <td class="text-gray-600 w-40 py-1 font-medium">Estimasi Dividen per Periode</td>
+                            <td class="font-bold text-gray-900 py-1 font-mono">: <span id="print-calc-dividen-periode">Rp 125.000</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Total Akumulasi Dividen</td>
+                            <td class="font-bold text-gray-900 py-1 font-mono">: <span id="print-calc-total-dividen">Rp 1.500.000</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Total Pengembalian Dana</td>
+                            <td class="font-bold text-gray-900 py-1 font-mono">: <span id="print-calc-total-pengembalian">Rp 11.500.000</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Estimasi Balik Modal</td>
+                            <td class="py-1">: <span id="print-calc-payback">6.7 Tahun (jika murni dividen)</span></td>
+                        </tr>
+                        <tr class="py-1">
+                            <td class="text-gray-600 py-1 font-medium">Metode Pelunasan Pokok</td>
+                            <td class="py-1 text-gray-700">: Bullet Payment (Akhir Tenor)</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TABEL JADWAL ESTIMASI ARUS KAS MASUK (CASHFLOW TIMELINE) -->
+            <div class="mb-6 page-break-avoid">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-black uppercase tracking-wider text-gray-500">
+                        Jadwal Estimasi Arus Kas Dividen & Pengembalian Modal
+                    </span>
+                    <span class="text-[10px] text-gray-400 italic">Disimulasikan berdasarkan parameter terpilih</span>
+                </div>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
+                    <thead>
+                        <tr class="bg-gray-100 text-gray-700 uppercase text-[10px] tracking-wider border-b border-gray-300">
+                            <th class="border border-gray-300 py-2 px-2.5 text-center w-12">Periode</th>
+                            <th class="border border-gray-300 py-2 px-3 text-left">Waktu Jatuh Tempo</th>
+                            <th class="border border-gray-300 py-2 px-3 text-right">Dividen Masuk</th>
+                            <th class="border border-gray-300 py-2 px-3 text-right">Pengembalian Pokok</th>
+                            <th class="border border-gray-300 py-2 px-3 text-right">Total Kas Masuk</th>
+                            <th class="border border-gray-300 py-2 px-3 text-right">Akumulasi Kas Diterima</th>
+                        </tr>
+                    </thead>
+                    <tbody id="print-cashflow-tbody" class="divide-y divide-gray-200 font-mono">
+                        <!-- Diisi otomatis oleh JavaScript onCalcChange() -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- FOOTER, PERNYATAAN PENYANGKALAN (DISCLAIMER) & TANDA TANGAN -->
+            <div class="grid grid-cols-12 gap-6 pt-4 border-t border-gray-300 page-break-avoid text-xs">
+                <div class="col-span-8 text-gray-600 space-y-1">
+                    <span class="font-bold text-gray-800 block text-[11px] uppercase tracking-wider">Penyangkalan Finansial (Disclaimer):</span>
+                    <p class="text-[10px] leading-relaxed">
+                        1. Lembar simulasi ini bersifat estimasi proyeksi ilustratif berdasarkan parameter skenario yang dipilih oleh investor pada tanggal simulasi.
+                    </p>
+                    <p class="text-[10px] leading-relaxed">
+                        2. Kemitraan modal pada DAYA UMKM menggunakan akad syirkah/bagi hasil sektor riil non-bunga. Realisasi dividen mengikuti performa riil laba kotor/bersih usaha mitra UMKM.
+                    </p>
+                    <p class="text-[10px] leading-relaxed">
+                        3. Lembar proyeksi ini bukan merupakan surat perjanjian investasi definitif (MoU/Akad) dan tidak menjamin kepastian imbal hasil tetap (fixed return).
+                    </p>
+                </div>
+                <div class="col-span-4 text-center">
+                    <p class="text-[11px] text-gray-600">Kudus, {{ now()->translatedFormat('d F Y') }}</p>
+                    <p class="text-xs font-bold text-gray-900 mt-0.5">Sistem Simulasi TIKUM</p>
+                    <div class="my-3 py-2 border border-dashed border-gray-400 rounded inline-block px-4">
+                        <span class="text-[10px] font-mono uppercase tracking-widest text-gray-500 block">SIMULATION REF</span>
+                        <span class="text-[9px] text-gray-400 block font-mono">{{ md5('TIKUM-SIM-'.$user->id) }}</span>
+                    </div>
+                    <p class="text-[10px] font-bold text-gray-700">Platform DAYA UMKM</p>
+                    <p class="text-[9px] text-gray-400">Universitas Maria Kudus</p>
+                </div>
             </div>
         </div>
 
@@ -2836,11 +3149,42 @@
         document.getElementById('res-total-pengembalian').innerText = 'Rp ' + Number(Math.round(totalPengembalian)).toLocaleString('id-ID');
         document.getElementById('res-payback').innerText = paybackYears + ' Tahun (jika murni dividen)';
 
-        // Populate Cashflow Timeline Table
+        // Sinkronisasi ke Lembar Cetak Proyeksi (Print-Only Invoice Sheet)
+        const printNominal = document.getElementById('print-calc-nominal');
+        if (printNominal) printNominal.innerText = 'Rp ' + Number(nominal).toLocaleString('id-ID');
+
+        const printRoi = document.getElementById('print-calc-roi');
+        if (printRoi) printRoi.innerText = persen.toFixed(1) + '% per tahun';
+
+        const printTenor = document.getElementById('print-calc-tenor');
+        if (printTenor) printTenor.innerText = tenor + ' Bulan (' + (tenor / 12).toFixed(1) + ' Tahun)';
+
+        const printFreq = document.getElementById('print-calc-freq');
+        if (printFreq) printFreq.innerText = freqText;
+
+        const scenBadge = document.getElementById('label-scenario-badge');
+        const printScen = document.getElementById('print-calc-scenario');
+        if (printScen && scenBadge) printScen.innerText = scenBadge.innerText.trim();
+
+        const printDivPeriod = document.getElementById('print-calc-dividen-periode');
+        if (printDivPeriod) printDivPeriod.innerText = 'Rp ' + Number(Math.round(dividenPerPeriode)).toLocaleString('id-ID');
+
+        const printTotalDiv = document.getElementById('print-calc-total-dividen');
+        if (printTotalDiv) printTotalDiv.innerText = 'Rp ' + Number(Math.round(totalBagiHasil)).toLocaleString('id-ID');
+
+        const printTotalReturn = document.getElementById('print-calc-total-pengembalian');
+        if (printTotalReturn) printTotalReturn.innerText = 'Rp ' + Number(Math.round(totalPengembalian)).toLocaleString('id-ID');
+
+        const printPayback = document.getElementById('print-calc-payback');
+        if (printPayback) printPayback.innerText = paybackYears + ' Tahun (jika murni dividen)';
+
+        // Populate Cashflow Timeline Table (Layar & Cetak)
         const cfBody = document.getElementById('cashflow-tbody');
+        const printCfBody = document.getElementById('print-cashflow-tbody');
         const cfBadge = document.getElementById('cf-tenor-badge');
         if (cfBody) {
             cfBody.innerHTML = '';
+            if (printCfBody) printCfBody.innerHTML = '';
             const totalPeriods = Math.max(1, Math.round((tenor / 12) * freqPerYear));
             if (cfBadge) {
                 cfBadge.innerText = totalPeriods + ' Periode (' + tenor + ' Bulan)';
@@ -2871,6 +3215,20 @@
                     <td class="py-2.5 px-3 font-black ${isFinal ? 'text-emerald-700 text-sm' : 'text-gray-600'}">Rp ${Number(Math.round(runningTotal)).toLocaleString('id-ID')}</td>
                 `;
                 cfBody.appendChild(tr);
+
+                if (printCfBody) {
+                    const printTr = document.createElement('tr');
+                    printTr.className = isFinal ? 'font-bold bg-gray-50 border-t-2 border-gray-400' : 'border-b border-gray-200';
+                    printTr.innerHTML = `
+                        <td class="border border-gray-300 py-1.5 px-2.5 text-center text-gray-700 font-mono">${p}</td>
+                        <td class="border border-gray-300 py-1.5 px-3 text-gray-900">Bulan ke-${monthNum} ${isFinal ? '<span class="text-[10px] uppercase font-bold text-gray-600">(Pelunasan)</span>' : ''}</td>
+                        <td class="border border-gray-300 py-1.5 px-3 text-right font-mono text-gray-900">Rp ${Number(Math.round(singleDividen)).toLocaleString('id-ID')}</td>
+                        <td class="border border-gray-300 py-1.5 px-3 text-right font-mono text-gray-700">${pokokReturned > 0 ? 'Rp ' + Number(pokokReturned).toLocaleString('id-ID') : '-'}</td>
+                        <td class="border border-gray-300 py-1.5 px-3 text-right font-mono font-semibold text-gray-900">Rp ${Number(Math.round(totalCashIn)).toLocaleString('id-ID')}</td>
+                        <td class="border border-gray-300 py-1.5 px-3 text-right font-mono font-bold text-gray-900">Rp ${Number(Math.round(runningTotal)).toLocaleString('id-ID')}</td>
+                    `;
+                    printCfBody.appendChild(printTr);
+                }
             }
         }
     }
@@ -2925,6 +3283,12 @@
 
     // Auto-calculate on tab load if calculator present
     document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('input-range-nominal')) {
+            onCalcChange();
+        }
+    });
+
+    window.addEventListener('beforeprint', function() {
         if (document.getElementById('input-range-nominal')) {
             onCalcChange();
         }

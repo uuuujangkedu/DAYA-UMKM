@@ -48,13 +48,13 @@
                 </p>
 
                 <!-- Tombol Utama: Hijau rumput gelap (#2D6B22, hover #1E4A1A) & Sekunder -->
-                <div class="flex flex-wrap items-center gap-4 pt-2" data-reveal-item>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 pt-2" data-reveal-item>
                     <a href="{{ route('gabung.investor') }}" 
-                       class="inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" data-i18n="hero.btn_investor">
+                       class="inline-flex items-center justify-center w-full sm:w-auto bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 text-center" data-i18n="hero.btn_investor">
                         Daftar jadi Investor
                     </a>
                     <a href="{{ route('gabung.umkm') }}" 
-                       class="inline-flex items-center justify-center border-2 border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white/90 backdrop-blur-sm font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" data-i18n="hero.btn_umkm">
+                       class="inline-flex items-center justify-center w-full sm:w-auto border-2 border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white/90 backdrop-blur-sm font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-center" data-i18n="hero.btn_umkm">
                         Daftar jadi UMKM
                     </a>
                 </div>
@@ -110,13 +110,13 @@
                 </p>
 
                 <!-- Tombol Aksi Menuju Tutorial & Dukungan Bantuan -->
-                <div class="flex flex-wrap items-center gap-4 pt-2" data-reveal-item>
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 pt-2" data-reveal-item>
                     <a href="#tutorial" 
-                       class="inline-flex items-center justify-center bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" data-i18n="about.btn_tutorial">
+                       class="inline-flex items-center justify-center w-full sm:w-auto bg-[#2D6B22] hover:bg-[#1E4A1A] text-white font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-[0_4px_14px_rgba(45,107,34,0.3)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 text-center" data-i18n="about.btn_tutorial">
                         Pelajari Alur Kerja
                     </a>
                     <a href="#bantuan" 
-                       class="inline-flex items-center justify-center border-2 border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white/90 backdrop-blur-sm font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" data-i18n="about.btn_help">
+                       class="inline-flex items-center justify-center w-full sm:w-auto border-2 border-[#2D6B22] text-[#2D6B22] hover:bg-[#2D6B22] hover:text-white bg-white/90 backdrop-blur-sm font-semibold text-[15px] px-6 py-3.5 rounded-xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 text-center" data-i18n="about.btn_help">
                         Pusat Bantuan
                     </a>
                 </div>

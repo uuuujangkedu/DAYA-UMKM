@@ -22,6 +22,12 @@ return [
     'model' => env('CHATBOT_MODEL', 'gpt-4o-mini'),
 
     /*
+    | Self-Hosted FastAPI / VPS Gateway configuration
+    */
+    'fastapi_url' => env('FASTAPI_URL', 'https://expected-memorabilia-lodging-did.trycloudflare.com/chat'),
+    'fastapi_secret_token' => env('FASTAPI_SECRET_TOKEN', 'tikum_secret_token_2026'),
+
+    /*
     | Gemini specific configuration
     */
     'gemini_model' => env('CHATBOT_GEMINI_MODEL', 'gemini-1.5-flash'),

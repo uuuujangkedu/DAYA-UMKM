@@ -110,6 +110,7 @@ class AuthController extends Controller
             'rt' => ['nullable', 'string', 'max:10'],
             'rw' => ['nullable', 'string', 'max:10'],
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
+            'foto_profil' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         ];
 
         $validated = $request->validate($rules, [
@@ -125,12 +126,19 @@ class AuthController extends Controller
             'password.numbers' => 'Kata sandi harus mengandung angka.',
             'password.symbols' => 'Kata sandi harus mengandung simbol/karakter khusus.',
             'role.required' => 'Pilih peran pendaftaran.',
+            'foto_profil.image' => 'Foto profil harus berupa file gambar (JPG, PNG, WEBP).',
+            'foto_profil.max' => 'Ukuran foto profil maksimal 3MB.',
         ]);
 
         $role = $validated['role'];
         $provinsi = $validated['provinsi'] ?? null;
         $kota = $validated['kota'] ?? null;
         $provinsiKota = $validated['provinsi_kota'] ?? (($provinsi && $kota) ? "{$provinsi}, {$kota}" : ($kota ?: ($provinsi ?: null)));
+
+        $avatarPath = null;
+        if ($request->hasFile('foto_profil')) {
+            $avatarPath = $request->file('foto_profil')->store('avatars', 'public');
+        }
 
         // Simpan data akun pengguna baru
         $user = User::create([
@@ -145,6 +153,7 @@ class AuthController extends Controller
             'rt' => $validated['rt'] ?? null,
             'rw' => $validated['rw'] ?? null,
             'kategori_diminati' => $validated['kategori_diminati'] ?? null,
+            'avatar_url' => $avatarPath,
             'role' => $role,
             'password' => $validated['password'],
             'status' => 'menunggu_verifikasi',

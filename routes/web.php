@@ -121,6 +121,10 @@ Route::middleware('auth')->group(function () {
     // Klarifikasi Penundaan Dividen UMKM
     Route::post('/dashboard/umkm/dividen/klarifikasi', [DashboardController::class, 'storeKlarifikasiDividen'])->name('dashboard.umkm.dividen.klarifikasi');
 
+    // Update Foto Profil Pengguna & Unduh Berkas Proposal
+    Route::post('/profil/foto', [DashboardController::class, 'updateProfilePhoto'])->name('profil.foto.update');
+    Route::get('/proposal/{id}/download', [DashboardController::class, 'downloadProposal'])->name('proposal.download');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // ==========================================

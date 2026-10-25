@@ -16,8 +16,8 @@
 
     <style>
         :root {
-            --sidebar-bg: #1B4D3E;
-            --sidebar-active: #2D6A4F;
+            --sidebar-bg: #0F433C;
+            --sidebar-active: #20675D;
             --main-bg: #F5F0E8;
             --text-dark: #1A202C;
             --card-border: #E8E6DF;
@@ -56,8 +56,8 @@
             theme: {
                 extend: {
                     colors: {
-                        'brand-dark': '#1B4D3E',
-                        'brand-pill': '#2D6A4F',
+                        'brand-dark': '#0F433C',
+                        'brand-pill': '#20675D',
                         'brand-sage': '#7BAE91',
                         'brand-bg': '#F5F0E8',
                     }
@@ -69,8 +69,8 @@
 <body class="bg-[#F5F0E8] min-h-screen text-[#1A202C] flex">
 
     <!-- SIDEBAR UMKM (Sesuai Gambar 2: Mockup Dashboard UMKM) -->
-    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#1B4D3E] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
-           style="background-color: #1B4D3E !important; height: 100vh; min-height: 100vh;">
+    <aside id="sidebar-umkm" class="fixed inset-y-0 left-0 z-40 w-64 bg-[#0F433C] text-white flex flex-col justify-between transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:sticky md:top-0 md:h-screen md:shrink-0 overflow-y-auto shadow-2xl md:shadow-none"
+           style="background-color: #0F433C !important; height: 100vh; min-height: 100vh;">
         
         <div>
             <!-- Brand Logo TIKUM -->
@@ -83,18 +83,25 @@
             <!-- Profil UMKM Top Left (Sesuai Gambar 2) -->
             <div class="px-4 pt-4 pb-4 border-b border-white/10">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-full bg-[#D1D5DB] text-[#1B4D3E] font-bold text-base flex items-center justify-center shrink-0 border-2 border-white/20">
-                        @if(!empty($user->avatar))
-                            <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-full h-full rounded-full object-cover">
-                        @else
-                            {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
-                        @endif
+                    <div class="relative group cursor-pointer" onclick="openModalEditFotoProfil()" title="Klik untuk ubah foto profil">
+                        <div class="user-avatar-target w-10 h-10 rounded-full bg-[#D1D5DB] text-[#0F433C] font-bold text-base flex items-center justify-center shrink-0 border-2 border-white/20 overflow-hidden">
+                            @if(!empty($user->avatar))
+                                <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                            @else
+                                {{ strtoupper(substr($user->name ?? 'U', 0, 2)) }}
+                            @endif
+                        </div>
+                        <div class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#0F433C] text-white border border-white flex items-center justify-center text-[8px] shadow group-hover:bg-[#20675D] transition" title="Ubah Foto Profil">
+                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                            </svg>
+                        </div>
                     </div>
                     <div class="min-w-0 flex-1">
                         <h2 class="text-[13px] font-bold tracking-wide text-white truncate leading-tight">
                             {{ $user->name ?? 'PELAKU UMKM' }}
                         </h2>
-                        <p class="text-[11px] text-teal-200/70 truncate mt-0.5 font-medium">
+                        <p class="text-[11px] text-teal-200/70 truncate font-medium">
                             {{ $user->phone_number ?? '08123456789' }}
                         </p>
                         <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-[0.06em] bg-teal-500/20 text-teal-300 border border-teal-400/30 truncate max-w-full">
@@ -108,7 +115,7 @@
             <nav class="mt-5 px-3 space-y-1">
                 <!-- 1. BERANDA -->
                 <a href="{{ route('dashboard', ['tab' => 'beranda']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? 'beranda') === 'beranda' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? 'beranda') === 'beranda' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
@@ -132,7 +139,7 @@
 
                 <!-- 2. INBOX PENDANAAN (Komunikasi & Minat Modal Investor) -->
                 <a href="{{ route('dashboard', ['tab' => 'inbox']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'inbox' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'inbox' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
@@ -148,7 +155,7 @@
 
                 <!-- 3. ANALISIS KEUANGAN -->
                 <a href="{{ route('dashboard', ['tab' => 'keuangan']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'keuangan' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'keuangan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
@@ -159,10 +166,10 @@
 
                 <!-- 4. BANTUAN -->
                 <a href="{{ route('dashboard', ['tab' => 'bantuan']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'bantuan' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'bantuan' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'bantuan' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M18.364 5.636l-3.536 3.536m-2.036-5.036l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                         <span>BANTUAN</span>
                     </div>
@@ -170,7 +177,7 @@
 
                 <!-- 5. INFORMASI RUKO -->
                 <a href="{{ route('dashboard', ['tab' => 'ruko']) }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#2D6A4F] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'ruko' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'ruko' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -180,10 +187,10 @@
                 </a>
 
                 <!-- 6. PROFIL & FORMULIR PENGAJUAN -->
-                <a href="{{ route('formulir.umkm') }}" 
-                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link text-teal-100/70 hover:bg-white/[0.06] hover:text-white">
+                <a href="{{ route('dashboard', ['tab' => 'profil']) }}" 
+                   class="group flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.08em] uppercase sidebar-link {{ ($activeTab ?? '') === 'profil' ? 'bg-[#20675D] text-white' : 'text-teal-100/80 hover:bg-white/[0.06] hover:text-white' }}">
                     <div class="flex items-center gap-3">
-                        <svg class="w-4 h-4 text-teal-400/70 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 {{ ($activeTab ?? '') === 'profil' ? 'text-teal-300' : 'text-teal-400/70 group-hover:text-white' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                         </svg>
                         <span>EDIT PROFIL & PROPOSAL</span>
@@ -193,8 +200,8 @@
         </div>
 
         <!-- Bawah Sidebar: Tautan Web & Keluar -->
-        <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0"
-             style="background-color: #1B4D3E !important;">
+        <div class="p-4 border-t border-white/10 space-y-2 mt-auto shrink-0 bg-[#0F433C]"
+             style="background-color: #0F433C !important;">
             <!-- Tombol Aksesibilitas (Menu Khusus Sidebar) -->
             <button type="button" 
                     class="a11y-trigger w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-teal-200/90 hover:bg-white/[0.08] hover:text-white sidebar-link transition cursor-pointer group text-left"
@@ -232,7 +239,7 @@
     <div class="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         
         <!-- Mobile Header Top Bar -->
-        <header class="md:hidden bg-[#1B4D3E] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
+        <header class="md:hidden bg-[#0F433C] text-white px-4 py-3 flex items-center justify-between shadow-sm sticky top-0 z-20">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebarUmkm()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white focus:outline-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -244,9 +251,6 @@
                 </a>
             </div>
             <div class="flex items-center gap-2.5">
-                <!-- Language Switcher Mobile -->
-                @include('components.language-switcher', ['id' => 'umkm-mobile-lang'])
-
                 <!-- Tombol Cepat Aksesibilitas di Mobile Top Bar -->
                 <button type="button" 
                         class="a11y-trigger p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white cursor-pointer transition flex items-center justify-center"
@@ -335,7 +339,7 @@
                 </button>
                 <button type="button" 
                         id="app-confirm-submit-btn" 
-                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white">
+                        class="px-5 py-2.5 rounded-xl text-xs font-extrabold shadow-md transition transform active:scale-95 bg-[#0F433C] hover:bg-[#19584F] text-white">
                     Ya, Lanjutkan
                 </button>
             </div>
@@ -381,14 +385,14 @@
                 iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-rose-100 text-rose-600 shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>';
             } else {
-                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#1B4D3E] shadow-sm';
+                iconContainer.className = 'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 bg-teal-100 text-[#0F433C] shadow-sm';
                 iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>';
             }
             
             const submitBtn = document.getElementById('app-confirm-submit-btn');
             submitBtn.innerText = config.confirmText || 'Ya, Lanjutkan';
             submitBtn.className = 'px-5 py-2.5 rounded-xl text-xs font-black shadow-md transition transform active:scale-95 ' + 
-                (config.confirmClass || 'bg-[#1B4D3E] hover:bg-[#2D6A4F] text-white');
+                (config.confirmClass || 'bg-[#0F433C] hover:bg-[#19584F] text-white');
             
             submitBtn.onclick = function() {
                 closeAppConfirmModal();
@@ -411,6 +415,9 @@
             }
         }
     </script>
+
+    <!-- Komponen Modal Ubah Foto Profil -->
+    @include('components.modal-edit-foto-profil')
 
     <!-- Komponen Aksesibilitas Disabilitas -->
     @include('components.accessibility-widget', ['isDashboardLayout' => true])

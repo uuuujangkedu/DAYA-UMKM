@@ -104,6 +104,32 @@
                 <h3 class="text-[18px] font-bold text-[#161d1a]">Identitas pengaju UMKM</h3>
             </div>
 
+            <!-- Foto Profil Pemilik Usaha -->
+            <div>
+                <label for="foto_profil" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
+                    Foto Profil Pemilik Usaha (Opsional)
+                </label>
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-[#f7f6f1] border-2 border-dashed border-[#b2d5cc] overflow-hidden flex items-center justify-center shrink-0">
+                        @if($user->avatar)
+                            <img id="preview-foto-umkm" src="{{ $user->avatar }}" alt="Preview" class="w-full h-full object-cover">
+                        @else
+                            <img id="preview-foto-umkm" src="" alt="Preview" class="w-full h-full object-cover hidden">
+                            <span id="placeholder-foto-umkm" class="text-2xl text-[#0b5a4a]">📷</span>
+                        @endif
+                    </div>
+                    <div class="flex-1">
+                        <input type="file" 
+                               id="foto_profil" 
+                               name="foto_profil" 
+                               accept="image/png,image/jpeg,image/webp,image/jpg" 
+                               onchange="previewImage(this, 'preview-foto-umkm', 'placeholder-foto-umkm')"
+                               class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-[#d8ebe5] file:text-[#0b5a4a] hover:file:bg-[#b2d5cc] cursor-pointer">
+                        <p class="text-[11px] text-gray-500 mt-1">Format JPG, PNG, atau WEBP. Maksimal 3MB.</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Nama Lengkap Pemilik -->
             <div>
                 <label for="pemilik" class="block text-[14px] font-semibold text-[#161d1a] mb-1.5">
@@ -423,6 +449,22 @@
                 card.style.display = 'none';
             }
         });
+    function previewImage(input, previewId, placeholderId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                if (preview) {
+                    preview.src = e.target.result;
+                    preview.classList.remove('hidden');
+                }
+                if (placeholder) {
+                    placeholder.classList.add('hidden');
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 </script>
 @endsection

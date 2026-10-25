@@ -14,6 +14,7 @@ use App\Models\TeguranDividenLog;
 use App\Models\TransaksiSewa;
 use App\Models\UlasanUmkm;
 use App\Models\Umkm;
+use App\Models\User;
 use App\Services\ExcelFinancialParser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,8 +55,8 @@ class DashboardController extends Controller
                 ]
             );
 
-            // Jika masih draf kosong awal, arahkan ke formulir
-            if ($umkm->status_pengajuan === 'draf' && empty($umkm->deskripsi) && empty($umkm->foto_produk) && empty($umkm->modal_dibutuhkan)) {
+            // Jika masih draf kosong awal dan tidak sedang membuka tab profil di dashboard, arahkan ke formulir
+            if ($request->query('tab') !== 'profil' && $umkm->status_pengajuan === 'draf' && empty($umkm->deskripsi) && empty($umkm->foto_produk) && empty($umkm->modal_dibutuhkan)) {
                 return redirect()->route('formulir.umkm')->with('info', 'Selamat datang! Silakan lengkapi formulir pendaftaran profil usaha UMKM Anda.');
             }
 
@@ -667,7 +668,7 @@ class DashboardController extends Controller
             ->latest('id_keuangan')
             ->first();
 
-        $modeAksi = $request->input('mode_aksi', 'akumulasi'); // Default: akumulasikan / totalkan
+        $modeAksi = $request->input('mode_aksi') ?? $request->input('penanganan_input') ?? 'akumulasi'; // Default: akumulasikan / totalkan
 
         // Jika data sebelumnya sudah ada dan mode aksi adalah 'akumulasi' (Menotalkan)
         if ($existing && $modeAksi === 'akumulasi') {
@@ -696,8 +697,8 @@ class DashboardController extends Controller
             return redirect()->route('dashboard', ['tab' => 'keuangan'])->with('success', 'Transaksi baru berhasil ditotalkan & diakumulasikan ke periode '.$validated['bulan_tahun'].'! Total Omzet saat ini: Rp '.number_format($existing->pendapatan, 0, ',', '.').' (Laba Bersih: Rp '.number_format($existing->laba_bersih, 0, ',', '.').').');
         }
 
-        // Jika data sebelumnya ada dan mode aksi adalah 'ganti' (Menimpa total periode)
-        if ($existing && $modeAksi === 'ganti') {
+        // Jika data sebelumnya ada dan mode aksi adalah 'ganti' / 'ganti_total' (Menimpa total periode)
+        if ($existing && ($modeAksi === 'ganti' || $modeAksi === 'ganti_total')) {
             $existing->pendapatan = $pendapatan;
             $existing->hpp = $hpp;
             $existing->beban_operasional = $bebanOperasional;
@@ -896,7 +897,13 @@ class DashboardController extends Controller
             'kategori_diminati' => ['nullable', 'string', 'max:100'],
             'umkm_diminati' => ['nullable', 'array'],
             'umkm_diminati.*' => ['integer'],
+            'foto_profil' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         ]);
+
+        $avatarPath = $user->avatar_url;
+        if ($request->hasFile('foto_profil')) {
+            $avatarPath = $request->file('foto_profil')->store('avatars', 'public');
+        }
 
         $provinsi = $validated['provinsi'] ?? null;
         $kota = $validated['kota'] ?? null;
@@ -913,6 +920,7 @@ class DashboardController extends Controller
             'rt' => $validated['rt'] ?? $user->rt,
             'rw' => $validated['rw'] ?? $user->rw,
             'kategori_diminati' => $validated['kategori_diminati'] ?? 'Semua',
+            'avatar_url' => $avatarPath,
             'status' => 'menunggu_verifikasi',
         ]);
 
@@ -981,6 +989,7 @@ class DashboardController extends Controller
             'deskripsi' => ['nullable', 'string'],
             'foto_produk' => ['nullable', 'file', 'image', 'max:5120'],
             'file_proposal' => ['nullable', 'file', 'mimes:pdf,doc,docx,zip', 'max:10240'],
+            'foto_profil' => ['nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
             'id_ruko_diminati' => ['nullable', 'exists:ruko,id_ruko'],
         ];
 
@@ -1000,7 +1009,14 @@ class DashboardController extends Controller
             'foto_produk.max' => 'Ukuran foto produk maksimal 5MB.',
             'file_proposal.mimes' => 'File proposal harus berformat PDF, DOC, DOCX, atau ZIP.',
             'file_proposal.max' => 'Ukuran file proposal maksimal 10MB.',
+            'foto_profil.image' => 'Foto profil harus berupa file gambar (JPG, PNG, WEBP).',
+            'foto_profil.max' => 'Ukuran foto profil maksimal 3MB.',
         ]);
+
+        $avatarPath = $user->avatar_url;
+        if ($request->hasFile('foto_profil')) {
+            $avatarPath = $request->file('foto_profil')->store('avatars', 'public');
+        }
 
         $provinsi = $validated['provinsi'] ?? null;
         $kota = $validated['kota'] ?? null;
@@ -1054,9 +1070,10 @@ class DashboardController extends Controller
             'kelurahan' => $validated['kelurahan'] ?? $user->kelurahan,
             'rt' => $validated['rt'] ?? $user->rt,
             'rw' => $validated['rw'] ?? $user->rw,
+            'avatar_url' => $avatarPath,
         ]);
 
-        return redirect()->route('dashboard')->with('success', $message);
+        return redirect()->route('dashboard', ['tab' => 'profil'])->with('success', $message);
     }
 
     /**
@@ -1531,5 +1548,57 @@ class DashboardController extends Controller
         ]);
 
         return back()->with('success', 'Balasan apresiasi/tanggapan Anda atas ulasan investor berhasil dipublikasikan!');
+    }
+
+    /**
+     * Memperbarui Foto Profil Pengguna dari Dashboard
+     */
+    public function updateProfilePhoto(Request $request)
+    {
+        $request->validate([
+            'foto_profil' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+        ], [
+            'foto_profil.required' => 'Silakan pilih file foto profil terlebih dahulu.',
+            'foto_profil.image' => 'File harus berupa gambar (JPG, PNG, WEBP).',
+            'foto_profil.mimes' => 'Format file yang didukung: JPG, JPEG, PNG, WEBP.',
+            'foto_profil.max' => 'Ukuran foto maksimal 5MB.',
+        ]);
+
+        $user = User::findOrFail(Auth::id());
+
+        if ($request->hasFile('foto_profil')) {
+            if ($user->avatar_url && ! str_starts_with($user->avatar_url, 'http') && Storage::disk('public')->exists($user->avatar_url)) {
+                Storage::disk('public')->delete($user->avatar_url);
+            }
+
+            $path = $request->file('foto_profil')->store('avatars', 'public');
+            $user->avatar_url = $path;
+            $user->save();
+        }
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profil berhasil diperbarui!',
+                'avatar_url' => $user->avatar,
+            ]);
+        }
+
+        return back()->with('success', 'Foto profil berhasil diperbarui!');
+    }
+
+    /**
+     * Unduh / Akses Berkas Proposal UMKM dengan Penanganan Error Aman
+     */
+    public function downloadProposal($id)
+    {
+        $umkm = Umkm::findOrFail($id);
+        $path = $umkm->file_proposal;
+
+        if (! $path || ! Storage::disk('public')->exists($path)) {
+            return back()->with('error', 'Berkas fisik proposal belum diunggah atau tidak ditemukan di penyimpanan server.');
+        }
+
+        return Storage::disk('public')->response($path, basename($path));
     }
 }

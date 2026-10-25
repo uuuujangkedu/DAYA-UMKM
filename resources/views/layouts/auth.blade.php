@@ -101,7 +101,7 @@
         }
     </script>
 </head>
-<body class="bg-[#FAFBF9] text-[#15241C] antialiased min-h-screen flex flex-col font-sans selection:bg-[#F7E8C8] selection:text-[#1E4A1A]">
+<body class="bg-[#FAFBF9] text-[#15241C] antialiased min-h-screen flex flex-col font-sans selection:bg-[#F7E8C8] selection:text-[#1E4A1A] overflow-x-hidden">
 
     @php
         $isAuthPage = request()->is('login') || request()->is('register*') || request()->is('forgot-password') || request()->is('reset-password') || request()->is('verify-otp');
